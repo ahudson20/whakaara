@@ -1,37 +1,51 @@
 package com.app.whakaara.ui.navigation
 
-import android.widget.Toast
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import kotlinx.coroutines.launch
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun TopBar() {
-    val context = LocalContext.current
+fun TopBar(navController: NavController, sheetState: ModalBottomSheetState) {
+
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val coroutineScope = rememberCoroutineScope()
+
     TopAppBar(
-        title = {
-            Text(text = "TOP BAR")
-        },
+        title = {},
         backgroundColor = MaterialTheme.colors.primary,
         contentColor = Color.Green,
         actions = {
-            IconButton(
-                onClick = {
-                    Toast.makeText(context, "Create alarm clicked..", Toast.LENGTH_LONG).show()
+            when (navBackStackEntry?.destination?.route) {
+                "alarm" ->{
+                    IconButton(
+                        onClick = {
+                            coroutineScope.launch {
+                                if (sheetState.isVisible) sheetState.hide()
+                                else sheetState.show()
+                            }
+                        }
+                    ) {
+                        Icon(Icons.Filled.Add, contentDescription = "create alarm")
+                    }
                 }
-            ) {
-                Icon(Icons.Filled.Add, contentDescription = "create alarm")
             }
         }
     )
 }
 
-@Preview(showBackground = false)
+@OptIn(ExperimentalMaterialApi::class)
+@Preview(showBackground = true)
 @Composable
 fun TopBarPreview() {
-    TopBar()
+    TopBar(rememberNavController(), rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden))
 }

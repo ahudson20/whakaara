@@ -6,10 +6,10 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 @Composable
 fun BottomNavigation(navController: NavController) {
@@ -51,5 +51,5 @@ fun BottomNavigation(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun BottomNavigationPreview() {
-
+    BottomNavigation(rememberNavController())
 }

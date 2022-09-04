@@ -1,13 +1,13 @@
 package com.app.whakaara
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -16,10 +16,11 @@ import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import kotlinx.coroutines.launch
 
+@ExperimentalLayoutApi
 @OptIn(ExperimentalMaterialApi::class)
 class MainActivity : ComponentActivity() {
+    @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,12 +31,6 @@ class MainActivity : ComponentActivity() {
                     confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
                     skipHalfExpanded = true,
                 )
-
-                val coroutineScope = rememberCoroutineScope()
-
-                BackHandler(sheetState.isVisible) {
-                    coroutineScope.launch { sheetState.hide() }
-                }
 
                 ModalBottomSheetLayout(
                     sheetState = sheetState,
@@ -54,6 +49,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MainPreview() {

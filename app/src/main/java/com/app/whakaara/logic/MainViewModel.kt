@@ -10,12 +10,14 @@ import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val app: Application,
+    app: Application,
     private val repository: AlarmRepository
 ) : AndroidViewModel(app) {
 
@@ -26,7 +28,7 @@ class MainViewModel @Inject constructor(
         getAllAlarms()
     }
 
-    fun getAllAlarms() = viewModelScope.launch {
+    private fun getAllAlarms() = viewModelScope.launch {
         repository.allAlarms().collect { allAlarms ->
             alarms = allAlarms
         }

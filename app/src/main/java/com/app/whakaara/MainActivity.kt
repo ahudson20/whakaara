@@ -4,16 +4,15 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.runtime.collectAsState
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
-import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.bottomsheet.BottomSheet
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
@@ -30,15 +29,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             WhakaaraTheme {
-//                val alarmViewModel = viewModel<MainViewModel>()
-//                val alarmList = alarmViewModel.alarms
-
                 val navController = rememberNavController()
                 val sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
                     confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
                     skipHalfExpanded = true,
                 )
+                val scaffoldState = rememberScaffoldState()
 
                 ModalBottomSheetLayout(
                     sheetState = sheetState,
@@ -46,10 +43,13 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Scaffold(
+                        scaffoldState = scaffoldState,
                         topBar = { TopBar(navController = navController, sheetState = sheetState) },
                         bottomBar = { BottomNavigation(navController = navController) }
-                    ) {
-                        NavGraph(navController = navController)
+                    ) { innerPadding ->
+                        Box(modifier = Modifier.padding(innerPadding)){
+                            NavGraph(navController = navController, scaffoldState = scaffoldState)
+                        }
                     }
                 }
             }

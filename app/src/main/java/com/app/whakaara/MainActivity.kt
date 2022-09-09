@@ -49,11 +49,11 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Scaffold(
                         scaffoldState = scaffoldState,
-                        topBar = { TopBar(navController = navController, sheetState = sheetState, viewModel = viewModel) },
+                        topBar = { TopBar(navController = navController, viewModel = viewModel) },
                         bottomBar = { BottomNavigation(navController = navController) }
                     ) { innerPadding ->
                         Box(modifier = Modifier.padding(innerPadding)){
-                            NavGraph(navController = navController, scaffoldState = scaffoldState, viewModel = viewModel)
+                            NavGraph(navController = navController, viewModel = viewModel)
                         }
                     }
                 }

@@ -34,32 +34,19 @@ import kotlinx.coroutines.delay
 @Composable
 fun CardContainerSwipeToDismiss(
     viewModel: MainViewModel,
-    scaffoldState: ScaffoldState,
 ) {
-    val alarms = viewModel.alarms
+    val alarms =  mutableStateOf(viewModel.alarms)
     LazyColumn(
         modifier = Modifier.padding(10.dp)
     ) {
-        items(alarms) { alarm ->
+        items(alarms.value, key = {it.alarmId}) { alarm ->
+            //viewModel.delete(alarm)
             val dismissState = rememberDismissState()
-            if (dismissState.isDismissed(DismissDirection.EndToStart)) {
+            if(dismissState.currentValue != DismissValue.Default) {//dismissState.currentValue != DismissValue.Default) {
                 LaunchedEffect(Unit) {
-
                     viewModel.delete(alarm)
-                    // NEED this..
                     delay(25)
                     dismissState.reset()
-//                    dismissState.isDismissed()
-//                    dismissState.snapTo(DismissValue.Default)
-
-                    // TODO: implement delete, and then display snackbar with 'undo' option that reinstates alarm.
-//                    dismissState.snapTo(DismissValue.Default)
-//                    val deleted = scaffoldState.snackbarHostState.showSnackbar("Are you sure?", "Cancel", SnackbarDuration.Short)
-//                    if(deleted == SnackbarResult.ActionPerformed) {
-//                        dismissState.snapTo(DismissValue.Default)
-//                    } else {
-//
-//                    }
                 }
             }
 
@@ -169,7 +156,6 @@ fun Card(
 fun CardContainerSwipeToDismissPreview() {
     CardContainerSwipeToDismiss(
         viewModel = hiltViewModel(),
-        scaffoldState = rememberScaffoldState(),
     )
 }
 

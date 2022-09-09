@@ -20,15 +20,8 @@ class MainViewModel @Inject constructor(
 ) : AndroidViewModel(app) {
 
     var alarms by mutableStateOf(emptyList<Alarm>())
-    var alarm by mutableStateOf(Alarm(hour = 0, minute = 0, title = "", vibration = false))
 
     init {
-        // TODO: here for testing, remove later.
-        insert(Alarm(hour = 15, minute = 31, title = "hallo1", vibration = false))
-        insert(Alarm(hour = 25, minute = 32, title = "hallo2", vibration = false))
-        insert(Alarm(hour = 35, minute = 33, title = "hallo3", vibration = false))
-        insert(Alarm(hour = 45, minute = 34, title = "hallo4", vibration = false))
-        insert(Alarm(hour = 55, minute = 35, title = "hallo5", vibration = false))
         getAllAlarms()
     }
 
@@ -50,38 +43,5 @@ class MainViewModel @Inject constructor(
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         println("deleteing...... " + alarm.title)
         repository.delete(alarm)
-    }
-
-    fun updateHour(hour: Int) {
-        alarm = alarm.copy(
-            hour = hour
-        )
-    }
-
-    fun updateMinute(minute: Int) {
-        alarm = alarm.copy(
-            minute = minute
-        )
-    }
-
-    fun updateTitle(title: String) {
-        alarm = alarm.copy(
-            title = title
-        )
-    }
-
-    fun updateVibration(vibration: Boolean) {
-        alarm = alarm.copy(
-            vibration = vibration
-        )
-    }
-
-    fun resetAlarm() {
-        alarm = alarm.copy(
-            hour = 0,
-            minute = 0,
-            title = "",
-            vibration = false
-        )
     }
 }

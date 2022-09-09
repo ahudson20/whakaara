@@ -1,16 +1,14 @@
 package com.app.whakaara.ui.navigation
 
 import android.app.TimePickerDialog
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.SmallTopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,18 +21,16 @@ import com.app.whakaara.logic.MainViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 
-@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
     navController: NavController,
-    sheetState: ModalBottomSheetState,
     viewModel: MainViewModel,
 ) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
-    val alarmLocal = remember { Alarm(hour = -1, minute = -1, title = null, vibration = false) }
 
     // Declaring and initializing a calendar
     val calendar = Calendar.getInstance()
@@ -44,27 +40,8 @@ fun TopBar(
     val timePickerDialog = TimePickerDialog(
             context,
     {_, hour : Int, minute: Int ->
-        alarmLocal.apply {
-            println("hour: $hour minute: $minute")
-            this.hour = hour
-            this.minute = minute
-
-            // TODO: for now well just init the other values
-            this.title = "title-$hour-$minute"
-            this.vibration = true
-        }
-        println(alarmLocal.hour)
-        println(alarmLocal.minute)
-        println(alarmLocal.title)
+        val alarmLocal = Alarm(hour = hour, minute = minute, title= "$hour-$minute", vibration = true)
         viewModel.insert(alarmLocal)
-//            .invokeOnCompletion {
-//            alarmLocal.apply {
-//                this.hour = -1
-//                this.minute = -1
-//                this.title = null
-//                this.vibration = false
-//            }
-//        }
     },
     hour,
     minute,
@@ -80,8 +57,6 @@ fun TopBar(
                         onClick = {
                             coroutineScope.launch {
                                 timePickerDialog.show()
-//                                if (sheetState.isVisible) sheetState.hide()
-//                                else sheetState.show()
                             }
                         }
                     ) {
@@ -93,12 +68,11 @@ fun TopBar(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun TopBarPreview() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     navBackStackEntry?.destination?.route = "alarm"
-    TopBar(navController, rememberModalBottomSheetState(initialValue = ModalBottomSheetValue.Hidden), hiltViewModel())
+    TopBar(navController, hiltViewModel())
 }

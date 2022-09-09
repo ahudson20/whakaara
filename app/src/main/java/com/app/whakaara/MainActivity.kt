@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
+import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.bottomsheet.BottomSheet
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
@@ -24,6 +26,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @ExperimentalLayoutApi
 @OptIn(ExperimentalMaterialApi::class)
 class MainActivity : ComponentActivity() {
+
+    private val viewModel : MainViewModel by viewModels()
+
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +44,16 @@ class MainActivity : ComponentActivity() {
 
                 ModalBottomSheetLayout(
                     sheetState = sheetState,
-                    sheetContent = { BottomSheet( sheetState ) },
+                    sheetContent = { BottomSheet(sheetState) },
                     modifier = Modifier.fillMaxSize()
                 ) {
                     Scaffold(
                         scaffoldState = scaffoldState,
-                        topBar = { TopBar(navController = navController, sheetState = sheetState) },
+                        topBar = { TopBar(navController = navController, sheetState = sheetState, viewModel = viewModel) },
                         bottomBar = { BottomNavigation(navController = navController) }
                     ) { innerPadding ->
                         Box(modifier = Modifier.padding(innerPadding)){
-                            NavGraph(navController = navController, scaffoldState = scaffoldState)
+                            NavGraph(navController = navController, scaffoldState = scaffoldState, viewModel = viewModel)
                         }
                     }
                 }

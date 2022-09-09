@@ -48,7 +48,9 @@ fun CardContainerSwipeToDismiss(
                     viewModel.delete(alarm)
                     // NEED this..
                     delay(25)
-                    dismissState.snapTo(DismissValue.Default)
+                    dismissState.reset()
+//                    dismissState.isDismissed()
+//                    dismissState.snapTo(DismissValue.Default)
 
                     // TODO: implement delete, and then display snackbar with 'undo' option that reinstates alarm.
 //                    dismissState.snapTo(DismissValue.Default)

@@ -5,11 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.SettingsScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
+fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState, viewModel:  MainViewModel) {
     NavHost(
         navController = navController,
         startDestination = BottomNavItem.Alarm.route
@@ -18,7 +19,7 @@ fun NavGraph(navController: NavHostController, scaffoldState: ScaffoldState) {
         composable(
             route = BottomNavItem.Alarm.route
         ) {
-            AlarmScreen(scaffoldState)
+            AlarmScreen(scaffoldState, viewModel)
         }
 
         composable(

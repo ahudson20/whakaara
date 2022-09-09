@@ -11,7 +11,7 @@ import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 @Composable
 fun AlarmScreen(
     scaffoldState: ScaffoldState,
-    viewModel: MainViewModel = hiltViewModel(),
+    viewModel: MainViewModel,
 ) {
     /***
      * Passing the WHOLE VM down.
@@ -24,5 +24,5 @@ fun AlarmScreen(
 @Preview(showBackground = true)
 @Composable
 fun AlarmScreenPreview() {
-    AlarmScreen(rememberScaffoldState())
+    AlarmScreen(rememberScaffoldState(), hiltViewModel())
 }

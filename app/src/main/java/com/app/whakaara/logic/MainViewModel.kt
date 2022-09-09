@@ -39,6 +39,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun insert(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        println("inserting......: " + alarm.alarmId)
         repository.insert(alarm)
     }
 
@@ -47,6 +48,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        println("deleteing...... " + alarm.title)
         repository.delete(alarm)
     }
 
@@ -71,6 +73,15 @@ class MainViewModel @Inject constructor(
     fun updateVibration(vibration: Boolean) {
         alarm = alarm.copy(
             vibration = vibration
+        )
+    }
+
+    fun resetAlarm() {
+        alarm = alarm.copy(
+            hour = 0,
+            minute = 0,
+            title = "",
+            vibration = false
         )
     }
 }

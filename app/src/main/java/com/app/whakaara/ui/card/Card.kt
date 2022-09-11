@@ -40,9 +40,9 @@ fun CardContainerSwipeToDismiss(
         modifier = Modifier.padding(10.dp)
     ) {
         items(alarms.value, key = {it.alarmId}) { alarm ->
-            //viewModel.delete(alarm)
+
             val dismissState = rememberDismissState()
-            if(dismissState.currentValue != DismissValue.Default) {//dismissState.currentValue != DismissValue.Default) {
+            if(dismissState.currentValue != DismissValue.Default) {
                 LaunchedEffect(Unit) {
                     viewModel.delete(alarm)
                     delay(25)

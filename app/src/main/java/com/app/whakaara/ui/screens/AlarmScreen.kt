@@ -11,9 +11,8 @@ fun AlarmScreen(
     viewModel: MainViewModel,
 ) {
     /***
-     * Passing the WHOLE VM down.
-     * I want to pass JUST the delete from the VM,
-     * but need to figure out how to pass the coroutine down.
+     * Passing the whole VM down.
+     * Possibly just want to pass certain functions to the UI.
      * **/
     CardContainerSwipeToDismiss(viewModel)
 }

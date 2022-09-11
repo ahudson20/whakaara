@@ -14,8 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.app.whakaara.data.Alarm
-import com.app.whakaara.utils.DateUtils
 import kotlinx.coroutines.launch
 
 @Composable
@@ -62,16 +60,6 @@ fun BottomSheet(
             style = MaterialTheme.typography.h6
         )
     }
-}
-
-private fun generateString(alarm: Alarm): String {
-    println("generateString")
-    if(alarm.hour == 0 && alarm.minute == 0) {
-        println("Set Time")
-        return "Set Time"
-    }
-    println(DateUtils.convertIntegersToHHMM(alarm.hour, alarm.minute))
-    return DateUtils.convertIntegersToHHMM(alarm.hour, alarm.minute)
 }
 
 @Preview(showBackground = true)

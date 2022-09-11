@@ -15,8 +15,8 @@ import com.app.whakaara.MainActivity
 import com.google.android.material.R.drawable
 
 class NotificationUtils(context: Context): ContextWrapper(context) {
-    val CHANNEL_ID = "channel_id"
-    val CHANNEL_NAME = "channel_name"
+    private val CHANNEL_ID = "channel_id"
+    private val CHANNEL_NAME = "channel_name"
 
     private var manager: NotificationManager? = null
 
@@ -36,7 +36,7 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         getManager().createNotificationChannel(channel)
     }
 
-    fun getManager() : NotificationManager {
+    fun getManager(): NotificationManager {
         if (manager == null) {
             manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         }

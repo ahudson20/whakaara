@@ -35,12 +35,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             WhakaaraTheme {
                 val navController = rememberNavController()
+                val scaffoldState = rememberScaffoldState()
                 val sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
                     confirmStateChange = { it != ModalBottomSheetValue.HalfExpanded },
                     skipHalfExpanded = true,
                 )
-                val scaffoldState = rememberScaffoldState()
 
                 ModalBottomSheetLayout(
                     sheetState = sheetState,
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                         topBar = { TopBar(navController = navController, viewModel = viewModel) },
                         bottomBar = { BottomNavigation(navController = navController) }
                     ) { innerPadding ->
-                        Box(modifier = Modifier.padding(innerPadding)){
+                        Box(modifier = Modifier.padding(innerPadding)) {
                             NavGraph(navController = navController, viewModel = viewModel)
                         }
                     }

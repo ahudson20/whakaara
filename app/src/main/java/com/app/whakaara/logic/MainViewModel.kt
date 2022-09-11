@@ -58,6 +58,12 @@ class MainViewModel @Inject constructor(
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
     }
 
+    private fun deleteAlarm(
+        alarm: Alarm,
+    ) {
+        // TODO: implementation
+    }
+
     private fun getTimeInMillis(alarm: Alarm): Long {
         return Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, alarm.hour)

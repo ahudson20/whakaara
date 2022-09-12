@@ -32,20 +32,17 @@ fun TopBar(
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    // Declaring and initializing a calendar
     val calendar = Calendar.getInstance()
-    val hour = calendar[Calendar.HOUR_OF_DAY]
-    val minute = calendar[Calendar.MINUTE]
 
     val timePickerDialog = TimePickerDialog(
-            context,
-    {_, hour : Int, minute: Int ->
-        val alarmLocal = Alarm(hour = hour, minute = minute, title= "$hour-$minute", vibration = true)
-        viewModel.insert(alarmLocal)
-    },
-    hour,
-    minute,
-    false
+        context,
+        {_, hour : Int, minute: Int ->
+            val alarmLocal = Alarm(hour = hour, minute = minute, title= "$hour-$minute", vibration = true)
+            viewModel.insert(alarmLocal)
+        },
+        calendar[Calendar.HOUR_OF_DAY],
+        calendar[Calendar.MINUTE],
+        false
     )
 
     SmallTopAppBar(
@@ -56,7 +53,9 @@ fun TopBar(
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
-                                timePickerDialog.show()
+                                timePickerDialog.apply {
+                                    this.updateTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE))
+                                }.show()
                             }
                         }
                     ) {

@@ -5,6 +5,9 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.widget.Toast
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -39,6 +42,7 @@ class MainViewModel @Inject constructor(
     fun insert(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         repository.insert(alarm)
+        showToast("Alarm set")
     }
 
     fun update(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -46,14 +50,19 @@ class MainViewModel @Inject constructor(
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        deleteAlarm(alarm)
         repository.delete(alarm)
+        showToast("Alarm removed")
     }
 
     private fun createAlarm(
         alarm: Alarm,
     ) {
         val alarmManager =  app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(app, Receiver::class.java)
+        val intent = Intent(app, Receiver::class.java).apply {
+            // setting unique action allows for differentiation when deleting.
+            this.action = alarm.alarmId.toString()
+        }
         val pendingIntent = PendingIntent.getBroadcast(app, 0, intent, 0)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
     }
@@ -61,7 +70,21 @@ class MainViewModel @Inject constructor(
     private fun deleteAlarm(
         alarm: Alarm,
     ) {
-        // TODO: implementation
+        val alarmManager =  app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(app, Receiver::class.java).apply {
+            // setting unique action allows for differentiation when deleting.
+            this.action = alarm.alarmId.toString()
+        }
+        val pendingIntent = PendingIntent.getBroadcast(app, 0, intent, 0)
+        if(pendingIntent != null) {
+            alarmManager.cancel(pendingIntent)
+        }
+    }
+
+    private fun showToast(title: String) {
+        Handler(Looper.getMainLooper()).post {
+            Toast.makeText(app.applicationContext, title, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun getTimeInMillis(alarm: Alarm): Long {

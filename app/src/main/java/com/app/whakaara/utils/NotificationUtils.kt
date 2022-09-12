@@ -15,8 +15,8 @@ import com.app.whakaara.MainActivity
 import com.google.android.material.R.drawable
 
 class NotificationUtils(context: Context): ContextWrapper(context) {
-    private val CHANNEL_ID = "channel_id"
-    private val CHANNEL_NAME = "channel_name"
+    private val channelId = "channel_id"
+    private val channelName = "channel_name"
 
     private var manager: NotificationManager? = null
 
@@ -27,7 +27,7 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
     }
 
     private fun createChannel() {
-        val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH)
+        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
 
         // TODO: re-visit this.
         channel.enableVibration(true)
@@ -51,7 +51,7 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
 
         // TODO: pass in custom values.
-        return NotificationCompat.Builder(applicationContext, CHANNEL_ID)
+        return NotificationCompat.Builder(applicationContext, channelId)
             .setContentTitle("Alarm....")
             .setContentText("AlarmManager is working.")
             .setSmallIcon(drawable.mtrl_ic_error)

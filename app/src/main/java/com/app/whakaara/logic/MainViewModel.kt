@@ -2,7 +2,6 @@ package com.app.whakaara.logic
 
 import android.app.AlarmManager
 import android.app.Application
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Handler
@@ -15,6 +14,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.utils.PendingIntentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -63,7 +63,7 @@ class MainViewModel @Inject constructor(
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, 0, intent, 0)
+        val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
     }
 
@@ -75,10 +75,10 @@ class MainViewModel @Inject constructor(
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
         }
-        val pendingIntent = PendingIntent.getBroadcast(app, 0, intent, 0)
-        if(pendingIntent != null) {
-            alarmManager.cancel(pendingIntent)
-        }
+        val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
+
+        // no need to check if not null anymore?
+        alarmManager.cancel(pendingIntent)
     }
 
     private fun showToast(title: String) {

@@ -2,7 +2,6 @@ package com.app.whakaara.utils
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -27,11 +26,15 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
     }
 
     private fun createChannel() {
-        val channel = NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_HIGH)
-
-        // TODO: re-visit this.
-        channel.enableVibration(true)
-        channel.enableLights(true)
+        val channel = NotificationChannel(
+            channelId,
+            channelName,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            // TODO: re-visit this.
+            enableVibration(true)
+            enableLights(true)
+        }
 
         getManager().createNotificationChannel(channel)
     }
@@ -48,7 +51,7 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         val intent = Intent(this, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
-        val pendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+        val pendingIntent = PendingIntentUtils.getActivity(this, 0, intent, 0)
 
         // TODO: pass in custom values.
         return NotificationCompat.Builder(applicationContext, channelId)

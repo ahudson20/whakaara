@@ -7,6 +7,7 @@ import android.os.Build
 
 class PendingIntentUtils {
     companion object {
+
         fun getActivity(context: Context?, id: Int, intent: Intent?, flag: Int): PendingIntent {
             return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 PendingIntent.getActivity(context, id, intent, PendingIntent.FLAG_MUTABLE or flag)

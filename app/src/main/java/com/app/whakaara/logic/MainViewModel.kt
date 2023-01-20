@@ -39,7 +39,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun insert(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         repository.insert(alarm)
         showToast("Alarm set")
@@ -53,6 +53,16 @@ class MainViewModel @Inject constructor(
         deleteAlarm(alarm)
         repository.delete(alarm)
         showToast("Alarm removed")
+    }
+
+    fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        deleteAlarm(alarm)
+        showToast("Alarm cancelled")
+    }
+
+    fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        createAlarm(alarm)
+        showToast("Alarm enabled")
     }
 
     private fun createAlarm(

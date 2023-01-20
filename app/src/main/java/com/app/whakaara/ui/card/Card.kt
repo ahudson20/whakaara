@@ -28,6 +28,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.logic.MainViewModel
 import kotlinx.coroutines.delay
+import java.util.*
 
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -61,7 +62,13 @@ fun CardContainerSwipeToDismiss(
                     DismissBackground(dismissState)
                 },
                 dismissContent = {
-                    Card(time = (alarm.hour.toString() + ":" + alarm.minute.toString()), day = alarm.title ?: "")
+                    Card(
+                        time = (alarm.hour.toString() + ":" + alarm.minute.toString()),
+                        day = alarm.title ?: "",
+                        alarm = alarm,
+                        cancel = viewModel::disable,
+                        enable = viewModel::enable
+                    )
                 }
             )
         }
@@ -100,23 +107,26 @@ private fun DismissBackground(dismissState: DismissState) {
     }
 }
 
-@Composable
-fun CardContainer(
-    alarms: MutableList<Alarm>
-) {
-    LazyColumn(
-        modifier = Modifier.padding(10.dp)
-    ) {
-        items(alarms) { alarm ->
-            Card(time = (alarm.hour.toString() + ":" + alarm.minute.toString()), day = alarm.title ?: "")
-        }
-    }
-}
+//@Composable
+//fun CardContainer(
+//    alarms: MutableList<Alarm>
+//) {
+//    LazyColumn(
+//        modifier = Modifier.padding(10.dp)
+//    ) {
+//        items(alarms) { alarm ->
+//            Card(time = (alarm.hour.toString() + ":" + alarm.minute.toString()), day = alarm.title ?: "")
+//        }
+//    }
+//}
 
 @Composable
 fun Card(
     time: String,
-    day: String
+    day: String,
+    alarm: Alarm,
+    cancel: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit
 ) {
     val checkedState = remember { mutableStateOf(true) }
     ElevatedCard(
@@ -145,7 +155,14 @@ fun Card(
             Spacer(Modifier.weight(1f))
             Switch(
                 checked = checkedState.value,
-                onCheckedChange = { checkedState.value = it }
+                onCheckedChange = {
+                    if(!it) {
+                        cancel(alarm)
+                    } else {
+                        enable(alarm)
+                    }
+                    checkedState.value = it
+                }
             )
         }
     }
@@ -159,19 +176,13 @@ fun CardContainerSwipeToDismissPreview() {
     )
 }
 
-@Preview(showBackground = true)
-@Composable
-fun CardContainerPreview() {
-    CardContainer(
-        alarms = mutableListOf(
-            Alarm(hour = 3, minute = 30, title = "hello", vibration = false),
-            Alarm(hour = 13, minute = 35, title = "goodbye", vibration = false)
-        )
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun CardPreview() {
-    Card("asd", "asd")
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun CardContainerPreview() {
+//    CardContainer(
+//        alarms = mutableListOf(
+//            Alarm(hour = 3, minute = 30, title = "hello", vibration = false),
+//            Alarm(hour = 13, minute = 35, title = "goodbye", vibration = false)
+//        )
+//    )
+//}

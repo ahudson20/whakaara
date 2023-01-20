@@ -38,7 +38,7 @@ fun TopBar(
         context,
         {_, hour : Int, minute: Int ->
             val alarmLocal = Alarm(hour = hour, minute = minute, title= "$hour-$minute", vibration = true)
-            viewModel.insert(alarmLocal)
+            viewModel.create(alarmLocal)
         },
         calendar[Calendar.HOUR_OF_DAY],
         calendar[Calendar.MINUTE],

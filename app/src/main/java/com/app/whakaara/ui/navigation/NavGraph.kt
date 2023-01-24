@@ -18,7 +18,9 @@ fun NavGraph(navController: NavHostController, viewModel:  MainViewModel) {
         composable(
             route = BottomNavItem.Alarm.route
         ) {
-            AlarmScreen(viewModel)
+            AlarmScreen(
+                viewModel = viewModel
+            )
         }
 
         composable(

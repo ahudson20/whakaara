@@ -3,6 +3,7 @@ buildscript {
         compose_version = '1.1.0-beta01'
         nav_version = '2.5.3'
         work_version = '2.7.1'
+        time_picker_version = '0.6.0'
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:2.43.2"

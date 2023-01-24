@@ -61,6 +61,10 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.5.0'
     kapt "androidx.room:room-compiler:2.5.0"
 
+    // Timepicker Material3
+    implementation "com.marosseleng.android:compose-material3-datetime-pickers:$time_picker_version"
+
+
     // Kotlin + coroutines
     implementation "androidx.work:work-runtime-ktx:$work_version"
 

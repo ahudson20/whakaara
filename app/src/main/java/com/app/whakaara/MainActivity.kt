@@ -1,7 +1,6 @@
 package com.app.whakaara
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,11 +12,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -28,13 +28,15 @@ import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
+import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
+import java.time.LocalTime
 import java.util.*
 
 @AndroidEntryPoint
 @ExperimentalLayoutApi
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalMaterial3Api::class)
 class MainActivity : ComponentActivity() {
 
     private val viewModel : MainViewModel by viewModels()
@@ -46,25 +48,12 @@ class MainActivity : ComponentActivity() {
             WhakaaraTheme {
                 val navController = rememberNavController()
                 val scaffoldState = rememberScaffoldState()
+                val isDialogShown = rememberSaveable { mutableStateOf(false) }
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val sheetState = rememberModalBottomSheetState(
                     initialValue = ModalBottomSheetValue.Hidden,
                     confirmValueChange = { it != ModalBottomSheetValue.HalfExpanded },
                     skipHalfExpanded = true
-                )
-                val coroutineScope = rememberCoroutineScope()
-                val context = LocalContext.current
-                val calendar = Calendar.getInstance()
-
-                val timePickerDialog = TimePickerDialog(
-                    context,
-                    {_, hour : Int, minute: Int ->
-                        val alarmLocal = Alarm(hour = hour, minute = minute, title= "$hour-$minute", vibration = true)
-                        viewModel.create(alarmLocal)
-                    },
-                    calendar[Calendar.HOUR_OF_DAY],
-                    calendar[Calendar.MINUTE],
-                    false
                 )
 
                 ModalBottomSheetLayout(
@@ -82,11 +71,7 @@ class MainActivity : ComponentActivity() {
                                 "alarm" -> {
                                     FloatingActionButton(
                                         onClick = {
-                                            coroutineScope.launch {
-                                                timePickerDialog.apply {
-                                                    this.updateTime(Calendar.getInstance().get(Calendar.HOUR_OF_DAY), Calendar.getInstance().get(Calendar.MINUTE))
-                                                }.show()
-                                            }
+                                            isDialogShown.value  = !isDialogShown.value
                                         }
                                     ) {
                                         Icon(
@@ -94,6 +79,26 @@ class MainActivity : ComponentActivity() {
                                             contentDescription = "Add Alarm",
                                         )
                                     }
+
+                                    if (isDialogShown.value) {
+                                        TimePickerDialog(
+                                            onDismissRequest = { isDialogShown.value = false },
+                                            initialTime = LocalTime.now().noSeconds(),
+                                            onTimeChange = {
+                                                viewModel.create(
+                                                    Alarm(
+                                                        hour = it.hour,
+                                                        minute = it.minute,
+                                                        title = "new alarm~",
+                                                        vibration = true
+                                                    )
+                                                )
+                                                isDialogShown.value = false
+                                            },
+                                            title = { Text(text = "Select time") }
+                                        )
+                                    }
+
                                 }
                             }
                         },

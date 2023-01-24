@@ -4,14 +4,18 @@ import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
+import android.provider.Settings
 import android.widget.Toast
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.whakaara.MainActivity
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
 import com.app.whakaara.utils.PendingIntentUtils
@@ -21,6 +25,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
+@OptIn(ExperimentalLayoutApi::class)
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val app: Application,
@@ -47,6 +52,7 @@ class MainViewModel @Inject constructor(
 
     fun update(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.update(alarm)
+        showToast("Alarm updated")
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -68,13 +74,40 @@ class MainViewModel @Inject constructor(
     private fun createAlarm(
         alarm: Alarm,
     ) {
-        val alarmManager =  app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(app, Receiver::class.java).apply {
-            // setting unique action allows for differentiation when deleting.
-            this.action = alarm.alarmId.toString()
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            if (!alarmManager.canScheduleExactAlarms()) {
+                Intent().also { intent ->
+                    intent.action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+                    app.applicationContext.startActivity(intent)
+                }
+            } else {
+                val intent = Intent(app, Receiver::class.java).apply {
+                    // setting unique action allows for differentiation when deleting.
+                    this.action = alarm.alarmId.toString()
+                }
+                val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
+
+                val mainActivityIntent = Intent(app.applicationContext, MainActivity::class.java)
+                val testPendingIntent = PendingIntentUtils.getBroadcast(app, 1, mainActivityIntent, 0)
+
+
+                alarmManager.setAlarmClock(
+                    AlarmManager.AlarmClockInfo(getTimeInMillis(alarm), testPendingIntent),
+                    pendingIntent
+                )
+            }
+        } else {
+            val alarmManager =  app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            val intent = Intent(app, Receiver::class.java).apply {
+                // setting unique action allows for differentiation when deleting.
+                this.action = alarm.alarmId.toString()
+            }
+            val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
         }
-        val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
     }
 
     private fun deleteAlarm(

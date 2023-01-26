@@ -61,6 +61,9 @@ dependencies {
     implementation 'androidx.room:room-ktx:2.5.0'
     kapt "androidx.room:room-compiler:2.5.0"
 
+    // Accompanist permissions
+    implementation "com.google.accompanist:accompanist-permissions:$accompanist_permissions"
+
     // Timepicker Material3
     implementation "com.marosseleng.android:compose-material3-datetime-pickers:$time_picker_version"
 

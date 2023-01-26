@@ -11,5 +11,6 @@ data class Alarm(
     var hour: Int,
     var minute: Int,
     var title: String?,
-    var vibration: Boolean
+    var subTitle: String?,
+    var vibration: Boolean,
 )

@@ -22,6 +22,7 @@ import com.app.whakaara.utils.PendingIntentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -74,8 +75,6 @@ class MainViewModel @Inject constructor(
     private fun createAlarm(
         alarm: Alarm,
     ) {
-
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             if (!alarmManager.canScheduleExactAlarms()) {
@@ -87,12 +86,13 @@ class MainViewModel @Inject constructor(
                 val intent = Intent(app, Receiver::class.java).apply {
                     // setting unique action allows for differentiation when deleting.
                     this.action = alarm.alarmId.toString()
+                    putExtra("title", "Alarm")
+                    putExtra("subtitle", generateSubTitle(alarm))
                 }
                 val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
 
                 val mainActivityIntent = Intent(app.applicationContext, MainActivity::class.java)
                 val testPendingIntent = PendingIntentUtils.getBroadcast(app, 1, mainActivityIntent, 0)
-
 
                 alarmManager.setAlarmClock(
                     AlarmManager.AlarmClockInfo(getTimeInMillis(alarm), testPendingIntent),
@@ -104,6 +104,8 @@ class MainViewModel @Inject constructor(
             val intent = Intent(app, Receiver::class.java).apply {
                 // setting unique action allows for differentiation when deleting.
                 this.action = alarm.alarmId.toString()
+                putExtra("title", "Alarm")
+                putExtra("subtitle", generateSubTitle(alarm))
             }
             val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
@@ -130,11 +132,32 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun generateSubTitle(alarm: Alarm): String {
+        val subTitle = StringBuilder()
+        val hour24 = (alarm.hour % 12).toString()
+        val minute = if (alarm.minute < 10) "0" + alarm.minute.toString() else alarm.minute.toString()
+        val postFix = if (alarm.hour < 12)  "AM" else "PM"
+        subTitle.append(SimpleDateFormat("EE", Locale.ENGLISH).format(System.currentTimeMillis())).append(" ")
+
+        subTitle.append("$hour24:$minute $postFix")
+
+
+        return subTitle.toString()
+    }
+
     private fun getTimeInMillis(alarm: Alarm): Long {
-        return Calendar.getInstance().apply {
+        val cal = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, alarm.hour)
             set(Calendar.MINUTE, alarm.minute)
             set(Calendar.SECOND, 0)
-        }.timeInMillis
+        }
+
+        /** check if time has already elapsed, set for following day **/
+        if (cal.timeInMillis < System.currentTimeMillis()) {
+            cal.add(Calendar.DATE, 1)
+            showToast("Alarm set for following day")
+        }
+
+        return cal.timeInMillis
     }
 }

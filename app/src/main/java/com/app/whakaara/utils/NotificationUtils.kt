@@ -5,7 +5,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
-import android.graphics.Color.GREEN
+import android.graphics.Color.WHITE
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -53,12 +53,9 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         }
         val pendingIntent = PendingIntentUtils.getActivity(this, 0, intent, 0)
 
-        // TODO: pass in custom values.
         return NotificationCompat.Builder(applicationContext, channelId)
-            .setContentTitle("Alarm....")
-            .setContentText("AlarmManager is working.")
-            .setSmallIcon(drawable.mtrl_ic_error)
-            .setColor(GREEN)
+            .setSmallIcon(drawable.ic_clock_black_24dp)
+            .setColor(WHITE)
             .setContentIntent(pendingIntent)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setAutoCancel(true)

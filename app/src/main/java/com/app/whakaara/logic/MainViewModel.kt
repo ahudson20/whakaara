@@ -51,9 +51,8 @@ class MainViewModel @Inject constructor(
         showToast("Alarm set")
     }
 
-    fun update(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    private fun update(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.update(alarm)
-        showToast("Alarm updated")
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -64,11 +63,13 @@ class MainViewModel @Inject constructor(
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         deleteAlarm(alarm)
+        update(alarm.copy(isEnabled = false))
         showToast("Alarm cancelled")
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
+        update(alarm.copy(isEnabled = true))
         showToast("Alarm enabled")
     }
 
@@ -88,6 +89,7 @@ class MainViewModel @Inject constructor(
                     this.action = alarm.alarmId.toString()
                     putExtra("title", "Alarm")
                     putExtra("subtitle", generateSubTitle(alarm))
+                    putExtra("alarmId", alarm.alarmId)
                 }
                 val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
 
@@ -106,6 +108,7 @@ class MainViewModel @Inject constructor(
                 this.action = alarm.alarmId.toString()
                 putExtra("title", "Alarm")
                 putExtra("subtitle", generateSubTitle(alarm))
+                putExtra("alarmId", alarm.alarmId)
             }
             val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
             alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
@@ -137,11 +140,9 @@ class MainViewModel @Inject constructor(
         val hour24 = (alarm.hour % 12).toString()
         val minute = if (alarm.minute < 10) "0" + alarm.minute.toString() else alarm.minute.toString()
         val postFix = if (alarm.hour < 12)  "AM" else "PM"
+
         subTitle.append(SimpleDateFormat("EE", Locale.ENGLISH).format(System.currentTimeMillis())).append(" ")
-
         subTitle.append("$hour24:$minute $postFix")
-
-
         return subTitle.toString()
     }
 

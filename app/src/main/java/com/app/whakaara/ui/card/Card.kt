@@ -128,7 +128,7 @@ fun Card(
     cancel: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit
 ) {
-    val checkedState = remember { mutableStateOf(true) }
+    val checkedState = remember { mutableStateOf(alarm.isEnabled) }
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()

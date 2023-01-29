@@ -2,6 +2,7 @@ package com.app.whakaara.data
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import java.util.*
 
 @Dao
 interface AlarmDao {
@@ -17,5 +18,8 @@ interface AlarmDao {
 
     @Query("SELECT * FROM alarm_table")
     fun getAllAlarms(): Flow<List<Alarm>>
+
+    @Query("UPDATE alarm_table SET isEnabled = :isEnabled WHERE alarmId = :id")
+    fun isEnabled(id: UUID, isEnabled: Boolean)
 
 }

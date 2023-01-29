@@ -2,6 +2,7 @@ package com.app.whakaara
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -37,6 +38,7 @@ import com.google.accompanist.permissions.*
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.util.*
@@ -61,7 +63,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(
     ExperimentalPermissionsApi::class,
     ExperimentalMaterialApi::class,
-    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class
+    ExperimentalMaterial3Api::class,
 )
 @Composable
 private fun Main(
@@ -81,8 +83,6 @@ private fun Main(
         skipHalfExpanded = true
     )
     val context = LocalContext.current.applicationContext
-
-
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
         if (wasGranted) {
             isDialogShown.value = !isDialogShown.value
@@ -112,23 +112,11 @@ private fun Main(
                                     else -> {
                                         /**PERMISSION DENIED - SHOW PROMPT**/
                                         if (notificationPermissionState.status.shouldShowRationale) {
-                                            scope.launch {
-                                                val result = snackbarHostState.showSnackbar(
-                                                    message = "Notification permission required",
-                                                    actionLabel = "Go to settings",
-                                                    duration = SnackbarDuration.Long
-                                                )
-                                                /**PROMPT ACCEPTED**/
-                                                if (result == SnackbarResult.ActionPerformed) {
-                                                    val intent = Intent(
-                                                        Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                                                    ).apply {
-                                                        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                                        data = Uri.fromParts("package", context.packageName, null)
-                                                    }
-                                                    context.startActivity(intent)
-                                                }
-                                            }
+                                            snackBarPromptPermission(
+                                                scope,
+                                                snackbarHostState,
+                                                context
+                                            )
                                         } else {
                                             /**FIRST TIME ACCESSING**/
                                             /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
@@ -153,9 +141,6 @@ private fun Main(
                                         Alarm(
                                             hour = it.hour,
                                             minute = it.minute,
-                                            title = null,
-                                            subTitle = null,
-                                            vibration = true,
                                         )
                                     )
                                     isDialogShown.value = false
@@ -173,6 +158,31 @@ private fun Main(
             Box(modifier = Modifier.padding(innerPadding)) {
                 NavGraph(navController = navController, viewModel = viewModel)
             }
+        }
+    }
+}
+
+
+private fun snackBarPromptPermission(
+    scope: CoroutineScope,
+    snackBarHostState: SnackbarHostState,
+    context: Context
+) {
+    scope.launch {
+        val result = snackBarHostState.showSnackbar(
+            message = "Notification permission required",
+            actionLabel = "Go to settings",
+            duration = SnackbarDuration.Long
+        )
+        /**SNACKBAR PROMPT ACCEPTED**/
+        if (result == SnackbarResult.ActionPerformed) {
+            val intent = Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            ).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.fromParts("package", context.packageName, null)
+            }
+            context.startActivity(intent)
         }
     }
 }

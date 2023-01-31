@@ -23,9 +23,7 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
     private var manager: NotificationManager? = null
 
     init {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createChannel()
-        }
+        createChannel()
     }
 
     private fun createChannel() {

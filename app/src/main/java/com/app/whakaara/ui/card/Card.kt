@@ -31,16 +31,16 @@ import kotlinx.coroutines.delay
 import java.util.*
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CardContainerSwipeToDismiss(
     viewModel: MainViewModel,
 ) {
-    val alarms =  mutableStateOf(viewModel.alarms)
+    val alarms by viewModel.uiState.collectAsState()
+
     LazyColumn(
         modifier = Modifier.padding(10.dp)
     ) {
-        items(alarms.value, key = {it.alarmId}) { alarm ->
+        items(alarms.alarms, key = {it.alarmId}) { alarm ->
 
             val dismissState = rememberDismissState()
             if(dismissState.currentValue != DismissValue.Default) {

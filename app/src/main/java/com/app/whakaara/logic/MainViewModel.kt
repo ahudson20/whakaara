@@ -10,17 +10,18 @@ import android.os.Looper
 import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.MainActivity
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.state.AlarmState
 import com.app.whakaara.utils.PendingIntentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,7 +34,8 @@ class MainViewModel @Inject constructor(
     private val repository: AlarmRepository
 ) : AndroidViewModel(app) {
 
-    var alarms by mutableStateOf(emptyList<Alarm>())
+    private val _uiState = MutableStateFlow(AlarmState())
+    val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
 
     init {
         getAllAlarms()
@@ -41,7 +43,7 @@ class MainViewModel @Inject constructor(
 
     private fun getAllAlarms() = viewModelScope.launch {
         repository.allAlarms().collect { allAlarms ->
-            alarms = allAlarms
+            _uiState.value = AlarmState(alarms = allAlarms)
         }
     }
 

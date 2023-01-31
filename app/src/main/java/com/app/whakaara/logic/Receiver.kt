@@ -38,7 +38,7 @@ class Receiver: BroadcastReceiver() {
 
             if (action.equals("cancel")) {
                 //intent.getSerializableExtra("alarmId", UUID::class.java)
-                if (notification.extras.get != null) {
+                if (notification.extras.getString("alarmId") != null) {
                     val v = notification.extras.getString("alarmId")
                     repo.isEnabled(UUID.fromString(alarmId), false)
                 }

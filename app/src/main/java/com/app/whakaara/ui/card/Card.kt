@@ -20,9 +20,8 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
 import com.dokar.sheets.rememberBottomSheetState
@@ -36,14 +35,14 @@ fun Card(
 ) {
     val valueSlider by remember(alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
     val scope = rememberCoroutineScope()
-    val simpleSheetState = rememberBottomSheetState()
+    val sheetState = rememberBottomSheetState()
     ElevatedCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
             .clip(RoundedCornerShape(12.0.dp))
             .clickable {
-                scope.launch { simpleSheetState.expand() }
+                scope.launch { sheetState.expand() }
             },
     ) {
         Row(
@@ -75,15 +74,23 @@ fun Card(
     }
 
     BottomSheetWrapper(
-        state = simpleSheetState,
-        alarm = alarm
+        state = sheetState,
+        alarm = alarm,
+        cancel = cancel,
+        enable = enable
     )
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-fun CardContainerSwipeToDismissPreview() {
-    CardContainerSwipeToDismiss(
-        viewModel = hiltViewModel(),
+fun CardPreview() {
+    Card(
+        alarm = Alarm(
+            hour = 12,
+            minute = 13
+        ),
+        cancel = {},
+        enable = {}
     )
 }
+

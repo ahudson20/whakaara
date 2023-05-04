@@ -61,13 +61,13 @@ class MainViewModel @Inject constructor(
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         repository.insert(alarm)
-        GeneralUtils.showToast(title = "Alarm cancelled", context = app.applicationContext)
+        GeneralUtils.showToast(title = "Alarm created", context = app.applicationContext)
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         deleteAlarm(alarm)
         repository.delete(alarm)
-        GeneralUtils.showToast(title = "Alarm cancelled", context = app.applicationContext)
+        GeneralUtils.showToast(title = "Alarm deleted", context = app.applicationContext)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -79,7 +79,7 @@ class MainViewModel @Inject constructor(
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         update(alarm.copy(isEnabled = true))
-        GeneralUtils.showToast(title = "Alarm cancelled", context = app.applicationContext)
+        GeneralUtils.showToast(title = "Alarm enabled", context = app.applicationContext)
     }
 
     private fun createAlarm(

@@ -10,7 +10,9 @@ import com.dokar.sheets.BottomSheetState
 fun BottomSheetWrapper(
     alarm: Alarm,
     state: BottomSheetState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cancel: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit
 ) {
     BottomSheet(
         state = state,
@@ -19,7 +21,9 @@ fun BottomSheetWrapper(
     ) {
         BottomSheetContent(
             alarm = alarm,
-            sheetState = state
+            sheetState = state,
+            cancel = cancel,
+            enable = enable
         )
     }
 }

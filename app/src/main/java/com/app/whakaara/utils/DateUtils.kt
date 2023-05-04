@@ -1,9 +1,9 @@
 package com.app.whakaara.utils
 
-import android.content.Context
 import com.app.whakaara.data.Alarm
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class DateUtils {
     companion object {
@@ -36,5 +36,4 @@ class DateUtils {
             return cal.timeInMillis
         }
     }
-
 }

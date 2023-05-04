@@ -10,7 +10,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Text
+import androidx.compose.material3.Switch
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +30,9 @@ import com.app.whakaara.R
 @Composable
 fun BottomSheetContent(
     alarm: Alarm,
-    sheetState: BottomSheetState //ModalBottomSheetState
+    sheetState: BottomSheetState, //ModalBottomSheetState
+    cancel: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -54,7 +60,7 @@ fun BottomSheetContent(
                     }
                 }
             )
-            Text(text = alarm.title ?: stringResource(id = R.string.bottom_sheet_title))
+            BottomSheetTitle(title = alarm.title, isEnabled = alarm.isEnabled)
             ClickableText(
                 text = AnnotatedString(stringResource(id = R.string.bottom_sheet_save_button)),
                 onClick = {
@@ -67,6 +73,10 @@ fun BottomSheetContent(
             )
         }
 
+
+        val isAlarmEnabled by remember(alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
+        val isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
+
         Column {
             Text(text = alarm.title ?: "title")
 
@@ -74,10 +84,61 @@ fun BottomSheetContent(
 
             Text(text = "${alarm.hour}:${alarm.minute}")
 
-            Text(text = "isEnabled: " + alarm.isEnabled.toString())
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "isEnabled: " + alarm.isEnabled.toString())
+                Switch(
+                    checked = isAlarmEnabled,
+                    onCheckedChange = {
+                        if (!it) {
+                            cancel(alarm)
+                        } else {
+                            enable(alarm)
+                        }
+                    }
+                )
+            }
 
-            Text(text = "isVibration: " + alarm.vibration.toString())
+            Row(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(text = "isVibration: " + alarm.vibration.toString())
+                Switch(
+                    checked = isVibrationEnabled,
+                    onCheckedChange = {
+                        Toast.makeText(context, "TODO...", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
         }
+    }
+}
+
+@Composable
+private fun BottomSheetTitle(title: String?, isEnabled: Boolean) {
+    Column {
+        Text(
+            text = if (!title.isNullOrBlank()) {
+                title.toString()
+            } else {
+                stringResource(id = R.string.bottom_sheet_title)
+            }
+        )
+
+        Text(
+            text = if (!isEnabled) {
+                stringResource(id = R.string.bottom_sheet_sub_title)
+            } else {
+                "" // TODO: display hours until alarm will sound. Alarm in xx hours xx minutes
+            }
+        )
     }
 }
 
@@ -87,8 +148,11 @@ fun BottomSheetPreview() {
     BottomSheetContent(
         alarm = Alarm(
             minute = 3,
-            hour = 10
+            hour = 10,
+            isEnabled = false
         ),
-        sheetState = BottomSheetState()
+        sheetState = BottomSheetState(),
+        cancel = {},
+        enable = {}
     )
 }

@@ -59,7 +59,10 @@ fun BottomSheetContent(
                 text = AnnotatedString(stringResource(id = R.string.bottom_sheet_save_button)),
                 onClick = {
                     // TODO: Call to update alarm with any new values, and close bottom sheet.
-                    Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show()
+                    coroutineScope.launch {
+                        Toast.makeText(context, "Save", Toast.LENGTH_SHORT).show()
+                        sheetState.collapse() //sheetState.hide()
+                    }
                 }
             )
         }
@@ -69,7 +72,7 @@ fun BottomSheetContent(
 
             Text(text = alarm.subTitle ?: "subtitle")
 
-            Text(text = "${alarm.minute}:${alarm.hour}")
+            Text(text = "${alarm.hour}:${alarm.minute}")
 
             Text(text = "isEnabled: " + alarm.isEnabled.toString())
 

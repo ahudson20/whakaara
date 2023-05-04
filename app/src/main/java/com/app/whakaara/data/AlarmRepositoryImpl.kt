@@ -1,6 +1,6 @@
 package com.app.whakaara.data
 
-import java.util.*
+import java.util.UUID
 
 class AlarmRepositoryImpl(
     private val alarmDao: AlarmDao
@@ -15,4 +15,7 @@ class AlarmRepositoryImpl(
     override fun update(alarm: Alarm) = alarmDao.updateAlarm(alarm)
 
     override fun isEnabled(id: UUID, isEnabled: Boolean) = alarmDao.isEnabled(id, isEnabled)
+
+    override fun getAlarmById(id: UUID): Alarm = alarmDao.getAlarmById(id)
+
 }

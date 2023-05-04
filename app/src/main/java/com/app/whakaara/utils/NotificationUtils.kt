@@ -9,11 +9,10 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color.WHITE
 import android.media.RingtoneManager
-import android.os.Build
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.MainActivity
-import com.app.whakaara.logic.Receiver
+import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.google.android.material.R.drawable
 
 class NotificationUtils(context: Context): ContextWrapper(context) {
@@ -58,20 +57,18 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         }
         val onNotificationClickPendingIntent = PendingIntentUtils.getActivity(this, 0, mainActivityIntent, 0)
 
-        val cancelAlarmIntent = Intent(this, Receiver::class.java).apply {
-            putExtra("action", "cancel")
-        }
-        val onNotificationCancelActionPendingIntent = PendingIntentUtils.getBroadcast(this, 0, cancelAlarmIntent, 0)
-
-
+//        val testIntent = Intent(this, FullScreenNotificationActivity::class.java).apply {
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        }
+//        val testPendingIntent = PendingIntentUtils.getActivity(this, 0, testIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return NotificationCompat.Builder(applicationContext, channelId)
             .setSmallIcon(drawable.ic_clock_black_24dp)
             .setColor(WHITE)
-            .setContentIntent(onNotificationClickPendingIntent) /** This is the action for clicking on the notification - it just opens the app**/
+            .setContentIntent(onNotificationClickPendingIntent)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setAutoCancel(true)
             .setOngoing(true)
-            .addAction(drawable.mtrl_ic_cancel, "Cancel", onNotificationCancelActionPendingIntent) /** Action for cancelling alarm on the notification - it SHOULD disable the alarm + see the switch disabled too..**/
+//            .setFullScreenIntent(testPendingIntent, true)
     }
 }

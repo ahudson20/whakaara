@@ -4,27 +4,32 @@ import android.app.AlarmManager
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
-import android.os.Handler
-import android.os.Looper
 import android.provider.Settings
-import android.widget.Toast
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.MainActivity
+import com.app.whakaara.R
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
 import com.app.whakaara.state.AlarmState
+import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -43,36 +48,38 @@ class MainViewModel @Inject constructor(
 
     private fun getAllAlarms() = viewModelScope.launch {
         repository.allAlarms().collect { allAlarms ->
-            _uiState.value = AlarmState(alarms = allAlarms)
+            _uiState.value = AlarmState(alarms = allAlarms).apply {
+                    _uiState.stateIn(viewModelScope)
+            }
         }
+    }
+
+    fun getAlarmById(id: UUID): Alarm {
+        return repository.getAlarmById(id = id)
     }
 
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         repository.insert(alarm)
-        showToast("Alarm set")
-    }
-
-    private fun update(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(alarm)
+        GeneralUtils.showToast(title = "Alarm cancelled", context = coroutineContext as Context)
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         deleteAlarm(alarm)
         repository.delete(alarm)
-        showToast("Alarm removed")
+        GeneralUtils.showToast(title = "Alarm cancelled", context = coroutineContext as Context)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         deleteAlarm(alarm)
         update(alarm.copy(isEnabled = false))
-        showToast("Alarm cancelled")
+        GeneralUtils.showToast(title = "Alarm cancelled", context = coroutineContext as Context)
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         update(alarm.copy(isEnabled = true))
-        showToast("Alarm enabled")
+        GeneralUtils.showToast(title = "Alarm cancelled", context = coroutineContext as Context)
     }
 
     private fun createAlarm(
@@ -89,9 +96,7 @@ class MainViewModel @Inject constructor(
                 val intent = Intent(app, Receiver::class.java).apply {
                     // setting unique action allows for differentiation when deleting.
                     this.action = alarm.alarmId.toString()
-                    putExtra("title", "Alarm")
-                    putExtra("subtitle", generateSubTitle(alarm))
-                    putExtra("alarmId", alarm.alarmId)
+                    putExtras(alarm)
                 }
                 val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
 
@@ -99,7 +104,7 @@ class MainViewModel @Inject constructor(
                 val testPendingIntent = PendingIntentUtils.getBroadcast(app, 1, mainActivityIntent, 0)
 
                 alarmManager.setAlarmClock(
-                    AlarmManager.AlarmClockInfo(getTimeInMillis(alarm), testPendingIntent),
+                    AlarmManager.AlarmClockInfo(DateUtils.getTimeInMillis(alarm), testPendingIntent),
                     pendingIntent
                 )
             }
@@ -108,12 +113,10 @@ class MainViewModel @Inject constructor(
             val intent = Intent(app, Receiver::class.java).apply {
                 // setting unique action allows for differentiation when deleting.
                 this.action = alarm.alarmId.toString()
-                putExtra("title", "Alarm")
-                putExtra("subtitle", generateSubTitle(alarm))
-                putExtra("alarmId", alarm.alarmId)
+                putExtras(alarm)
             }
             val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, getTimeInMillis(alarm), pendingIntent)
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, DateUtils.getTimeInMillis(alarm), pendingIntent)
         }
     }
 
@@ -127,40 +130,47 @@ class MainViewModel @Inject constructor(
         }
         val pendingIntent = PendingIntentUtils.getBroadcast(app, 0, intent, 0)
 
-        // no need to check if not null anymore?
         alarmManager.cancel(pendingIntent)
     }
 
-    private fun showToast(title: String) {
-        Handler(Looper.getMainLooper()).post {
-            Toast.makeText(app.applicationContext, title, Toast.LENGTH_SHORT).show()
+    private fun update(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        repository.update(alarm)
+    }
+    private fun Intent.putExtras(alarm: Alarm) {
+        putExtra("title", "Alarm")
+        putExtra("subtitle", DateUtils.generateSubTitle(alarm))
+        putExtra("alarmId", alarm.alarmId.toString())
+        putExtra("action", "create")
+    }
+
+    fun snackBarPromptPermission(
+        scope: CoroutineScope,
+        snackBarHostState: SnackbarHostState,
+        context: Context
+    ) {
+        scope.launch {
+            val result = snackBarHostState.showSnackbar(
+                message = context.getString(R.string.permission_prompt_message),
+                actionLabel = context.getString(R.string.permission_prompt_action_label),
+                duration = SnackbarDuration.Long
+            )
+            /**SNACKBAR PROMPT ACCEPTED**/
+            if (snackBarHasBeenClicked(result)) {
+                openDeviceApplicationSettings(context)
+            }
         }
     }
 
-    private fun generateSubTitle(alarm: Alarm): String {
-        val subTitle = StringBuilder()
-        val hour24 = (alarm.hour % 12).toString()
-        val minute = if (alarm.minute < 10) "0" + alarm.minute.toString() else alarm.minute.toString()
-        val postFix = if (alarm.hour < 12)  "AM" else "PM"
-
-        subTitle.append(SimpleDateFormat("EE", Locale.ENGLISH).format(System.currentTimeMillis())).append(" ")
-        subTitle.append("$hour24:$minute $postFix")
-        return subTitle.toString()
+    private fun openDeviceApplicationSettings(context: Context) {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            data = Uri.fromParts("package", context.packageName, null)
+        }
+        context.startActivity(intent)
     }
 
-    private fun getTimeInMillis(alarm: Alarm): Long {
-        val cal = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, alarm.hour)
-            set(Calendar.MINUTE, alarm.minute)
-            set(Calendar.SECOND, 0)
-        }
-
-        /** check if time has already elapsed, set for following day **/
-        if (cal.timeInMillis < System.currentTimeMillis()) {
-            cal.add(Calendar.DATE, 1)
-            showToast("Alarm set for following day")
-        }
-
-        return cal.timeInMillis
-    }
+    private fun snackBarHasBeenClicked(result: SnackbarResult) =
+        result == SnackbarResult.ActionPerformed
 }

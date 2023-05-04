@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">whakaara</string>
+    <string name="time_picker_dialog_title">Select time</string>
+    <string name="permission_prompt_message">Notification permission required</string>
+    <string name="permission_prompt_action_label">Go to settings</string>
+    <string name="bottom_sheet_title">Edit alarm</string>
+    <string name="bottom_sheet_save_button">Save</string>
+    <string name="bottom_sheet_close_button">Close</string>
 </resources>

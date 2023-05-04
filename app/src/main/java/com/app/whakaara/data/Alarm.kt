@@ -2,7 +2,7 @@ package com.app.whakaara.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.*
+import java.util.UUID
 
 @Entity(tableName = "alarm_table")
 data class Alarm(

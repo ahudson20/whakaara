@@ -10,11 +10,7 @@ import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 fun AlarmScreen(
     viewModel: MainViewModel,
 ) {
-    /***
-     * Passing the whole VM down.
-     * Possibly just want to pass certain functions to the UI.
-     * **/
-    CardContainerSwipeToDismiss(viewModel)
+    CardContainerSwipeToDismiss(viewModel = viewModel)
 }
 
 @Preview(showBackground = true)

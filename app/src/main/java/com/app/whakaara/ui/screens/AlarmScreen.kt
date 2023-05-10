@@ -16,5 +16,5 @@ fun AlarmScreen(
 @Preview(showBackground = true)
 @Composable
 fun AlarmScreenPreview() {
-    AlarmScreen(hiltViewModel())
+    AlarmScreen(viewModel = hiltViewModel())
 }

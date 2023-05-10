@@ -7,14 +7,14 @@ interface AlarmRepository {
 
     fun allAlarms(): Flow<List<Alarm>>
 
-    fun insert(alarm: Alarm)
+    suspend fun insert(alarm: Alarm)
 
-    fun delete(alarm: Alarm)
+    suspend fun delete(alarm: Alarm)
 
-    fun update(alarm: Alarm)
+    suspend fun update(alarm: Alarm)
 
-    fun isEnabled(id: UUID, isEnabled: Boolean)
+    suspend fun isEnabled(id: UUID, isEnabled: Boolean)
 
-    fun getAlarmById(id: UUID): Alarm
+    suspend fun getAlarmById(id: UUID): Alarm
 
 }

@@ -10,9 +10,14 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.FabPosition
+import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +31,7 @@ import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.app.whakaara.utils.DateUtils
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,7 +59,6 @@ class MainActivity : ComponentActivity() {
 private fun Main(
     viewModel: MainViewModel
 ) {
-
     val navController = rememberNavController()
     val scaffoldState = rememberScaffoldState()
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
@@ -75,8 +80,7 @@ private fun Main(
                     FloatingButton(
                         isDialogShown = isDialogShown,
                         scaffoldState = scaffoldState,
-                        launcher = launcher,
-                        snackBarPromptPermission = viewModel::snackBarPromptPermission
+                        launcher = launcher
                     )
                     if (isDialogShown.value) {
                         TimePickerDialog(
@@ -87,6 +91,7 @@ private fun Main(
                                     Alarm(
                                         hour = it.hour,
                                         minute = it.minute,
+                                        subTitle = DateUtils.generateSubTitle(hour = it.hour, minute = it.minute)
                                     )
                                 )
                                 isDialogShown.value = false
@@ -95,7 +100,6 @@ private fun Main(
                             is24HourFormat = true,
                         )
                     }
-
                 }
             }
         },

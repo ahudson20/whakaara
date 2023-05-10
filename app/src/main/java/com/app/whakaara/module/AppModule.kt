@@ -6,7 +6,6 @@ import com.app.whakaara.data.AlarmDao
 import com.app.whakaara.data.AlarmDatabase
 import com.app.whakaara.data.AlarmRepository
 import com.app.whakaara.data.AlarmRepositoryImpl
-import com.app.whakaara.service.NotificationService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

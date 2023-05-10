@@ -56,7 +56,8 @@ fun CardContainerSwipeToDismiss(
                     Card(
                         alarm = alarm,
                         cancel = viewModel::disable,
-                        enable = viewModel::enable
+                        enable = viewModel::enable,
+                        reset = viewModel::reset
                     )
                 }
             )

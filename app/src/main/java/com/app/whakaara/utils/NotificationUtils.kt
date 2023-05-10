@@ -3,21 +3,25 @@ package com.app.whakaara.utils
 import android.app.Notification.VISIBILITY_PUBLIC
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color.WHITE
 import android.media.RingtoneManager
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import android.net.Uri
+import android.provider.Settings
+import androidx.compose.material.SnackbarDuration
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.core.app.NotificationCompat
-import com.app.whakaara.MainActivity
-import com.app.whakaara.activities.FullScreenNotificationActivity
+import com.app.whakaara.R
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_NAME
 import com.google.android.material.R.drawable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 class NotificationUtils(context: Context): ContextWrapper(context) {
-    private val channelId = "channel_id"
-    private val channelName = "channel_name"
 
     private var manager: NotificationManager? = null
 
@@ -27,12 +31,10 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
 
     private fun createChannel() {
         val channel = NotificationChannel(
-            channelId,
-            channelName,
+            CHANNEL_ID,
+            CHANNEL_NAME,
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            // TODO: re-visit this.
-            enableVibration(true)
             enableLights(true)
             setBypassDnd(true)
             lockscreenVisibility = VISIBILITY_PUBLIC
@@ -50,25 +52,53 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         return manager as NotificationManager
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
+    fun getChannel(): NotificationChannel {
+        return getManager().getNotificationChannel(CHANNEL_ID)
+    }
+
     fun getNotificationBuilder(): NotificationCompat.Builder {
-        val mainActivityIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        }
-        val onNotificationClickPendingIntent = PendingIntentUtils.getActivity(this, 0, mainActivityIntent, 0)
-
-//        val testIntent = Intent(this, FullScreenNotificationActivity::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//        val mainActivityIntent = Intent(this, MainActivity::class.java).apply {
+//            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
 //        }
-//        val testPendingIntent = PendingIntentUtils.getActivity(this, 0, testIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+//        val onNotificationClickPendingIntent = PendingIntentUtils.getActivity(this, 0, mainActivityIntent, 0)
 
-        return NotificationCompat.Builder(applicationContext, channelId)
+        return NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(drawable.ic_clock_black_24dp)
             .setColor(WHITE)
-            .setContentIntent(onNotificationClickPendingIntent)
+            //.setContentIntent(onNotificationClickPendingIntent)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setAutoCancel(true)
             .setOngoing(true)
-//            .setFullScreenIntent(testPendingIntent, true)
     }
+
+    fun snackBarPromptPermission(
+        scope: CoroutineScope,
+        snackBarHostState: SnackbarHostState,
+        context: Context
+    ) {
+        scope.launch {
+            val result = snackBarHostState.showSnackbar(
+                message = context.getString(R.string.permission_prompt_message),
+                actionLabel = context.getString(R.string.permission_prompt_action_label),
+                duration = SnackbarDuration.Long
+            )
+            /**SNACKBAR PROMPT ACCEPTED**/
+            if (snackBarHasBeenClicked(result)) {
+                openDeviceApplicationSettings(context)
+            }
+        }
+    }
+
+    private fun openDeviceApplicationSettings(context: Context) {
+        val intent = Intent(
+            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            data = Uri.fromParts("package", context.packageName, null)
+        }
+        context.startActivity(intent)
+    }
+
+    private fun snackBarHasBeenClicked(result: SnackbarResult) =
+        result == SnackbarResult.ActionPerformed
 }

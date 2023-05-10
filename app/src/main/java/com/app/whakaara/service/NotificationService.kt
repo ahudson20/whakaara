@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.app.whakaara.data.AlarmRepository
-import com.app.whakaara.logic.Receiver
+import com.app.whakaara.receiver.Receiver
 import com.app.whakaara.utils.NotificationUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.app.whakaara.logic
+package com.app.whakaara.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,10 +10,6 @@ import com.app.whakaara.MainActivity
 import com.app.whakaara.data.AlarmRepository
 import com.app.whakaara.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -28,9 +24,6 @@ class NotificationReceiver : BroadcastReceiver() {
             if (intent.action.equals("cancel")) {
                 val alarmId = intent.getStringExtra("alarmId")
                 if (alarmId != null) {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        repo.isEnabled(id = UUID.fromString(alarmId), isEnabled = false)
-                    }
                     removeNotification(
                         context = context,
                         id = intent.getIntExtra("notificationId", 1)

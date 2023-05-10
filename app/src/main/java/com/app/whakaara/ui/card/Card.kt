@@ -31,9 +31,10 @@ import kotlinx.coroutines.launch
 fun Card(
     alarm: Alarm,
     cancel: (alarm: Alarm) -> Unit,
-    enable: (alarm: Alarm) -> Unit
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit
 ) {
-    val valueSlider by remember(alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
+//    val valueSlider by remember(alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
     ElevatedCard(
@@ -61,7 +62,7 @@ fun Card(
             }
             Spacer(Modifier.weight(1f))
             Switch(
-                checked = valueSlider,
+                checked = alarm.isEnabled,
                 onCheckedChange = {
                     if (!it) {
                         cancel(alarm)
@@ -76,8 +77,7 @@ fun Card(
     BottomSheetWrapper(
         state = sheetState,
         alarm = alarm,
-        cancel = cancel,
-        enable = enable
+        reset = reset
     )
 }
 
@@ -87,10 +87,12 @@ fun CardPreview() {
     Card(
         alarm = Alarm(
             hour = 12,
-            minute = 13
+            minute = 13,
+            subTitle = "12:13 AM"
         ),
         cancel = {},
-        enable = {}
+        enable = {},
+        reset = {}
     )
 }
 

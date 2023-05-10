@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'kotlin-parcelize'
 }
 
 android {
@@ -49,26 +50,25 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.material:material:1.8.0'
-    implementation("androidx.compose.material3:material3:1.1.0-alpha08")
-    implementation("androidx.compose.material3:material3-window-size-class:1.1.0-alpha08")
+    implementation "com.google.android.material:material:1.8.0"
+    implementation "androidx.compose.material3:material3:1.1.0-rc01"
+    implementation "androidx.compose.material3:material3-window-size-class:1.1.0-rc01"
     implementation "androidx.navigation:navigation-compose:$nav_version"
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation "androidx.compose.ui:ui:1.4.0-rc01"
-    implementation "androidx.compose.material:material:1.4.0-rc01"
-    implementation "androidx.compose.ui:ui-tooling-preview:1.4.0-rc01"
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.0'
-    implementation 'androidx.activity:activity-compose:1.6.1'
-    implementation 'androidx.room:room-ktx:2.5.0'
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    kapt "androidx.room:room-compiler:2.5.0"
+    implementation "androidx.core:core-ktx:1.10.0"
+    implementation "androidx.compose.ui:ui:1.5.0-alpha03"
+    implementation "androidx.compose.material:material:1.5.0-alpha03"
+    implementation "androidx.compose.ui:ui-tooling-preview:1.5.0-alpha03"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
+    implementation "androidx.activity:activity-compose:1.7.1"
+    implementation "androidx.room:room-ktx:2.5.1"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    kapt "androidx.room:room-compiler:2.5.1"
 
     // Accompanist permissions
     implementation "com.google.accompanist:accompanist-permissions:$accompanist_permissions"
 
     // Timepicker Material3
     implementation "com.marosseleng.android:compose-material3-datetime-pickers:$time_picker_version"
-
 
     // Kotlin + coroutines
     implementation "androidx.work:work-runtime-ktx:$work_version"
@@ -77,38 +77,43 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.5.0"
 
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
-    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.4.0-rc01"
-    debugImplementation "androidx.compose.ui:ui-tooling:1.4.0-rc01"
-    debugImplementation "androidx.compose.ui:ui-test-manifest:1.4.0-rc01"
+    testImplementation "junit:junit:4.13.2"
+    androidTestImplementation "androidx.test.ext:junit:1.1.5"
+    androidTestImplementation "androidx.test.espresso:espresso-core:3.5.1"
+    androidTestImplementation "androidx.compose.ui:ui-test-junit4:1.5.0-alpha03"
+    debugImplementation "androidx.compose.ui:ui-tooling:1.5.0-alpha03"
+    debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.0-alpha03"
 
     implementation "javax.inject:javax.inject:1"
 
     // https://github.com/dokar3/sheets
     implementation "io.github.dokar3:sheets:0.4.2"
 
+    // https://github.com/ChargeMap/Compose-NumberPicker
+    implementation "com.chargemap.compose:numberpicker:1.0.3"
+
+    implementation "com.google.code.gson:gson:2.10.1"
+
     // Hilt
-    implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
     implementation "com.google.dagger:hilt-android:2.44"
     kapt "com.google.dagger:hilt-android-compiler:2.43.2"
 
     // ViewModel utilities for Compose
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.0")
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.1"
 
     // Saved state module for ViewModel
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.0")
+    implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1"
 
     // optional - helpers for implementing LifecycleOwner in a Service
-    implementation("androidx.lifecycle:lifecycle-service:2.6.0")
+    implementation "androidx.lifecycle:lifecycle-service:2.6.1"
 
     // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
-    implementation("androidx.lifecycle:lifecycle-process:2.6.0")
+    implementation "androidx.lifecycle:lifecycle-process:2.6.1"
 
     // optional - Test helpers for Lifecycle runtime
-    testImplementation ("androidx.lifecycle:lifecycle-runtime-testing:2.6.0")
+    testImplementation "androidx.lifecycle:lifecycle-runtime-testing:2.6.1"
 }
 
 // Allow references to generated code

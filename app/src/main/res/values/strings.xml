@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">whakaara</string>
     <string name="time_picker_dialog_title">Select time</string>
 
@@ -11,6 +11,10 @@
     <string name="bottom_sheet_close_button">Cancel</string>
     <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>
 
+    <string name="notification_action_deleted">Alarm deleted</string>
+    <string name="notification_action_cancelled">Alarm cancelled</string>
+
     <string name="notification_action_button_cancel">Cancel</string>
     <string name="notification_action_button_snooze">Snooze</string>
+    <string name="notification_action_button_dismiss">Dismiss</string>
 </resources>

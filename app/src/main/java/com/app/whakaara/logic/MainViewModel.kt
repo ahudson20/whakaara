@@ -9,6 +9,7 @@ import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.app.whakaara.R
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
 import com.app.whakaara.receiver.Receiver
@@ -25,6 +26,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,13 +61,13 @@ class MainViewModel @Inject constructor(
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         deleteAlarm(alarm)
         repository.delete(alarm)
-        GeneralUtils.showToast(title = "Alarm deleted", context = app.applicationContext)
+        GeneralUtils.showToast(title = app.getString(R.string.notification_action_deleted), context = app.applicationContext)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         deleteAlarm(alarm)
-        GeneralUtils.showToast(title = "Alarm cancelled", context = app.applicationContext)
+        GeneralUtils.showToast(title = app.getString(R.string.notification_action_cancelled), context = app.applicationContext)
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -80,6 +84,19 @@ class MainViewModel @Inject constructor(
         create(alarm)
     }
 
+    fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+        val currentTimePlusTenMinutes = Calendar.getInstance().apply {
+            add(Calendar.MINUTE, 10)
+        }
+        deleteAlarm(alarm)
+        createAlarm(
+            alarm.copy(
+                hour = currentTimePlusTenMinutes.get(Calendar.HOUR_OF_DAY),
+                minute = currentTimePlusTenMinutes.get(Calendar.MINUTE)
+            )
+        )
+    }
+
     private fun updateExistingAlarmInDatabase(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.update(alarm)
     }
@@ -90,36 +107,35 @@ class MainViewModel @Inject constructor(
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (userHasNotGrantedAlarmPermission(alarmManager)) {
+            if (!userHasNotGrantedAlarmPermission(alarmManager)) {
                 redirectUserToSpecialAppAccessScreen()
             } else {
-                val startReceiverIntent = getStartReceiverIntent(alarm)
-                val intentActionAfterAlarmGoesOff = PendingIntentUtils.getBroadcast(
-                    context = app,
-                    id = INTENT_REQUEST_CODE,
-                    intent = startReceiverIntent,
-                    flag = 0
-                )
-
-                val alarmDetailsIntent = PendingIntentUtils.getBroadcast(
-                    context = app,
-                    id = INTENT_REQUEST_CODE, //1,
-                    intent = startReceiverIntent,
-                    flag = 0
-                )
-
-                alarmManager.setAlarmClock(
-                    AlarmManager.AlarmClockInfo(
-                        DateUtils.getTimeInMillis(alarm),
-                        alarmDetailsIntent
-                    ),
-                    intentActionAfterAlarmGoesOff
-                )
+                setExactAlarm(alarm, alarmManager)
             }
         } else {
             setExactAlarm(alarm, alarmManager)
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun userHasNotGrantedAlarmPermission(alarmManager: AlarmManager) =
+        alarmManager.canScheduleExactAlarms()
+
+    @RequiresApi(Build.VERSION_CODES.S)
+    private fun redirectUserToSpecialAppAccessScreen() {
+        Intent().apply {
+            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
+        }.also {
+            app.applicationContext.startActivity(it)
+        }
+    }
+
+    private fun getStartReceiverIntent(alarm: Alarm) =
+        Intent(app, Receiver::class.java).apply {
+            // setting unique action allows for differentiation when deleting.
+            this.action = alarm.alarmId.toString()
+            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
+        }
 
     private fun setExactAlarm(
         alarm: Alarm,
@@ -138,26 +154,6 @@ class MainViewModel @Inject constructor(
             pendingIntent
         )
     }
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun redirectUserToSpecialAppAccessScreen() {
-        Intent().apply {
-            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-        }.also {
-            app.applicationContext.startActivity(it)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.S)
-    private fun userHasNotGrantedAlarmPermission(alarmManager: AlarmManager) =
-        !alarmManager.canScheduleExactAlarms()
-
-    private fun getStartReceiverIntent(alarm: Alarm) =
-        Intent(app, Receiver::class.java).apply {
-            // setting unique action allows for differentiation when deleting.
-            this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
-        }
 
     private fun deleteAlarm(
         alarm: Alarm,

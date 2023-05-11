@@ -1,5 +1,6 @@
 package com.app.whakaara.receiver
 
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -12,12 +13,7 @@ import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.NotificationUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_CANCEL
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_SNOOZE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_NOTIFICATION_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,63 +30,35 @@ class Receiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         try {
             val alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
+            val notificationUtils = NotificationUtils(context)
+            val notification = createNotification(
+                context = context,
+                alarm = alarm,
+                notificationUtils = notificationUtils
+            )
 
             setIsEnabledToFalse(alarmId = alarm.alarmId.toString())
 
-            createNotificationAndDisplay(
-                alarm = alarm,
-                context = context
+            enableVibrationForNotification(
+                notificationUtils = notificationUtils,
+                alarm = alarm
+            )
+
+            displayNotification(
+                notificationUtils = notificationUtils,
+                uniqueID = System.currentTimeMillis().toInt(),
+                notification = notification
             )
         } catch (exception: Exception) {
             Log.d("Receiver exception", exception.printStackTrace().toString())
         }
     }
 
-    private fun createNotificationAndDisplay(
+    private fun createNotification(
+        context: Context,
         alarm: Alarm,
-        context: Context
-    ) {
-
-        val uniqueID = System.currentTimeMillis().toInt()
-
-        val snoozeAlarmIntent = Intent().apply {
-            setClass(context, NotificationReceiver::class.java)
-            putExtra(INTENT_EXTRA_ALARM_ID, alarm.alarmId.toString())
-            putExtra(INTENT_EXTRA_NOTIFICATION_ID, uniqueID)
-            action = INTENT_EXTRA_ACTION_SNOOZE
-        }
-        val snoozeActionPendingIntent = PendingIntentUtils.getBroadcast(
-            context = context,
-            id = INTENT_REQUEST_CODE,
-            intent = snoozeAlarmIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-
-        // TODO: Implement cancel button on notification?
-
-        //            val cancelAlarmIntent = Intent().apply {
-        //                setClass(context, NotificationService::class.java)
-        //                putExtra("alarmId", alarmId.toString())
-        //                putExtra("notificationId", uniqueID)
-        //                action = "cancel"
-        //
-        //            }
-        //            val cancelActionPendingIntent = PendingIntent.getService(context, 0, cancelAlarmIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
-
-        val cancelAlarmIntent = Intent().apply {
-            setClass(context, NotificationReceiver::class.java)
-            putExtra(INTENT_EXTRA_ALARM_ID, alarm.alarmId.toString())
-            putExtra(INTENT_EXTRA_NOTIFICATION_ID, uniqueID)
-            action = INTENT_EXTRA_ACTION_CANCEL
-        }
-        val cancelActionPendingIntent = PendingIntentUtils.getBroadcast(
-            context = context,
-            id = INTENT_REQUEST_CODE,
-            intent = cancelAlarmIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )//PendingIntent.FLAG_UPDATE_CURRENT
-
+        notificationUtils: NotificationUtils,
+    ): Notification {
         val fullScreenIntent = Intent().apply {
             setClass(context, FullScreenNotificationActivity::class.java)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -105,28 +73,12 @@ class Receiver : BroadcastReceiver() {
         }
         val fullScreenPendingIntent = PendingIntentUtils.getActivity(context, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notificationUtils = NotificationUtils(context)
         val notification = notificationUtils.getNotificationBuilder().apply {
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(fullScreenPendingIntent, true)
-//            addAction(
-//                R.drawable.baseline_cancel_24,
-//                context.getString(R.string.notification_action_button_snooze),
-//                snoozeActionPendingIntent
-//            )
-//            addAction(
-//                R.drawable.baseline_cancel_24,
-//                context.getString(R.string.notification_action_button_cancel),
-//                cancelActionPendingIntent
-//            )
         }.build()
-
-        notificationUtils.getChannel().apply {
-            enableVibration(alarm.vibration)
-        }
-
-        notificationUtils.getManager().notify(uniqueID, notification)
+        return notification
     }
 
     private fun setIsEnabledToFalse(alarmId: String?) {
@@ -135,5 +87,22 @@ class Receiver : BroadcastReceiver() {
                 repo.isEnabled(id = UUID.fromString(alarmId), isEnabled = false)
             }
         }
+    }
+
+    private fun enableVibrationForNotification(
+        notificationUtils: NotificationUtils,
+        alarm: Alarm
+    ) {
+        notificationUtils.getChannel().apply {
+            enableVibration(alarm.vibration)
+        }
+    }
+
+    private fun displayNotification(
+        notificationUtils: NotificationUtils,
+        uniqueID: Int,
+        notification: Notification
+    ) {
+        notificationUtils.getManager().notify(uniqueID, notification)
     }
 }

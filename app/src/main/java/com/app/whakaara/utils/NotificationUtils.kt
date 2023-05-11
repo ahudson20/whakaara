@@ -57,15 +57,9 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
     }
 
     fun getNotificationBuilder(): NotificationCompat.Builder {
-//        val mainActivityIntent = Intent(this, MainActivity::class.java).apply {
-//            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-//        }
-//        val onNotificationClickPendingIntent = PendingIntentUtils.getActivity(this, 0, mainActivityIntent, 0)
-
         return NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(drawable.ic_clock_black_24dp)
             .setColor(WHITE)
-            //.setContentIntent(onNotificationClickPendingIntent)
             .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
             .setAutoCancel(true)
             .setOngoing(true)

@@ -1,11 +1,9 @@
 package com.app.whakaara.activities
 
-import android.os.Build
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,34 +14,34 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.app.whakaara.R
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.ui.clock.TextClock
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.DateUtils.Companion.TWENTY_FOUR_HOUR_AM_PM
-import com.app.whakaara.utils.DateUtils.Companion.toString
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FullScreenNotificationActivity: AppCompatActivity() {
+class FullScreenNotificationActivity: ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
 
-    @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
 
         val alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
+
         setContent {
             WhakaaraTheme {
                 Main(
-                   alarm = alarm
+                    alarm = alarm
                 )
             }
         }
@@ -60,14 +58,22 @@ class FullScreenNotificationActivity: AppCompatActivity() {
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
         ) {
-            Text(text = DateUtils.getCurrentDateTime().toString(format = TWENTY_FOUR_HOUR_AM_PM))
+            TextClock()
+            Button(
+                onClick = {
+                    viewModel.snooze(alarm = alarm)
+                    finishAndRemoveTask()
+                }
+            ) {
+                Text(text = stringResource(id = R.string.notification_action_button_snooze))
+            }
             Button(
                 onClick = {
                     viewModel.disable(alarm = alarm)
                     finishAndRemoveTask()
                 }
             ) {
-                Text(text = "Dismiss alarm")
+                Text(text = stringResource(id = R.string.notification_action_button_dismiss))
             }
         }
     }

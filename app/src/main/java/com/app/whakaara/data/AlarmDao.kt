@@ -17,6 +17,9 @@ interface AlarmDao {
     @Delete
     suspend fun deleteAlarm(alarm: Alarm)
 
+    @Query("DELETE FROM alarm_table WHERE alarmId = :id")
+    suspend fun deleteAlarmById(id: UUID)
+
     @Update
     suspend fun updateAlarm(alarm: Alarm)
 

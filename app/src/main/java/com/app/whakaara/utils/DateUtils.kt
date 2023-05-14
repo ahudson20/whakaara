@@ -1,9 +1,9 @@
 package com.app.whakaara.utils
 
 import com.app.whakaara.data.Alarm
+import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -11,38 +11,6 @@ class DateUtils {
     companion object {
 
         private const val BOTTOM_SHEET_ALARM_LABEL_OFF = "Off"
-        const val TWENTY_FOUR_HOUR_AM_PM = "hh:mm aa"
-
-        fun convertIntegersToHHMM(hour: Int, minute: Int): String {
-            return String.format("%02d:%02d", hour, minute);
-        }
-
-        fun Date.toString(format: String, locale: Locale = Locale.getDefault()): String {
-            val formatter = SimpleDateFormat(format, locale) //"hh:mm aa"
-            return formatter.format(this)
-        }
-
-        fun getCurrentDateTime(): Date {
-            return Calendar.getInstance().time
-        }
-
-        fun getCurrent(): String {
-            val sdf = SimpleDateFormat("hh:mm aa", Locale.getDefault())
-            val dateNow = Calendar.getInstance().time
-            return sdf.format(dateNow)
-        }
-
-        // TODO: make this better...
-          fun generateSubTitle(hour: Int, minute: Int): String {
-            val subTitle = StringBuilder()
-            val hour24 = (hour % 12).toString()
-            val min = if (minute < 10) "0$minute" else minute.toString()
-            val postFix = if (hour < 12)  "AM" else "PM"
-
-            subTitle.append(SimpleDateFormat("EE", Locale.ENGLISH).format(System.currentTimeMillis())).append(" ")
-            subTitle.append("$hour24:$min $postFix")
-            return subTitle.toString()
-        }
 
         fun getTimeInMillis(alarm: Alarm): Long {
             val cal = Calendar.getInstance().apply {
@@ -83,11 +51,22 @@ class DateUtils {
         fun convertSecondsToHMm(seconds: Long): String {
             val minutes = seconds / 60 % 60
             val hours = seconds / (60 * 60) % 24
-            return if (hours > 0) {
+            return if (hours.toInt() == 1) {
+                String.format("Alarm in %d hour %d minutes", hours, minutes)
+            } else if (hours > 0) {
                 String.format("Alarm in %d hours %d minutes", hours, minutes)
             } else {
                 String.format("Alarm in %d minutes", minutes)
             }
+        }
+
+        fun alarmTimeTo24HourFormat(hour: Int, minute: Int): String {
+            val cal = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, hour)
+                set(Calendar.MINUTE, minute)
+                set(Calendar.SECOND, 0)
+            }
+            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(cal.time)
         }
 
         fun getInitialTimeToAlarm(isEnabled: Boolean, hours: Int, minutes: Int): String {

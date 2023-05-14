@@ -37,7 +37,11 @@ class Receiver : BroadcastReceiver() {
                 notificationUtils = notificationUtils
             )
 
-            setIsEnabledToFalse(alarmId = alarm.alarmId.toString())
+            if (alarm.deleteAfterGoesOff) {
+                deleteAlarmById(alarmId = alarm.alarmId)
+            } else {
+                setIsEnabledToFalse(alarmId = alarm.alarmId)
+            }
 
             enableVibrationForNotification(
                 notificationUtils = notificationUtils,
@@ -81,11 +85,15 @@ class Receiver : BroadcastReceiver() {
         return notification
     }
 
-    private fun setIsEnabledToFalse(alarmId: String?) {
-        if (alarmId != null) {
-            CoroutineScope(Dispatchers.IO).launch {
-                repo.isEnabled(id = UUID.fromString(alarmId), isEnabled = false)
-            }
+    private fun deleteAlarmById(alarmId: UUID) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.deleteAlarmById(id = alarmId)
+        }
+    }
+
+    private fun setIsEnabledToFalse(alarmId: UUID) {
+        CoroutineScope(Dispatchers.IO).launch {
+            repo.isEnabled(id = alarmId, isEnabled = false)
         }
     }
 

@@ -26,9 +26,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
@@ -59,20 +57,20 @@ class MainViewModel @Inject constructor(
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        deleteAlarm(alarm)
+        stopAlarm(alarm)
         repository.delete(alarm)
         GeneralUtils.showToast(title = app.getString(R.string.notification_action_deleted), context = app.applicationContext)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
-        deleteAlarm(alarm)
+        stopAlarm(alarm)
         GeneralUtils.showToast(title = app.getString(R.string.notification_action_cancelled), context = app.applicationContext)
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = true))
-        deleteAlarm(alarm)
+        stopAlarm(alarm)
         createAlarm(alarm)
         // TODO: Generate string for toast - Alarm set for x time OR Alarm set %d hours %d minute(s)
         GeneralUtils.showToast(title = "Alarm enabled", context = app.applicationContext)
@@ -80,15 +78,15 @@ class MainViewModel @Inject constructor(
 
     fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm)
-        deleteAlarm(alarm)
-        create(alarm)
+        stopAlarm(alarm)
+        createAlarm(alarm)
     }
 
     fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         val currentTimePlusTenMinutes = Calendar.getInstance().apply {
             add(Calendar.MINUTE, 10)
         }
-        deleteAlarm(alarm)
+        stopAlarm(alarm)
         createAlarm(
             alarm.copy(
                 hour = currentTimePlusTenMinutes.get(Calendar.HOUR_OF_DAY),
@@ -155,7 +153,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun deleteAlarm(
+    private fun stopAlarm(
         alarm: Alarm,
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager

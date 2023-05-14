@@ -11,6 +11,8 @@ interface AlarmRepository {
 
     suspend fun delete(alarm: Alarm)
 
+    suspend fun deleteAlarmById(id: UUID)
+
     suspend fun update(alarm: Alarm)
 
     suspend fun isEnabled(id: UUID, isEnabled: Boolean)

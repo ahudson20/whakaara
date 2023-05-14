@@ -31,26 +31,29 @@ import dagger.hilt.android.AndroidEntryPoint
 class FullScreenNotificationActivity: ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private lateinit var alarm: Alarm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
 
-        val alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
+        alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
 
         setContent {
             WhakaaraTheme {
-                Main(
-                    alarm = alarm
-                )
+                Main()
             }
         }
     }
 
+    override fun onBackPressed() {
+        onBackPressedDispatcher.onBackPressed()
+        viewModel.disable(alarm = alarm)
+        finishAndRemoveTask()
+    }
+
     @Composable
-    private fun Main(
-        alarm: Alarm
-    ) {
+    private fun Main() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -59,13 +62,16 @@ class FullScreenNotificationActivity: ComponentActivity() {
                 .background(MaterialTheme.colors.background)
         ) {
             TextClock()
-            Button(
-                onClick = {
-                    viewModel.snooze(alarm = alarm)
-                    finishAndRemoveTask()
+
+            if (alarm.isSnoozeEnabled) {
+                Button(
+                    onClick = {
+                        viewModel.snooze(alarm = alarm)
+                        finishAndRemoveTask()
+                    }
+                ) {
+                    Text(text = stringResource(id = R.string.notification_action_button_snooze))
                 }
-            ) {
-                Text(text = stringResource(id = R.string.notification_action_button_snooze))
             }
             Button(
                 onClick = {

@@ -31,7 +31,7 @@ import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.DateUtils.Companion.alarmTimeTo24HourFormat
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import dagger.hilt.android.AndroidEntryPoint
@@ -91,7 +91,7 @@ private fun Main(
                                     Alarm(
                                         hour = it.hour,
                                         minute = it.minute,
-                                        subTitle = DateUtils.generateSubTitle(hour = it.hour, minute = it.minute)
+                                        subTitle =  alarmTimeTo24HourFormat(hour = it.hour, minute = it.minute)
                                     )
                                 )
                                 isDialogShown.value = false

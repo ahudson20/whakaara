@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -14,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,37 +42,35 @@ fun BottomSheetTopBar(
     isVibrationEnabled: Boolean,
     isSnoozeEnabled: Boolean,
     deleteAfterGoesOff: Boolean,
-    bottomText: String
+    bottomText: String,
+    title: String
 ) {
     val context = LocalContext.current
     Row(
         modifier = modifier
-            .padding(10.dp)
+            .padding(start = 10.dp, end = 10.dp, bottom = 24.dp)
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        ClickableText(
-            style = TextStyle(
-                fontSize = 16.sp
-            ),
-            text = AnnotatedString(stringResource(id = R.string.bottom_sheet_close_button)),
+        IconButton(
             onClick = {
                 coroutineScope.launch {
                     sheetState.collapse()
                 }
             }
-        )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "close"
+            )
+        }
 
         BottomSheetTitle(
-            title = alarm.title,
+            title = title,
             bottomText = bottomText
         )
 
-        ClickableText(
-            style = TextStyle(
-                fontSize = 16.sp
-            ),
-            text = AnnotatedString(stringResource(id = R.string.bottom_sheet_save_button)),
+        IconButton(
             onClick = {
                 coroutineScope.launch {
                     reset(
@@ -79,14 +80,20 @@ fun BottomSheetTopBar(
                             isEnabled = true,
                             vibration = isVibrationEnabled,
                             isSnoozeEnabled = isSnoozeEnabled,
-                            deleteAfterGoesOff = deleteAfterGoesOff
+                            deleteAfterGoesOff = deleteAfterGoesOff,
+                            title = title
                         )
                     )
                     GeneralUtils.showToast(title = context.getString(R.string.bottom_sheet_save_button), context = context)
                     sheetState.collapse()
                 }
             }
-        )
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Check,
+                contentDescription = "close"
+            )
+        }
     }
 }
 
@@ -106,14 +113,14 @@ private fun BottomSheetTitle(
                 stringResource(id = R.string.bottom_sheet_title)
             },
             style = TextStyle(
-                fontSize = 16.sp
+                fontSize = 20.sp
             ),
         )
 
         Text(
             text = bottomText,
             style = TextStyle(
-                fontSize = 10.sp,
+                fontSize = 14.sp,
                 color = Color.Gray
             )
         )
@@ -140,7 +147,8 @@ fun BottomSheetTopBarPreview() {
         isVibrationEnabled = true,
         isSnoozeEnabled = true,
         deleteAfterGoesOff = false,
-        bottomText = "bottomText"
+        bottomText = "bottomText",
+        title = "title"
     )
 }
 

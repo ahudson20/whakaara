@@ -1,6 +1,7 @@
 package com.app.whakaara.ui.bottomsheet
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
@@ -11,6 +12,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.data.Alarm
@@ -29,10 +32,12 @@ fun BottomSheetContent(
     reset: (alarm: Alarm) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
     var timePickerValue by remember { mutableStateOf<Hours>(FullHours(alarm.hour, alarm.minute)) }
     var isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
     var isSnoozeEnabled by remember(alarm.isSnoozeEnabled) { mutableStateOf(alarm.isSnoozeEnabled) }
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
+    var title by remember(alarm.title) { mutableStateOf(alarm.title) }
     var bottomText by remember {
         mutableStateOf(
             DateUtils.getInitialTimeToAlarm(
@@ -50,7 +55,11 @@ fun BottomSheetContent(
     }
 
     Column(
-        modifier = modifier.fillMaxHeight()
+        modifier = modifier.fillMaxHeight().pointerInput(Unit) {
+            detectTapGestures(onTap = {
+                focusManager.clearFocus()
+            })
+        }
     ) {
 
         BottomSheetTopBar(
@@ -62,7 +71,8 @@ fun BottomSheetContent(
             isVibrationEnabled = isVibrationEnabled,
             isSnoozeEnabled = isSnoozeEnabled,
             deleteAfterGoesOff = deleteAfterGoesOff,
-            bottomText = bottomText
+            bottomText = bottomText,
+            title = title
         )
 
         BottomSheetTimePicker(
@@ -92,6 +102,10 @@ fun BottomSheetContent(
             deleteAfterGoesOff = deleteAfterGoesOff,
             updateDeleteAfterGoesOff = { newValue ->
                 deleteAfterGoesOff = newValue
+            },
+            title = title,
+            updateTitle = { newValue ->
+                title = newValue
             }
         )
     }

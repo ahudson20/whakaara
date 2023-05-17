@@ -1,6 +1,7 @@
 package com.app.whakaara.utils
 
 import com.app.whakaara.data.Alarm
+import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -9,9 +10,6 @@ import java.util.concurrent.TimeUnit
 
 class DateUtils {
     companion object {
-
-        private const val BOTTOM_SHEET_ALARM_LABEL_OFF = "Off"
-
         fun getTimeInMillis(alarm: Alarm): Long {
             val cal = Calendar.getInstance().apply {
                 set(Calendar.HOUR_OF_DAY, alarm.hour)
@@ -66,7 +64,7 @@ class DateUtils {
                 set(Calendar.MINUTE, minute)
                 set(Calendar.SECOND, 0)
             }
-            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(cal.time)
+            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(cal.time).uppercase()
         }
 
         fun getInitialTimeToAlarm(isEnabled: Boolean, hours: Int, minutes: Int): String {

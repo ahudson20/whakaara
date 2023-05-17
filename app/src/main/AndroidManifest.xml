@@ -30,11 +30,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".activities.FullScreenNotificationActivity"
-            android:theme="@style/Theme.Whakaara"
-        />
+            android:theme="@style/Theme.Whakaara" />
 
         <receiver
             android:name="com.app.whakaara.receiver.Receiver"
@@ -57,12 +55,6 @@
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <service
-            android:name=".service.NotificationService"
-            android:exported="true"
-            android:process=":remote"
-            />
     </application>
 
 </manifest>

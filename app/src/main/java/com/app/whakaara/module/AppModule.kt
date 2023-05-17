@@ -36,11 +36,4 @@ class AppModule {
     ): AlarmRepository = AlarmRepositoryImpl(
         alarmDao = alarmDao
     )
-
-//    @Provides
-//    fun provideNotificationService(
-//        notificationService: NotificationService
-//    ): NotificationService {
-//        return notificationService
-//    }
 }

@@ -14,4 +14,6 @@ object NotificationUtilsConstants {
     const val INTENT_EXTRA_NOTIFICATION_ID = "notificationId"
 
     const val INTENT_REQUEST_CODE = 0
+
+    const val ALARM_TITLE_MAX_CHARS = 20
 }

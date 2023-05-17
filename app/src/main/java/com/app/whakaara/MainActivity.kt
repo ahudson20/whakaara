@@ -10,9 +10,9 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.FabPosition
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -70,7 +70,6 @@ private fun Main(
     }
 
     Scaffold(
-        scaffoldState = scaffoldState,
         topBar = { TopBar(navController = navController) },
         bottomBar = { BottomNavigation(navController = navController) },
         floatingActionButton = {

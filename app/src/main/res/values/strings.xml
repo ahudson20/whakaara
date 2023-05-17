@@ -13,13 +13,15 @@
     <string name="bottom_sheet_save_button">Save</string>
     <string name="bottom_sheet_close_button">Cancel</string>
     <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>
+    <string name="bottom_sheet_content_alarm_title">Title</string>
 
     <string name="card_alarm_sub_title_off">Off</string>
 
     <string name="notification_action_deleted">Alarm deleted</string>
     <string name="notification_action_cancelled">Alarm cancelled</string>
-
     <string name="notification_action_button_cancel">Cancel</string>
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>
+
+    <string name="delete_icon_content_description">Delete icon</string>
 </resources>

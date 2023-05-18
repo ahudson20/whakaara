@@ -2,6 +2,7 @@ package com.app.whakaara.logic
 
 import android.app.AlarmManager
 import android.app.Application
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -144,7 +145,7 @@ class MainViewModel @Inject constructor(
             context = app,
             id = INTENT_REQUEST_CODE,
             intent = startReceiverIntent,
-            flag = 0
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
@@ -160,13 +161,14 @@ class MainViewModel @Inject constructor(
         val intent = Intent(app, Receiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
+            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
         }
 
         val pendingIntent = PendingIntentUtils.getBroadcast(
             context = app,
             id = INTENT_REQUEST_CODE,
             intent = intent,
-            flag = 0
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
         )
 
         alarmManager.cancel(pendingIntent)

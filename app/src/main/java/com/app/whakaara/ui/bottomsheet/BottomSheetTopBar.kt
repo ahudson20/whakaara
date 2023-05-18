@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.data.Alarm
+import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.GeneralUtils
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
@@ -81,7 +82,11 @@ fun BottomSheetTopBar(
                             vibration = isVibrationEnabled,
                             isSnoozeEnabled = isSnoozeEnabled,
                             deleteAfterGoesOff = deleteAfterGoesOff,
-                            title = title
+                            title = title,
+                            subTitle = DateUtils.alarmTimeTo24HourFormat(
+                                hour = pickerValue.hours,
+                                minute = pickerValue.minutes
+                            )
                         )
                     )
                     GeneralUtils.showToast(title = context.getString(R.string.bottom_sheet_save_button), context = context)

@@ -53,8 +53,8 @@ fun Card(
             )
         )
     }
-    
-    LaunchedEffect(valueSlider) {
+
+    LaunchedEffect(key1 = alarm.hour, key2 = alarm.minute, key3 = valueSlider) {
         timeToAlarm = getInitialTimeToAlarm(
             isEnabled = valueSlider,
             hours = alarm.hour,
@@ -103,19 +103,13 @@ fun Card(
                     modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
                     text = alarm.subTitle,
                     style = TextStyle(
-                        fontSize = 20.sp,
-//                        color = if (valueSlider) {
-//                            Color.Black
-//                        } else {
-//                            Color.Gray
-//                        }
+                        fontSize = 20.sp
                     )
                 )
                 Text(
                     text = timeToAlarm,
                     style = TextStyle(
-                        fontSize = 14.sp,
-//                        color = Color.Gray
+                        fontSize = 14.sp
                     )
                 )
             }

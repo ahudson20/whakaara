@@ -73,7 +73,6 @@ private fun Main(
         topBar = { TopBar(navController = navController) },
         bottomBar = { BottomNavigation(navController = navController) },
         floatingActionButton = {
-            /** Only show FAB when on alarm screen **/
             when (navBackStackEntry?.destination?.route) {
                 "alarm" -> {
                     FloatingButton(

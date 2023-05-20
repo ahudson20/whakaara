@@ -44,7 +44,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getAllAlarms() = viewModelScope.launch {
-        repository.allAlarms().flowOn(Dispatchers.IO).collect { allAlarms ->
+        repository.getAllAlarmsFlow().flowOn(Dispatchers.IO).collect { allAlarms ->
             _uiState.value = AlarmState(alarms = allAlarms)
         }
     }

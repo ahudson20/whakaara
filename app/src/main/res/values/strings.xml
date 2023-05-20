@@ -14,6 +14,8 @@
     <string name="bottom_sheet_close_button">Cancel</string>
     <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>
     <string name="bottom_sheet_content_alarm_title">Title</string>
+    <string name="bottom_sheet_icon_cancel_content_description">Cancel alarm changes</string>
+    <string name="bottom_sheet_icon_save_content_description">Save alarm changes</string>
 
     <string name="card_alarm_sub_title_off">Off</string>
 

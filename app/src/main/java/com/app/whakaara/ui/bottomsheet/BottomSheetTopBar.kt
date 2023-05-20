@@ -62,7 +62,7 @@ fun BottomSheetTopBar(
         ) {
             Icon(
                 imageVector = Icons.Filled.Close,
-                contentDescription = "close"
+                contentDescription = stringResource(id = R.string.bottom_sheet_icon_cancel_content_description)
             )
         }
 
@@ -96,7 +96,7 @@ fun BottomSheetTopBar(
         ) {
             Icon(
                 imageVector = Icons.Filled.Check,
-                contentDescription = "close"
+                contentDescription = stringResource(id = R.string.bottom_sheet_icon_save_content_description)
             )
         }
     }

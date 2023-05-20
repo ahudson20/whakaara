@@ -4,12 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,11 +39,12 @@ class FullScreenNotificationActivity: ComponentActivity() {
 
         setContent {
             WhakaaraTheme {
-                Main()
+                NotificationFullScreen()
             }
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
         viewModel.disable(alarm = alarm)
@@ -53,13 +52,12 @@ class FullScreenNotificationActivity: ComponentActivity() {
     }
 
     @Composable
-    private fun Main() {
+    private fun NotificationFullScreen() {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
         ) {
             TextClock()
 

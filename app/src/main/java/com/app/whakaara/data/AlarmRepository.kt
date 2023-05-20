@@ -5,7 +5,9 @@ import java.util.UUID
 
 interface AlarmRepository {
 
-    fun allAlarms(): Flow<List<Alarm>>
+    fun getAllAlarmsFlow(): Flow<List<Alarm>>
+
+    suspend fun getAllAlarms(): List<Alarm>
 
     suspend fun insert(alarm: Alarm)
 

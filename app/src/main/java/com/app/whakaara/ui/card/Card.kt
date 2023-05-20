@@ -95,8 +95,7 @@ fun Card(
                 Text(
                     text = alarm.title,
                     style = TextStyle(
-                        fontSize = 14.sp,
-//                        color = Color.Gray
+                        fontSize = 14.sp
                     )
                 )
                 Text(

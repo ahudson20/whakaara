@@ -5,7 +5,9 @@ import java.util.UUID
 class AlarmRepositoryImpl(
     private val alarmDao: AlarmDao
 ) : AlarmRepository {
-    override fun allAlarms() = alarmDao.getAllAlarms()
+    override fun getAllAlarmsFlow() = alarmDao.getAllAlarmsFlow()
+
+    override suspend fun getAllAlarms() = alarmDao.getAllAlarms()
 
     override suspend fun insert(alarm: Alarm) = alarmDao.insert(alarm)
 

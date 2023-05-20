@@ -24,7 +24,10 @@ interface AlarmDao {
     suspend fun updateAlarm(alarm: Alarm)
 
     @Query("SELECT * FROM alarm_table")
-    fun getAllAlarms(): Flow<List<Alarm>>
+    fun getAllAlarmsFlow(): Flow<List<Alarm>>
+
+    @Query("SELECT * FROM alarm_table")
+    fun getAllAlarms(): List<Alarm>
 
     @Query("UPDATE alarm_table SET isEnabled = :isEnabled WHERE alarmId = :id")
     suspend fun isEnabled(id: UUID, isEnabled: Boolean)

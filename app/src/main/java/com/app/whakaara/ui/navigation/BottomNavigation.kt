@@ -15,7 +15,7 @@ import androidx.navigation.compose.rememberNavController
 fun BottomNavigation(navController: NavController) {
     val navItems = listOf(
         BottomNavItem.Alarm,
-        BottomNavItem.Settings
+        BottomNavItem.Timer
     )
 
     NavigationBar {

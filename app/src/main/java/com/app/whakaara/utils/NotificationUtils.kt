@@ -21,6 +21,7 @@ import com.google.android.material.R.drawable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+// TODO: could provide the notification builder/manager/channel via hilt
 class NotificationUtils(context: Context): ContextWrapper(context) {
 
     private var manager: NotificationManager? = null

@@ -8,6 +8,9 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.R
@@ -28,7 +31,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.Timer
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.concurrent.fixedRateTimer
+import kotlin.time.Duration
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -36,8 +45,19 @@ class MainViewModel @Inject constructor(
     private val repository: AlarmRepository
 ) : AndroidViewModel(app) {
 
+    //alarm
     private val _uiState = MutableStateFlow(AlarmState())
     val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
+
+    //timer
+    private var time: Duration = Duration.ZERO
+    private lateinit var timer: Timer
+    var millis by mutableStateOf("000")
+    var seconds by mutableStateOf("00")
+    var minutes by mutableStateOf("00")
+    var hours by mutableStateOf("00")
+    var isPlaying by mutableStateOf(false)
+    var isStart by mutableStateOf(true)
 
     init {
         getAllAlarms()
@@ -49,32 +69,55 @@ class MainViewModel @Inject constructor(
         }
     }
 
-
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         repository.insert(alarm)
-        // TODO: Generate string for toast - Alarm set for x time OR Alarm set %d hours %d minute(s)
-        GeneralUtils.showToast(title = "Alarm created", context = app.applicationContext)
+        GeneralUtils.showToast(
+            title = DateUtils.convertSecondsToHMm(
+                seconds = TimeUnit.MILLISECONDS.toSeconds(
+                    DateUtils.getDifferenceFromCurrentTimeInMillis(
+                        hours = alarm.hour,
+                        minutes = alarm.minute
+                    )
+                )
+            ),
+            context = app.applicationContext
+        )
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         stopAlarm(alarm)
         repository.delete(alarm)
-        GeneralUtils.showToast(title = app.getString(R.string.notification_action_deleted), context = app.applicationContext)
+        GeneralUtils.showToast(
+            title = app.getString(
+                R.string.notification_action_deleted,
+                alarm.title
+            ),
+            context = app.applicationContext
+        )
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         stopAlarm(alarm)
-        GeneralUtils.showToast(title = app.getString(R.string.notification_action_cancelled), context = app.applicationContext)
+        GeneralUtils.showToast(title = app.getString(R.string.notification_action_cancelled, alarm.title), context = app.applicationContext)
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = true))
         stopAlarm(alarm)
         createAlarm(alarm)
-        // TODO: Generate string for toast - Alarm set for x time OR Alarm set %d hours %d minute(s)
-        GeneralUtils.showToast(title = "Alarm enabled", context = app.applicationContext)
+        GeneralUtils.showToast(
+            title = DateUtils.convertSecondsToHMm(
+                seconds = TimeUnit.MILLISECONDS.toSeconds(
+                    DateUtils.getDifferenceFromCurrentTimeInMillis(
+                        hours = alarm.hour,
+                        minutes = alarm.minute
+                    )
+                )
+            ),
+            context = app.applicationContext
+        )
     }
 
     fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -173,4 +216,43 @@ class MainViewModel @Inject constructor(
 
         alarmManager.cancel(pendingIntent)
     }
+
+    //region timer
+    fun start() {
+        timer = fixedRateTimer(initialDelay = 1L, period = 1L) {
+            time = time.plus(1.toDuration(DurationUnit.MILLISECONDS))
+            updateTimeStates()
+        }
+        isPlaying = true
+        isStart = false
+    }
+
+    private fun updateTimeStates() {
+        time.toComponents { hours, minutes, seconds, nanoseconds ->
+            this@MainViewModel.millis = (nanoseconds / 1000000).toString().padStart(3, '0')
+            this@MainViewModel.seconds = seconds.pad()
+            this@MainViewModel.minutes = minutes.pad()
+            this@MainViewModel.hours = hours.pad()
+        }
+    }
+
+    private fun Int.pad(): String {
+        return this.toString().padStart(2, '0')
+    }
+
+    private fun Long.pad(): String {
+        return this.toString().padStart(2, '0')
+    }
+    fun pause() {
+        timer.cancel()
+        isPlaying = false
+    }
+
+    fun stop() {
+        pause()
+        time = Duration.ZERO
+        isStart = true
+        updateTimeStates()
+    }
+    //endregion
 }

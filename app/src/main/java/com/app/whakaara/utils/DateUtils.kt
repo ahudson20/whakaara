@@ -46,7 +46,9 @@ class DateUtils {
             return futureTime.timeInMillis - timeNowNoSeconds.timeInMillis
         }
 
-        fun convertSecondsToHMm(seconds: Long): String {
+        fun convertSecondsToHMm(
+            seconds: Long
+        ): String {
             val minutes = seconds / 60 % 60
             val hours = seconds / (60 * 60) % 24
             return if (hours.toInt() == 1) {

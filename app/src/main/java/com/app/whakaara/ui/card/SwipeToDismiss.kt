@@ -31,8 +31,6 @@ fun DismissBackground(dismissState: DismissState) {
             else -> MaterialTheme.colorScheme.error
         }
     )
-    val alignment = Alignment.CenterEnd
-    val icon = Icons.Default.Delete
 
     val scale by animateFloatAsState(
         if (dismissState.targetValue == DismissValue.Default) 0.75f else 1.25f
@@ -42,10 +40,10 @@ fun DismissBackground(dismissState: DismissState) {
         Modifier
             .fillMaxSize()
             .background(color),
-        contentAlignment = alignment
+        contentAlignment = Alignment.CenterEnd
     ) {
         Icon(
-            icon,
+            Icons.Default.Delete,
             contentDescription = stringResource(id = R.string.delete_icon_content_description),
             modifier = Modifier
                 .scale(scale)

@@ -19,11 +19,15 @@
 
     <string name="card_alarm_sub_title_off">Off</string>
 
-    <string name="notification_action_deleted">Alarm deleted</string>
-    <string name="notification_action_cancelled">Alarm cancelled</string>
+    <string name="notification_action_deleted">%1$s deleted</string>
+    <string name="notification_action_cancelled">%1$s cancelled</string>
+    <string name="notification_action_enabled">%1$s enabled</string>
     <string name="notification_action_button_cancel">Cancel</string>
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>
 
     <string name="delete_icon_content_description">Delete icon</string>
+    <string name="pause_timer_icon_content_description">Pause timer icon button</string>
+    <string name="start_timer_icon_content_description">Start timer icon button</string>
+    <string name="stop_timer_icon_content_description">Stop timer icon button</string>
 </resources>

@@ -10,7 +10,7 @@ data class Alarm(
     var alarmId: UUID = UUID.randomUUID(),
     var hour: Int,
     var minute: Int,
-    var title: String = "Alarm", // TODO: default alarm title? blank?
+    var title: String = "Alarm",
     var subTitle: String,
     var vibration: Boolean = true,
     var isEnabled: Boolean = true,

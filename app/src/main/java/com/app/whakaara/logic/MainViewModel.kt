@@ -24,20 +24,23 @@ import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Timer
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
-import kotlin.concurrent.fixedRateTimer
-import kotlin.time.Duration
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -50,13 +53,13 @@ class MainViewModel @Inject constructor(
     val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
 
     //timer
-    private var time: Duration = Duration.ZERO
-    private lateinit var timer: Timer
-    var millis by mutableStateOf("000")
-    var seconds by mutableStateOf("00")
-    var minutes by mutableStateOf("00")
-    var hours by mutableStateOf("00")
-    var isPlaying by mutableStateOf(false)
+    private var coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    private var timeMillis by mutableStateOf(0L)
+    private var lastTimeStamp by mutableStateOf(0L)
+
+    var formattedTime by mutableStateOf("00:00:000")
+    var isActive by mutableStateOf(false)
     var isStart by mutableStateOf(true)
 
     init {
@@ -219,40 +222,45 @@ class MainViewModel @Inject constructor(
 
     //region timer
     fun start() {
-        timer = fixedRateTimer(initialDelay = 1L, period = 1L) {
-            time = time.plus(1.toDuration(DurationUnit.MILLISECONDS))
-            updateTimeStates()
+        if (isActive) {
+            return
         }
-        isPlaying = true
-        isStart = false
-    }
 
-    private fun updateTimeStates() {
-        time.toComponents { hours, minutes, seconds, nanoseconds ->
-            this@MainViewModel.millis = (nanoseconds / 1000000).toString().padStart(3, '0')
-            this@MainViewModel.seconds = seconds.pad()
-            this@MainViewModel.minutes = minutes.pad()
-            this@MainViewModel.hours = hours.pad()
+        coroutineScope.launch {
+            lastTimeStamp = System.currentTimeMillis()
+            isActive = true
+            isStart = false
+
+            while(isActive) {
+                delay(10L)
+                timeMillis += System.currentTimeMillis() - lastTimeStamp
+                lastTimeStamp = System.currentTimeMillis()
+                formattedTime = formatTime(timeMillis)
+            }
         }
     }
 
-    private fun Int.pad(): String {
-        return this.toString().padStart(2, '0')
-    }
-
-    private fun Long.pad(): String {
-        return this.toString().padStart(2, '0')
-    }
     fun pause() {
-        timer.cancel()
-        isPlaying = false
+        isActive = false
     }
 
-    fun stop() {
-        pause()
-        time = Duration.ZERO
+    fun reset() {
+        coroutineScope.cancel()
+        coroutineScope = CoroutineScope(Dispatchers.Main)
+        timeMillis = 0L
+        lastTimeStamp = 0L
+        formattedTime = "00:00:000"
+        isActive = false
         isStart = true
-        updateTimeStates()
+    }
+
+    private fun formatTime(timeMillis: Long): String {
+        val localDateTime = LocalDateTime.ofInstant(
+            Instant.ofEpochMilli(timeMillis),
+            ZoneId.systemDefault()
+        )
+        val formatter = DateTimeFormatter.ofPattern("mm:ss:SSS", Locale.getDefault())
+        return localDateTime.format(formatter)
     }
     //endregion
 }

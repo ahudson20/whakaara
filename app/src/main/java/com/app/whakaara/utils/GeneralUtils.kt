@@ -16,7 +16,7 @@ class GeneralUtils {
         }
 
         /**
-         * Cant pass parcelize object to a BroadcastReceiver inside a PendingIntent extra.
+         * Can't pass parcelize object to a BroadcastReceiver inside a PendingIntent extra.
          * Going to convert the object to a string to pass to the receiver.
          * https://issuetracker.google.com/issues/36914697
          * */

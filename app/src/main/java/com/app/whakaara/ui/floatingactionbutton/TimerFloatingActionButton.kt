@@ -45,13 +45,26 @@ fun FloatingActionButtonPauseStop(
 }
 
 @Composable
-private fun FloatingActionButtonStop(onStop: () -> Unit) {
+fun FloatingActionButtonStop(onStop: () -> Unit) {
     FloatingActionButton(
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = 0.dp),
-        onClick = onStop
+        onClick = onStop,
     ) {
         Icon(
             imageVector = Icons.Filled.Stop,
+            contentDescription = stringResource(id = R.string.stop_timer_icon_content_description)
+        )
+    }
+}
+
+@Composable
+fun FloatingActionButtonPause(onPause: () -> Unit) {
+    FloatingActionButton(
+        elevation = FloatingActionButtonDefaults.elevation(pressedElevation = 0.dp),
+        onClick = onPause
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Pause,
             contentDescription = stringResource(id = R.string.stop_timer_icon_content_description)
         )
     }
@@ -65,10 +78,12 @@ private fun FloatingActionButtonPlayPause(
 ) {
     FloatingActionButton(
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = 0.dp),
-        onClick = if (isPlaying) {
-            onPause
-        } else {
-            onStart
+        onClick = {
+            if (isPlaying) {
+                onPause()
+            } else {
+                onStart()
+            }
         }
     ) {
         if (isPlaying) {

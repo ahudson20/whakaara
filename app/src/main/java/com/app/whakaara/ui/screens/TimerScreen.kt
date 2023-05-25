@@ -2,6 +2,7 @@ package com.app.whakaara.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
@@ -10,9 +11,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.app.whakaara.logic.MainViewModel
-import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPauseStop
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPause
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStart
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStop
 
 @Composable
 fun TimerScreen(
@@ -41,19 +44,15 @@ private fun Timer(
     Scaffold(
         /**
          * I don't like the animations on the FAB shadow.
-         * Just doing a basic show/hide for now.
          * https://issuetracker.google.com/issues/224005027
          * */
         floatingActionButton = {
-            if (isStart) {
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                FloatingActionButtonStop(onStop)
+                FloatingActionButtonPause(onPause)
                 FloatingActionButtonStart(
-                    onStart = onStart
-                )
-            } else {
-                FloatingActionButtonPauseStop(
-                    isPlaying = isPlaying,
-                    onStop = onStop,
-                    onPause = onPause,
                     onStart = onStart
                 )
             }

@@ -31,7 +31,8 @@ class FullScreenNotificationActivity: ComponentActivity() {
             WhakaaraTheme {
                 NotificationFullScreen(
                     alarm = alarm,
-                    viewModel = viewModel
+                    snooze = viewModel::snooze,
+                    disable = viewModel::disable
                 )
             }
         }

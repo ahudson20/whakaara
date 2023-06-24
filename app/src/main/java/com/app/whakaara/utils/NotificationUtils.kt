@@ -1,5 +1,6 @@
 package com.app.whakaara.utils
 
+import android.app.Notification.CATEGORY_ALARM
 import android.app.Notification.VISIBILITY_PUBLIC
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -61,9 +62,10 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
         return NotificationCompat.Builder(applicationContext, CHANNEL_ID)
             .setSmallIcon(drawable.ic_clock_black_24dp)
             .setColor(WHITE)
-            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+            .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM))
             .setAutoCancel(true)
             .setOngoing(true)
+            .setCategory(CATEGORY_ALARM)
     }
 
     fun snackBarPromptPermission(

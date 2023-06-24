@@ -12,16 +12,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.app.whakaara.R
 import com.app.whakaara.data.Alarm
-import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.clock.TextClock
 
 @Composable
 fun NotificationFullScreen(
     alarm: Alarm,
-    viewModel: MainViewModel,
+    snooze: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
 ) {
     val activity = (LocalContext.current as? Activity)
     Column(
@@ -35,7 +34,7 @@ fun NotificationFullScreen(
         if (alarm.isSnoozeEnabled) {
             Button(
                 onClick = {
-                    viewModel.snooze(alarm = alarm)
+                    snooze(alarm)
                     activity?.finish()
                 }
             ) {
@@ -44,7 +43,7 @@ fun NotificationFullScreen(
         }
         Button(
             onClick = {
-                viewModel.disable(alarm = alarm)
+                disable(alarm)
                 activity?.finish()
             }
         ) {
@@ -63,6 +62,7 @@ fun NotificationFullScreenPreview() {
             isEnabled = false,
             subTitle = "10:03 AM"
         ),
-        viewModel = hiltViewModel()
+        snooze = {},
+        disable = {}
     )
 }

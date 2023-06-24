@@ -18,6 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 
@@ -81,6 +82,10 @@ class Receiver : BroadcastReceiver() {
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(fullScreenPendingIntent, true)
+            setWhen(Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, alarm.hour)
+                set(Calendar.MINUTE, alarm.minute)
+            }.timeInMillis)
         }.build()
         return notification
     }

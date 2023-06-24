@@ -1,4 +1,4 @@
-package com.app.whakaara
+package com.app.whakaara.activities
 
 import android.annotation.SuppressLint
 import android.os.Bundle

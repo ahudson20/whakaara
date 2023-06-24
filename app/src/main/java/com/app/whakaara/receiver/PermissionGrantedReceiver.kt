@@ -64,7 +64,7 @@ class PermissionGrantedReceiver : BroadcastReceiver() {
     }
 
     private fun getStartReceiverIntent(alarm: Alarm, context: Context) =
-        Intent(context, Receiver::class.java).apply {
+        Intent(context, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
             putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))

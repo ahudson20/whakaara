@@ -9,6 +9,7 @@ import android.os.Build
 import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -16,7 +17,7 @@ import androidx.lifecycle.viewModelScope
 import com.app.whakaara.R
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.data.AlarmRepository
-import com.app.whakaara.receiver.Receiver
+import com.app.whakaara.receiver.NotificationReceiver
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.GeneralUtils
@@ -55,8 +56,8 @@ class MainViewModel @Inject constructor(
     //timer
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private var timeMillis by mutableStateOf(0L)
-    private var lastTimeStamp by mutableStateOf(0L)
+    private var timeMillis by mutableLongStateOf(0L)
+    private var lastTimeStamp by mutableLongStateOf(0L)
 
     var formattedTime by mutableStateOf("00:00:000")
     var isActive by mutableStateOf(false)
@@ -66,6 +67,7 @@ class MainViewModel @Inject constructor(
         getAllAlarms()
     }
 
+    //region alarm
     private fun getAllAlarms() = viewModelScope.launch {
         repository.getAllAlarmsFlow().flowOn(Dispatchers.IO).collect { allAlarms ->
             _uiState.value = AlarmState(alarms = allAlarms)
@@ -176,7 +178,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getStartReceiverIntent(alarm: Alarm) =
-        Intent(app, Receiver::class.java).apply {
+        Intent(app, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
             putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
@@ -204,7 +206,7 @@ class MainViewModel @Inject constructor(
         alarm: Alarm,
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(app, Receiver::class.java).apply {
+        val intent = Intent(app, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
             putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
@@ -219,6 +221,7 @@ class MainViewModel @Inject constructor(
 
         alarmManager.cancel(pendingIntent)
     }
+    //endregion
 
     //region timer
     fun start() {

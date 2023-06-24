@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -22,8 +23,6 @@ fun TimerScreen(
     viewModel: MainViewModel,
 ) {
     Timer(
-        isPlaying = viewModel.isActive,
-        isStart = viewModel.isStart,
         formattedTime = viewModel.formattedTime,
         onStart = viewModel::start,
         onPause = viewModel::pause,
@@ -34,8 +33,6 @@ fun TimerScreen(
 @Composable
 private fun Timer(
     modifier: Modifier = Modifier,
-    isStart: Boolean,
-    isPlaying: Boolean,
     formattedTime: String,
     onStart: () -> Unit = {},
     onPause: () -> Unit = {},
@@ -43,7 +40,8 @@ private fun Timer(
 ) {
     Scaffold(
         /**
-         * I don't like the animations on the FAB shadow.
+         * I wanted to use a single FAB for play/pause, and show/hide another for reset.
+         * But I don't like the animations on the FAB shadow, when show/hide the buttons.
          * https://issuetracker.google.com/issues/224005027
          * */
         floatingActionButton = {
@@ -58,9 +56,9 @@ private fun Timer(
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
-    ) {
+    ) { innerPadding ->
         Column(
-            modifier.fillMaxSize(),
+            modifier.fillMaxSize().padding(innerPadding),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

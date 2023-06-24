@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -121,7 +122,9 @@ fun Card(
             Spacer(Modifier.weight(1f))
 
             Switch(
-                modifier = Modifier.padding(end = 20.dp),
+                modifier = Modifier
+                    .padding(end = 20.dp)
+                    .testTag("alarm switch"),
                 checked = valueSlider,
                 onCheckedChange = {
                     if (!it) {

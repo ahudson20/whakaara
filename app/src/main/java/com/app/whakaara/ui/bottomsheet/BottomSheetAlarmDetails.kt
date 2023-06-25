@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -60,6 +61,7 @@ fun BottomSheetAlarmDetails(
                 fontSize = 16.sp
             )
             Switch(
+                modifier = modifier.testTag("vibrate switch"),
                 checked = isVibrationEnabled,
                 onCheckedChange = {
                     updateIsVibrationEnabled(it)
@@ -82,6 +84,7 @@ fun BottomSheetAlarmDetails(
                 fontSize = 16.sp
             )
             Switch(
+                modifier = modifier.testTag("snooze switch"),
                 checked = isSnoozeEnabled,
                 onCheckedChange = {
                     updateIsSnoozeEnabled(it)
@@ -104,6 +107,7 @@ fun BottomSheetAlarmDetails(
                 fontSize = 16.sp
             )
             Switch(
+                modifier = modifier.testTag("delete switch"),
                 checked = deleteAfterGoesOff,
                 onCheckedChange = {
                     updateDeleteAfterGoesOff(it)

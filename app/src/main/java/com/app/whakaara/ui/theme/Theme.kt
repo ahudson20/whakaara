@@ -1,10 +1,14 @@
 package com.app.whakaara.ui.theme
 
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 
@@ -73,26 +77,41 @@ private val DarkColors = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+fun supportsDynamic() : Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
+
 @Composable
 fun WhakaaraTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable() () -> Unit
 ) {
-    val colors = if (!useDarkTheme) {
-        LightColors
+    val context = LocalContext.current
+    val colors = if (supportsDynamic()) {
+        if (useDarkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
     } else {
-        DarkColors
+        if (useDarkTheme) DarkColors else LightColors
     }
 
     val systemUiController = rememberSystemUiController()
-    if (useDarkTheme) {
-        systemUiController.setStatusBarColor(
-            color = DarkColors.surface
-        )
+    if (supportsDynamic()) {
+        if (useDarkTheme) {
+            systemUiController.setStatusBarColor(
+                color = dynamicDarkColorScheme(context).surface
+            )
+        } else {
+            systemUiController.setStatusBarColor(
+                color = dynamicLightColorScheme(context).surface
+            )
+        }
     } else {
-        systemUiController.setStatusBarColor(
-            color = LightColors.surface
-        )
+        if (useDarkTheme) {
+            systemUiController.setStatusBarColor(
+                color = DarkColors.surface
+            )
+        } else {
+            systemUiController.setStatusBarColor(
+                color = LightColors.surface
+            )
+        }
     }
 
     MaterialTheme(

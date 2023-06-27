@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit
 
 @Composable
 fun BottomSheetContent(
-    modifier: Modifier = Modifier.padding(16.dp),
+    modifier: Modifier = Modifier,
     alarm: Alarm,
     sheetState: BottomSheetState,
     reset: (alarm: Alarm) -> Unit
@@ -55,11 +55,16 @@ fun BottomSheetContent(
     }
 
     Column(
-        modifier = modifier.fillMaxHeight().pointerInput(Unit) {
-            detectTapGestures(onTap = {
-                focusManager.clearFocus()
-            })
-        }
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(16.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        focusManager.clearFocus()
+                    }
+                )
+            }
     ) {
 
         BottomSheetTopBar(

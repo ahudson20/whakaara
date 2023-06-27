@@ -39,6 +39,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Card(
+    modifier: Modifier = Modifier,
     alarm: Alarm,
     cancel: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
@@ -119,10 +120,10 @@ fun Card(
                 )
             }
 
-            Spacer(Modifier.weight(1f))
+            Spacer(modifier.weight(1f))
 
             Switch(
-                modifier = Modifier
+                modifier = modifier
                     .padding(end = 20.dp)
                     .testTag("alarm switch"),
                 checked = valueSlider,
@@ -138,8 +139,8 @@ fun Card(
     }
 
     BottomSheetWrapper(
-        state = sheetState,
         alarm = alarm,
+        state = sheetState,
         reset = reset
     )
 }

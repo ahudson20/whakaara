@@ -4,11 +4,12 @@ import android.Manifest
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -25,11 +26,10 @@ fun FloatingButton(
     isDialogShown: MutableState<Boolean>,
     launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {
-    val scaffoldState = rememberScaffoldState()
+    val snackbarHostState = remember { SnackbarHostState() }
     val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
     val context = LocalContext.current.applicationContext
-    val snackbarHostState = scaffoldState.snackbarHostState
 
     FloatingActionButton(
         onClick = {

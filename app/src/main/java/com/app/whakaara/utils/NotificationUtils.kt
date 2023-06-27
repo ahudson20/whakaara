@@ -11,9 +11,9 @@ import android.graphics.Color.WHITE
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.Settings
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID

@@ -104,6 +104,7 @@ fun BottomSheetTopBar(
 
 @Composable
 private fun BottomSheetTitle(
+    modifier: Modifier = Modifier,
     title: String?,
     bottomText: String,
 ) {
@@ -111,7 +112,7 @@ private fun BottomSheetTitle(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            modifier = Modifier.padding(bottom = 4.dp),
+            modifier = modifier.padding(bottom = 4.dp),
             text = if (!title.isNullOrBlank()) {
                 title.toString()
             } else {

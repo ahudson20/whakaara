@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.screens.AlarmScreen
+import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.screens.TimerScreen
 
 @Composable
@@ -31,5 +32,10 @@ fun NavGraph(navController: NavHostController, viewModel:  MainViewModel) {
             )
         }
 
+        composable(
+            route = BottomNavItem.Settings.route
+        ) {
+            SettingsScreen()
+        }
     }
 }

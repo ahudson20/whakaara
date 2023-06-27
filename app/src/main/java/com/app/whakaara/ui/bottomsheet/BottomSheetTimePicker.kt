@@ -13,11 +13,12 @@ import com.chargemap.compose.numberpicker.HoursNumberPicker
 
 @Composable
 fun BottomSheetTimePicker(
+    modifier: Modifier = Modifier,
     pickerValue: Hours,
     updatePickerValue: (Hours) -> Unit
 ) {
     HoursNumberPicker(
-        modifier = Modifier.padding(bottom = 24.dp),
+        modifier = modifier.padding(bottom = 24.dp),
         dividersColor = MaterialTheme.colorScheme.onSurface,
         leadingZero = false,
         value = pickerValue,

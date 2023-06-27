@@ -22,9 +22,8 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    navController: NavController,
+    navController: NavController
 ) {
-
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val showMenu = remember { mutableStateOf(false) }
 
@@ -53,7 +52,6 @@ fun TopBar(
                 DropdownMenuItem(text = { Text(text = "hello") }, onClick = { /*TODO*/ })
                 DropdownMenuItem(text = { Text(text = "goodbye") }, onClick = { /*TODO*/ })
             }
-
         }
     )
 }

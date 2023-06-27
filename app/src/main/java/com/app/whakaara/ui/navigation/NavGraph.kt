@@ -10,12 +10,11 @@ import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.screens.TimerScreen
 
 @Composable
-fun NavGraph(navController: NavHostController, viewModel:  MainViewModel) {
+fun NavGraph(navController: NavHostController, viewModel: MainViewModel) {
     NavHost(
         navController = navController,
         startDestination = BottomNavItem.Alarm.route
     ) {
-
         composable(
             route = BottomNavItem.Alarm.route
         ) {

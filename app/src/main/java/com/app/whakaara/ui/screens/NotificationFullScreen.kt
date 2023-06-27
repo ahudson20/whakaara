@@ -20,7 +20,7 @@ import com.app.whakaara.ui.clock.TextClock
 fun NotificationFullScreen(
     alarm: Alarm,
     snooze: (alarm: Alarm) -> Unit,
-    disable: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit
 ) {
     val activity = (LocalContext.current as? Activity)
     Column(

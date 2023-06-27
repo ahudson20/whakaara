@@ -20,5 +20,4 @@ interface AlarmRepository {
     suspend fun isEnabled(id: UUID, isEnabled: Boolean)
 
     suspend fun getAlarmById(id: UUID): Alarm
-
 }

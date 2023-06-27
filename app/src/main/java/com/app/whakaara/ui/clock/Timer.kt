@@ -25,7 +25,7 @@ fun Timer(
     formattedTime: String,
     onStart: () -> Unit = {},
     onPause: () -> Unit = {},
-    onStop: () -> Unit = {},
+    onStop: () -> Unit = {}
 ) {
     Scaffold(
         /**
@@ -49,7 +49,7 @@ fun Timer(
                 )
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Column(
             modifier.fillMaxSize().padding(innerPadding),

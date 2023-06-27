@@ -9,7 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 fun SettingsScreen() {
     Text(
         text = "Settings Screen",
-        color = Color.Green,
+        color = Color.Green
     )
 }
 

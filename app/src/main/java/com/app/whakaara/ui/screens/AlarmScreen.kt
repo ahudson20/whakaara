@@ -10,7 +10,7 @@ import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 
 @Composable
 fun AlarmScreen(
-    viewModel: MainViewModel,
+    viewModel: MainViewModel
 ) {
     val alarms by viewModel.uiState.collectAsStateWithLifecycle()
     CardContainerSwipeToDismiss(
@@ -18,7 +18,7 @@ fun AlarmScreen(
         delete = viewModel::delete,
         disable = viewModel::disable,
         enable = viewModel::enable,
-        reset = viewModel::reset,
+        reset = viewModel::reset
     )
 }
 

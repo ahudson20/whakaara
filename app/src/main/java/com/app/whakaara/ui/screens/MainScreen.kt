@@ -63,13 +63,13 @@ fun MainScreen(
                                     Alarm(
                                         hour = it.hour,
                                         minute = it.minute,
-                                        subTitle =  DateUtils.alarmTimeTo24HourFormat(hour = it.hour, minute = it.minute)
+                                        subTitle = DateUtils.alarmTimeTo24HourFormat(hour = it.hour, minute = it.minute)
                                     )
                                 )
                                 isDialogShown.value = false
                             },
                             title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
-                            is24HourFormat = true,
+                            is24HourFormat = true
                         )
                     }
                 }

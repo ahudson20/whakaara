@@ -18,7 +18,7 @@ class AppModule {
     @Provides
     fun provideAlarmDatabase(
         @ApplicationContext
-        context : Context
+        context: Context
     ) = Room.databaseBuilder(
         context,
         AlarmDatabase::class.java,

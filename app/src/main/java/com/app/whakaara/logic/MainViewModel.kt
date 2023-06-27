@@ -49,11 +49,11 @@ class MainViewModel @Inject constructor(
     private val repository: AlarmRepository
 ) : AndroidViewModel(app) {
 
-    //alarm
+    // alarm
     private val _uiState = MutableStateFlow(AlarmState())
     val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
 
-    //timer
+    // timer
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
 
     private var timeMillis by mutableLongStateOf(0L)
@@ -149,10 +149,9 @@ class MainViewModel @Inject constructor(
     }
 
     private fun createAlarm(
-        alarm: Alarm,
+        alarm: Alarm
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (!userHasNotGrantedAlarmPermission(alarmManager)) {
                 redirectUserToSpecialAppAccessScreen()
@@ -203,7 +202,7 @@ class MainViewModel @Inject constructor(
     }
 
     private fun stopAlarm(
-        alarm: Alarm,
+        alarm: Alarm
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(app, NotificationReceiver::class.java).apply {
@@ -234,7 +233,7 @@ class MainViewModel @Inject constructor(
             isActive = true
             isStart = false
 
-            while(isActive) {
+            while (isActive) {
                 delay(10L)
                 timeMillis += System.currentTimeMillis() - lastTimeStamp
                 lastTimeStamp = System.currentTimeMillis()

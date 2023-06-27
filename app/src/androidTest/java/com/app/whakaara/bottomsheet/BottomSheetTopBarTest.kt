@@ -51,6 +51,5 @@ class BottomSheetTopBarTest {
 
         onNodeWithText(text = "title").assertIsDisplayed()
         onNodeWithText(text = "bottomText").assertIsDisplayed()
-
     }
 }

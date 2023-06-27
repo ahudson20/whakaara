@@ -15,7 +15,7 @@ fun BottomSheetWrapper(
     BottomSheet(
         backgroundColor = MaterialTheme.colorScheme.surface,
         state = state,
-        skipPeeked = true,
+        skipPeeked = true
     ) {
         BottomSheetContent(
             alarm = alarm,

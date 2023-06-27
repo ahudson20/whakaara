@@ -27,6 +27,5 @@ class GeneralUtils {
         fun convertStringToAlarmObject(string: String?): Alarm {
             return Gson().fromJson(string, Alarm::class.java)
         }
-
     }
 }

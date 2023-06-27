@@ -6,7 +6,7 @@ import com.app.whakaara.ui.clock.Timer
 
 @Composable
 fun TimerScreen(
-    viewModel: MainViewModel,
+    viewModel: MainViewModel
 ) {
     Timer(
         formattedTime = viewModel.formattedTime,

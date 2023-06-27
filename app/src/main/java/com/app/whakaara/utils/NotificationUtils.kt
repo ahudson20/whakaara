@@ -23,7 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 // TODO: could provide the notification builder/manager/channel via hilt
-class NotificationUtils(context: Context): ContextWrapper(context) {
+class NotificationUtils(context: Context) : ContextWrapper(context) {
 
     private var manager: NotificationManager? = null
 
@@ -41,7 +41,7 @@ class NotificationUtils(context: Context): ContextWrapper(context) {
             setBypassDnd(true)
             lockscreenVisibility = VISIBILITY_PUBLIC
             setShowBadge(true)
-            //setVibrationPattern
+            // setVibrationPattern
         }
 
         getManager().createNotificationChannel(channel)

@@ -57,7 +57,7 @@ fun FloatingButton(
     ) {
         Icon(
             imageVector = Icons.Default.Add,
-            contentDescription = stringResource(id = R.string.floating_action_button_icon_description),
+            contentDescription = stringResource(id = R.string.floating_action_button_icon_description)
         )
     }
 }

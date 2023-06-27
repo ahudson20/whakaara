@@ -24,7 +24,7 @@ fun BottomNavigation(navController: NavController) {
         navItems.forEach { item ->
             NavigationBarItem(
                 selected = currentRoute == item.route,
-                icon = { Icon(imageVector = item.icon, contentDescription = item.title)},
+                icon = { Icon(imageVector = item.icon, contentDescription = item.title) },
                 label = { Text(text = item.title) },
                 onClick = {
                     navController.navigate(item.route) {

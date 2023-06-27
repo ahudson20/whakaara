@@ -16,7 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import com.app.whakaara.ui.screens.NotificationFullScreen
 
 @AndroidEntryPoint
-class FullScreenNotificationActivity: ComponentActivity() {
+class FullScreenNotificationActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private lateinit var alarm: Alarm

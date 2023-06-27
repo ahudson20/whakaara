@@ -66,7 +66,6 @@ fun BottomSheetContent(
                 )
             }
     ) {
-
         BottomSheetTopBar(
             coroutineScope = coroutineScope,
             sheetState = sheetState,
@@ -115,7 +114,6 @@ fun BottomSheetContent(
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable

@@ -145,7 +145,8 @@ fun BottomSheetAlarmDetails(
                     keyboardActions = KeyboardActions(
                         onDone = {
                             focusManager.clearFocus()
-                        }),
+                        }
+                    )
                 )
                 Text(
                     text = "${title.length} / $ALARM_TITLE_MAX_CHARS",

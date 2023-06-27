@@ -106,7 +106,7 @@ fun BottomSheetTopBar(
 private fun BottomSheetTitle(
     modifier: Modifier = Modifier,
     title: String?,
-    bottomText: String,
+    bottomText: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -120,7 +120,7 @@ private fun BottomSheetTitle(
             },
             style = TextStyle(
                 fontSize = 20.sp
-            ),
+            )
         )
 
         Text(

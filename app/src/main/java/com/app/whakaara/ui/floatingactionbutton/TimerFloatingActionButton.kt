@@ -37,7 +37,7 @@ fun FloatingActionButtonPauseStop(
     onStart: () -> Unit
 ) {
     Row(
-        horizontalArrangement = Arrangement.spacedBy(48.dp),
+        horizontalArrangement = Arrangement.spacedBy(48.dp)
     ) {
         FloatingActionButtonStop(onStop)
         FloatingActionButtonPlayPause(isPlaying, onPause, onStart)
@@ -48,7 +48,7 @@ fun FloatingActionButtonPauseStop(
 fun FloatingActionButtonStop(onStop: () -> Unit) {
     FloatingActionButton(
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = 0.dp),
-        onClick = onStop,
+        onClick = onStop
     ) {
         Icon(
             imageVector = Icons.Filled.Stop,
@@ -89,7 +89,7 @@ private fun FloatingActionButtonPlayPause(
         if (isPlaying) {
             Icon(
                 imageVector = Icons.Filled.Pause,
-                contentDescription = stringResource(id = R.string.pause_timer_icon_content_description),
+                contentDescription = stringResource(id = R.string.pause_timer_icon_content_description)
             )
         } else {
             Icon(

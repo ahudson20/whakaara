@@ -62,7 +62,7 @@ fun CardContainerSwipeToDismiss(
 @Composable
 fun CardContainerSwipeToDismissPreview() {
     CardContainerSwipeToDismiss(
-        alarms =  AlarmState(
+        alarms = AlarmState(
             listOf(
                 Alarm(
                     hour = 12,

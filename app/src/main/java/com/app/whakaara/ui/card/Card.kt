@@ -86,16 +86,16 @@ fun Card(
             .height(100.dp)
             .clickable {
                 scope.launch { sheetState.expand() }
-            },
+            }
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(start = 20.dp),
-                verticalArrangement = Arrangement.Center,
+                verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     text = alarm.title,
@@ -159,4 +159,3 @@ fun CardPreview() {
         reset = {}
     )
 }
-

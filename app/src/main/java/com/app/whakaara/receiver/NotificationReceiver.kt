@@ -62,7 +62,7 @@ class NotificationReceiver : BroadcastReceiver() {
     private fun createNotification(
         context: Context,
         alarm: Alarm,
-        notificationUtils: NotificationUtils,
+        notificationUtils: NotificationUtils
     ): Notification {
         val fullScreenIntent = Intent().apply {
             setClass(context, FullScreenNotificationActivity::class.java)
@@ -82,10 +82,12 @@ class NotificationReceiver : BroadcastReceiver() {
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(fullScreenPendingIntent, true)
-            setWhen(Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, alarm.hour)
-                set(Calendar.MINUTE, alarm.minute)
-            }.timeInMillis)
+            setWhen(
+                Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, alarm.hour)
+                    set(Calendar.MINUTE, alarm.minute)
+                }.timeInMillis
+            )
         }.build()
         return notification
     }

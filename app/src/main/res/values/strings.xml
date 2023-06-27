@@ -26,6 +26,7 @@
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>
 
+    <string name="floating_action_button_icon_description">Create alarm</string>
     <string name="delete_icon_content_description">Delete icon</string>
     <string name="pause_timer_icon_content_description">Pause timer icon button</string>
     <string name="start_timer_icon_content_description">Start timer icon button</string>

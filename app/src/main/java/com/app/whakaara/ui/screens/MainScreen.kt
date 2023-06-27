@@ -4,7 +4,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
@@ -37,7 +36,6 @@ fun MainScreen(
     viewModel: MainViewModel
 ) {
     val navController = rememberNavController()
-    val scaffoldState = rememberScaffoldState()
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
@@ -54,7 +52,6 @@ fun MainScreen(
                 "alarm" -> {
                     FloatingButton(
                         isDialogShown = isDialogShown,
-                        scaffoldState = scaffoldState,
                         launcher = launcher
                     )
                     if (isDialogShown.value) {

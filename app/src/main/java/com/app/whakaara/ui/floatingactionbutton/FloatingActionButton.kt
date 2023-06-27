@@ -2,32 +2,35 @@ package com.app.whakaara.ui.floatingactionbutton
 
 import android.Manifest
 import androidx.activity.compose.ManagedActivityResultLauncher
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import com.app.whakaara.R
 import com.app.whakaara.utils.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
 fun FloatingButton(
     isDialogShown: MutableState<Boolean>,
-    scaffoldState: ScaffoldState,
     launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {
-    val context = LocalContext.current.applicationContext
-    val snackbarHostState = scaffoldState.snackbarHostState
+    val scaffoldState = rememberScaffoldState()
     val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
+    val context = LocalContext.current.applicationContext
+    val snackbarHostState = scaffoldState.snackbarHostState
+
     FloatingActionButton(
         onClick = {
             /**PERMISSION GRANTED**/
@@ -53,8 +56,8 @@ fun FloatingButton(
         }
     ) {
         Icon(
-            Icons.Default.Add,
-            contentDescription = "Add Alarm",
+            imageVector = Icons.Default.Add,
+            contentDescription = stringResource(id = R.string.floating_action_button_icon_description),
         )
     }
 }

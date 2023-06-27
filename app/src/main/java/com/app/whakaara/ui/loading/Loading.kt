@@ -11,21 +11,30 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
-fun LoadingScreen() {
+fun Loading() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
     ) {
         CircularProgressIndicator(
             Modifier
                 .width(48.dp)
                 .height(48.dp)
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LoadingPreview() {
+    WhakaaraTheme {
+        Loading()
     }
 }

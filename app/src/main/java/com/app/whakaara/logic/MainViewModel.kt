@@ -247,7 +247,7 @@ class MainViewModel @Inject constructor(
         isActive = false
     }
 
-    fun reset() {
+    fun resetTimer() {
         coroutineScope.cancel()
         coroutineScope = CoroutineScope(Dispatchers.Main)
         timeMillis = 0L

@@ -10,27 +10,27 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.data.Alarm
+import com.app.whakaara.state.AlarmState
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun CardContainerSwipeToDismiss(
-    viewModel: MainViewModel,
+    alarms: AlarmState,
+    delete: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit
 ) {
-    val alarms by viewModel.uiState.collectAsStateWithLifecycle()
-
     LazyColumn {
         items(alarms.alarms, key = { it.alarmId }) { alarm ->
 
             val dismissState = rememberDismissState()
             if (dismissState.currentValue != DismissValue.Default) {
                 LaunchedEffect(Unit) {
-                    viewModel.delete(alarm)
+                    delete(alarm)
                     delay(25)
                     dismissState.reset()
                 }
@@ -48,9 +48,9 @@ fun CardContainerSwipeToDismiss(
                 dismissContent = {
                     Card(
                         alarm = alarm,
-                        cancel = viewModel::disable,
-                        enable = viewModel::enable,
-                        reset = viewModel::reset
+                        cancel = disable,
+                        enable = enable,
+                        reset = reset
                     )
                 }
             )
@@ -62,6 +62,18 @@ fun CardContainerSwipeToDismiss(
 @Composable
 fun CardContainerSwipeToDismissPreview() {
     CardContainerSwipeToDismiss(
-        viewModel = hiltViewModel(),
+        alarms =  AlarmState(
+            listOf(
+                Alarm(
+                    hour = 12,
+                    minute = 13,
+                    subTitle = "12:13 AM"
+                )
+            )
+        ),
+        delete = {},
+        disable = {},
+        enable = {},
+        reset = {}
     )
 }

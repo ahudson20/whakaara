@@ -9,11 +9,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.app.whakaara.data.Alarm
 import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.ui.screens.NotificationFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import dagger.hilt.android.AndroidEntryPoint
-import com.app.whakaara.ui.screens.NotificationFullScreen
 
 @AndroidEntryPoint
 class FullScreenNotificationActivity : ComponentActivity() {

@@ -33,11 +33,6 @@ fun Timer(
          * But I don't like the animations on the FAB shadow, when show/hide the buttons.
          * https://issuetracker.google.com/issues/224005027
          * */
-        /**
-         * I wanted to use a single FAB for play/pause, and show/hide another for reset.
-         * But I don't like the animations on the FAB shadow, when show/hide the buttons.
-         * https://issuetracker.google.com/issues/224005027
-         * */
         floatingActionButton = {
             Row(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)

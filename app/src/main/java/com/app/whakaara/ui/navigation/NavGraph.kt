@@ -47,7 +47,7 @@ fun NavGraph(
         ) {
             SettingsScreen(
                 preferencesState = preferencesState,
-                viewModel = viewModel
+                updatePreferences = viewModel::updatePreferences
             )
         }
     }

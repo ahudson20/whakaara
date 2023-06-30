@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_NAME
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_PACKAGE
 import com.google.android.material.R.drawable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -91,7 +92,7 @@ class NotificationUtils(context: Context) : ContextWrapper(context) {
             Settings.ACTION_APPLICATION_DETAILS_SETTINGS
         ).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            data = Uri.fromParts("package", context.packageName, null)
+            data = Uri.fromParts(INTENT_PACKAGE, context.packageName, null)
         }
         context.startActivity(intent)
     }

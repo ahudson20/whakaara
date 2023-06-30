@@ -2,7 +2,7 @@ package com.app.whakaara.ui.bottomsheet
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.BottomSheetState
 

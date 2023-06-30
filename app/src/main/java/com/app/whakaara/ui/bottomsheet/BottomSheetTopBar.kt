@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.GeneralUtils
 import com.chargemap.compose.numberpicker.FullHours

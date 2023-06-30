@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.BottomSheetTopBar
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.chargemap.compose.numberpicker.FullHours

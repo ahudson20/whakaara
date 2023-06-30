@@ -1,6 +1,6 @@
 package com.app.whakaara.utils
 
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import java.text.SimpleDateFormat

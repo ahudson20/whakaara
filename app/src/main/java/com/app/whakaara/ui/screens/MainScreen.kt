@@ -16,10 +16,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.R
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.floatingactionbutton.FloatingButton
 import com.app.whakaara.ui.navigation.BottomNavigation
@@ -43,7 +44,8 @@ fun MainScreen(
             isDialogShown.value = !isDialogShown.value
         }
     }
-
+    val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
+    val alarms by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = { TopBar(navController = navController) },
         bottomBar = { BottomNavigation(navController = navController) },
@@ -63,7 +65,10 @@ fun MainScreen(
                                     Alarm(
                                         hour = it.hour,
                                         minute = it.minute,
-                                        subTitle = DateUtils.alarmTimeTo24HourFormat(hour = it.hour, minute = it.minute)
+                                        subTitle = DateUtils.alarmTimeTo24HourFormat(hour = it.hour, minute = it.minute),
+                                        vibration = pref.preferences.isVibrateEnabled,
+                                        isSnoozeEnabled = pref.preferences.isSnoozeEnabled,
+                                        deleteAfterGoesOff = pref.preferences.deleteAfterGoesOff
                                     )
                                 )
                                 isDialogShown.value = false
@@ -78,7 +83,7 @@ fun MainScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(navController = navController, viewModel = viewModel)
+            NavGraph(navController = navController, viewModel = viewModel, preferencesState = pref, alarmState = alarms)
         }
     }
 }

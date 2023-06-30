@@ -31,7 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
 import com.dokar.sheets.rememberBottomSheetState

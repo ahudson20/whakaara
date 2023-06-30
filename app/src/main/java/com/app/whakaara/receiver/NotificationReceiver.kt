@@ -7,8 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.app.whakaara.activities.FullScreenNotificationActivity
-import com.app.whakaara.data.Alarm
-import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.NotificationUtils
 import com.app.whakaara.utils.PendingIntentUtils

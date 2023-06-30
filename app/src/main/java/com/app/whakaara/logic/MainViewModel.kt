@@ -15,10 +15,13 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.R
-import com.app.whakaara.data.Alarm
-import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.preferences.Preferences
+import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.receiver.NotificationReceiver
 import com.app.whakaara.state.AlarmState
+import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -46,12 +49,17 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val app: Application,
-    private val repository: AlarmRepository
+    private val repository: AlarmRepository,
+    private val preferencesRepository: PreferencesRepository
 ) : AndroidViewModel(app) {
 
     // alarm
     private val _uiState = MutableStateFlow(AlarmState())
     val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
+
+    // preferences
+    private val _preferencesState = MutableStateFlow(PreferencesState())
+    val preferencesUiState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
     // timer
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
@@ -65,7 +73,20 @@ class MainViewModel @Inject constructor(
 
     init {
         getAllAlarms()
+        getPreferences()
     }
+
+    //region preferences
+    private fun getPreferences() = viewModelScope.launch {
+        preferencesRepository.getPreferencesFlow().flowOn(Dispatchers.IO).collect { preferences ->
+            _preferencesState.value = PreferencesState(preferences = preferences)
+        }
+    }
+
+    fun updatePreferences(preferences: Preferences) = viewModelScope.launch(Dispatchers.IO) {
+        preferencesRepository.updatePreferences(preferences = preferences)
+    }
+    //endregion
 
     //region alarm
     private fun getAllAlarms() = viewModelScope.launch {

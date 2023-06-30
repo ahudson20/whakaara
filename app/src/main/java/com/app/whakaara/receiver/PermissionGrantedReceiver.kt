@@ -5,8 +5,8 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.app.whakaara.data.Alarm
-import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils

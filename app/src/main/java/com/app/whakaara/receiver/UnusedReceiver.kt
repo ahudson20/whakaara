@@ -7,7 +7,7 @@ import android.util.Log
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.core.content.ContextCompat.startActivity
 import com.app.whakaara.activities.MainActivity
-import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.utils.NotificationUtils
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject

@@ -2,10 +2,14 @@ package com.app.whakaara.module
 
 import android.content.Context
 import androidx.room.Room
-import com.app.whakaara.data.AlarmDao
-import com.app.whakaara.data.AlarmDatabase
-import com.app.whakaara.data.AlarmRepository
-import com.app.whakaara.data.AlarmRepositoryImpl
+import com.app.whakaara.data.alarm.AlarmDao
+import com.app.whakaara.data.alarm.AlarmDatabase
+import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.alarm.AlarmRepositoryImpl
+import com.app.whakaara.data.preferences.PreferencesDao
+import com.app.whakaara.data.preferences.PreferencesDatabase
+import com.app.whakaara.data.preferences.PreferencesImpl
+import com.app.whakaara.data.preferences.PreferencesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,5 +39,27 @@ class AppModule {
         alarmDao: AlarmDao
     ): AlarmRepository = AlarmRepositoryImpl(
         alarmDao = alarmDao
+    )
+
+    @Provides
+    fun providesPreferencesDataBase(
+        @ApplicationContext
+        context: Context
+    ) = Room.databaseBuilder(
+        context,
+        PreferencesDatabase::class.java,
+        "preferences_database"
+    ).createFromAsset("database/preferences.db").build()
+
+    @Provides
+    fun providePreferencesDao(
+        preferencesDatabase: PreferencesDatabase
+    ) = preferencesDatabase.preferencesDao()
+
+    @Provides
+    fun providePreferencesRepository(
+        preferencesDao: PreferencesDao
+    ): PreferencesRepository = PreferencesImpl(
+        preferencesDao = preferencesDao
     )
 }

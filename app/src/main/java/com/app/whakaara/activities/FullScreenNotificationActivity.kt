@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.app.whakaara.data.Alarm
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.screens.NotificationFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme

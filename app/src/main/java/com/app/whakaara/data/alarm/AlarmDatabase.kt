@@ -1,4 +1,4 @@
-package com.app.whakaara.data
+package com.app.whakaara.data.alarm
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

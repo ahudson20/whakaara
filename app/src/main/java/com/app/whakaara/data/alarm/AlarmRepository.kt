@@ -1,4 +1,4 @@
-package com.app.whakaara.data
+package com.app.whakaara.data.alarm
 
 import kotlinx.coroutines.flow.Flow
 import java.util.UUID

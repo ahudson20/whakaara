@@ -2,7 +2,8 @@ package com.app.whakaara
 
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.app.whakaara.data.AlarmRepository
+import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.logic.MainViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,7 +22,7 @@ import org.mockito.junit.MockitoJUnitRunner
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(MockitoJUnitRunner::class)
 class MainViewModelTest {
-    var openMocks: AutoCloseable? = null
+    private var openMocks: AutoCloseable? = null
 
     @Rule
     @JvmField
@@ -35,13 +36,16 @@ class MainViewModelTest {
     @Mock
     lateinit var repository: AlarmRepository
 
+    @Mock
+    lateinit var preferencesRepository: PreferencesRepository
+
     private lateinit var viewModel: MainViewModel
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         openMocks = MockitoAnnotations.openMocks(this)
-        viewModel = MainViewModel(app, repository)
+        viewModel = MainViewModel(app, repository, preferencesRepository)
     }
 
     @After

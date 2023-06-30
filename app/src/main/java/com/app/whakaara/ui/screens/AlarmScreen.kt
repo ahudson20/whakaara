@@ -1,29 +1,36 @@
 package com.app.whakaara.ui.screens
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.state.AlarmState
 import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 
 @Composable
 fun AlarmScreen(
-    viewModel: MainViewModel
+    alarmState: AlarmState,
+    delete: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit
 ) {
-    val alarms by viewModel.uiState.collectAsStateWithLifecycle()
     CardContainerSwipeToDismiss(
-        alarms = alarms,
-        delete = viewModel::delete,
-        disable = viewModel::disable,
-        enable = viewModel::enable,
-        reset = viewModel::reset
+        alarms = alarmState,
+        delete = delete,
+        disable = disable,
+        enable = enable,
+        reset = reset
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun AlarmScreenPreview() {
-    AlarmScreen(viewModel = hiltViewModel())
+    AlarmScreen(
+        delete = {},
+        disable = {},
+        enable = {},
+        reset = {},
+        alarmState = AlarmState()
+    )
 }

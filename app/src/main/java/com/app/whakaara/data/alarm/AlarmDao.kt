@@ -1,4 +1,4 @@
-package com.app.whakaara.data
+package com.app.whakaara.data.alarm
 
 import androidx.room.Dao
 import androidx.room.Delete

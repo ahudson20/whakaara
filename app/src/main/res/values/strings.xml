@@ -39,7 +39,7 @@
     <string name="settings_screen_vibrate_title">Vibrate</string>
     <string name="settings_screen_vibrate_subtitle">Vibrate when alarms go off</string>
     <string name="settings_screen_snooze_title">Snooze</string>
-    <string name="settings_screen_snooze_subtitle">Is snooze enabled for alarms</string>
+    <string name="settings_screen_snooze_subtitle">Allow alarms to be snoozed</string>
     <string name="settings_screen_delete_title">Delete</string>
     <string name="settings_screen_delete_subtitle">Alarms are deleted after they go off</string>
 </resources>

@@ -117,8 +117,8 @@ fun SettingsScreen(
             )
             SettingsSwitch(
                 modifier = modifier.height(80.dp),
-                title = { Text(text = "Snooze") },
-                subtitle = { Text(text = "Is snooze enabled for alarms") },
+                title = { Text(text = stringResource(id = R.string.settings_screen_snooze_title)) },
+                subtitle = { Text(text = stringResource(id = R.string.settings_screen_snooze_subtitle)) },
                 state = rememberBooleanSettingState(preferencesState.preferences.isSnoozeEnabled),
                 onCheckedChange = {
                     viewModel.updatePreferences(

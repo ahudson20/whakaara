@@ -1,5 +1,6 @@
 package com.app.whakaara.activities
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -14,6 +15,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class FullScreenNotificationActivity : ComponentActivity() {
@@ -21,9 +23,13 @@ class FullScreenNotificationActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var alarm: Alarm
 
+    @Inject
+    lateinit var mediaPlayer: MediaPlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
+        // mediaPlayer.stop()
 
         alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
 
@@ -43,6 +49,11 @@ class FullScreenNotificationActivity : ComponentActivity() {
         onBackPressedDispatcher.onBackPressed()
         viewModel.disable(alarm = alarm)
         finishAndRemoveTask()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.stop()
     }
 
     private fun hideSystemBars() {

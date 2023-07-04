@@ -1,17 +1,20 @@
 package com.app.whakaara.receiver
 
 import android.app.Notification
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.media.MediaPlayer
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.utils.GeneralUtils
-import com.app.whakaara.utils.NotificationUtils
 import com.app.whakaara.utils.PendingIntentUtils
+import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,41 +31,55 @@ class NotificationReceiver : BroadcastReceiver() {
     @Inject
     lateinit var repo: AlarmRepository
 
+    @Inject
+    lateinit var mediaPlayer: MediaPlayer
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    @Inject
+    lateinit var notificationBuilder: NotificationCompat.Builder
+
     override fun onReceive(context: Context, intent: Intent) {
         try {
             val alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
-            val notificationUtils = NotificationUtils(context)
-            val notification = createNotification(
-                context = context,
-                alarm = alarm,
-                notificationUtils = notificationUtils
-            )
-
             if (alarm.deleteAfterGoesOff) {
                 deleteAlarmById(alarmId = alarm.alarmId)
             } else {
                 setIsEnabledToFalse(alarmId = alarm.alarmId)
             }
 
+            val notification = createNotification(
+                context = context,
+                alarm = alarm
+            )
+
             enableVibrationForNotification(
-                notificationUtils = notificationUtils,
                 alarm = alarm
             )
 
             displayNotification(
-                notificationUtils = notificationUtils,
                 uniqueID = System.currentTimeMillis().toInt(),
                 notification = notification
             )
+
+            startAlarmSound()
         } catch (exception: Exception) {
             Log.d("Receiver exception", exception.printStackTrace().toString())
         }
     }
 
+    private fun startAlarmSound() {
+        mediaPlayer.apply {
+            reset()
+            prepare()
+            start()
+        }
+    }
+
     private fun createNotification(
         context: Context,
-        alarm: Alarm,
-        notificationUtils: NotificationUtils
+        alarm: Alarm
     ): Notification {
         val fullScreenIntent = Intent().apply {
             setClass(context, FullScreenNotificationActivity::class.java)
@@ -78,7 +95,9 @@ class NotificationReceiver : BroadcastReceiver() {
         }
         val fullScreenPendingIntent = PendingIntentUtils.getActivity(context, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notification = notificationUtils.getNotificationBuilder().apply {
+        val notification = notificationBuilder.apply {
+            // TODO::
+            // setTimeoutAfter
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(fullScreenPendingIntent, true)
@@ -105,19 +124,15 @@ class NotificationReceiver : BroadcastReceiver() {
     }
 
     private fun enableVibrationForNotification(
-        notificationUtils: NotificationUtils,
         alarm: Alarm
     ) {
-        notificationUtils.getChannel().apply {
-            enableVibration(alarm.vibration)
-        }
+        notificationManager.getNotificationChannel(NotificationUtilsConstants.CHANNEL_ID).apply { enableVibration(alarm.vibration) }
     }
 
     private fun displayNotification(
-        notificationUtils: NotificationUtils,
         uniqueID: Int,
         notification: Notification
     ) {
-        notificationUtils.getManager().notify(uniqueID, notification)
+        notificationManager.notify(uniqueID, notification)
     }
 }

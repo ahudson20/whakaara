@@ -29,6 +29,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
+import com.alorma.compose.settings.storage.base.rememberIntSettingState
+import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
@@ -128,6 +130,15 @@ fun SettingsScreen(
                     )
                 }
             )
+            SettingsListDropdown(
+                state = rememberIntSettingState(defaultValue = 0),
+                modifier = modifier.height(80.dp),
+                title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
+                items = listOf("1 minute", "5 minutes", "10 minutes", "15 minutes"),
+                onItemSelected = { _, text ->
+                    println(text.split(" ")[0])
+                }
+            )
             SettingsSwitch(
                 modifier = modifier.height(80.dp),
                 title = { Text(text = stringResource(id = R.string.settings_screen_delete_title)) },
@@ -139,6 +150,16 @@ fun SettingsScreen(
                             deleteAfterGoesOff = it
                         )
                     )
+                }
+            )
+            SettingsListDropdown(
+                state = rememberIntSettingState(defaultValue = 0),
+                modifier = modifier.height(80.dp),
+                title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
+                subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
+                items = listOf("1 minute", "5 minutes", "10 minutes", "15 minutes"),
+                onItemSelected = { _, text ->
+                    println(text.split(" ")[0])
                 }
             )
         }

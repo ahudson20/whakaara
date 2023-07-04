@@ -42,13 +42,6 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name="com.app.whakaara.receiver.UnusedReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.NOTIFY" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name="com.app.whakaara.receiver.PermissionGrantedReceiver"
             android:exported="false">
             <intent-filter>

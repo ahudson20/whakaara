@@ -15,11 +15,13 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 class AppModule {
     @Provides
+    @Singleton
     fun provideAlarmDatabase(
         @ApplicationContext
         context: Context
@@ -30,11 +32,13 @@ class AppModule {
     ).build()
 
     @Provides
+    @Singleton
     fun provideAlarmDao(
         alarmDatabase: AlarmDatabase
     ) = alarmDatabase.alarmDao()
 
     @Provides
+    @Singleton
     fun provideAlarmRepository(
         alarmDao: AlarmDao
     ): AlarmRepository = AlarmRepositoryImpl(
@@ -42,6 +46,7 @@ class AppModule {
     )
 
     @Provides
+    @Singleton
     fun providesPreferencesDataBase(
         @ApplicationContext
         context: Context
@@ -52,11 +57,13 @@ class AppModule {
     ).createFromAsset("database/preferences.db").build()
 
     @Provides
+    @Singleton
     fun providePreferencesDao(
         preferencesDatabase: PreferencesDatabase
     ) = preferencesDatabase.preferencesDao()
 
     @Provides
+    @Singleton
     fun providePreferencesRepository(
         preferencesDao: PreferencesDao
     ): PreferencesRepository = PreferencesImpl(

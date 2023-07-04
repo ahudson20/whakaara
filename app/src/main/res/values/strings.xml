@@ -26,6 +26,8 @@
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>
 
+    <string name="notification_sub_text">Tap to dismiss</string>
+
     <string name="floating_action_button_icon_description">Create alarm</string>
     <string name="delete_icon_content_description">Delete icon</string>
     <string name="pause_timer_icon_content_description">Pause timer icon button</string>
@@ -43,4 +45,7 @@
     <string name="settings_screen_snooze_subtitle">Allow alarms to be snoozed</string>
     <string name="settings_screen_delete_title">Delete</string>
     <string name="settings_screen_delete_subtitle">Alarms are deleted after they go off</string>
+    <string name="settings_screen_snooze_duration_title">Snooze duration</string>
+    <string name="settings_screen_auto_silence_title">Auto silence</string>
+    <string name="settings_screen_auto_silence_subtitle">Set time after which alarms will be silenced</string>
 </resources>

@@ -95,7 +95,7 @@ class NotificationReceiver : BroadcastReceiver() {
         }
         val fullScreenPendingIntent = PendingIntentUtils.getActivity(context, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        val notification = notificationBuilder.apply {
+        return notificationBuilder.apply {
             // TODO::
             // setTimeoutAfter
             setContentTitle(alarm.title)
@@ -108,7 +108,6 @@ class NotificationReceiver : BroadcastReceiver() {
                 }.timeInMillis
             )
         }.build()
-        return notification
     }
 
     private fun deleteAlarmById(alarmId: UUID) {

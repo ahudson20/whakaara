@@ -29,7 +29,7 @@ class MediaPlayerModule {
         )
         setDataSource(
             context,
-            Settings.System.DEFAULT_ALARM_ALERT_URI ?: Settings.System.DEFAULT_RINGTONE_URI // RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
+            Settings.System.DEFAULT_ALARM_ALERT_URI ?: Settings.System.DEFAULT_RINGTONE_URI
         )
         isLooping = true
     }

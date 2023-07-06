@@ -154,7 +154,7 @@ class MainViewModel @Inject constructor(
 
     fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         val currentTimePlusTenMinutes = Calendar.getInstance().apply {
-            add(Calendar.MINUTE, 10)
+            add(Calendar.MINUTE, _preferencesState.value.preferences.snoozeTime)
         }
         stopAlarm(alarm)
         createAlarm(

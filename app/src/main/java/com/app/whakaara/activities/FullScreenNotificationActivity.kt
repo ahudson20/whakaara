@@ -1,5 +1,6 @@
 package com.app.whakaara.activities
 
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,6 +11,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.ui.screens.NotificationFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
@@ -29,7 +31,6 @@ class FullScreenNotificationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
-        // mediaPlayer.stop()
 
         alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
 
@@ -47,13 +48,13 @@ class FullScreenNotificationActivity : ComponentActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
-        viewModel.disable(alarm = alarm)
         finishAndRemoveTask()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.stop()
+        viewModel.disable(alarm = alarm)
+        applicationContext.stopService(Intent(this@FullScreenNotificationActivity, MediaPlayerService::class.java))
     }
 
     private fun hideSystemBars() {

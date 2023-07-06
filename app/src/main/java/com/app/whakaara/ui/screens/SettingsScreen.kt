@@ -36,6 +36,7 @@ import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.utils.constants.GeneralConstants.SETTINGS_SCREEN_TIME_LIST
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_PACKAGE
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,12 +132,16 @@ fun SettingsScreen(
                 }
             )
             SettingsListDropdown(
-                state = rememberIntSettingState(defaultValue = 0),
+                state = rememberIntSettingState(defaultValue = SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.snoozeTime }),
                 modifier = modifier.height(80.dp),
                 title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
-                items = listOf("1 minute", "5 minutes", "10 minutes", "15 minutes"),
+                items = SETTINGS_SCREEN_TIME_LIST,
                 onItemSelected = { _, text ->
-                    println(text.split(" ")[0])
+                    updatePreferences(
+                        preferencesState.preferences.copy(
+                            snoozeTime = text.split(" ")[0].toInt()
+                        )
+                    )
                 }
             )
             SettingsSwitch(
@@ -153,13 +158,17 @@ fun SettingsScreen(
                 }
             )
             SettingsListDropdown(
-                state = rememberIntSettingState(defaultValue = 0),
+                state = rememberIntSettingState(defaultValue = SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.autoSilenceTime }),
                 modifier = modifier.height(80.dp),
                 title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
                 subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
-                items = listOf("1 minute", "5 minutes", "10 minutes", "15 minutes"),
+                items = SETTINGS_SCREEN_TIME_LIST,
                 onItemSelected = { _, text ->
-                    println(text.split(" ")[0])
+                    updatePreferences(
+                        preferencesState.preferences.copy(
+                            autoSilenceTime = text.split(" ")[0].toInt()
+                        )
+                    )
                 }
             )
         }

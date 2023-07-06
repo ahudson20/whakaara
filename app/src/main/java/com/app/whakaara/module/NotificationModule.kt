@@ -6,8 +6,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
-import android.media.AudioAttributes
-import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
@@ -34,13 +32,6 @@ class NotificationModule {
         setBypassDnd(true)
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         setShowBadge(true)
-        setSound(
-            RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE),
-            AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build()
-        )
     }
 
     @Provides
@@ -50,10 +41,9 @@ class NotificationModule {
         context: Context,
         channel: NotificationChannel
     ): NotificationManager {
-        val manager = (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+        return (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
             createNotificationChannel(channel)
         }
-        return manager
     }
 
     @Provides

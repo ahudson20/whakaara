@@ -12,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
@@ -63,17 +64,15 @@ class NotificationReceiver : BroadcastReceiver() {
                 notification = notification
             )
 
-            startAlarmSound()
+            startAlarmSound(context = context)
         } catch (exception: Exception) {
-            Log.d("Receiver exception", exception.printStackTrace().toString())
+            Log.d("NotificationReceiver exception", exception.printStackTrace().toString())
         }
     }
 
-    private fun startAlarmSound() {
-        mediaPlayer.apply {
-            reset()
-            prepare()
-            start()
+    private fun startAlarmSound(context: Context) {
+        Intent(context, MediaPlayerService::class.java).also { mediaIntent ->
+            context.startForegroundService(mediaIntent)
         }
     }
 
@@ -96,8 +95,6 @@ class NotificationReceiver : BroadcastReceiver() {
         val fullScreenPendingIntent = PendingIntentUtils.getActivity(context, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
         return notificationBuilder.apply {
-            // TODO::
-            // setTimeoutAfter
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(fullScreenPendingIntent, true)

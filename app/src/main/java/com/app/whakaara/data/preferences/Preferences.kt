@@ -9,5 +9,7 @@ data class Preferences(
     var id: Int = 0,
     var isVibrateEnabled: Boolean = true,
     var isSnoozeEnabled: Boolean = true,
-    var deleteAfterGoesOff: Boolean = false
+    var deleteAfterGoesOff: Boolean = false,
+    var autoSilenceTime: Int = 10,
+    var snoozeTime: Int = 10
 )

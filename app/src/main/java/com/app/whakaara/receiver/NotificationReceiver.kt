@@ -72,7 +72,7 @@ class NotificationReceiver : BroadcastReceiver() {
 
     private fun startAlarmSound(context: Context) {
         Intent(context, MediaPlayerService::class.java).also { mediaIntent ->
-            context.startForegroundService(mediaIntent)
+            context.startService(mediaIntent)
         }
     }
 

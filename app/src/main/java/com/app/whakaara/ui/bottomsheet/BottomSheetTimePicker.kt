@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.chargemap.compose.numberpicker.HoursNumberPicker
@@ -18,14 +19,17 @@ fun BottomSheetTimePicker(
     updatePickerValue: (Hours) -> Unit
 ) {
     HoursNumberPicker(
-        modifier = modifier.padding(bottom = 24.dp),
+        modifier = modifier.padding(all = 24.dp),
         dividersColor = MaterialTheme.colorScheme.onSurface,
         leadingZero = false,
         value = pickerValue,
         onValueChange = {
             updatePickerValue(it)
         },
-        textStyle = LocalTextStyle.current.copy(MaterialTheme.colorScheme.onSurface)
+        textStyle = LocalTextStyle.current.copy(
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 24.sp
+        )
     )
 }
 

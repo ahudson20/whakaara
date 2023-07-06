@@ -48,12 +48,12 @@ class FullScreenNotificationActivity : ComponentActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
+        viewModel.disable(alarm = alarm)
         finishAndRemoveTask()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        viewModel.disable(alarm = alarm)
         applicationContext.stopService(Intent(this@FullScreenNotificationActivity, MediaPlayerService::class.java))
     }
 

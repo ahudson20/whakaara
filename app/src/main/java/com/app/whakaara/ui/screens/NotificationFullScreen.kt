@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.clock.TextClock
+import java.util.Calendar
 
 @Composable
 fun NotificationFullScreen(
@@ -71,8 +72,7 @@ fun NotificationFullScreen(
 fun NotificationFullScreenPreview() {
     NotificationFullScreen(
         alarm = Alarm(
-            minute = 3,
-            hour = 10,
+            date = Calendar.getInstance(),
             isEnabled = false,
             subTitle = "10:03 AM"
         ),

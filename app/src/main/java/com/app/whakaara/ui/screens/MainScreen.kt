@@ -30,6 +30,7 @@ import com.app.whakaara.utils.DateUtils
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import java.time.LocalTime
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -59,13 +60,17 @@ fun MainScreen(
                     if (isDialogShown.value) {
                         TimePickerDialog(
                             onDismissRequest = { isDialogShown.value = false },
-                            initialTime = LocalTime.now().noSeconds(),
+                            initialTime = LocalTime.now().plusMinutes(1).noSeconds(),
                             onTimeChange = {
+                                val date = Calendar.getInstance().apply {
+                                    set(Calendar.HOUR_OF_DAY, it.hour)
+                                    set(Calendar.MINUTE, it.minute)
+                                    set(Calendar.SECOND, 0)
+                                }
                                 viewModel.create(
                                     Alarm(
-                                        hour = it.hour,
-                                        minute = it.minute,
-                                        subTitle = DateUtils.alarmTimeTo24HourFormat(hour = it.hour, minute = it.minute),
+                                        date = date,
+                                        subTitle = DateUtils.alarmTimeTo24HourFormat(date = date),
                                         vibration = pref.preferences.isVibrateEnabled,
                                         isSnoozeEnabled = pref.preferences.isSnoozeEnabled,
                                         deleteAfterGoesOff = pref.preferences.deleteAfterGoesOff

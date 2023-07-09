@@ -12,6 +12,7 @@ import com.chargemap.compose.numberpicker.FullHours
 import com.dokar.sheets.BottomSheetState
 import org.junit.Rule
 import org.junit.Test
+import java.util.Calendar
 
 class BottomSheetTopBarTest {
     @get:Rule
@@ -26,8 +27,7 @@ class BottomSheetTopBarTest {
                     coroutineScope = rememberCoroutineScope(),
                     sheetState = BottomSheetState(),
                     alarm = Alarm(
-                        minute = 3,
-                        hour = 10,
+                        date = Calendar.getInstance(),
                         isEnabled = false,
                         subTitle = "10:03 AM"
                     ),

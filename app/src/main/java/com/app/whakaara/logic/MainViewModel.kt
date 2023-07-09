@@ -102,8 +102,7 @@ class MainViewModel @Inject constructor(
             title = DateUtils.convertSecondsToHMm(
                 seconds = TimeUnit.MILLISECONDS.toSeconds(
                     DateUtils.getDifferenceFromCurrentTimeInMillis(
-                        hours = alarm.hour,
-                        minutes = alarm.minute
+                        time = alarm.date
                     )
                 )
             ),
@@ -137,8 +136,7 @@ class MainViewModel @Inject constructor(
             title = DateUtils.convertSecondsToHMm(
                 seconds = TimeUnit.MILLISECONDS.toSeconds(
                     DateUtils.getDifferenceFromCurrentTimeInMillis(
-                        hours = alarm.hour,
-                        minutes = alarm.minute
+                        time = alarm.date
                     )
                 )
             ),
@@ -159,8 +157,7 @@ class MainViewModel @Inject constructor(
         stopAlarm(alarm)
         createAlarm(
             alarm.copy(
-                hour = currentTimePlusTenMinutes.get(Calendar.HOUR_OF_DAY),
-                minute = currentTimePlusTenMinutes.get(Calendar.MINUTE)
+                date = currentTimePlusTenMinutes
             )
         )
     }

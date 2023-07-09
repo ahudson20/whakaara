@@ -36,6 +36,7 @@ import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
 import com.dokar.sheets.rememberBottomSheetState
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @Composable
 fun Card(
@@ -52,18 +53,16 @@ fun Card(
         mutableStateOf(
             getInitialTimeToAlarm(
                 isEnabled = valueSlider,
-                hours = alarm.hour,
-                minutes = alarm.minute
+                time = alarm.date
             )
         )
     }
     val alpha = if (valueSlider) 1f else ContentAlpha.disabled
 
-    LaunchedEffect(key1 = alarm.hour, key2 = alarm.minute, key3 = valueSlider) {
+    LaunchedEffect(key1 = alarm.date, key2 = valueSlider) {
         timeToAlarm = getInitialTimeToAlarm(
             isEnabled = valueSlider,
-            hours = alarm.hour,
-            minutes = alarm.minute
+            time = alarm.date
         )
     }
 
@@ -74,8 +73,7 @@ fun Card(
     ) { _, _ ->
         timeToAlarm = getInitialTimeToAlarm(
             isEnabled = valueSlider,
-            hours = alarm.hour,
-            minutes = alarm.minute
+            time = alarm.date
         )
     }
 
@@ -150,8 +148,7 @@ fun Card(
 fun CardPreview() {
     Card(
         alarm = Alarm(
-            hour = 12,
-            minute = 13,
+            date = Calendar.getInstance(),
             subTitle = "12:13 AM"
         ),
         cancel = {},

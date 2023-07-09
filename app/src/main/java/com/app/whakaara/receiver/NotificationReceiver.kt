@@ -100,8 +100,8 @@ class NotificationReceiver : BroadcastReceiver() {
             setFullScreenIntent(fullScreenPendingIntent, true)
             setWhen(
                 Calendar.getInstance().apply {
-                    set(Calendar.HOUR_OF_DAY, alarm.hour)
-                    set(Calendar.MINUTE, alarm.minute)
+                    set(Calendar.HOUR_OF_DAY, alarm.date.get(Calendar.HOUR_OF_DAY))
+                    set(Calendar.MINUTE, alarm.date.get(Calendar.MINUTE))
                 }.timeInMillis
             )
         }.build()

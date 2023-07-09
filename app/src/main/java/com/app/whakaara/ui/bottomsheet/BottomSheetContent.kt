@@ -22,6 +22,7 @@ import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.concurrent.TimeUnit
 
 @Composable
@@ -33,7 +34,9 @@ fun BottomSheetContent(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    var timePickerValue by remember { mutableStateOf<Hours>(FullHours(alarm.hour, alarm.minute)) }
+    val hours = alarm.date.get(Calendar.HOUR_OF_DAY)
+    val mins = alarm.date.get(Calendar.MINUTE)
+    var timePickerValue by remember { mutableStateOf<Hours>(FullHours(hours, mins)) }
     var isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
     var isSnoozeEnabled by remember(alarm.isSnoozeEnabled) { mutableStateOf(alarm.isSnoozeEnabled) }
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
@@ -42,8 +45,7 @@ fun BottomSheetContent(
         mutableStateOf(
             DateUtils.getInitialTimeToAlarm(
                 isEnabled = alarm.isEnabled,
-                hours = alarm.hour,
-                minutes = alarm.minute
+                time = alarm.date
             )
         )
     }
@@ -86,8 +88,10 @@ fun BottomSheetContent(
                 bottomText = DateUtils.convertSecondsToHMm(
                     seconds = TimeUnit.MILLISECONDS.toSeconds(
                         DateUtils.getDifferenceFromCurrentTimeInMillis(
-                            hours = newValue.hours,
-                            minutes = newValue.minutes
+                            time = Calendar.getInstance().apply {
+                                set(Calendar.HOUR_OF_DAY, newValue.hours)
+                                set(Calendar.MINUTE, newValue.minutes)
+                            }
                         )
                     )
                 )
@@ -120,8 +124,7 @@ fun BottomSheetContent(
 fun BottomSheetContentPreview() {
     BottomSheetContent(
         alarm = Alarm(
-            minute = 3,
-            hour = 10,
+            date = Calendar.getInstance(),
             isEnabled = false,
             subTitle = "10:03 AM"
         ),

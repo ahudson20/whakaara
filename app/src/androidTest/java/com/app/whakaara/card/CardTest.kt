@@ -12,6 +12,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
 import org.junit.Rule
 import org.junit.Test
+import java.util.Calendar
 
 class CardTest {
 
@@ -21,12 +22,15 @@ class CardTest {
     @Test
     fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
         // Given
+        val date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 12)
+            set(Calendar.MINUTE, 13)
+        }
         val alarm = Alarm(
-            hour = 12,
-            minute = 13,
+            date = date,
             subTitle = "12:13 AM"
         )
-        val timeToAlarm = getInitialTimeToAlarm(alarm.isEnabled, alarm.hour, alarm.minute)
+        val timeToAlarm = getInitialTimeToAlarm(alarm.isEnabled, date)
 
         // When
         setContent {

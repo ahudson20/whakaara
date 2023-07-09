@@ -14,6 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
 import kotlinx.coroutines.delay
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -65,8 +66,7 @@ fun CardContainerSwipeToDismissPreview() {
         alarms = AlarmState(
             listOf(
                 Alarm(
-                    hour = 12,
-                    minute = 13,
+                    date = Calendar.getInstance(),
                     subTitle = "12:13 AM"
                 )
             )

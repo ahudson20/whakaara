@@ -11,39 +11,43 @@ import java.util.concurrent.TimeUnit
 class DateUtils {
     companion object {
         fun getTimeInMillis(alarm: Alarm): Long {
-            val cal = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, alarm.hour)
-                set(Calendar.MINUTE, alarm.minute)
-                set(Calendar.SECOND, 0)
+            val alarmTime = alarm.date
+            val currentTime = Calendar.getInstance()
+
+            if (checkIfSameDay(alarmTime, currentTime)) {
+                alarmTime.add(Calendar.DATE, 1)
             }
 
-            /** check if time has already elapsed, set for following day **/
-            if (cal.timeInMillis < System.currentTimeMillis()) {
-                cal.add(Calendar.DATE, 1)
+            return alarmTime.timeInMillis
+        }
+
+        private fun checkIfSameDay(alarmTime: Calendar, currentTime: Calendar): Boolean {
+            if (alarmTime.before(currentTime)) {
+                return true
             }
 
-            return cal.timeInMillis
+            if (
+                alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
+                alarmTime.get(Calendar.HOUR_OF_DAY) == currentTime.get(Calendar.HOUR_OF_DAY) &&
+                alarmTime.get(Calendar.MINUTE) == currentTime.get(Calendar.MINUTE)
+            ) {
+                return true
+            }
+            return false
         }
 
         fun getDifferenceFromCurrentTimeInMillis(
-            hours: Int,
-            minutes: Int
+            time: Calendar
         ): Long {
             val timeNowNoSeconds = Calendar.getInstance().apply {
                 set(Calendar.SECOND, 0)
             }
 
-            val futureTime = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, hours)
-                set(Calendar.MINUTE, minutes)
-                set(Calendar.SECOND, 0)
+            if (checkIfSameDay(time, timeNowNoSeconds)) {
+                time.add(Calendar.DATE, 1)
             }
 
-            if (futureTime.timeInMillis < timeNowNoSeconds.timeInMillis) {
-                futureTime.add(Calendar.DATE, 1)
-            }
-
-            return futureTime.timeInMillis - timeNowNoSeconds.timeInMillis
+            return time.timeInMillis - timeNowNoSeconds.timeInMillis
         }
 
         fun convertSecondsToHMm(
@@ -51,33 +55,37 @@ class DateUtils {
         ): String {
             val minutes = seconds / 60 % 60
             val hours = seconds / (60 * 60) % 24
-            return if (hours.toInt() == 1) {
-                String.format("Alarm in %d hour %d minutes", hours, minutes)
-            } else if (hours > 0) {
-                String.format("Alarm in %d hours %d minutes", hours, minutes)
-            } else {
-                String.format("Alarm in %d minutes", minutes)
+            val formattedString = StringBuilder()
+            val hoursString = when {
+                hours.toInt() == 1 -> String.format("%d hour ", hours)
+                hours.toInt() == 0 -> ""
+                else -> String.format("%d hours ", hours)
             }
+            val minutesString = when {
+                minutes.toInt() == 1 -> String.format("%d minute ", minutes)
+                minutes.toInt() == 0 && hours.toInt() == 0 -> "less than 1 minute"
+                minutes.toInt() == 0 -> ""
+                else -> String.format("%d minutes ", minutes)
+            }
+
+            formattedString.append("Alarm in ")
+            if (hoursString.isNotBlank()) formattedString.append(hoursString)
+            if (minutesString.isNotBlank()) formattedString.append(minutesString)
+            return formattedString.toString()
         }
 
-        fun alarmTimeTo24HourFormat(hour: Int, minute: Int): String {
-            val cal = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, hour)
-                set(Calendar.MINUTE, minute)
-                set(Calendar.SECOND, 0)
-            }
-            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(cal.time).uppercase()
+        fun alarmTimeTo24HourFormat(date: Calendar): String {
+            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(date.time).uppercase()
         }
 
-        fun getInitialTimeToAlarm(isEnabled: Boolean, hours: Int, minutes: Int): String {
+        fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar): String {
             return if (!isEnabled) {
                 BOTTOM_SHEET_ALARM_LABEL_OFF
             } else {
                 return convertSecondsToHMm(
                     seconds = TimeUnit.MILLISECONDS.toSeconds(
                         getDifferenceFromCurrentTimeInMillis(
-                            hours = hours,
-                            minutes = minutes
+                            time = time
                         )
                     )
                 )

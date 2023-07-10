@@ -21,33 +21,18 @@ class DateUtils {
             return alarmTime.timeInMillis
         }
 
-        private fun checkIfSameDay(alarmTime: Calendar, currentTime: Calendar): Boolean {
-            if (alarmTime.before(currentTime)) {
-                return true
+        fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar): String {
+            return if (!isEnabled) {
+                BOTTOM_SHEET_ALARM_LABEL_OFF
+            } else {
+                return convertSecondsToHMm(
+                    seconds = TimeUnit.MILLISECONDS.toSeconds(
+                        getDifferenceFromCurrentTimeInMillis(
+                            time = time
+                        )
+                    )
+                )
             }
-
-            if (
-                alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
-                alarmTime.get(Calendar.HOUR_OF_DAY) == currentTime.get(Calendar.HOUR_OF_DAY) &&
-                alarmTime.get(Calendar.MINUTE) == currentTime.get(Calendar.MINUTE)
-            ) {
-                return true
-            }
-            return false
-        }
-
-        fun getDifferenceFromCurrentTimeInMillis(
-            time: Calendar
-        ): Long {
-            val timeNowNoSeconds = Calendar.getInstance().apply {
-                set(Calendar.SECOND, 0)
-            }
-
-            if (checkIfSameDay(time, timeNowNoSeconds)) {
-                time.add(Calendar.DATE, 1)
-            }
-
-            return time.timeInMillis - timeNowNoSeconds.timeInMillis
         }
 
         fun convertSecondsToHMm(
@@ -74,22 +59,37 @@ class DateUtils {
             return formattedString.toString()
         }
 
-        fun alarmTimeTo24HourFormat(date: Calendar): String {
-            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(date.time).uppercase()
+        fun getDifferenceFromCurrentTimeInMillis(
+            time: Calendar
+        ): Long {
+            val timeNowNoSeconds = Calendar.getInstance().apply {
+                set(Calendar.SECOND, 0)
+            }
+
+            if (checkIfSameDay(time, timeNowNoSeconds)) {
+                time.add(Calendar.DATE, 1)
+            }
+
+            return time.timeInMillis - timeNowNoSeconds.timeInMillis
         }
 
-        fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar): String {
-            return if (!isEnabled) {
-                BOTTOM_SHEET_ALARM_LABEL_OFF
-            } else {
-                return convertSecondsToHMm(
-                    seconds = TimeUnit.MILLISECONDS.toSeconds(
-                        getDifferenceFromCurrentTimeInMillis(
-                            time = time
-                        )
-                    )
-                )
+        private fun checkIfSameDay(alarmTime: Calendar, currentTime: Calendar): Boolean {
+            if (alarmTime.before(currentTime)) {
+                return true
             }
+
+            if (
+                alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
+                alarmTime.get(Calendar.HOUR_OF_DAY) == currentTime.get(Calendar.HOUR_OF_DAY) &&
+                alarmTime.get(Calendar.MINUTE) == currentTime.get(Calendar.MINUTE)
+            ) {
+                return true
+            }
+            return false
+        }
+
+        fun alarmTimeTo24HourFormat(date: Calendar): String {
+            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(date.time).uppercase()
         }
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
@@ -43,7 +42,6 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @HiltViewModel
@@ -98,50 +96,22 @@ class MainViewModel @Inject constructor(
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         createAlarm(alarm)
         repository.insert(alarm)
-        GeneralUtils.showToast(
-            title = DateUtils.convertSecondsToHMm(
-                seconds = TimeUnit.MILLISECONDS.toSeconds(
-                    DateUtils.getDifferenceFromCurrentTimeInMillis(
-                        time = alarm.date
-                    )
-                )
-            ),
-            context = app.applicationContext
-        )
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         stopAlarm(alarm)
         repository.delete(alarm)
-        GeneralUtils.showToast(
-            title = app.getString(
-                R.string.notification_action_deleted,
-                alarm.title
-            ),
-            context = app.applicationContext
-        )
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         stopAlarm(alarm)
-        GeneralUtils.showToast(title = app.getString(R.string.notification_action_cancelled, alarm.title), context = app.applicationContext)
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = true))
         stopAlarm(alarm)
         createAlarm(alarm)
-        GeneralUtils.showToast(
-            title = DateUtils.convertSecondsToHMm(
-                seconds = TimeUnit.MILLISECONDS.toSeconds(
-                    DateUtils.getDifferenceFromCurrentTimeInMillis(
-                        time = alarm.date
-                    )
-                )
-            ),
-            context = app.applicationContext
-        )
     }
 
     fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {

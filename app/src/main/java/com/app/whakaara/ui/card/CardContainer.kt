@@ -10,9 +10,12 @@ import androidx.compose.material.SwipeToDismiss
 import androidx.compose.material.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -25,6 +28,7 @@ fun CardContainerSwipeToDismiss(
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit
 ) {
+    val context = LocalContext.current
     LazyColumn {
         items(alarms.alarms, key = { it.alarmId }) { alarm ->
 
@@ -34,6 +38,9 @@ fun CardContainerSwipeToDismiss(
                     delete(alarm)
                     delay(25)
                     dismissState.reset()
+                    context.showToast(
+                        message = context.getString(R.string.notification_action_deleted, alarm.title)
+                    )
                 }
             }
 
@@ -49,7 +56,7 @@ fun CardContainerSwipeToDismiss(
                 dismissContent = {
                     Card(
                         alarm = alarm,
-                        cancel = disable,
+                        disable = disable,
                         enable = enable,
                         reset = reset
                     )

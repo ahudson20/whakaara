@@ -1,18 +1,14 @@
 package com.app.whakaara.utils
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper
 import android.widget.Toast
 import com.app.whakaara.data.alarm.Alarm
 import com.google.gson.Gson
 
 class GeneralUtils {
     companion object {
-        fun showToast(title: String, context: Context) {
-            Handler(Looper.getMainLooper()).post {
-                Toast.makeText(context, title, Toast.LENGTH_SHORT).show()
-            }
+        fun Context.showToast(message: String, length: Int = Toast.LENGTH_LONG) {
+            Toast.makeText(this, message, length).show()
         }
 
         /**

@@ -9,12 +9,14 @@ import androidx.activity.viewModels
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.ui.screens.NotificationFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -49,6 +51,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
         viewModel.disable(alarm = alarm)
+        this@FullScreenNotificationActivity.showToast(message = this@FullScreenNotificationActivity.getString(R.string.notification_action_cancelled, alarm.title))
         finishAndRemoveTask()
     }
 

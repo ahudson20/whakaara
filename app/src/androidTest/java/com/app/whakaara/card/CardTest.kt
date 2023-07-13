@@ -37,7 +37,7 @@ class CardTest {
             WhakaaraTheme {
                 Card(
                     alarm = alarm,
-                    cancel = {},
+                    disable = {},
                     enable = {},
                     reset = {}
                 )

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.clock.TextClock
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import java.util.Calendar
 
 @Composable
@@ -28,7 +29,8 @@ fun NotificationFullScreen(
     snooze: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit
 ) {
-    val activity = (LocalContext.current as? Activity)
+    val context = LocalContext.current
+    val activity = (context as? Activity)
     Scaffold { innerPadding ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -47,6 +49,9 @@ fun NotificationFullScreen(
                         modifier = modifier.padding(16.dp),
                         onClick = {
                             snooze(alarm)
+                            context.showToast(
+                                message = context.getString(R.string.notification_action_snoozed, alarm.title)
+                            )
                             activity?.finish()
                         }
                     ) {
@@ -57,6 +62,7 @@ fun NotificationFullScreen(
                     modifier = modifier.padding(16.dp),
                     onClick = {
                         disable(alarm)
+                        context.showToast(message = context.getString(R.string.notification_action_cancelled, alarm.title))
                         activity?.finish()
                     }
                 ) {

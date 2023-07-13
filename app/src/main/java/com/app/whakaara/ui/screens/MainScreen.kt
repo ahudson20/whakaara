@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,16 +28,19 @@ import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
 import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import java.time.LocalTime
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
     viewModel: MainViewModel
 ) {
+    val context = LocalContext.current
     val navController = rememberNavController()
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -45,6 +49,7 @@ fun MainScreen(
             isDialogShown.value = !isDialogShown.value
         }
     }
+
     val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
     val alarms by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
@@ -77,6 +82,15 @@ fun MainScreen(
                                     )
                                 )
                                 isDialogShown.value = false
+                                context.showToast(
+                                    message = DateUtils.convertSecondsToHMm(
+                                        seconds = TimeUnit.MILLISECONDS.toSeconds(
+                                            DateUtils.getDifferenceFromCurrentTimeInMillis(
+                                                time = date
+                                            )
+                                        )
+                                    )
+                                )
                             },
                             title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
                             is24HourFormat = true

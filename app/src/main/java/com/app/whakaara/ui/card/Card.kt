@@ -26,26 +26,32 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
+import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.dokar.sheets.rememberBottomSheetState
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun Card(
     modifier: Modifier = Modifier,
     alarm: Alarm,
-    cancel: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit
 ) {
+    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
     val valueSlider by remember(alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
@@ -127,9 +133,19 @@ fun Card(
                 checked = valueSlider,
                 onCheckedChange = {
                     if (!it) {
-                        cancel(alarm)
+                        disable(alarm)
+                        context.showToast(message = context.getString(R.string.notification_action_cancelled, alarm.title))
                     } else {
                         enable(alarm)
+                        context.showToast(
+                            message = DateUtils.convertSecondsToHMm(
+                                seconds = TimeUnit.MILLISECONDS.toSeconds(
+                                    DateUtils.getDifferenceFromCurrentTimeInMillis(
+                                        time = alarm.date
+                                    )
+                                )
+                            )
+                        )
                     }
                 }
             )
@@ -151,7 +167,7 @@ fun CardPreview() {
             date = Calendar.getInstance(),
             subTitle = "12:13 AM"
         ),
-        cancel = {},
+        disable = {},
         enable = {},
         reset = {}
     )

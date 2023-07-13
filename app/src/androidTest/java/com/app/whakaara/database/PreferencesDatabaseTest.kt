@@ -50,6 +50,7 @@ class PreferencesDatabaseTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        preferencesDatabase.close()
     }
 
     @Test

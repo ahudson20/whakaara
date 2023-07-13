@@ -27,7 +27,7 @@ import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.GeneralUtils
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
@@ -95,7 +95,7 @@ fun BottomSheetTopBar(
                             )
                         )
                     )
-                    GeneralUtils.showToast(title = context.getString(R.string.bottom_sheet_save_button), context = context)
+                    context.showToast(message = context.getString(R.string.bottom_sheet_save_button))
                     sheetState.collapse()
                 }
             }

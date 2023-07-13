@@ -50,6 +50,7 @@ class AlarmDatabaseTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        alarmDatabase.close()
     }
 
     @Test

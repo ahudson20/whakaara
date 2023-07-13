@@ -22,6 +22,7 @@
     <string name="notification_action_deleted">%1$s deleted</string>
     <string name="notification_action_cancelled">%1$s cancelled</string>
     <string name="notification_action_enabled">%1$s enabled</string>
+    <string name="notification_action_snoozed">%1$s snoozed</string>
     <string name="notification_action_button_cancel">Cancel</string>
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>

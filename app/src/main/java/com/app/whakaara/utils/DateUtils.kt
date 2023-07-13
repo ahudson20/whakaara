@@ -56,7 +56,7 @@ class DateUtils {
             formattedString.append("Alarm in ")
             if (hoursString.isNotBlank()) formattedString.append(hoursString)
             if (minutesString.isNotBlank()) formattedString.append(minutesString)
-            return formattedString.toString()
+            return formattedString.toString().trim()
         }
 
         fun getDifferenceFromCurrentTimeInMillis(

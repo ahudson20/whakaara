@@ -9,8 +9,17 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  lint:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v3
+
+      - name: Kotlin Linter
+        uses: vroy/gha-kotlin-linter@v4
+
+  build:
     runs-on: macOS-latest
 
     steps:
@@ -30,9 +39,6 @@ jobs:
 
     - name: Build with Gradle
       run: ./gradlew app:assembleDebug
-      
-    - name: Kotlin Linter
-      uses: vroy/gha-kotlin-linter@v4
 
     - name: Run instrumented test
       uses: reactivecircus/android-emulator-runner@v2

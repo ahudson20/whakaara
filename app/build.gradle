@@ -89,15 +89,17 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
     // Not a processor, but forces Dagger to use newer metadata lib
-    implementation "org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.6.0"
+    implementation 'org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0'
 
     implementation "androidx.arch.core:core-common:2.2.0"
     implementation "androidx.arch.core:core-runtime:2.2.0"
     implementation "androidx.arch.core:core-testing:2.2.0"
 
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2"
 
     testImplementation "junit:junit:4.13.2"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1"
+    testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2'
     testImplementation "org.mockito:mockito-core:5.4.0"
     testImplementation "org.mockito.kotlin:mockito-kotlin:5.0.0"
     androidTestImplementation "androidx.test.ext:junit:1.1.5"
@@ -109,7 +111,7 @@ dependencies {
     implementation "javax.inject:javax.inject:1"
 
     // https://github.com/dokar3/sheets
-    implementation "io.github.dokar3:sheets:0.4.2"
+    implementation 'io.github.dokar3:sheets:0.4.4'
 
     // https://github.com/ChargeMap/Compose-NumberPicker
     implementation "com.chargemap.compose:numberpicker:1.0.3"
@@ -123,7 +125,7 @@ dependencies {
 
     // Google
     implementation "com.google.code.gson:gson:2.10.1"
-    implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.2-alpha"
+    implementation 'com.google.accompanist:accompanist-systemuicontroller:0.31.5-beta'
 
     // Hilt
     implementation "androidx.hilt:hilt-navigation-compose:1.0.0"

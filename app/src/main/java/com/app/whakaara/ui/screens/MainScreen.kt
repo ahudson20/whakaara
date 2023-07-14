@@ -23,7 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
-import com.app.whakaara.ui.floatingactionbutton.FloatingButton
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButton
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
@@ -58,7 +58,7 @@ fun MainScreen(
         floatingActionButton = {
             when (navBackStackEntry?.destination?.route) {
                 "alarm" -> {
-                    FloatingButton(
+                    FloatingActionButton(
                         isDialogShown = isDialogShown,
                         launcher = launcher
                     )

@@ -52,7 +52,7 @@ jobs:
       if: ${{ always() }}
       with:
         name: reports
-        path: app/build/test-results
+        path: app/build/reports
 
   report:
     runs-on: macOS-latest

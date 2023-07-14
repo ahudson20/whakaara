@@ -51,18 +51,18 @@ jobs:
       uses: actions/upload-artifact@v2
       if: ${{ always() }}
       with:
-        name: test-project
-        path: ./test-project
+        name: reports
+        path: app/build/test-results
 
   report:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     needs: build
     if: ${{ always() }}
     steps:
     - name: Download Test Reports Folder
       uses: actions/download-artifact@v2
       with:
-        name: test-project
+        name: reports
 
-    - name: Report test result
-      uses: linuxias/Android-test-result-printer@v0.1.0
+    - name: Android Test Report
+      uses: asadmansr/android-test-report-action@v1.2.0

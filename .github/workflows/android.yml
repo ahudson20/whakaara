@@ -21,6 +21,7 @@ jobs:
 
   build:
     runs-on: macOS-latest
+    needs: lint
 
     steps:
     - uses: actions/checkout@v3
@@ -40,6 +41,9 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew app:assembleDebug
 
+    - name: Unit tests
+      run: ./gradlew testDebugUnitTest
+
     - name: Run instrumented test
       uses: reactivecircus/android-emulator-runner@v2
       with:
@@ -48,11 +52,13 @@ jobs:
         script: ./gradlew app:connectedDebugAndroidTest
 
     - name: Upload Test Reports Folder
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       if: ${{ always() }}
       with:
         name: reports
-        path: app/build/reports
+        path: |
+          app/build/reports
+          app/build/test-results
 
   report:
     runs-on: ubuntu-latest

@@ -55,7 +55,7 @@ jobs:
         path: app/build/reports
 
   report:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     needs: build
     if: ${{ always() }}
     steps:

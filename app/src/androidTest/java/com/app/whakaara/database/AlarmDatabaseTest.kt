@@ -17,12 +17,15 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import java.util.Calendar
+import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -55,16 +58,67 @@ class AlarmDatabaseTest {
 
     @Test
     fun insert_alarm_should_return_alarm_in_flow() = runTest {
+        // Given
         val alarm = Alarm(
-            subTitle = "subtitle",
+            subTitle = "subTitle",
             date = Calendar.getInstance()
         )
+
+        // When
         alarmDao.insert(alarm)
 
+        // Then
         alarmDao.getAllAlarmsFlow().test {
             val list = awaitItem()
             assert(list.contains(alarm))
             cancel()
+        }
+    }
+
+    @Test
+    fun insert_alarm_should_return_alarm_not_in_flow() = runTest {
+        // Given
+        val alarm = Alarm(
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+
+        // When
+        alarmDao.insert(alarm)
+
+        // Then
+        val alarms = alarmDao.getAllAlarms()
+        assert(alarms.contains(alarm))
+    }
+
+    @Test
+    fun update_alarm_should_return_alarm_in_flow() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+        alarmDao.insert(alarm)
+
+        // When
+        alarmDao.updateAlarm(
+            alarm = alarm.copy(
+                title = "updatedTitle",
+                subTitle = "updatedSubTitle"
+            )
+        )
+
+        // Then
+        val updatedAlarm = alarmDao.getAlarmById(id = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"))
+        updatedAlarm.apply {
+            assertNotEquals("title", this.title)
+            assertNotEquals("subTitle", this.subTitle)
+
+            assertEquals("updatedTitle", this.title)
+            assertEquals("updatedSubTitle", this.subTitle)
         }
     }
 }

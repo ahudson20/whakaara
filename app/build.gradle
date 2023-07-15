@@ -64,12 +64,10 @@ dependencies {
     implementation "androidx.compose.ui:ui-tooling-preview:1.6.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.1"
     implementation "androidx.activity:activity-compose:1.7.2"
-    implementation "androidx.appcompat:appcompat:1.6.1"
 
     // Material
     implementation "com.google.android.material:material:1.9.0"
     implementation "androidx.compose.material3:material3:1.2.0-alpha03"
-    implementation "androidx.compose.material3:material3-window-size-class:1.2.0-alpha03"
     implementation "androidx.compose.material:material-icons-extended:1.6.0-alpha01"
     implementation "androidx.compose.material:material:1.6.0-alpha01"
 
@@ -98,6 +96,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2"
 
+    testImplementation "com.google.truth:truth:1.1.5"
+    testImplementation "io.mockk:mockk:1.13.5"
     testImplementation "junit:junit:4.13.2"
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.2'
     testImplementation "org.mockito:mockito-core:5.4.0"
@@ -139,13 +139,13 @@ dependencies {
     // Saved state module for ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-savedstate:2.6.1"
 
-    // optional - helpers for implementing LifecycleOwner in a Service
+    // Helpers for implementing LifecycleOwner in a Service
     implementation "androidx.lifecycle:lifecycle-service:2.6.1"
 
-    // optional - ProcessLifecycleOwner provides a lifecycle for the whole application process
+    // ProcessLifecycleOwner provides a lifecycle for the whole application process
     implementation "androidx.lifecycle:lifecycle-process:2.6.1"
 
-    // optional - Test helpers for Lifecycle runtime
+    // Test helpers for Lifecycle runtime
     testImplementation "androidx.lifecycle:lifecycle-runtime-testing:2.6.1"
 }
 

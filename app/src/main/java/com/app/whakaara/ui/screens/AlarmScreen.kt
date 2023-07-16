@@ -27,10 +27,10 @@ fun AlarmScreen(
 @Composable
 fun AlarmScreenPreview() {
     AlarmScreen(
+        alarmState = AlarmState(),
         delete = {},
         disable = {},
         enable = {},
-        reset = {},
-        alarmState = AlarmState()
+        reset = {}
     )
 }

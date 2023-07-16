@@ -65,7 +65,7 @@ fun FloatingActionButtonPause(onPause: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Filled.Pause,
-            contentDescription = stringResource(id = R.string.stop_timer_icon_content_description)
+            contentDescription = stringResource(id = R.string.pause_timer_icon_content_description)
         )
     }
 }

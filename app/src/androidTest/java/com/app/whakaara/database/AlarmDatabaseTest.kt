@@ -93,10 +93,11 @@ class AlarmDatabaseTest {
     }
 
     @Test
-    fun update_alarm_should_return_alarm_in_flow() = runTest {
+    fun update_alarm_should_return_alarm_get_by_id() = runTest {
         // Given
+        val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
         val alarm = Alarm(
-            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            alarmId = alarmId,
             title = "title",
             subTitle = "subTitle",
             date = Calendar.getInstance()
@@ -112,13 +113,79 @@ class AlarmDatabaseTest {
         )
 
         // Then
-        val updatedAlarm = alarmDao.getAlarmById(id = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"))
-        updatedAlarm.apply {
+        alarmDao.getAlarmById(id = alarmId).apply {
             assertNotEquals("title", this.title)
             assertNotEquals("subTitle", this.subTitle)
 
             assertEquals("updatedTitle", this.title)
             assertEquals("updatedSubTitle", this.subTitle)
+        }
+    }
+
+    @Test
+    fun delete_alarm_should_not_return_alarm() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+        alarmDao.insert(alarm)
+
+        // When
+        alarmDao.deleteAlarm(alarm)
+
+        // Then
+        alarmDao.getAllAlarmsFlow().test {
+            val list = awaitItem()
+            assert(!list.contains(alarm))
+            cancel()
+        }
+    }
+
+    @Test
+    fun delete_alarm_by_id_should_not_return_alarm() = runTest {
+        // Given
+        val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
+        val alarm = Alarm(
+            alarmId = alarmId,
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+        alarmDao.insert(alarm)
+
+        // When
+        alarmDao.deleteAlarmById(id = alarmId)
+
+        // Then
+        alarmDao.getAllAlarmsFlow().test {
+            val list = awaitItem()
+            assert(!list.contains(alarm))
+            cancel()
+        }
+    }
+
+    @Test
+    fun alarm_is_enabled() = runTest {
+        // Given
+        val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
+        val alarm = Alarm(
+            alarmId = alarmId,
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance(),
+            isEnabled = true
+        )
+        alarmDao.insert(alarm)
+
+        // When
+        alarmDao.isEnabled(id = alarmId, isEnabled = false)
+
+        // Then
+        alarmDao.getAlarmById(id = alarmId).apply {
+            assertEquals(false, this.isEnabled)
         }
     }
 }

@@ -65,12 +65,17 @@ class DateUtils {
             val timeNowNoSeconds = Calendar.getInstance().apply {
                 set(Calendar.SECOND, 0)
             }
+            var newTime: Calendar = time
 
             if (checkIfSameDay(time, timeNowNoSeconds)) {
-                time.add(Calendar.DATE, 1)
+                newTime = Calendar.getInstance().apply {
+                    add(Calendar.DATE, 1)
+                    set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY))
+                    set(Calendar.MINUTE, time.get(Calendar.MINUTE))
+                }
             }
 
-            return time.timeInMillis - timeNowNoSeconds.timeInMillis
+            return newTime.timeInMillis - timeNowNoSeconds.timeInMillis
         }
 
         private fun checkIfSameDay(alarmTime: Calendar, currentTime: Calendar): Boolean {

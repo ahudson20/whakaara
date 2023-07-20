@@ -17,7 +17,11 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.state.BooleanStateEvent
+import com.app.whakaara.state.HoursUpdateEvent
+import com.app.whakaara.state.StringStateEvent
+import com.app.whakaara.utils.DateUtils.Companion.convertSecondsToHMm
+import com.app.whakaara.utils.DateUtils.Companion.getDifferenceFromCurrentTimeInMillis
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
@@ -29,26 +33,18 @@ import java.util.concurrent.TimeUnit
 fun BottomSheetContent(
     modifier: Modifier = Modifier,
     alarm: Alarm,
+    timeToAlarm: String,
     sheetState: BottomSheetState,
     reset: (alarm: Alarm) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    val hours = alarm.date.get(Calendar.HOUR_OF_DAY)
-    val mins = alarm.date.get(Calendar.MINUTE)
-    var timePickerValue by remember { mutableStateOf<Hours>(FullHours(hours, mins)) }
+    var timePickerValue by remember { mutableStateOf<Hours>(FullHours(alarm.date.get(Calendar.HOUR_OF_DAY), alarm.date.get(Calendar.MINUTE))) }
     var isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
     var isSnoozeEnabled by remember(alarm.isSnoozeEnabled) { mutableStateOf(alarm.isSnoozeEnabled) }
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
     var title by remember(alarm.title) { mutableStateOf(alarm.title) }
-    var bottomText by remember {
-        mutableStateOf(
-            DateUtils.getInitialTimeToAlarm(
-                isEnabled = alarm.isEnabled,
-                time = alarm.date
-            )
-        )
-    }
+    var bottomText by remember { mutableStateOf(timeToAlarm) }
 
     BackHandler(sheetState.visible) {
         coroutineScope.launch {
@@ -82,39 +78,49 @@ fun BottomSheetContent(
         )
 
         BottomSheetTimePicker(
-            pickerValue = timePickerValue,
-            updatePickerValue = { newValue ->
-                timePickerValue = newValue
-                bottomText = DateUtils.convertSecondsToHMm(
-                    seconds = TimeUnit.MILLISECONDS.toSeconds(
-                        DateUtils.getDifferenceFromCurrentTimeInMillis(
-                            time = Calendar.getInstance().apply {
-                                set(Calendar.HOUR_OF_DAY, newValue.hours)
-                                set(Calendar.MINUTE, newValue.minutes)
-                            }
+            updatePickerValue = HoursUpdateEvent(
+                value = timePickerValue,
+                onValueChange = { newValue ->
+                    timePickerValue = newValue
+                    bottomText = convertSecondsToHMm(
+                        seconds = TimeUnit.MILLISECONDS.toSeconds(
+                            getDifferenceFromCurrentTimeInMillis(
+                                time = Calendar.getInstance().apply {
+                                    set(Calendar.HOUR_OF_DAY, newValue.hours)
+                                    set(Calendar.MINUTE, newValue.minutes)
+                                }
+                            )
                         )
                     )
-                )
-            }
+                }
+            )
         )
 
         BottomSheetAlarmDetails(
-            isVibrationEnabled = isVibrationEnabled,
-            updateIsVibrationEnabled = { newValue ->
-                isVibrationEnabled = newValue
-            },
-            isSnoozeEnabled = isSnoozeEnabled,
-            updateIsSnoozeEnabled = { newValue ->
-                isSnoozeEnabled = newValue
-            },
-            deleteAfterGoesOff = deleteAfterGoesOff,
-            updateDeleteAfterGoesOff = { newValue ->
-                deleteAfterGoesOff = newValue
-            },
-            title = title,
-            updateTitle = { newValue ->
-                title = newValue
-            }
+            updateIsVibrationEnabled = BooleanStateEvent(
+                value = isVibrationEnabled,
+                onValueChange = { newValue ->
+                    isVibrationEnabled = newValue
+                }
+            ),
+            updateIsSnoozeEnabled = BooleanStateEvent(
+                value = isSnoozeEnabled,
+                onValueChange = { newValue ->
+                    isSnoozeEnabled = newValue
+                }
+            ),
+            updateDeleteAfterGoesOff = BooleanStateEvent(
+                value = deleteAfterGoesOff,
+                onValueChange = { newValue ->
+                    deleteAfterGoesOff = newValue
+                }
+            ),
+            updateTitle = StringStateEvent(
+                value = title,
+                onValueChange = { newValue ->
+                    title = newValue
+                }
+            )
         )
     }
 }
@@ -128,6 +134,7 @@ fun BottomSheetContentPreview() {
             isEnabled = false,
             subTitle = "10:03 AM"
         ),
+        timeToAlarm = "timeToAlarm",
         sheetState = BottomSheetState(),
         reset = {}
     )

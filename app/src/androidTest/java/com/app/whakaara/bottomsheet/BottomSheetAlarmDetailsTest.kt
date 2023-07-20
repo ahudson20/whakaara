@@ -25,7 +25,7 @@ class BottomSheetAlarmDetailsTest {
             WhakaaraTheme {
                 BottomSheetAlarmDetails(
                     updateIsVibrationEnabled = BooleanStateEvent(
-                        value = true
+                        value = false
                     ),
                     updateIsSnoozeEnabled = BooleanStateEvent(
                         value = true
@@ -34,7 +34,7 @@ class BottomSheetAlarmDetailsTest {
                         value = false
                     ),
                     updateTitle = StringStateEvent(
-                        value = "Title"
+                        value = "Alarm"
                     )
                 )
             }

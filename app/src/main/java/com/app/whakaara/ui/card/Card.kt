@@ -154,6 +154,7 @@ fun Card(
 
     BottomSheetWrapper(
         alarm = alarm,
+        timeToAlarm = timeToAlarm,
         state = sheetState,
         reset = reset
     )

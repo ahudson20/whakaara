@@ -7,6 +7,8 @@ import androidx.compose.ui.test.assertIsToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import com.app.whakaara.state.BooleanStateEvent
+import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.ui.bottomsheet.BottomSheetAlarmDetails
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
@@ -22,14 +24,18 @@ class BottomSheetAlarmDetailsTest {
         setContent {
             WhakaaraTheme {
                 BottomSheetAlarmDetails(
-                    isVibrationEnabled = false,
-                    updateIsVibrationEnabled = {},
-                    isSnoozeEnabled = true,
-                    updateIsSnoozeEnabled = {},
-                    deleteAfterGoesOff = false,
-                    updateDeleteAfterGoesOff = {},
-                    title = "Alarm",
-                    updateTitle = {}
+                    updateIsVibrationEnabled = BooleanStateEvent(
+                        value = true
+                    ),
+                    updateIsSnoozeEnabled = BooleanStateEvent(
+                        value = true
+                    ),
+                    updateDeleteAfterGoesOff = BooleanStateEvent(
+                        value = false
+                    ),
+                    updateTitle = StringStateEvent(
+                        value = "Title"
+                    )
                 )
             }
         }

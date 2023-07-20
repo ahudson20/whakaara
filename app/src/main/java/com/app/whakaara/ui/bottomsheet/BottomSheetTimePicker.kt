@@ -8,23 +8,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.app.whakaara.state.HoursUpdateEvent
 import com.chargemap.compose.numberpicker.FullHours
-import com.chargemap.compose.numberpicker.Hours
 import com.chargemap.compose.numberpicker.HoursNumberPicker
 
 @Composable
 fun BottomSheetTimePicker(
     modifier: Modifier = Modifier,
-    pickerValue: Hours,
-    updatePickerValue: (Hours) -> Unit
+    updatePickerValue: HoursUpdateEvent
 ) {
     HoursNumberPicker(
         modifier = modifier.padding(all = 24.dp),
         dividersColor = MaterialTheme.colorScheme.onSurface,
         leadingZero = false,
-        value = pickerValue,
+        value = updatePickerValue.value,
         onValueChange = {
-            updatePickerValue(it)
+            updatePickerValue.onValueChange(it)
         },
         textStyle = LocalTextStyle.current.copy(
             color = MaterialTheme.colorScheme.onSurface,
@@ -37,10 +36,11 @@ fun BottomSheetTimePicker(
 @Composable
 fun BottomSheetTimePickerPreview() {
     BottomSheetTimePicker(
-        pickerValue = FullHours(
-            hours = 12,
-            minutes = 12
-        ),
-        updatePickerValue = {}
+        updatePickerValue = HoursUpdateEvent(
+            value = FullHours(
+                hours = 12,
+                minutes = 12
+            )
+        )
     )
 }

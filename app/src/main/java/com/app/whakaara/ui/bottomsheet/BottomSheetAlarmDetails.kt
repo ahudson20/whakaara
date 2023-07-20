@@ -29,19 +29,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
+import com.app.whakaara.state.BooleanStateEvent
+import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 
 @Composable
 fun BottomSheetAlarmDetails(
     modifier: Modifier = Modifier,
-    isVibrationEnabled: Boolean,
-    updateIsVibrationEnabled: (Boolean) -> Unit,
-    isSnoozeEnabled: Boolean,
-    updateIsSnoozeEnabled: (Boolean) -> Unit,
-    deleteAfterGoesOff: Boolean,
-    updateDeleteAfterGoesOff: (Boolean) -> Unit,
-    title: String,
-    updateTitle: (String) -> Unit
+    updateIsVibrationEnabled: BooleanStateEvent,
+    updateIsSnoozeEnabled: BooleanStateEvent,
+    updateDeleteAfterGoesOff: BooleanStateEvent,
+    updateTitle: StringStateEvent
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -62,9 +60,9 @@ fun BottomSheetAlarmDetails(
             )
             Switch(
                 modifier = modifier.testTag("vibrate switch"),
-                checked = isVibrationEnabled,
+                checked = updateIsVibrationEnabled.value,
                 onCheckedChange = {
-                    updateIsVibrationEnabled(it)
+                    updateIsVibrationEnabled.onValueChange(it)
                 }
             )
         }
@@ -85,9 +83,9 @@ fun BottomSheetAlarmDetails(
             )
             Switch(
                 modifier = modifier.testTag("snooze switch"),
-                checked = isSnoozeEnabled,
+                checked = updateIsSnoozeEnabled.value,
                 onCheckedChange = {
-                    updateIsSnoozeEnabled(it)
+                    updateIsSnoozeEnabled.onValueChange(it)
                 }
             )
         }
@@ -108,9 +106,9 @@ fun BottomSheetAlarmDetails(
             )
             Switch(
                 modifier = modifier.testTag("delete switch"),
-                checked = deleteAfterGoesOff,
+                checked = updateDeleteAfterGoesOff.value,
                 onCheckedChange = {
-                    updateDeleteAfterGoesOff(it)
+                    updateDeleteAfterGoesOff.onValueChange(it)
                 }
             )
         }
@@ -132,8 +130,8 @@ fun BottomSheetAlarmDetails(
             Column {
                 TextField(
                     modifier = modifier.width(150.dp),
-                    value = title,
-                    onValueChange = { if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) updateTitle(it) },
+                    value = updateTitle.value,
+                    onValueChange = { if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) updateTitle.onValueChange(it) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Transparent,
                         unfocusedContainerColor = Transparent,
@@ -149,7 +147,7 @@ fun BottomSheetAlarmDetails(
                     )
                 )
                 Text(
-                    text = "${title.length} / $ALARM_TITLE_MAX_CHARS",
+                    text = "${updateTitle.value.length} / $ALARM_TITLE_MAX_CHARS",
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = modifier
@@ -165,13 +163,17 @@ fun BottomSheetAlarmDetails(
 @Composable
 private fun BottomSheetAlarmDetailsPreview() {
     BottomSheetAlarmDetails(
-        isVibrationEnabled = false,
-        updateIsVibrationEnabled = {},
-        isSnoozeEnabled = true,
-        updateIsSnoozeEnabled = {},
-        deleteAfterGoesOff = false,
-        updateDeleteAfterGoesOff = {},
-        title = "Alarm",
-        updateTitle = {}
+        updateIsVibrationEnabled = BooleanStateEvent(
+            value = true
+        ),
+        updateIsSnoozeEnabled = BooleanStateEvent(
+            value = true
+        ),
+        updateDeleteAfterGoesOff = BooleanStateEvent(
+            value = false
+        ),
+        updateTitle = StringStateEvent(
+            value = "title"
+        )
     )
 }

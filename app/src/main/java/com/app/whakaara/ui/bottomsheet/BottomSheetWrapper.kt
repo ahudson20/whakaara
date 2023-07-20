@@ -9,6 +9,7 @@ import com.dokar.sheets.BottomSheetState
 @Composable
 fun BottomSheetWrapper(
     alarm: Alarm,
+    timeToAlarm: String,
     state: BottomSheetState,
     reset: (alarm: Alarm) -> Unit
 ) {
@@ -19,6 +20,7 @@ fun BottomSheetWrapper(
     ) {
         BottomSheetContent(
             alarm = alarm,
+            timeToAlarm = timeToAlarm,
             sheetState = state,
             reset = reset
         )

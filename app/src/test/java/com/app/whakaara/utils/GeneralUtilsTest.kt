@@ -14,6 +14,9 @@ class GeneralUtilsTest {
             alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
             subTitle = "subTitle",
             date = Calendar.getInstance().apply {
+                set(Calendar.YEAR, 2023)
+                set(Calendar.DAY_OF_MONTH, 13)
+                set(Calendar.MONTH, 6)
                 set(Calendar.HOUR_OF_DAY, 12)
                 set(Calendar.MINUTE, 34)
                 set(Calendar.SECOND, 0)

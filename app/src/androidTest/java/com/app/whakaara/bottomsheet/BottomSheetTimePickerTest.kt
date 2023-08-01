@@ -3,6 +3,7 @@ package com.app.whakaara.bottomsheet
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.app.whakaara.state.HoursUpdateEvent
 import com.app.whakaara.ui.bottomsheet.BottomSheetTimePicker
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.chargemap.compose.numberpicker.FullHours
@@ -19,11 +20,12 @@ class BottomSheetTimePickerTest {
         setContent {
             WhakaaraTheme {
                 BottomSheetTimePicker(
-                    pickerValue = FullHours(
-                        hours = 12,
-                        minutes = 30
-                    ),
-                    updatePickerValue = {}
+                    updatePickerValue = HoursUpdateEvent(
+                        value = FullHours(
+                            hours = 12,
+                            minutes = 30
+                        )
+                    )
                 )
             }
         }

@@ -18,6 +18,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -67,6 +68,41 @@ class PreferencesDatabaseTest {
 
         preferencesDao.getPreferencesFlow().test {
             assertEquals(preferences, awaitItem())
+            cancel()
+        }
+    }
+
+    @Test
+    fun update_preference_should_return_updated() = runTest {
+        // Given
+        val preferences = Preferences(
+            id = 100,
+            isVibrateEnabled = false,
+            isSnoozeEnabled = true,
+            deleteAfterGoesOff = false,
+            autoSilenceTime = 123,
+            snoozeTime = 321
+        )
+        preferencesDao.insert(preferences = preferences)
+
+        // When
+        preferencesDao.updatePreferences(
+            preferences = preferences.copy(
+                id = 100,
+                autoSilenceTime = 999,
+                snoozeTime = 888
+            )
+        )
+
+        preferencesDao.getPreferencesFlow().test {
+            val updated = awaitItem()
+            updated.apply {
+                assertNotEquals(123, this.autoSilenceTime)
+                assertNotEquals(321, this.snoozeTime)
+
+                assertEquals(999, this.autoSilenceTime)
+                assertEquals(888, this.snoozeTime)
+            }
             cancel()
         }
     }

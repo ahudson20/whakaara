@@ -22,7 +22,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 
 @Composable
 @OptIn(ExperimentalPermissionsApi::class)
-fun FloatingButton(
+fun FloatingActionButton(
     isDialogShown: MutableState<Boolean>,
     launcher: ManagedActivityResultLauncher<String, Boolean>
 ) {

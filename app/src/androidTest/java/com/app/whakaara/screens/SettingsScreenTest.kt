@@ -20,7 +20,8 @@ class SettingsScreenTest {
             WhakaaraTheme {
                 SettingsScreen(
                     preferencesState = PreferencesState(),
-                    updatePreferences = {}
+                    updatePreferences = {},
+                    updateAllAlarmSubtitles = {}
                 )
             }
         }

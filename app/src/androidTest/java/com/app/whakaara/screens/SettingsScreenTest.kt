@@ -3,6 +3,7 @@ package com.app.whakaara.screens
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollTo
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -33,13 +34,16 @@ class SettingsScreenTest {
 
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
+        onNodeWithText(text = "Alarms displayed in 24 hour format").assertIsDisplayed()
+        onNodeWithText(text = "If enabled display using 24 hour format, else 12 hour format").assertIsDisplayed()
+
         onNodeWithText(text = "Vibrate").assertIsDisplayed()
         onNodeWithText(text = "Vibrate when alarms go off").assertIsDisplayed()
 
         onNodeWithText(text = "Snooze").assertIsDisplayed()
         onNodeWithText(text = "Allow alarms to be snoozed").assertIsDisplayed()
 
-        onNodeWithText(text = "Snooze duration").assertIsDisplayed()
+        onNodeWithText(text = "Snooze duration").performScrollTo().assertIsDisplayed()
 
         onNodeWithText(text = "Delete").assertIsDisplayed()
         onNodeWithText(text = "Alarms are deleted after they go off").assertIsDisplayed()

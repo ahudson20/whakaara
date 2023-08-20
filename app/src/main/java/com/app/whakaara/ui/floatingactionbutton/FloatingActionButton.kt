@@ -29,7 +29,7 @@ fun FloatingActionButton(
     val snackbarHostState = remember { SnackbarHostState() }
     val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
-    val context = LocalContext.current.applicationContext
+    val context = LocalContext.current
 
     FloatingActionButton(
         onClick = {
@@ -41,7 +41,7 @@ fun FloatingActionButton(
                 else -> {
                     /**PERMISSION DENIED - SHOW PROMPT**/
                     if (notificationPermissionState.status.shouldShowRationale) {
-                        NotificationUtils(context).snackBarPromptPermission(
+                        NotificationUtils.snackBarPromptPermission(
                             scope = scope,
                             snackBarHostState = snackbarHostState,
                             context = context
@@ -61,3 +61,18 @@ fun FloatingActionButton(
         )
     }
 }
+
+/**
+ * Preview breaks for composables using permissions.
+ * https://issuetracker.google.com/issues/267227895
+ * **/
+// @Preview
+// @Composable
+// fun FloatingButtonPreview() {
+//    WhakaaraTheme {
+//        FloatingButton(
+//            isDialogShown = rememberSaveable { mutableStateOf(false) },
+//            launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {}
+//        )
+//    }
+// }

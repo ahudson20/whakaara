@@ -4,7 +4,7 @@ buildscript {
     }
     ext {
         compose_version = '1.1.0-beta01'
-        nav_version = '2.6.0'
+        nav_version = '2.7.0'
         work_version = '2.8.1'
         time_picker_version = '0.7.2'
         accompanist_permissions = '0.31.5-beta'

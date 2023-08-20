@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -25,7 +25,8 @@ import com.app.whakaara.ui.settings.GeneralSettings
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -37,15 +38,16 @@ fun SettingsScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
             GeneralSettings()
-            Divider()
+            HorizontalDivider()
             AlarmSettings(
                 preferencesState = preferencesState,
-                updatePreferences = updatePreferences
+                updatePreferences = updatePreferences,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
         }
     }
@@ -56,6 +58,7 @@ fun SettingsScreen(
 fun SettingsScreenPreview() {
     SettingsScreen(
         preferencesState = PreferencesState(),
-        updatePreferences = {}
+        updatePreferences = {},
+        updateAllAlarmSubtitles = {}
     )
 }

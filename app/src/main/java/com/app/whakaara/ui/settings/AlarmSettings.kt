@@ -9,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
 import com.alorma.compose.settings.ui.SettingsListDropdown
@@ -17,22 +16,40 @@ import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.ui.theme.Spacings.space80
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.GeneralConstants
 
 @Composable
 fun AlarmSettings(
-    modifier: Modifier = Modifier,
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     Text(
-        modifier = modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+        modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
         text = stringResource(id = R.string.settings_screen_alarm_settings_title)
     )
+
     SettingsSwitch(
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
+        state = rememberBooleanSettingState(preferencesState.preferences.is24HourFormat),
+        title = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_subtitle)) },
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    is24HourFormat = it
+                )
+            )
+            updateAllAlarmSubtitles(it)
+        }
+    )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80),
         state = rememberBooleanSettingState(preferencesState.preferences.isVibrateEnabled),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_vibrate_subtitle)) },
@@ -44,8 +61,9 @@ fun AlarmSettings(
             )
         }
     )
+
     SettingsSwitch(
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_snooze_subtitle)) },
         state = rememberBooleanSettingState(preferencesState.preferences.isSnoozeEnabled),
@@ -57,9 +75,10 @@ fun AlarmSettings(
             )
         }
     )
+
     SettingsListDropdown(
         state = rememberIntSettingState(defaultValue = GeneralConstants.SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.snoozeTime }),
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
         items = GeneralConstants.SETTINGS_SCREEN_TIME_LIST,
         onItemSelected = { _, text ->
@@ -70,8 +89,9 @@ fun AlarmSettings(
             )
         }
     )
+
     SettingsSwitch(
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_delete_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_delete_subtitle)) },
         state = rememberBooleanSettingState(preferencesState.preferences.deleteAfterGoesOff),
@@ -83,9 +103,10 @@ fun AlarmSettings(
             )
         }
     )
+
     SettingsListDropdown(
         state = rememberIntSettingState(defaultValue = GeneralConstants.SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.autoSilenceTime }),
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
         items = GeneralConstants.SETTINGS_SCREEN_TIME_LIST,
@@ -106,7 +127,8 @@ fun AlarmSettingsPreview() {
         Column {
             AlarmSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {}
+                updatePreferences = {},
+                updateAllAlarmSubtitles = {}
             )
         }
     }

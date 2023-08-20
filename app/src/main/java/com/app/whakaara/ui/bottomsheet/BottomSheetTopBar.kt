@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
@@ -47,7 +47,8 @@ fun BottomSheetTopBar(
     isSnoozeEnabled: Boolean,
     deleteAfterGoesOff: Boolean,
     bottomText: String,
-    title: String
+    title: String,
+    is24HourFormat: Boolean
 ) {
     val context = LocalContext.current
     Row(
@@ -57,7 +58,7 @@ fun BottomSheetTopBar(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         IconButton(
-            modifier = modifier.fillMaxHeight(),
+            modifier = Modifier.fillMaxHeight(),
             onClick = {
                 coroutineScope.launch {
                     sheetState.collapse()
@@ -76,7 +77,7 @@ fun BottomSheetTopBar(
         )
 
         IconButton(
-            modifier = modifier.fillMaxHeight(),
+            modifier = Modifier.fillMaxHeight(),
             onClick = {
                 coroutineScope.launch {
                     reset(
@@ -90,8 +91,9 @@ fun BottomSheetTopBar(
                             isSnoozeEnabled = isSnoozeEnabled,
                             deleteAfterGoesOff = deleteAfterGoesOff,
                             title = title,
-                            subTitle = DateUtils.alarmTimeTo24HourFormat(
-                                date = alarm.date
+                            subTitle = getAlarmTimeFormatted(
+                                date = alarm.date,
+                                is24HourFormatEnabled = is24HourFormat
                             )
                         )
                     )
@@ -156,7 +158,8 @@ fun BottomSheetTopBarPreview() {
             isSnoozeEnabled = true,
             deleteAfterGoesOff = false,
             bottomText = "bottomText",
-            title = "title"
+            title = "title",
+            is24HourFormat = true
         )
     }
 }

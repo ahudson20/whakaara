@@ -1,7 +1,6 @@
 package com.app.whakaara.utils
 
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -13,35 +12,37 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_PACKAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-class NotificationUtils(context: Context) : ContextWrapper(context) {
-    fun snackBarPromptPermission(
-        scope: CoroutineScope,
-        snackBarHostState: SnackbarHostState,
-        context: Context
-    ) {
-        scope.launch {
-            val result = snackBarHostState.showSnackbar(
-                message = context.getString(R.string.permission_prompt_message),
-                actionLabel = context.getString(R.string.permission_prompt_action_label),
-                duration = SnackbarDuration.Long
-            )
-            /**SNACKBAR PROMPT ACCEPTED**/
-            if (snackBarHasBeenClicked(result)) {
-                openDeviceApplicationSettings(context)
+class NotificationUtils {
+    companion object {
+        fun snackBarPromptPermission(
+            scope: CoroutineScope,
+            snackBarHostState: SnackbarHostState,
+            context: Context
+        ) {
+            scope.launch {
+                val result = snackBarHostState.showSnackbar(
+                    message = context.getString(R.string.permission_prompt_message),
+                    actionLabel = context.getString(R.string.permission_prompt_action_label),
+                    duration = SnackbarDuration.Long
+                )
+                /**SNACKBAR PROMPT ACCEPTED**/
+                if (snackBarHasBeenClicked(result)) {
+                    openDeviceApplicationSettings(context)
+                }
             }
         }
-    }
 
-    private fun openDeviceApplicationSettings(context: Context) {
-        val intent = Intent(
-            Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-        ).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            data = Uri.fromParts(INTENT_PACKAGE, context.packageName, null)
+        private fun openDeviceApplicationSettings(context: Context) {
+            val intent = Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            ).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                data = Uri.fromParts(INTENT_PACKAGE, context.packageName, null)
+            }
+            context.startActivity(intent)
         }
-        context.startActivity(intent)
-    }
 
-    private fun snackBarHasBeenClicked(result: SnackbarResult) =
-        result == SnackbarResult.ActionPerformed
+        private fun snackBarHasBeenClicked(result: SnackbarResult) =
+            result == SnackbarResult.ActionPerformed
+    }
 }

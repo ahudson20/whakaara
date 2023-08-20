@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
@@ -27,9 +27,8 @@ class PermissionGrantedReceiver : BroadcastReceiver() {
         when (intent?.action) {
             AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val alarms = repo.getAllAlarms().filter { it.isEnabled }
-                    for (alarm in alarms) {
-                        createAlarm(alarm = alarm, context = context)
+                    repo.getAllAlarms().filter { it.isEnabled }.forEach {
+                        createAlarm(alarm = it, context = context)
                     }
                 }
             }
@@ -58,7 +57,7 @@ class PermissionGrantedReceiver : BroadcastReceiver() {
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            DateUtils.getTimeInMillis(alarm),
+            getTimeInMillis(alarm),
             pendingIntent
         )
     }

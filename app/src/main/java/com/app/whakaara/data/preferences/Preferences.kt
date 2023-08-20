@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class Preferences(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
+    var is24HourFormat: Boolean = true,
     var isVibrateEnabled: Boolean = true,
     var isSnoozeEnabled: Boolean = true,
     var deleteAfterGoesOff: Boolean = false,

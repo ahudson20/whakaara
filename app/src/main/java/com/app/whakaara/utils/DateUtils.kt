@@ -2,6 +2,7 @@ package com.app.whakaara.utils
 
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
+import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -35,6 +36,21 @@ class DateUtils {
             }
         }
 
+        fun getAlarmTimeFormatted(date: Calendar, is24HourFormatEnabled: Boolean): String {
+            val format = if (is24HourFormatEnabled) DATE_FORMAT_24_HOUR else DATE_FORMAT_12_HOUR
+            return SimpleDateFormat(format, Locale.getDefault()).format(date.time).uppercase()
+        }
+
+        fun getTimeUntilAlarmFormatted(date: Calendar): String {
+            return convertSecondsToHMm(
+                seconds = TimeUnit.MILLISECONDS.toSeconds(
+                    getDifferenceFromCurrentTimeInMillis(
+                        time = date
+                    )
+                )
+            )
+        }
+
         fun convertSecondsToHMm(
             seconds: Long
         ): String {
@@ -59,7 +75,7 @@ class DateUtils {
             return formattedString.toString().trim()
         }
 
-        fun getDifferenceFromCurrentTimeInMillis(
+        private fun getDifferenceFromCurrentTimeInMillis(
             time: Calendar
         ): Long {
             val timeNowNoSeconds = Calendar.getInstance().apply {
@@ -91,10 +107,6 @@ class DateUtils {
                 return true
             }
             return false
-        }
-
-        fun alarmTimeTo24HourFormat(date: Calendar): String {
-            return SimpleDateFormat(DATE_FORMAT_24_HOUR, Locale.getDefault()).format(date.time).uppercase()
         }
     }
 }

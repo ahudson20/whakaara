@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
+import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -50,7 +50,7 @@ fun DismissBackground(dismissState: DismissState) {
             contentDescription = stringResource(id = R.string.delete_icon_content_description),
             modifier = Modifier
                 .scale(scale)
-                .padding(horizontal = 20.dp)
+                .padding(horizontal = space20)
         )
     }
 }

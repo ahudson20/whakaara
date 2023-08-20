@@ -1,15 +1,15 @@
-package com.app.whakaara.screens
+package com.app.whakaara.settings
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.ui.screens.SettingsScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.app.whakaara.ui.settings.AlarmSettings
 import org.junit.Rule
 import org.junit.Test
 
-class SettingsScreenTest {
+class AlarmSettingsTest {
+
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -17,20 +17,18 @@ class SettingsScreenTest {
     fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
         // Given + When
         setContent {
-            WhakaaraTheme {
-                SettingsScreen(
-                    preferencesState = PreferencesState(),
-                    updatePreferences = {}
-                )
-            }
+            AlarmSettings(
+                preferencesState = PreferencesState(),
+                updatePreferences = {},
+                updateAllAlarmSubtitles = {}
+            )
         }
 
         // Then
-        onNodeWithText(text = "General settings").assertIsDisplayed()
-        onNodeWithText(text = "Edit system time").assertIsDisplayed()
-        onNodeWithText(text = "App settings").assertIsDisplayed()
-
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
+
+        onNodeWithText(text = "Alarms displayed in 24 hour format").assertIsDisplayed()
+        onNodeWithText(text = "If enabled display using 24 hour format, else 12 hour format").assertIsDisplayed()
 
         onNodeWithText(text = "Vibrate").assertIsDisplayed()
         onNodeWithText(text = "Vibrate when alarms go off").assertIsDisplayed()

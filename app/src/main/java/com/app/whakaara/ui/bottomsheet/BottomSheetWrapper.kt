@@ -10,6 +10,7 @@ import com.dokar.sheets.BottomSheetState
 fun BottomSheetWrapper(
     alarm: Alarm,
     timeToAlarm: String,
+    is24HourFormat: Boolean,
     state: BottomSheetState,
     reset: (alarm: Alarm) -> Unit
 ) {
@@ -21,6 +22,7 @@ fun BottomSheetWrapper(
         BottomSheetContent(
             alarm = alarm,
             timeToAlarm = timeToAlarm,
+            is24HourFormat = is24HourFormat,
             sheetState = state,
             reset = reset
         )

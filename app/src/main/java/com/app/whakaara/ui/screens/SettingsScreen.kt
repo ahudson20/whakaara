@@ -25,7 +25,8 @@ import com.app.whakaara.ui.settings.GeneralSettings
 fun SettingsScreen(
     modifier: Modifier = Modifier,
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -37,7 +38,7 @@ fun SettingsScreen(
         }
     ) { innerPadding ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .padding(innerPadding)
         ) {
@@ -45,7 +46,8 @@ fun SettingsScreen(
             Divider()
             AlarmSettings(
                 preferencesState = preferencesState,
-                updatePreferences = updatePreferences
+                updatePreferences = updatePreferences,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
         }
     }
@@ -56,6 +58,7 @@ fun SettingsScreen(
 fun SettingsScreenPreview() {
     SettingsScreen(
         preferencesState = PreferencesState(),
-        updatePreferences = {}
+        updatePreferences = {},
+        updateAllAlarmSubtitles = {}
     )
 }

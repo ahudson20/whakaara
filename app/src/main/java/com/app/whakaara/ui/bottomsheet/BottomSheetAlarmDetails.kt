@@ -31,6 +31,9 @@ import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.StringStateEvent
+import com.app.whakaara.ui.theme.Spacings.space10
+import com.app.whakaara.ui.theme.Spacings.space20
+import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 
 @Composable
@@ -46,7 +49,7 @@ fun BottomSheetAlarmDetails(
     Column {
         Row(
             modifier = modifier
-                .padding(start = 10.dp, end = 10.dp, top = 20.dp)
+                .padding(start = space10, end = space10, top = space20)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -69,7 +72,7 @@ fun BottomSheetAlarmDetails(
 
         Row(
             modifier = modifier
-                .padding(10.dp)
+                .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -92,7 +95,7 @@ fun BottomSheetAlarmDetails(
 
         Row(
             modifier = modifier
-                .padding(10.dp)
+                .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -115,7 +118,7 @@ fun BottomSheetAlarmDetails(
 
         Row(
             modifier = modifier
-                .padding(10.dp)
+                .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
@@ -152,7 +155,7 @@ fun BottomSheetAlarmDetails(
                     style = MaterialTheme.typography.labelSmall,
                     modifier = modifier
                         .align(Alignment.End)
-                        .padding(top = 4.dp)
+                        .padding(top = spaceXxSmall)
                 )
             }
         }

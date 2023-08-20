@@ -15,25 +15,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.HoursUpdateEvent
 import com.app.whakaara.state.StringStateEvent
-import com.app.whakaara.utils.DateUtils.Companion.convertSecondsToHMm
-import com.app.whakaara.utils.DateUtils.Companion.getDifferenceFromCurrentTimeInMillis
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun BottomSheetContent(
     modifier: Modifier = Modifier,
     alarm: Alarm,
     timeToAlarm: String,
+    is24HourFormat: Boolean,
     sheetState: BottomSheetState,
     reset: (alarm: Alarm) -> Unit
 ) {
@@ -55,7 +54,7 @@ fun BottomSheetContent(
     Column(
         modifier = modifier
             .fillMaxHeight()
-            .padding(16.dp)
+            .padding(spaceMedium)
             .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = {
@@ -74,7 +73,8 @@ fun BottomSheetContent(
             isSnoozeEnabled = isSnoozeEnabled,
             deleteAfterGoesOff = deleteAfterGoesOff,
             bottomText = bottomText,
-            title = title
+            title = title,
+            is24HourFormat = is24HourFormat
         )
 
         BottomSheetTimePicker(
@@ -82,15 +82,11 @@ fun BottomSheetContent(
                 value = timePickerValue,
                 onValueChange = { newValue ->
                     timePickerValue = newValue
-                    bottomText = convertSecondsToHMm(
-                        seconds = TimeUnit.MILLISECONDS.toSeconds(
-                            getDifferenceFromCurrentTimeInMillis(
-                                time = Calendar.getInstance().apply {
-                                    set(Calendar.HOUR_OF_DAY, newValue.hours)
-                                    set(Calendar.MINUTE, newValue.minutes)
-                                }
-                            )
-                        )
+                    bottomText = getTimeUntilAlarmFormatted(
+                        date = Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, newValue.hours)
+                            set(Calendar.MINUTE, newValue.minutes)
+                        }
                     )
                 }
             )
@@ -135,6 +131,7 @@ fun BottomSheetContentPreview() {
             subTitle = "10:03 AM"
         ),
         timeToAlarm = "timeToAlarm",
+        is24HourFormat = true,
         sheetState = BottomSheetState(),
         reset = {}
     )

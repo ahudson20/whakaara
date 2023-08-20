@@ -15,6 +15,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
+import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import kotlinx.coroutines.delay
 import java.util.Calendar
@@ -23,6 +24,7 @@ import java.util.Calendar
 @Composable
 fun CardContainerSwipeToDismiss(
     alarms: AlarmState,
+    preferencesState: PreferencesState,
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
@@ -56,6 +58,7 @@ fun CardContainerSwipeToDismiss(
                 dismissContent = {
                     Card(
                         alarm = alarm,
+                        preferencesState = preferencesState,
                         disable = disable,
                         enable = enable,
                         reset = reset
@@ -78,6 +81,7 @@ fun CardContainerSwipeToDismissPreview() {
                 )
             )
         ),
+        preferencesState = PreferencesState(),
         delete = {},
         disable = {},
         enable = {},

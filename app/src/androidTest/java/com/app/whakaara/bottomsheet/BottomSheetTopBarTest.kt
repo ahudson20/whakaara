@@ -40,7 +40,8 @@ class BottomSheetTopBarTest {
                     isSnoozeEnabled = true,
                     deleteAfterGoesOff = false,
                     bottomText = "bottomText",
-                    title = "title"
+                    title = "title",
+                    is24HourFormat = true
                 )
             }
         }

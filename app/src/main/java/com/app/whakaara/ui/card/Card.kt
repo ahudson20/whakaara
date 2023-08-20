@@ -30,23 +30,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.ui.theme.Spacings.space100
+import com.app.whakaara.ui.theme.Spacings.space20
+import com.app.whakaara.ui.theme.Spacings.spaceNone
+import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
+import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.dokar.sheets.rememberBottomSheetState
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 @Composable
 fun Card(
     modifier: Modifier = Modifier,
     alarm: Alarm,
+    preferencesState: PreferencesState,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit
@@ -84,10 +88,10 @@ fun Card(
     }
 
     ElevatedCard(
-        shape = RoundedCornerShape(0.dp),
-        modifier = Modifier
+        shape = RoundedCornerShape(spaceNone),
+        modifier = modifier
             .fillMaxWidth()
-            .height(100.dp)
+            .height(space100)
             .clickable {
                 scope.launch { sheetState.expand() }
             }
@@ -98,7 +102,7 @@ fun Card(
             Column(
                 modifier = Modifier
                     .fillMaxHeight()
-                    .padding(start = 20.dp),
+                    .padding(start = space20),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
@@ -109,7 +113,7 @@ fun Card(
                 )
                 Text(
                     modifier = Modifier
-                        .padding(top = 4.dp, bottom = 4.dp)
+                        .padding(top = spaceXxSmall, bottom = spaceXxSmall)
                         .alpha(alpha = alpha),
                     text = alarm.subTitle,
                     style = TextStyle(
@@ -124,11 +128,11 @@ fun Card(
                 )
             }
 
-            Spacer(modifier.weight(1f))
+            Spacer(Modifier.weight(1f))
 
             Switch(
-                modifier = modifier
-                    .padding(end = 20.dp)
+                modifier = Modifier
+                    .padding(end = space20)
                     .testTag("alarm switch"),
                 checked = valueSlider,
                 onCheckedChange = {
@@ -138,13 +142,7 @@ fun Card(
                     } else {
                         enable(alarm)
                         context.showToast(
-                            message = DateUtils.convertSecondsToHMm(
-                                seconds = TimeUnit.MILLISECONDS.toSeconds(
-                                    DateUtils.getDifferenceFromCurrentTimeInMillis(
-                                        time = alarm.date
-                                    )
-                                )
-                            )
+                            message = getTimeUntilAlarmFormatted(date = alarm.date)
                         )
                     }
                 }
@@ -155,6 +153,7 @@ fun Card(
     BottomSheetWrapper(
         alarm = alarm,
         timeToAlarm = timeToAlarm,
+        is24HourFormat = preferencesState.preferences.is24HourFormat,
         state = sheetState,
         reset = reset
     )
@@ -168,6 +167,7 @@ fun CardPreview() {
             date = Calendar.getInstance(),
             subTitle = "12:13 AM"
         ),
+        preferencesState = PreferencesState(),
         disable = {},
         enable = {},
         reset = {}

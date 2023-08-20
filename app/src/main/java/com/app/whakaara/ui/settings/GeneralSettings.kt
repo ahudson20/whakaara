@@ -1,8 +1,5 @@
 package com.app.whakaara.ui.settings
 
-import android.content.Intent
-import android.net.Uri
-import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,30 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.app.whakaara.R
+import com.app.whakaara.ui.theme.Spacings.space80
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.NotificationUtilsConstants
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_DATE_SETTINGS
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.getAppSettingsIntent
 
 @Composable
-fun GeneralSettings(
-    modifier: Modifier = Modifier
-) {
+fun GeneralSettings() {
     val context = LocalContext.current
-    val dateSettingsIntent = Intent(Settings.ACTION_DATE_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
-    val appSettingsIntent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-        addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        data = Uri.fromParts(NotificationUtilsConstants.INTENT_PACKAGE, context.packageName, null)
-    }
 
     Text(
-        modifier = modifier.padding(start = 16.dp, top = 16.dp, bottom = 16.dp),
+        modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
         text = stringResource(id = R.string.settings_screen_general_title)
     )
     SettingsMenuLink(
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
         icon = {
             Icon(
                 imageVector = Icons.Default.Timer,
@@ -51,11 +43,11 @@ fun GeneralSettings(
         },
         title = { Text(text = stringResource(id = R.string.settings_screen_system_time)) },
         onClick = {
-            context.startActivity(dateSettingsIntent)
+            context.startActivity(INTENT_DATE_SETTINGS)
         }
     )
     SettingsMenuLink(
-        modifier = modifier.height(80.dp),
+        modifier = Modifier.height(space80),
         icon = {
             Icon(
                 imageVector = Icons.Default.Settings,
@@ -64,7 +56,7 @@ fun GeneralSettings(
         },
         title = { Text(text = stringResource(id = R.string.settings_screen_app_settings)) },
         onClick = {
-            context.startActivity(appSettingsIntent)
+            context.startActivity(getAppSettingsIntent(context.packageName))
         }
     )
 }

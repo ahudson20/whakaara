@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
@@ -21,11 +20,13 @@ import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.receiver.NotificationReceiver
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
+import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_SCHEDULE_ALARM_PERMISSION
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -157,9 +158,7 @@ class MainViewModel @Inject constructor(
 
     @RequiresApi(Build.VERSION_CODES.S)
     private fun redirectUserToSpecialAppAccessScreen() {
-        Intent().apply {
-            action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
-        }.also {
+        INTENT_SCHEDULE_ALARM_PERMISSION.also {
             app.applicationContext.startActivity(it)
         }
     }
@@ -184,7 +183,7 @@ class MainViewModel @Inject constructor(
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            DateUtils.getTimeInMillis(alarm),
+            getTimeInMillis(alarm),
             pendingIntent
         )
     }
@@ -207,6 +206,12 @@ class MainViewModel @Inject constructor(
         )
 
         alarmManager.cancel(pendingIntent)
+    }
+
+    fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(Dispatchers.IO) {
+        _uiState.value.alarms.forEach {
+            updateExistingAlarmInDatabase(it.copy(subTitle = getAlarmTimeFormatted(it.date, format)))
+        }
     }
     //endregion
 

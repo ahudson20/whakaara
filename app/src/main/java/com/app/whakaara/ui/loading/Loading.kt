@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
@@ -23,8 +23,8 @@ fun Loading() {
     ) {
         CircularProgressIndicator(
             Modifier
-                .width(48.dp)
-                .height(48.dp)
+                .width(spaceXxLarge)
+                .height(spaceXxLarge)
         )
     }
 }

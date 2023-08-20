@@ -15,10 +15,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.clock.TextClock
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import java.util.Calendar
 
@@ -35,7 +35,7 @@ fun NotificationFullScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
@@ -46,7 +46,7 @@ fun NotificationFullScreen(
             Row {
                 if (alarm.isSnoozeEnabled) {
                     Button(
-                        modifier = modifier.padding(16.dp),
+                        modifier = Modifier.padding(spaceMedium),
                         onClick = {
                             snooze(alarm)
                             context.showToast(
@@ -59,7 +59,7 @@ fun NotificationFullScreen(
                     }
                 }
                 Button(
-                    modifier = modifier.padding(16.dp),
+                    modifier = Modifier.padding(spaceMedium),
                     onClick = {
                         disable(alarm)
                         context.showToast(message = context.getString(R.string.notification_action_cancelled, alarm.title))

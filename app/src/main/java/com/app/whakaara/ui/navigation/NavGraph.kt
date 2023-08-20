@@ -27,6 +27,7 @@ fun NavGraph(
         ) {
             AlarmScreen(
                 alarmState = alarmState,
+                preferencesState = preferencesState,
                 delete = viewModel::delete,
                 disable = viewModel::disable,
                 enable = viewModel::enable,
@@ -47,7 +48,8 @@ fun NavGraph(
         ) {
             SettingsScreen(
                 preferencesState = preferencesState,
-                updatePreferences = viewModel::updatePreferences
+                updatePreferences = viewModel::updatePreferences,
+                updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
             )
         }
     }

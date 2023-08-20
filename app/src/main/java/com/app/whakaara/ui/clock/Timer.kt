@@ -13,10 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPause
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStart
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStop
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
@@ -35,7 +35,7 @@ fun Timer(
          * */
         floatingActionButton = {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(spaceMedium)
             ) {
                 FloatingActionButtonStop(onStop)
                 FloatingActionButtonPause(onPause)

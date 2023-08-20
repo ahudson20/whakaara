@@ -27,13 +27,13 @@ import com.app.whakaara.ui.floatingactionbutton.FloatingActionButton
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
+import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import java.time.LocalTime
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +75,7 @@ fun MainScreen(
                                 viewModel.create(
                                     Alarm(
                                         date = date,
-                                        subTitle = DateUtils.alarmTimeTo24HourFormat(date = date),
+                                        subTitle = getAlarmTimeFormatted(date = date, is24HourFormatEnabled = pref.preferences.is24HourFormat),
                                         vibration = pref.preferences.isVibrateEnabled,
                                         isSnoozeEnabled = pref.preferences.isSnoozeEnabled,
                                         deleteAfterGoesOff = pref.preferences.deleteAfterGoesOff
@@ -83,13 +83,7 @@ fun MainScreen(
                                 )
                                 isDialogShown.value = false
                                 context.showToast(
-                                    message = DateUtils.convertSecondsToHMm(
-                                        seconds = TimeUnit.MILLISECONDS.toSeconds(
-                                            DateUtils.getDifferenceFromCurrentTimeInMillis(
-                                                time = date
-                                            )
-                                        )
-                                    )
+                                    message = getTimeUntilAlarmFormatted(date = date)
                                 )
                             },
                             title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },

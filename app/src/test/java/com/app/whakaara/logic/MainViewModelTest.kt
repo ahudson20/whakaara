@@ -58,24 +58,24 @@ class MainViewModelTest {
                     set(Calendar.YEAR, 2023)
                     set(Calendar.DAY_OF_MONTH, 13)
                     set(Calendar.MONTH, 6)
-                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.HOUR_OF_DAY, 14)
                     set(Calendar.MINUTE, 34)
                     set(Calendar.SECOND, 0)
                 },
                 title = "First Alarm Title",
-                subTitle = "First Alarm"
+                subTitle = "14:34 PM"
             ),
             Alarm(
                 date = Calendar.getInstance().apply {
                     set(Calendar.YEAR, 2023)
                     set(Calendar.DAY_OF_MONTH, 14)
                     set(Calendar.MONTH, 7)
-                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.HOUR_OF_DAY, 14)
                     set(Calendar.MINUTE, 34)
                     set(Calendar.SECOND, 0)
                 },
                 title = "Second Alarm Title",
-                subTitle = "Second Alarm"
+                subTitle = "14:34 PM"
             )
         )
         preferences = Preferences()
@@ -98,12 +98,12 @@ class MainViewModelTest {
 
             alarmList.alarms[0].apply {
                 assertEquals("First Alarm Title", this.title)
-                assertEquals("First Alarm", this.subTitle)
+                assertEquals("14:34 PM", this.subTitle)
             }
 
             alarmList.alarms[1].apply {
                 assertEquals("Second Alarm Title", this.title)
-                assertEquals("Second Alarm", this.subTitle)
+                assertEquals("14:34 PM", this.subTitle)
             }
 
             cancelAndIgnoreRemainingEvents()

@@ -4,13 +4,18 @@ buildscript {
     }
     ext {
         compose_version = '1.1.0-beta01'
-        nav_version = '2.7.0'
+        nav_version = '2.7.1'
         work_version = '2.8.1'
         time_picker_version = '0.7.2'
         accompanist_permissions = '0.31.5-beta'
         ktlint_gradle_version = '11.4.2'
         hilt_agp_version = '2.43.2'
         room_version = '2.5.2'
+        mockk_version = '1.13.5'
+        lifecycle_version = '2.6.1'
+        turbine_version = '1.0.0'
+        arch_core_version = '2.2.0'
+        kotlinx_coroutines_version = '1.7.2'
     }
     dependencies {
         classpath "com.google.dagger:hilt-android-gradle-plugin:$hilt_agp_version"

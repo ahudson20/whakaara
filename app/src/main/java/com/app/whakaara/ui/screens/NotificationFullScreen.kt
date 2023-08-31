@@ -27,7 +27,8 @@ fun NotificationFullScreen(
     modifier: Modifier = Modifier,
     alarm: Alarm,
     snooze: (alarm: Alarm) -> Unit,
-    disable: (alarm: Alarm) -> Unit
+    disable: (alarm: Alarm) -> Unit,
+    is24HourFormat: Boolean
 ) {
     val context = LocalContext.current
     val activity = (context as? Activity)
@@ -40,7 +41,9 @@ fun NotificationFullScreen(
                 .padding(innerPadding)
         ) {
             Row {
-                TextClock()
+                TextClock(
+                    is24HourFormat = is24HourFormat
+                )
             }
 
             Row {
@@ -83,6 +86,7 @@ fun NotificationFullScreenPreview() {
             subTitle = "10:03 AM"
         ),
         snooze = {},
-        disable = {}
+        disable = {},
+        is24HourFormat = true
     )
 }

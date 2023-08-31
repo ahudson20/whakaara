@@ -16,8 +16,11 @@ import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -49,40 +52,46 @@ class NotificationReceiver : BroadcastReceiver() {
                 setIsEnabledToFalse(alarmId = alarm.alarmId)
             }
 
-            val notification = createNotification(
-                context = context,
-                alarm = alarm
-            )
-
             enableVibrationForNotification(
                 alarm = alarm
             )
 
             displayNotification(
                 uniqueID = System.currentTimeMillis().toInt(),
-                notification = notification
+                notification = createNotification(
+                    context = context,
+                    alarm = alarm,
+                    timeFormat = intent.getBooleanExtra(INTENT_TIME_FORMAT, true)
+                )
             )
 
-            startAlarmSound(context = context)
+            startAlarmSound(
+                context = context,
+                autoSilenceTime = intent.getIntExtra(INTENT_AUTO_SILENCE, ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES)
+            )
         } catch (exception: Exception) {
             Log.d("NotificationReceiver exception", exception.printStackTrace().toString())
         }
     }
 
-    private fun startAlarmSound(context: Context) {
-        Intent(context, MediaPlayerService::class.java).also { mediaIntent ->
+    private fun startAlarmSound(context: Context, autoSilenceTime: Int) {
+        Intent(context, MediaPlayerService::class.java).apply {
+            putExtra(INTENT_AUTO_SILENCE, autoSilenceTime)
+        }.also { mediaIntent ->
             context.startService(mediaIntent)
         }
     }
 
     private fun createNotification(
         context: Context,
-        alarm: Alarm
+        alarm: Alarm,
+        timeFormat: Boolean
     ): Notification {
         val fullScreenIntent = Intent().apply {
             setClass(context, FullScreenNotificationActivity::class.java)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
+            putExtra(INTENT_TIME_FORMAT, timeFormat)
 
             /**
              * Unsure why I need to set an action here.

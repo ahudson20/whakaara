@@ -33,7 +33,8 @@ class NotificationFullScreenTest {
                 NotificationFullScreen(
                     alarm = alarm,
                     snooze = {},
-                    disable = {}
+                    disable = {},
+                    is24HourFormat = true
                 )
             }
         }
@@ -65,7 +66,8 @@ class NotificationFullScreenTest {
                 NotificationFullScreen(
                     alarm = alarm,
                     snooze = {},
-                    disable = {}
+                    disable = {},
+                    is24HourFormat = true
                 )
             }
         }

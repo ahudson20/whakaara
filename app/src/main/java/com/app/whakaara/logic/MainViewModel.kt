@@ -24,9 +24,11 @@ import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_SCHEDULE_ALARM_PERMISSION
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -168,6 +170,8 @@ class MainViewModel @Inject constructor(
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
             putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
+            putExtra(INTENT_AUTO_SILENCE, preferencesUiState.value.preferences.autoSilenceTime)
+            putExtra(INTENT_TIME_FORMAT, preferencesUiState.value.preferences.is24HourFormat)
         }
 
     private fun setExactAlarm(

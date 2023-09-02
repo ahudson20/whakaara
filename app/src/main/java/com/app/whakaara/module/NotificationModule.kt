@@ -7,9 +7,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
+import com.app.whakaara.R
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
-import com.google.android.material.R
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -53,10 +53,10 @@ class NotificationModule {
         context: Context
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_clock_black_24dp)
+            .setSmallIcon(R.drawable.baseline_access_time_24)
             .setColor(Color.WHITE)
             .setAutoCancel(true)
             .setCategory(CATEGORY_ALARM)
-            .setSubText(context.getString(com.app.whakaara.R.string.notification_sub_text))
+            .setSubText(context.getString(R.string.notification_sub_text))
     }
 }

@@ -18,6 +18,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,7 +42,8 @@ class FullScreenNotificationActivity : ComponentActivity() {
                 NotificationFullScreen(
                     alarm = alarm,
                     snooze = viewModel::snooze,
-                    disable = viewModel::disable
+                    disable = viewModel::disable,
+                    is24HourFormat = intent.getBooleanExtra(INTENT_TIME_FORMAT, true)
                 )
             }
         }

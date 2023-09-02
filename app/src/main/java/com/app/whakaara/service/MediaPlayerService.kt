@@ -26,10 +26,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         }
 
         val autoSilenceTime = intent?.getIntExtra(INTENT_AUTO_SILENCE, ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES)?.toLong()
-
         Handler(Looper.getMainLooper()).postDelayed({
             if (mediaPlayer.isPlaying) mediaPlayer.stop()
         }, TimeUnit.MINUTES.toMillis(autoSilenceTime ?: ALARM_SOUND_TIMEOUT_DEFAULT_MILLIS))
+
         return START_STICKY
     }
 

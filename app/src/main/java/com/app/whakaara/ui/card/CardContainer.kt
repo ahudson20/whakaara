@@ -1,5 +1,6 @@
 package com.app.whakaara.ui.card
 
+import android.widget.Toast
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.DismissDirection
@@ -16,7 +17,6 @@ import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -37,12 +37,10 @@ fun CardContainerSwipeToDismiss(
             val dismissState = rememberDismissState()
             if (dismissState.currentValue != DismissValue.Default) {
                 LaunchedEffect(Unit) {
+                    Toast.makeText(context, context.getString(R.string.notification_action_deleted, alarm.title), Toast.LENGTH_LONG).show()
                     delete(alarm)
                     delay(25)
                     dismissState.reset()
-                    context.showToast(
-                        message = context.getString(R.string.notification_action_deleted, alarm.title)
-                    )
                 }
             }
 

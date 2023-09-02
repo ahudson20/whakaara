@@ -1,7 +1,7 @@
 package com.app.whakaara.card
 
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.rememberDismissState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberDismissState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -10,11 +10,11 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalMaterial3Api::class)
 class SwipeToDismissTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    @OptIn(ExperimentalMaterialApi::class)
     @Test
     fun shouldDisplayDeleteIcon(): Unit = with(composeTestRule) {
         setContent {

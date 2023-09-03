@@ -121,6 +121,7 @@ class MainViewModelTest {
 
         mockkObject(PendingIntentUtils.Companion)
         every { PendingIntentUtils.getBroadcast(any(), any(), any(), any()) } returns pendingIntent
+        every { PendingIntentUtils.getActivity(any(), any(), any(), any()) } returns pendingIntent
 
         mockkObject(GeneralUtils.Companion)
         every { GeneralUtils.convertAlarmObjectToString(any()) } returns "alarmString"
@@ -254,6 +255,8 @@ class MainViewModelTest {
         viewModel.delete(alarm = alarm)
 
         // Then
+        verify { alarmManager.cancel(pendingIntent) }
+
         coVerify { repository.delete(capture(alarmSlot)) }
         with(alarmSlot.captured) {
             assertEquals(UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"), alarmId)
@@ -262,7 +265,6 @@ class MainViewModelTest {
             assertEquals("Alarm Title", title)
             assertEquals("First SubTitle", subTitle)
         }
-        verify { alarmManager.cancel(pendingIntent) }
     }
 
     @Test

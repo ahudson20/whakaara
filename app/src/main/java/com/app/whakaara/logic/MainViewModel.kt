@@ -196,16 +196,15 @@ class MainViewModel @Inject constructor(
         alarm: Alarm
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(app, NotificationReceiver::class.java).apply {
-            // setting unique action allows for differentiation when deleting.
-            this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
-        }
 
         val pendingIntent = PendingIntentUtils.getBroadcast(
             context = app,
             id = INTENT_REQUEST_CODE,
-            intent = intent,
+            intent = Intent(app, NotificationReceiver::class.java).apply {
+                // setting unique action allows for differentiation when deleting.
+                this.action = alarm.alarmId.toString()
+                putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
+            },
             flag = PendingIntent.FLAG_UPDATE_CURRENT
         )
 

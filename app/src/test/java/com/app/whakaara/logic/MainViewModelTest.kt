@@ -1,14 +1,27 @@
 package com.app.whakaara.logic
 
+import android.app.AlarmManager
 import android.app.Application
+import android.app.PendingIntent
+import android.content.Intent
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
+import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.GeneralUtils
+import com.app.whakaara.utils.PendingIntentUtils
+import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkConstructor
+import io.mockk.mockkObject
+import io.mockk.slot
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -25,6 +38,7 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.Calendar
+import java.util.UUID
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(JUnit4::class)
@@ -42,6 +56,8 @@ class MainViewModelTest {
     private lateinit var preferencesRepository: PreferencesRepository
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
+    private lateinit var alarmManager: AlarmManager
+    private lateinit var pendingIntent: PendingIntent
 
     @Before
     fun setUp() {
@@ -49,6 +65,8 @@ class MainViewModelTest {
         repository = mockk()
         preferencesRepository = mockk()
         app = mockk()
+        alarmManager = mockk()
+        pendingIntent = mockk()
 
         viewModel = MainViewModel(app, repository, preferencesRepository)
 
@@ -80,8 +98,23 @@ class MainViewModelTest {
         )
         preferences = Preferences()
 
+        every { app.getSystemService(any()) } returns alarmManager
+
+        mockkObject(PendingIntentUtils.Companion)
+        every { PendingIntentUtils.getBroadcast(any(), any(), any(), any()) } returns pendingIntent
+
+        mockkObject(GeneralUtils.Companion)
+        every { GeneralUtils.convertAlarmObjectToString(any()) } returns "alarmString"
+
+        mockkObject(DateUtils.Companion)
+        every { DateUtils.getTimeInMillis(any()) } returns 1L
+
         coEvery { repository.getAllAlarmsFlow() } returns flowOf(alarms)
+        coEvery { repository.insert(any()) } returns Unit
+        coEvery { repository.delete(any()) } returns Unit
+        coEvery { repository.update(any()) } returns Unit
         coEvery { preferencesRepository.getPreferencesFlow() } returns flowOf(preferences)
+        coEvery { preferencesRepository.updatePreferences(any()) } returns Unit
     }
 
     @After
@@ -126,4 +159,170 @@ class MainViewModelTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `updatePreferences - verify repository update called, with correct values`() = runTest {
+        // Given
+        val pref = Preferences(
+            autoSilenceTime = 1234,
+            snoozeTime = 5678
+        )
+        val prefSlot = slot<Preferences>()
+
+        // When
+        viewModel.updatePreferences(preferences = pref)
+
+        // Then
+        coVerify { preferencesRepository.updatePreferences(capture(prefSlot)) }
+        assertEquals(1234, prefSlot.captured.autoSilenceTime)
+        assertEquals(5678, prefSlot.captured.snoozeTime)
+    }
+
+    @Test
+    fun `create alarm`() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            date = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 12)
+                set(Calendar.MINUTE, 34)
+            },
+            isEnabled = true,
+            isSnoozeEnabled = false,
+            title = "Alarm Title",
+            subTitle = "First SubTitle"
+        )
+        val alarmSlot = slot<Alarm>()
+
+        mockkConstructor(Intent::class)
+        val intent = mockk<Intent>()
+        every {
+            anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, "alarmString")
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_AUTO_SILENCE, 10)
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_TIME_FORMAT, true)
+        } returns intent
+
+        every { alarmManager.setExactAndAllowWhileIdle(any(), any(), any()) } returns Unit
+
+        // When
+        viewModel.create(alarm = alarm)
+
+        // Then
+        verify { alarmManager.setExactAndAllowWhileIdle(0, 1L, pendingIntent) }
+
+        coVerify { repository.insert(capture(alarmSlot)) }
+        with(alarmSlot.captured) {
+            assertEquals(UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"), alarmId)
+            assertEquals(true, isEnabled)
+            assertEquals(false, isSnoozeEnabled)
+            assertEquals("Alarm Title", title)
+            assertEquals("First SubTitle", subTitle)
+        }
+    }
+
+    @Test
+    fun `disable alarm - should update alarm to not enabled, cancel alarm in alarm manager`() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            date = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 12)
+                set(Calendar.MINUTE, 34)
+            },
+            isEnabled = true,
+            isSnoozeEnabled = false,
+            title = "Alarm Title",
+            subTitle = "First SubTitle"
+        )
+        val alarmSlot = slot<Alarm>()
+        mockkConstructor(Intent::class)
+        val intent = mockk<Intent>()
+        every {
+            anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, "alarmString")
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_AUTO_SILENCE, 10)
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_TIME_FORMAT, true)
+        } returns intent
+
+        every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
+
+        // When
+        viewModel.disable(alarm = alarm)
+
+        // Then
+        coVerify { repository.update(capture(alarmSlot)) }
+        assertEquals(false, alarmSlot.captured.isEnabled)
+        verify { alarmManager.cancel(pendingIntent) }
+    }
+
+//    @Test
+//    fun `delete alarm - should delete alarm, cancel alarm in alarm manager`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            isEnabled = true,
+//            isSnoozeEnabled = false,
+//            title = "Alarm Title",
+//            subTitle = "First SubTitle"
+//        )
+//        val alarmSlot = slot<Alarm>()
+//
+//        mockkConstructor(Intent::class)
+//        val intent = mockk<Intent>()
+//        every {
+//            anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
+//        } returns intent
+//
+//        every {
+//            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, "alarmString")
+//        } returns intent
+//
+//        every {
+//            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_AUTO_SILENCE, 10)
+//        } returns intent
+//
+//        every {
+//            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_TIME_FORMAT, true)
+//        } returns intent
+//
+//        every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
+//
+//        // When
+//        viewModel.delete(alarm = alarm)
+//
+//        // Then
+//        verify { alarmManager.cancel(pendingIntent) }
+//
+//        coVerify { repository.delete(capture(alarmSlot)) }
+//        with(alarmSlot.captured) {
+//            assertEquals(UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"), alarmId)
+//            assertEquals(true, isEnabled)
+//            assertEquals(false, isSnoozeEnabled)
+//            assertEquals("Alarm Title", title)
+//            assertEquals("First SubTitle", subTitle)
+//        }
+//    }
 }

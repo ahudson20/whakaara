@@ -97,13 +97,13 @@ class MainViewModel @Inject constructor(
     }
 
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        createAlarm(alarm)
         repository.insert(alarm)
+        createAlarm(alarm)
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        stopAlarm(alarm)
         repository.delete(alarm)
+        stopAlarm(alarm)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -196,11 +196,7 @@ class MainViewModel @Inject constructor(
         alarm: Alarm
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(app, NotificationReceiver::class.java).apply {
-            // setting unique action allows for differentiation when deleting.
-            this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
-        }
+        val intent = getStartReceiverIntent(alarm)
 
         val pendingIntent = PendingIntentUtils.getBroadcast(
             context = app,

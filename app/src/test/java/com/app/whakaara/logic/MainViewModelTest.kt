@@ -32,6 +32,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -201,7 +202,10 @@ class MainViewModelTest {
         } returns intent
 
         every {
-            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, "alarmString")
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_EXTRA_ALARM,
+                "alarmString"
+            )
         } returns intent
 
         every {
@@ -231,7 +235,62 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `disable alarm - should update alarm to not enabled, cancel alarm in alarm manager`() = runTest {
+    fun `disable alarm - should update alarm to not enabled, cancel alarm in alarm manager`() =
+        runTest {
+            // Given
+            val alarm = Alarm(
+                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                isEnabled = true,
+                isSnoozeEnabled = false,
+                title = "Alarm Title",
+                subTitle = "First SubTitle"
+            )
+            val alarmSlot = slot<Alarm>()
+            mockkConstructor(Intent::class)
+            val intent = mockk<Intent>()
+            every {
+                anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
+            } returns intent
+
+            every {
+                anyConstructed<Intent>().putExtra(
+                    NotificationUtilsConstants.INTENT_EXTRA_ALARM,
+                    "alarmString"
+                )
+            } returns intent
+
+            every {
+                anyConstructed<Intent>().putExtra(
+                    NotificationUtilsConstants.INTENT_AUTO_SILENCE,
+                    10
+                )
+            } returns intent
+
+            every {
+                anyConstructed<Intent>().putExtra(
+                    NotificationUtilsConstants.INTENT_TIME_FORMAT,
+                    true
+                )
+            } returns intent
+
+            every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
+
+            // When
+            viewModel.disable(alarm = alarm)
+
+            // Then
+            coVerify { repository.update(capture(alarmSlot)) }
+            assertEquals(false, alarmSlot.captured.isEnabled)
+            verify { alarmManager.cancel(pendingIntent) }
+        }
+
+    @Test
+    @Ignore
+    fun `delete alarm - should delete alarm, cancel alarm in alarm manager`() = runTest {
         // Given
         val alarm = Alarm(
             alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
@@ -245,6 +304,7 @@ class MainViewModelTest {
             subTitle = "First SubTitle"
         )
         val alarmSlot = slot<Alarm>()
+
         mockkConstructor(Intent::class)
         val intent = mockk<Intent>()
         every {
@@ -252,7 +312,10 @@ class MainViewModelTest {
         } returns intent
 
         every {
-            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, "alarmString")
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_EXTRA_ALARM,
+                "alarmString"
+            )
         } returns intent
 
         every {
@@ -266,63 +329,18 @@ class MainViewModelTest {
         every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
 
         // When
-        viewModel.disable(alarm = alarm)
+        viewModel.delete(alarm = alarm)
 
         // Then
-        coVerify { repository.update(capture(alarmSlot)) }
-        assertEquals(false, alarmSlot.captured.isEnabled)
         verify { alarmManager.cancel(pendingIntent) }
-    }
 
-//    @Test
-//    fun `delete alarm - should delete alarm, cancel alarm in alarm manager`() = runTest {
-//        // Given
-//        val alarm = Alarm(
-//            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-//            date = Calendar.getInstance().apply {
-//                set(Calendar.HOUR_OF_DAY, 12)
-//                set(Calendar.MINUTE, 34)
-//            },
-//            isEnabled = true,
-//            isSnoozeEnabled = false,
-//            title = "Alarm Title",
-//            subTitle = "First SubTitle"
-//        )
-//        val alarmSlot = slot<Alarm>()
-//
-//        mockkConstructor(Intent::class)
-//        val intent = mockk<Intent>()
-//        every {
-//            anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
-//        } returns intent
-//
-//        every {
-//            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, "alarmString")
-//        } returns intent
-//
-//        every {
-//            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_AUTO_SILENCE, 10)
-//        } returns intent
-//
-//        every {
-//            anyConstructed<Intent>().putExtra(NotificationUtilsConstants.INTENT_TIME_FORMAT, true)
-//        } returns intent
-//
-//        every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
-//
-//        // When
-//        viewModel.delete(alarm = alarm)
-//
-//        // Then
-//        verify { alarmManager.cancel(pendingIntent) }
-//
-//        coVerify { repository.delete(capture(alarmSlot)) }
-//        with(alarmSlot.captured) {
-//            assertEquals(UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"), alarmId)
-//            assertEquals(true, isEnabled)
-//            assertEquals(false, isSnoozeEnabled)
-//            assertEquals("Alarm Title", title)
-//            assertEquals("First SubTitle", subTitle)
-//        }
-//    }
+        coVerify { repository.delete(capture(alarmSlot)) }
+        with(alarmSlot.captured) {
+            assertEquals(UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"), alarmId)
+            assertEquals(true, isEnabled)
+            assertEquals(false, isSnoozeEnabled)
+            assertEquals("Alarm Title", title)
+            assertEquals("First SubTitle", subTitle)
+        }
+    }
 }

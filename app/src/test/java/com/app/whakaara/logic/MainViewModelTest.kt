@@ -239,61 +239,116 @@ class MainViewModelTest {
     }
 
     @Test
-    fun `disable alarm - should update alarm to not enabled, cancel alarm in alarm manager`() =
-        runTest {
-            // Given
-            val alarm = Alarm(
-                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                date = Calendar.getInstance().apply {
-                    set(Calendar.HOUR_OF_DAY, 12)
-                    set(Calendar.MINUTE, 34)
-                },
-                isEnabled = true,
-                isSnoozeEnabled = false,
-                title = "Alarm Title",
-                subTitle = "First SubTitle"
+    fun `disable alarm - should update alarm, cancel alarm in alarm manager`() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            date = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 12)
+                set(Calendar.MINUTE, 34)
+            },
+            isEnabled = true,
+            isSnoozeEnabled = false,
+            title = "Alarm Title",
+            subTitle = "First SubTitle"
+        )
+        val alarmSlot = slot<Alarm>()
+        mockkConstructor(Intent::class)
+        val intent = mockk<Intent>()
+        every {
+            anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_EXTRA_ALARM,
+                "alarmString"
             )
-            val alarmSlot = slot<Alarm>()
-            mockkConstructor(Intent::class)
-            val intent = mockk<Intent>()
-            every {
-                anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
-            } returns intent
+        } returns intent
 
-            every {
-                anyConstructed<Intent>().putExtra(
-                    NotificationUtilsConstants.INTENT_EXTRA_ALARM,
-                    "alarmString"
-                )
-            } returns intent
+        every {
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_AUTO_SILENCE,
+                10
+            )
+        } returns intent
 
-            every {
-                anyConstructed<Intent>().putExtra(
-                    NotificationUtilsConstants.INTENT_AUTO_SILENCE,
-                    10
-                )
-            } returns intent
+        every {
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_TIME_FORMAT,
+                true
+            )
+        } returns intent
 
-            every {
-                anyConstructed<Intent>().putExtra(
-                    NotificationUtilsConstants.INTENT_TIME_FORMAT,
-                    true
-                )
-            } returns intent
+        every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
 
-            every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
+        // When
+        viewModel.disable(alarm = alarm)
 
-            // When
-            viewModel.disable(alarm = alarm)
-
-            // Then
-            coVerify { repository.update(capture(alarmSlot)) }
-            assertEquals(false, alarmSlot.captured.isEnabled)
-            verify { alarmManager.cancel(pendingIntent) }
-        }
+        // Then
+        coVerify { repository.update(capture(alarmSlot)) }
+        assertEquals(false, alarmSlot.captured.isEnabled)
+        verify { alarmManager.cancel(pendingIntent) }
+    }
 
     @Test
-    @Ignore
+    fun `enable alarm - should update alarm, cancel alarm + re-create`() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            date = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 12)
+                set(Calendar.MINUTE, 34)
+            },
+            isEnabled = true,
+            isSnoozeEnabled = false,
+            title = "Alarm Title",
+            subTitle = "First SubTitle"
+        )
+        val alarmSlot = slot<Alarm>()
+
+        mockkConstructor(Intent::class)
+        val intent = mockk<Intent>()
+        every {
+            anyConstructed<Intent>().setAction("19de4fcc-1c68-485c-b817-0290faec649d")
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_EXTRA_ALARM,
+                "alarmString"
+            )
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_AUTO_SILENCE,
+                10
+            )
+        } returns intent
+
+        every {
+            anyConstructed<Intent>().putExtra(
+                NotificationUtilsConstants.INTENT_TIME_FORMAT,
+                true
+            )
+        } returns intent
+
+        every { alarmManager.cancel(any<PendingIntent>()) } returns Unit
+        every { alarmManager.setExactAndAllowWhileIdle(any(), any(), any()) } returns Unit
+
+        // When
+        viewModel.enable(alarm = alarm)
+
+        // Then
+        coVerify { repository.update(capture(alarmSlot)) }
+        assertEquals(true, alarmSlot.captured.isEnabled)
+        verify { alarmManager.cancel(pendingIntent) }
+        verify { alarmManager.setExactAndAllowWhileIdle(0, 1L, pendingIntent) }
+    }
+
+    @Test
+    @Ignore("Running this breaks other tests")
     fun `delete alarm - should delete alarm, cancel alarm in alarm manager`() = runTest {
         // Given
         val alarm = Alarm(

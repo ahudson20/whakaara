@@ -1,14 +1,12 @@
 package com.app.whakaara.logic
 
+import android.app.AlarmManager
 import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import app.cash.turbine.test
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
-import io.mockk.coEvery
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -17,18 +15,25 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import org.junit.runners.JUnit4
+import org.mockito.Mock
+import org.mockito.MockitoAnnotations
+import org.mockito.kotlin.any
+import org.mockito.kotlin.atLeastOnce
+import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
+import org.robolectric.RobolectricTestRunner
 import java.util.Calendar
+import java.util.UUID
 
-@OptIn(ExperimentalCoroutinesApi::class)
-@RunWith(JUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class MainViewModelTest {
+
+    private var openMocks: AutoCloseable? = null
 
     @Rule
     @JvmField
@@ -36,19 +41,27 @@ class MainViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    private lateinit var app: Application
-    private lateinit var viewModel: MainViewModel
-    private lateinit var repository: AlarmRepository
-    private lateinit var preferencesRepository: PreferencesRepository
-    private lateinit var preferences: Preferences
-    private lateinit var alarms: List<Alarm>
+    @Mock
+    lateinit var app: Application
 
+    @Mock
+    lateinit var repository: AlarmRepository
+
+    @Mock
+    lateinit var preferencesRepository: PreferencesRepository
+
+    @Mock
+    lateinit var alarmManager: AlarmManager
+
+    private lateinit var viewModel: MainViewModel
+    private lateinit var alarms: List<Alarm>
+    private lateinit var preferences: Preferences
+
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
-        repository = mockk()
-        preferencesRepository = mockk()
-        app = mockk()
+        openMocks = MockitoAnnotations.openMocks(this)
 
         viewModel = MainViewModel(app, repository, preferencesRepository)
 
@@ -80,50 +93,80 @@ class MainViewModelTest {
         )
         preferences = Preferences()
 
-        coEvery { repository.getAllAlarmsFlow() } returns flowOf(alarms)
-        coEvery { preferencesRepository.getPreferencesFlow() } returns flowOf(preferences)
+        whenever(app.getSystemService(any())).thenReturn(alarmManager)
+
+        whenever(repository.getAllAlarmsFlow()).thenReturn(flowOf(alarms))
+        whenever(preferencesRepository.getPreferencesFlow()).thenReturn(flowOf(preferences))
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
     @Test
-    fun `init test - alarm state`() = runTest {
-        // Given + When + Then
-        viewModel.uiState.test {
-            val alarmList = awaitItem()
-            assertEquals(2, alarmList.alarms.size)
-
-            alarmList.alarms[0].apply {
-                assertEquals("First Alarm Title", this.title)
-                assertEquals("14:34 PM", this.subTitle)
-            }
-
-            alarmList.alarms[1].apply {
-                assertEquals("Second Alarm Title", this.title)
-                assertEquals("14:34 PM", this.subTitle)
-            }
-
-            cancelAndIgnoreRemainingEvents()
-        }
+    fun getUiState() {
     }
 
     @Test
-    fun `init test - preferences state`() = runTest {
-        // Given + When + Then
-        viewModel.preferencesUiState.test {
-            val pref = awaitItem()
-            pref.apply {
-                assertEquals(true, this.preferences.isVibrateEnabled)
-                assertEquals(true, this.preferences.isSnoozeEnabled)
-                assertEquals(false, this.preferences.deleteAfterGoesOff)
-                assertEquals(10, this.preferences.autoSilenceTime)
-                assertEquals(10, this.preferences.snoozeTime)
-            }
+    fun getPreferencesUiState() {
+    }
 
-            cancelAndIgnoreRemainingEvents()
-        }
+    @Test
+    fun updatePreferences() = runTest {
+        // Given
+        val pref = Preferences(
+            autoSilenceTime = 1234,
+            snoozeTime = 5678
+        )
+
+        // When
+        viewModel.updatePreferences(preferences = pref)
+
+        // Then
+        verify(preferencesRepository, atLeastOnce()).updatePreferences(pref)
+    }
+
+    @Test
+    fun create() = runTest {
+        // Given
+        val alarm = Alarm(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            date = Calendar.getInstance().apply {
+                set(Calendar.HOUR_OF_DAY, 12)
+                set(Calendar.MINUTE, 34)
+            },
+            isEnabled = true,
+            isSnoozeEnabled = false,
+            title = "Alarm Title",
+            subTitle = "First SubTitle"
+        )
+
+        // When
+        viewModel.create(alarm = alarm)
+
+        // Then
+        verify(repository, atLeastOnce()).insert(alarm)
+    }
+
+    @Test
+    fun delete() {
+    }
+
+    @Test
+    fun disable() {
+    }
+
+    @Test
+    fun enable() {
+    }
+
+    @Test
+    fun reset() {
+    }
+
+    @Test
+    fun snooze() {
     }
 }

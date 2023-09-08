@@ -61,6 +61,12 @@ android {
             excludes += '/META-INF/LICENSE-notice.md'
         }
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -130,6 +136,9 @@ dependencies {
 
     // Mockk
     testImplementation "io.mockk:mockk:$mockk_version"
+
+    // Robolectric
+    testImplementation 'org.robolectric:robolectric:4.9.2'
 
     // Google
     implementation "com.google.code.gson:gson:2.10.1"

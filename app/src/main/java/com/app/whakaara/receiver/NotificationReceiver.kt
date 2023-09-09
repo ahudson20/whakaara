@@ -21,6 +21,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_S
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_RECEIVER_EXCEPTION_TAG
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +46,9 @@ class NotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         try {
-            val alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
+            val alarm = GeneralUtils.convertStringToAlarmObject(
+                string = intent.getStringExtra(INTENT_EXTRA_ALARM)
+            )
             if (alarm.deleteAfterGoesOff) {
                 deleteAlarmById(alarmId = alarm.alarmId)
             } else {
@@ -67,10 +70,13 @@ class NotificationReceiver : BroadcastReceiver() {
 
             startAlarmSound(
                 context = context,
-                autoSilenceTime = intent.getIntExtra(INTENT_AUTO_SILENCE, ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES)
+                autoSilenceTime = intent.getIntExtra(
+                    INTENT_AUTO_SILENCE,
+                    ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES
+                )
             )
         } catch (exception: Exception) {
-            Log.d("NotificationReceiver exception", exception.printStackTrace().toString())
+            Log.d(NOTIFICATION_RECEIVER_EXCEPTION_TAG, exception.printStackTrace().toString())
         }
     }
 
@@ -100,7 +106,12 @@ class NotificationReceiver : BroadcastReceiver() {
              * */
             action = INTENT_EXTRA_ACTION_ARBITRARY
         }
-        val fullScreenPendingIntent = PendingIntentUtils.getActivity(context, 0, fullScreenIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val fullScreenPendingIntent = PendingIntentUtils.getActivity(
+            context,
+            0,
+            fullScreenIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         return notificationBuilder.apply {
             setContentTitle(alarm.title)
@@ -125,7 +136,8 @@ class NotificationReceiver : BroadcastReceiver() {
     private fun enableVibrationForNotification(
         alarm: Alarm
     ) {
-        notificationManager.getNotificationChannel(NotificationUtilsConstants.CHANNEL_ID).apply { enableVibration(alarm.vibration) }
+        notificationManager.getNotificationChannel(NotificationUtilsConstants.CHANNEL_ID)
+            .apply { enableVibration(alarm.vibration) }
     }
 
     private fun displayNotification(

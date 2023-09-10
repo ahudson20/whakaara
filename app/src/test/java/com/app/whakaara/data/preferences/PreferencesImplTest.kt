@@ -3,7 +3,9 @@ package com.app.whakaara.data.preferences
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -34,14 +36,55 @@ class PreferencesImplTest {
     fun `get preferences flow`() = runTest {
         // Given
         val preferences = Preferences()
-
-        // When
         coEvery { preferencesDao.getPreferencesFlow() } returns flowOf(preferences)
 
-        // Then
+        // When
         repository.getPreferencesFlow().test {
+            // Then
             assertEquals(preferences, awaitItem())
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `insert preferences`() = runTest {
+        // Given
+        val preferences = Preferences(
+            autoSilenceTime = 123,
+            snoozeTime = 456
+        )
+        val preferencesSlot = slot<Preferences>()
+        coEvery { preferencesDao.insert(any()) } returns mockk()
+
+        // When
+        repository.insert(preferences = preferences)
+
+        // Then
+        coVerify(atLeast = 1) { preferencesDao.insert(capture(preferencesSlot)) }
+        with(preferencesSlot.captured) {
+            assertEquals(123, autoSilenceTime)
+            assertEquals(456, snoozeTime)
+        }
+    }
+
+    @Test
+    fun `update preferences`() = runTest {
+        // Given
+        val preferences = Preferences(
+            autoSilenceTime = 123,
+            snoozeTime = 456
+        )
+        val preferencesSlot = slot<Preferences>()
+        coEvery { preferencesDao.updatePreferences(any()) } returns mockk()
+
+        // When
+        repository.updatePreferences(preferences = preferences)
+
+        // Then
+        coVerify(atLeast = 1) { preferencesDao.updatePreferences(capture(preferencesSlot)) }
+        with(preferencesSlot.captured) {
+            assertEquals(123, autoSilenceTime)
+            assertEquals(456, snoozeTime)
         }
     }
 }

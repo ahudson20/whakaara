@@ -5,8 +5,6 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -143,22 +141,16 @@ class MainViewModel @Inject constructor(
         alarm: Alarm
     ) {
         val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            if (!userHasNotGrantedAlarmPermission(alarmManager)) {
-                redirectUserToSpecialAppAccessScreen()
-            } else {
-                setExactAlarm(alarm, alarmManager)
-            }
+        if (!userHasNotGrantedAlarmPermission(alarmManager)) {
+            redirectUserToSpecialAppAccessScreen()
         } else {
             setExactAlarm(alarm, alarmManager)
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun userHasNotGrantedAlarmPermission(alarmManager: AlarmManager) =
         alarmManager.canScheduleExactAlarms()
 
-    @RequiresApi(Build.VERSION_CODES.S)
     private fun redirectUserToSpecialAppAccessScreen() {
         INTENT_SCHEDULE_ALARM_PERMISSION.also {
             app.applicationContext.startActivity(it)

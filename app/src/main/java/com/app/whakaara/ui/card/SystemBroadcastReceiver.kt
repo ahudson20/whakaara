@@ -19,7 +19,7 @@ fun SystemBroadcastReceiver(
             override fun onReceive(context: Context?, intent: Intent?) = onBroadcastReceive(context, intent)
         }
 
-        context.registerReceiver(receiver, filter)
+        context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
 
         onDispose {
             context.unregisterReceiver(receiver)

@@ -30,7 +30,7 @@ class DateUtilsTest {
         val time24HourFormat = DateUtils.getAlarmTimeFormatted(date = date, is24HourFormatEnabled = true)
 
         // Then
-        assertEquals("14:34 PM", time24HourFormat)
+        assertEquals("14:34", time24HourFormat)
     }
 
     @Test
@@ -46,7 +46,7 @@ class DateUtilsTest {
         val time24HourFormat = DateUtils.getAlarmTimeFormatted(date = date, is24HourFormatEnabled = false)
 
         // Then
-        assertEquals("02:34 PM", time24HourFormat)
+        assertEquals("2:34 PM", time24HourFormat)
     }
 
     @Test

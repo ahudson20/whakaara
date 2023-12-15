@@ -20,9 +20,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.R
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space20
+import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,11 +33,13 @@ fun DismissBackground(dismissState: DismissState) {
         when (dismissState.targetValue) {
             DismissValue.Default -> MaterialTheme.colorScheme.surface
             else -> MaterialTheme.colorScheme.error
-        }
+        },
+        label = ""
     )
 
     val scale by animateFloatAsState(
-        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1.25f
+        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1.25f,
+        label = ""
     )
 
     Box(
@@ -56,8 +59,9 @@ fun DismissBackground(dismissState: DismissState) {
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun DismissBackgroundPreview() {
     WhakaaraTheme {
         DismissBackground(

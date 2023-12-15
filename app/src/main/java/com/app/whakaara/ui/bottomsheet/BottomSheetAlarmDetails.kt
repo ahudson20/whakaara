@@ -25,15 +25,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.StringStateEvent
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 
 @Composable
@@ -162,21 +164,24 @@ fun BottomSheetAlarmDetails(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 private fun BottomSheetAlarmDetailsPreview() {
-    BottomSheetAlarmDetails(
-        updateIsVibrationEnabled = BooleanStateEvent(
-            value = true
-        ),
-        updateIsSnoozeEnabled = BooleanStateEvent(
-            value = true
-        ),
-        updateDeleteAfterGoesOff = BooleanStateEvent(
-            value = false
-        ),
-        updateTitle = StringStateEvent(
-            value = "title"
+    WhakaaraTheme {
+        BottomSheetAlarmDetails(
+            updateIsVibrationEnabled = BooleanStateEvent(
+                value = true
+            ),
+            updateIsSnoozeEnabled = BooleanStateEvent(
+                value = true
+            ),
+            updateDeleteAfterGoesOff = BooleanStateEvent(
+                value = false
+            ),
+            updateTitle = StringStateEvent(
+                value = "title"
+            )
         )
-    )
+    }
 }

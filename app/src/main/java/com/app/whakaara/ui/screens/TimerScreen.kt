@@ -1,17 +1,36 @@
 package com.app.whakaara.ui.screens
 
 import androidx.compose.runtime.Composable
-import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.clock.Timer
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
 fun TimerScreen(
-    viewModel: MainViewModel
+    formattedTime: String,
+    onStart: () -> Unit,
+    onPause: () -> Unit,
+    onStop: () -> Unit
 ) {
     Timer(
-        formattedTime = viewModel.formattedTime,
-        onStart = viewModel::start,
-        onPause = viewModel::pause,
-        onStop = viewModel::resetTimer
+        formattedTime = formattedTime,
+        onStart = onStart,
+        onPause = onPause,
+        onStop = onStop
     )
+}
+
+@Composable
+@ThemePreviews
+@FontScalePreviews
+fun TimerPreview() {
+    WhakaaraTheme {
+        TimerScreen(
+            formattedTime = "01:01:01",
+            onStart = {},
+            onPause = {},
+            onStop = {}
+        )
+    }
 }

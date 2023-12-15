@@ -14,11 +14,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.settings.AlarmSettings
 import com.app.whakaara.ui.settings.GeneralSettings
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,12 +55,15 @@ fun SettingsScreen(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun SettingsScreenPreview() {
-    SettingsScreen(
-        preferencesState = PreferencesState(),
-        updatePreferences = {},
-        updateAllAlarmSubtitles = {}
-    )
+    WhakaaraTheme {
+        SettingsScreen(
+            preferencesState = PreferencesState(),
+            updatePreferences = {},
+            updateAllAlarmSubtitles = {}
+        )
+    }
 }

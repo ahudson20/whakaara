@@ -11,11 +11,13 @@ import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import kotlinx.coroutines.delay
 import java.util.Calendar
 
@@ -67,22 +69,25 @@ fun CardContainerSwipeToDismiss(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun CardContainerSwipeToDismissPreview() {
-    CardContainerSwipeToDismiss(
-        alarms = AlarmState(
-            listOf(
-                Alarm(
-                    date = Calendar.getInstance(),
-                    subTitle = "12:13 AM"
+    WhakaaraTheme {
+        CardContainerSwipeToDismiss(
+            alarms = AlarmState(
+                listOf(
+                    Alarm(
+                        date = Calendar.getInstance(),
+                        subTitle = "12:13 AM"
+                    )
                 )
-            )
-        ),
-        preferencesState = PreferencesState(),
-        delete = {},
-        disable = {},
-        enable = {},
-        reset = {}
-    )
+            ),
+            preferencesState = PreferencesState(),
+            delete = {},
+            disable = {},
+            enable = {},
+            reset = {}
+        )
+    }
 }

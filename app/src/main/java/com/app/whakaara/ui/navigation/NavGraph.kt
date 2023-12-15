@@ -39,7 +39,10 @@ fun NavGraph(
             route = BottomNavItem.Timer.route
         ) {
             TimerScreen(
-                viewModel = viewModel
+                formattedTime = viewModel.formattedTime,
+                onStart = viewModel::start,
+                onPause = viewModel::pause,
+                onStop = viewModel::resetTimer
             )
         }
 

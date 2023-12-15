@@ -14,11 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.clock.TextClock
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import java.util.Calendar
 
@@ -76,17 +78,20 @@ fun NotificationFullScreen(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun NotificationFullScreenPreview() {
-    NotificationFullScreen(
-        alarm = Alarm(
-            date = Calendar.getInstance(),
-            isEnabled = false,
-            subTitle = "10:03 AM"
-        ),
-        snooze = {},
-        disable = {},
-        is24HourFormat = true
-    )
+    WhakaaraTheme {
+        NotificationFullScreen(
+            alarm = Alarm(
+                date = Calendar.getInstance(),
+                isEnabled = false,
+                subTitle = "10:03 AM"
+            ),
+            snooze = {},
+            disable = {},
+            is24HourFormat = true
+        )
+    }
 }

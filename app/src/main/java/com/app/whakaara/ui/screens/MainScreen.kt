@@ -15,8 +15,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -34,6 +32,7 @@ import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import java.time.LocalTime
 import java.util.Calendar
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,7 +52,13 @@ fun MainScreen(
     val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
     val alarms by viewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
-        topBar = { TopBar(navController = navController) },
+        topBar = {
+            TopBar(
+                route = navBackStackEntry?.destination?.route
+                    .toString()
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+            )
+        },
         bottomBar = { BottomNavigation(navController = navController) },
         floatingActionButton = {
             when (navBackStackEntry?.destination?.route) {
@@ -101,10 +106,17 @@ fun MainScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun MainPreview() {
-    MainScreen(
-        viewModel = hiltViewModel()
-    )
-}
+/**
+ * NOTE:
+ * previews don't work for composables that have VM as parameter.
+ * **/
+// @Composable
+// @ThemePreviews
+// @FontScalePreviews
+// fun MainPreview() {
+//     WhakaaraTheme {
+//         MainScreen(
+//             viewModel = hiltViewModel()
+//         )
+//     }
+// }

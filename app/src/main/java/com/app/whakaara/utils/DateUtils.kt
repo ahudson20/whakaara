@@ -99,14 +99,9 @@ class DateUtils {
                 return true
             }
 
-            if (
-                alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
+            return alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
                 alarmTime.get(Calendar.HOUR_OF_DAY) == currentTime.get(Calendar.HOUR_OF_DAY) &&
                 alarmTime.get(Calendar.MINUTE) == currentTime.get(Calendar.MINUTE)
-            ) {
-                return true
-            }
-            return false
         }
     }
 }

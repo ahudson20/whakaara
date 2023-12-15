@@ -8,7 +8,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
 import com.alorma.compose.settings.ui.SettingsListDropdown
@@ -16,8 +15,10 @@ import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.GeneralConstants
 
@@ -120,8 +121,9 @@ fun AlarmSettings(
     )
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun AlarmSettingsPreview() {
     WhakaaraTheme {
         Column {

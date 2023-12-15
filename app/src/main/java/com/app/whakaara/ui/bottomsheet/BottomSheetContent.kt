@@ -14,12 +14,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.HoursUpdateEvent
 import com.app.whakaara.state.StringStateEvent
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
@@ -121,18 +123,21 @@ fun BottomSheetContent(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun BottomSheetContentPreview() {
-    BottomSheetContent(
-        alarm = Alarm(
-            date = Calendar.getInstance(),
-            isEnabled = false,
-            subTitle = "10:03 AM"
-        ),
-        timeToAlarm = "timeToAlarm",
-        is24HourFormat = true,
-        sheetState = BottomSheetState(),
-        reset = {}
-    )
+    WhakaaraTheme {
+        BottomSheetContent(
+            alarm = Alarm(
+                date = Calendar.getInstance(),
+                isEnabled = false,
+                subTitle = "10:03 AM"
+            ),
+            timeToAlarm = "timeToAlarm",
+            is24HourFormat = true,
+            sheetState = BottomSheetState(),
+            reset = {}
+        )
+    }
 }

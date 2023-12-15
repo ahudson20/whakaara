@@ -12,11 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPause
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStart
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStop
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
@@ -59,8 +60,9 @@ fun Timer(
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun TimerPreview() {
     WhakaaraTheme {
         Timer(

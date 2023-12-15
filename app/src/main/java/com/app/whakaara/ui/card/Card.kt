@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ContentAlpha
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -29,16 +28,18 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.spaceNone
 import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
 import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
@@ -67,7 +68,7 @@ fun Card(
             )
         )
     }
-    val alpha = if (valueSlider) 1f else ContentAlpha.disabled
+    val alpha = if (valueSlider) 1f else 0.38f
 
     LaunchedEffect(key1 = alarm.date, key2 = valueSlider) {
         timeToAlarm = getInitialTimeToAlarm(
@@ -159,17 +160,20 @@ fun Card(
     )
 }
 
-@Preview
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun CardPreview() {
-    Card(
-        alarm = Alarm(
-            date = Calendar.getInstance(),
-            subTitle = "12:13 AM"
-        ),
-        preferencesState = PreferencesState(),
-        disable = {},
-        enable = {},
-        reset = {}
-    )
+    WhakaaraTheme {
+        Card(
+            alarm = Alarm(
+                date = Calendar.getInstance(),
+                subTitle = "12:13 AM"
+            ),
+            preferencesState = PreferencesState(),
+            disable = {},
+            enable = {},
+            reset = {}
+        )
+    }
 }

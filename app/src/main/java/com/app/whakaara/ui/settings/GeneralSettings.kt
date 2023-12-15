@@ -13,11 +13,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.app.whakaara.R
+import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_DATE_SETTINGS
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.getAppSettingsIntent
@@ -61,8 +62,9 @@ fun GeneralSettings() {
     )
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun GeneralSettingsPreview() {
     WhakaaraTheme {
         Column {

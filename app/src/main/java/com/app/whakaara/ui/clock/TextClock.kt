@@ -3,8 +3,10 @@ package com.app.whakaara.ui.clock
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.viewinterop.AndroidView
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.DateUtilsConstants
 
 @Composable
@@ -32,10 +34,13 @@ fun TextClock(
     )
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun TextClockPreview() {
-    TextClock(
-        is24HourFormat = true
-    )
+    WhakaaraTheme {
+        TextClock(
+            is24HourFormat = true
+        )
+    }
 }

@@ -25,6 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
@@ -164,15 +166,18 @@ fun BottomSheetTopBarPreview() {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun BottomSheetTitlePreview() {
-    Row(
-        modifier = Modifier.height(IntrinsicSize.Min)
-    ) {
-        BottomSheetTitle(
-            title = "title",
-            bottomText = "Off"
-        )
+    WhakaaraTheme {
+        Row(
+            modifier = Modifier.height(IntrinsicSize.Min)
+        ) {
+            BottomSheetTitle(
+                title = "title",
+                bottomText = "Off"
+            )
+        }
     }
 }

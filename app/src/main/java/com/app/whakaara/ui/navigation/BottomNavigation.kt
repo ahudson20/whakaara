@@ -6,10 +6,12 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
 fun BottomNavigation(navController: NavController) {
@@ -43,8 +45,13 @@ fun BottomNavigation(navController: NavController) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
+@ThemePreviews
+@FontScalePreviews
 fun BottomNavigationPreview() {
-    BottomNavigation(rememberNavController())
+    WhakaaraTheme {
+        BottomNavigation(
+            navController = rememberNavController()
+        )
+    }
 }

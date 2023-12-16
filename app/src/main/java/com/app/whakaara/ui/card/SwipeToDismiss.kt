@@ -15,7 +15,9 @@ import androidx.compose.material3.SwipeToDismissState
 import androidx.compose.material3.SwipeToDismissValue
 import androidx.compose.material3.rememberSwipeToDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -29,22 +31,21 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DismissBackground(dismissState: SwipeToDismissState) {
+    val isSwiping by remember(dismissState) {
+        derivedStateOf { dismissState.dismissDirection == SwipeToDismissValue.EndToStart && dismissState.progress > 0.1f }
+    }
+
     val color by animateColorAsState(
-        if (dismissState.progress >= 0.1 && dismissState.dismissDirection == SwipeToDismissValue.EndToStart) {
-            MaterialTheme.colorScheme.error
-        } else {
-            MaterialTheme.colorScheme.surface
+        when {
+            isSwiping -> MaterialTheme.colorScheme.error
+            else -> MaterialTheme.colorScheme.background
         },
-        label = ""
+        label = "color"
     )
 
     val scale by animateFloatAsState(
-        if (dismissState.progress >= 0.1 && dismissState.dismissDirection == SwipeToDismissValue.EndToStart) {
-            1.25f
-        } else {
-            0.75f
-        },
-        label = ""
+        if (isSwiping) 1f else 0.001f,
+        label = "scale"
     )
 
     Box(

@@ -48,7 +48,7 @@ jobs:
       uses: reactivecircus/android-emulator-runner@v2
       with:
         arch: 'x86_64'
-        api-level: 30
+        api-level: 33
         script: ./gradlew app:connectedDebugAndroidTest
 
     - name: Upload Test Reports Folder

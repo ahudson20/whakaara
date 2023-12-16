@@ -32,6 +32,7 @@ class NotificationModule {
         setBypassDnd(true)
         lockscreenVisibility = Notification.VISIBILITY_PUBLIC
         setShowBadge(true)
+        setSound(null, null)
     }
 
     @Provides

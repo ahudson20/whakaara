@@ -8,14 +8,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.DismissState
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.SwipeToDismissState
+import androidx.compose.material3.SwipeToDismissValue
+import androidx.compose.material3.rememberSwipeToDismissState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -28,18 +30,22 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DismissBackground(dismissState: DismissState) {
+fun DismissBackground(dismissState: SwipeToDismissState) {
+    val isSwiping by remember(dismissState) {
+        derivedStateOf { dismissState.dismissDirection == SwipeToDismissValue.EndToStart && dismissState.progress > 0.1f }
+    }
+
     val color by animateColorAsState(
-        when (dismissState.targetValue) {
-            DismissValue.Default -> MaterialTheme.colorScheme.surface
-            else -> MaterialTheme.colorScheme.error
+        when {
+            isSwiping -> MaterialTheme.colorScheme.error
+            else -> MaterialTheme.colorScheme.background
         },
-        label = ""
+        label = "color"
     )
 
     val scale by animateFloatAsState(
-        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1.25f,
-        label = ""
+        if (isSwiping) 1f else 0.001f,
+        label = "scale"
     )
 
     Box(
@@ -65,7 +71,7 @@ fun DismissBackground(dismissState: DismissState) {
 fun DismissBackgroundPreview() {
     WhakaaraTheme {
         DismissBackground(
-            dismissState = rememberDismissState()
+            dismissState = rememberSwipeToDismissState()
         )
     }
 }

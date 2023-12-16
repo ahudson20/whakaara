@@ -8,12 +8,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.DismissState
-import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.rememberDismissState
+import androidx.compose.material3.SwipeToDismissState
+import androidx.compose.material3.SwipeToDismissValue
+import androidx.compose.material3.rememberSwipeToDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,17 +28,22 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DismissBackground(dismissState: DismissState) {
+fun DismissBackground(dismissState: SwipeToDismissState) {
     val color by animateColorAsState(
-        when (dismissState.targetValue) {
-            DismissValue.Default -> MaterialTheme.colorScheme.surface
-            else -> MaterialTheme.colorScheme.error
+        if (dismissState.progress >= 0.1 && dismissState.dismissDirection == SwipeToDismissValue.EndToStart) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.surface
         },
         label = ""
     )
 
     val scale by animateFloatAsState(
-        if (dismissState.targetValue == DismissValue.Default) 0.75f else 1.25f,
+        if (dismissState.progress >= 0.1 && dismissState.dismissDirection == SwipeToDismissValue.EndToStart) {
+            1.25f
+        } else {
+            0.75f
+        },
         label = ""
     )
 
@@ -65,7 +70,7 @@ fun DismissBackground(dismissState: DismissState) {
 fun DismissBackgroundPreview() {
     WhakaaraTheme {
         DismissBackground(
-            dismissState = rememberDismissState()
+            dismissState = rememberSwipeToDismissState()
         )
     }
 }

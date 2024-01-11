@@ -5,6 +5,7 @@ import android.app.Application
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.provider.Settings
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -22,10 +23,13 @@ import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_MIN_SEC_MILLIS
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
+import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
+import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_SCHEDULE_ALARM_PERMISSION
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -63,10 +67,10 @@ class MainViewModel @Inject constructor(
     // timer
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private var timeMillis by mutableLongStateOf(0L)
-    private var lastTimeStamp by mutableLongStateOf(0L)
+    private var timeMillis by mutableLongStateOf(ZERO_MILLIS)
+    private var lastTimeStamp by mutableLongStateOf(ZERO_MILLIS)
 
-    var formattedTime by mutableStateOf("00:00:000")
+    var formattedTime by mutableStateOf(TIMER_STARTING_FORMAT)
     var isActive by mutableStateOf(false)
     var isStart by mutableStateOf(true)
 
@@ -133,9 +137,10 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    private fun updateExistingAlarmInDatabase(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        repository.update(alarm)
-    }
+    private fun updateExistingAlarmInDatabase(alarm: Alarm) =
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.update(alarm)
+        }
 
     private fun createAlarm(
         alarm: Alarm
@@ -152,7 +157,7 @@ class MainViewModel @Inject constructor(
         alarmManager.canScheduleExactAlarms()
 
     private fun redirectUserToSpecialAppAccessScreen() {
-        INTENT_SCHEDULE_ALARM_PERMISSION.also {
+        Intent().apply { action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM }.also {
             app.applicationContext.startActivity(it)
         }
     }
@@ -206,7 +211,14 @@ class MainViewModel @Inject constructor(
 
     fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(Dispatchers.IO) {
         _uiState.value.alarms.forEach {
-            updateExistingAlarmInDatabase(it.copy(subTitle = getAlarmTimeFormatted(it.date, format)))
+            updateExistingAlarmInDatabase(
+                it.copy(
+                    subTitle = getAlarmTimeFormatted(
+                        it.date,
+                        format
+                    )
+                )
+            )
         }
     }
     //endregion
@@ -223,7 +235,7 @@ class MainViewModel @Inject constructor(
             isStart = false
 
             while (isActive) {
-                delay(10L)
+                delay(TIMER_START_DELAY_MILLIS)
                 timeMillis += System.currentTimeMillis() - lastTimeStamp
                 lastTimeStamp = System.currentTimeMillis()
                 formattedTime = formatTime(timeMillis)
@@ -238,9 +250,9 @@ class MainViewModel @Inject constructor(
     fun resetTimer() {
         coroutineScope.cancel()
         coroutineScope = CoroutineScope(Dispatchers.Main)
-        timeMillis = 0L
-        lastTimeStamp = 0L
-        formattedTime = "00:00:000"
+        timeMillis = ZERO_MILLIS
+        lastTimeStamp = ZERO_MILLIS
+        formattedTime = TIMER_STARTING_FORMAT
         isActive = false
         isStart = true
     }
@@ -250,7 +262,7 @@ class MainViewModel @Inject constructor(
             Instant.ofEpochMilli(timeMillis),
             ZoneId.systemDefault()
         )
-        val formatter = DateTimeFormatter.ofPattern("mm:ss:SSS", Locale.getDefault())
+        val formatter = DateTimeFormatter.ofPattern(TIMER_MIN_SEC_MILLIS, Locale.getDefault())
         return localDateTime.format(formatter)
     }
     //endregion

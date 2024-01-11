@@ -32,7 +32,6 @@ import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import java.time.LocalTime
 import java.util.Calendar
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,9 +53,7 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopBar(
-                route = navBackStackEntry?.destination?.route
-                    .toString()
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                route = navBackStackEntry?.destination?.route.toString()
             )
         },
         bottomBar = { BottomNavigation(navController = navController) },

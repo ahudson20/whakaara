@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.bottomsheet
+package com.app.whakaara.ui.bottomsheet.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

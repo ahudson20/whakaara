@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.bottomsheet
+package com.app.whakaara.ui.bottomsheet.details
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -30,7 +30,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @Composable
-fun BottomSheetContent(
+fun BottomSheetDetailsContent(
     modifier: Modifier = Modifier,
     alarm: Alarm,
     timeToAlarm: String,
@@ -65,7 +65,7 @@ fun BottomSheetContent(
                 )
             }
     ) {
-        BottomSheetTopBar(
+        BottomSheetDetailsTopBar(
             coroutineScope = coroutineScope,
             sheetState = sheetState,
             alarm = alarm,
@@ -128,7 +128,7 @@ fun BottomSheetContent(
 @FontScalePreviews
 fun BottomSheetContentPreview() {
     WhakaaraTheme {
-        BottomSheetContent(
+        BottomSheetDetailsContent(
             alarm = Alarm(
                 date = Calendar.getInstance(),
                 isEnabled = false,

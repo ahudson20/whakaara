@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.state.HoursUpdateEvent
-import com.app.whakaara.ui.bottomsheet.BottomSheetTimePicker
+import com.app.whakaara.ui.bottomsheet.details.BottomSheetTimePicker
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.chargemap.compose.numberpicker.FullHours
 import org.junit.Rule

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.ui.bottomsheet.BottomSheetWrapper
+import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsWrapper
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space20
@@ -151,7 +151,7 @@ fun Card(
         }
     }
 
-    BottomSheetWrapper(
+    BottomSheetDetailsWrapper(
         alarm = alarm,
         timeToAlarm = timeToAlarm,
         is24HourFormat = preferencesState.preferences.is24HourFormat,

@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.bottomsheet
+package com.app.whakaara.ui.bottomsheet.details
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -7,7 +7,7 @@ import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.BottomSheetState
 
 @Composable
-fun BottomSheetWrapper(
+fun BottomSheetDetailsWrapper(
     alarm: Alarm,
     timeToAlarm: String,
     is24HourFormat: Boolean,
@@ -19,7 +19,7 @@ fun BottomSheetWrapper(
         state = state,
         skipPeeked = true
     ) {
-        BottomSheetContent(
+        BottomSheetDetailsContent(
             alarm = alarm,
             timeToAlarm = timeToAlarm,
             is24HourFormat = is24HourFormat,

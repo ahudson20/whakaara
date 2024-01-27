@@ -1,5 +1,6 @@
 package com.app.whakaara.ui.navigation
 
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -44,6 +45,12 @@ fun NavGraph(
                 onPause = viewModel::pause,
                 onStop = viewModel::resetTimer
             )
+        }
+
+        composable(
+            route = BottomNavItem.Stopwatch.route
+        ) {
+            Text(text = "Stopwatch")
         }
 
         composable(

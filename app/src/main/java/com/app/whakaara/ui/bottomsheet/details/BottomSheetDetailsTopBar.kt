@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.bottomsheet
+package com.app.whakaara.ui.bottomsheet.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -38,7 +38,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @Composable
-fun BottomSheetTopBar(
+fun BottomSheetDetailsTopBar(
     modifier: Modifier = Modifier,
     coroutineScope: CoroutineScope,
     sheetState: BottomSheetState,
@@ -143,7 +143,7 @@ private fun BottomSheetTitle(
 @Composable
 fun BottomSheetTopBarPreview() {
     WhakaaraTheme {
-        BottomSheetTopBar(
+        BottomSheetDetailsTopBar(
             coroutineScope = rememberCoroutineScope(),
             sheetState = BottomSheetState(),
             alarm = Alarm(

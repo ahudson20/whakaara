@@ -94,7 +94,7 @@ fun BottomSheetDetailsContent(
             )
         )
 
-        BottomSheetAlarmDetails(
+        BottomSheetDetailsAlarmInfo(
             updateIsVibrationEnabled = BooleanStateEvent(
                 value = isVibrationEnabled,
                 onValueChange = { newValue ->

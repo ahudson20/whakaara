@@ -9,7 +9,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.StringStateEvent
-import com.app.whakaara.ui.bottomsheet.details.BottomSheetAlarmDetails
+import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsAlarmInfo
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
@@ -23,7 +23,7 @@ class BottomSheetAlarmDetailsTest {
         // Given + When
         setContent {
             WhakaaraTheme {
-                BottomSheetAlarmDetails(
+                BottomSheetDetailsAlarmInfo(
                     updateIsVibrationEnabled = BooleanStateEvent(
                         value = false
                     ),

@@ -51,6 +51,6 @@
     <string name="settings_screen_snooze_duration_title">Snooze duration</string>
     <string name="settings_screen_auto_silence_title">Auto silence</string>
     <string name="settings_screen_auto_silence_subtitle">Set time after which alarms will be silenced</string>
-    <string name="settings_screen_24_hour_format_title">Alarms displayed in 24 hour format</string>
-    <string name="settings_screen_24_hour_format_subtitle">If enabled display using 24 hour format, else 12 hour format</string>
+    <string name="settings_screen_24_hour_format_title">24 hour format</string>
+    <string name="settings_screen_24_hour_format_subtitle">If enabled display using 24 hour format</string>
 </resources>

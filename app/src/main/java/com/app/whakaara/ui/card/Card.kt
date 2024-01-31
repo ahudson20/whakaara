@@ -27,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
@@ -108,24 +107,18 @@ fun Card(
             ) {
                 Text(
                     text = alarm.title,
-                    style = TextStyle(
-                        fontSize = 14.sp
-                    )
+                    fontSize = 14.sp
                 )
                 Text(
                     modifier = Modifier
                         .padding(top = spaceXxSmall, bottom = spaceXxSmall)
                         .alpha(alpha = alpha),
                     text = alarm.subTitle,
-                    style = TextStyle(
-                        fontSize = 20.sp
-                    )
+                    fontSize = 20.sp
                 )
                 Text(
                     text = timeToAlarm,
-                    style = TextStyle(
-                        fontSize = 14.sp
-                    )
+                    fontSize = 14.sp
                 )
             }
 

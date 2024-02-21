@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
+import com.app.whakaara.data.preferences.Preferences
+import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.bottomsheet.settings.BottomSheetSettingsWrapper
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -22,7 +24,10 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    route: String
+    route: String,
+    preferencesState: PreferencesState,
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
@@ -42,7 +47,10 @@ fun TopBar(
                             scope.launch { sheetState.expand() }
                         }
                     ) {
-                        Icon(Icons.Outlined.Settings, contentDescription = stringResource(id = R.string.alarm_settings_icon_content_description))
+                        Icon(
+                            imageVector = Icons.Outlined.Settings,
+                            contentDescription = stringResource(id = R.string.settings_icon_content_description)
+                        )
                     }
                 }
             }
@@ -50,7 +58,10 @@ fun TopBar(
     )
 
     BottomSheetSettingsWrapper(
-        state = sheetState
+        state = sheetState,
+        preferencesState = preferencesState,
+        updatePreferences = updatePreferences,
+        updateAllAlarmSubtitles = updateAllAlarmSubtitles
     )
 }
 
@@ -60,7 +71,10 @@ fun TopBar(
 fun TopBarPreview() {
     WhakaaraTheme {
         TopBar(
-            route = "alarm"
+            route = "alarm",
+            preferencesState = PreferencesState(),
+            updatePreferences = {},
+            updateAllAlarmSubtitles = {}
         )
     }
 }

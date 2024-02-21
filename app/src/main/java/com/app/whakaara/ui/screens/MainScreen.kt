@@ -53,7 +53,10 @@ fun MainScreen(
     Scaffold(
         topBar = {
             TopBar(
-                route = navBackStackEntry?.destination?.route.toString()
+                route = navBackStackEntry?.destination?.route.toString(),
+                preferencesState = pref,
+                updatePreferences = viewModel::updatePreferences,
+                updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
             )
         },
         bottomBar = { BottomNavigation(navController = navController) },

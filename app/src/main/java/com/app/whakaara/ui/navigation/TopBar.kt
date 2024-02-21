@@ -41,7 +41,7 @@ fun TopBar(
         },
         actions = {
             when (route) {
-                "alarm" -> {
+                BottomNavItem.Alarm.route -> {
                     IconButton(
                         onClick = {
                             scope.launch { sheetState.expand() }

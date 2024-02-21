@@ -39,7 +39,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 
 @Composable
-fun BottomSheetAlarmDetails(
+fun BottomSheetDetailsAlarmInfo(
     modifier: Modifier = Modifier,
     updateIsVibrationEnabled: BooleanStateEvent,
     updateIsSnoozeEnabled: BooleanStateEvent,
@@ -169,7 +169,7 @@ fun BottomSheetAlarmDetails(
 @FontScalePreviews
 private fun BottomSheetAlarmDetailsPreview() {
     WhakaaraTheme {
-        BottomSheetAlarmDetails(
+        BottomSheetDetailsAlarmInfo(
             updateIsVibrationEnabled = BooleanStateEvent(
                 value = true
             ),

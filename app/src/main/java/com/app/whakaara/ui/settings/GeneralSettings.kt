@@ -8,13 +8,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.app.whakaara.R
@@ -35,17 +35,20 @@ fun GeneralSettings() {
         style = MaterialTheme.typography.titleMedium,
         text = stringResource(id = R.string.settings_screen_general_title)
     )
+
     SettingsMenuLink(
         modifier = Modifier.height(space80),
         icon = {
             Icon(
-                imageVector = Icons.Default.Timer,
+                painter = painterResource(id = R.drawable.outline_chronic_24),
                 contentDescription = stringResource(
                     id = R.string.system_time_icon_content_description
                 )
             )
         },
-        title = { Text(text = stringResource(id = R.string.settings_screen_system_time)) },
+        title = {
+            Text(text = stringResource(id = R.string.settings_screen_system_time))
+        },
         onClick = {
             context.startActivity(Intent(Settings.ACTION_DATE_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
         }

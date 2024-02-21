@@ -29,8 +29,6 @@
 
     <string name="notification_sub_text">Tap to dismiss</string>
 
-    <string name="alarm_settings_icon_content_description">Alarm settings icon button</string>
-
     <string name="floating_action_button_icon_description">Create alarm</string>
     <string name="delete_icon_content_description">Delete icon</string>
     <string name="pause_timer_icon_content_description">Pause timer icon button</string>

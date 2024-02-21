@@ -5,11 +5,12 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.res.stringResource
+import com.app.whakaara.R
 import com.app.whakaara.ui.bottomsheet.settings.BottomSheetSettingsWrapper
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -30,19 +31,18 @@ fun TopBar(
         title = {
             Text(
                 text = route
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
-                style = MaterialTheme.typography.headlineLarge
+                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             )
         },
         actions = {
             when (route) {
-                "alarm" -> {
+                BottomNavItem.Alarm.route -> {
                     IconButton(
                         onClick = {
                             scope.launch { sheetState.expand() }
                         }
                     ) {
-                        Icon(Icons.Outlined.Settings, contentDescription = "alarm settings")
+                        Icon(Icons.Outlined.Settings, contentDescription = stringResource(id = R.string.alarm_settings_icon_content_description))
                     }
                 }
             }

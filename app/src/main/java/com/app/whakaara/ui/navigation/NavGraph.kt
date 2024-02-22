@@ -1,6 +1,5 @@
 package com.app.whakaara.ui.navigation
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,6 +9,7 @@ import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.SettingsScreen
+import com.app.whakaara.ui.screens.StopwatchScreen
 import com.app.whakaara.ui.screens.TimerScreen
 
 @Composable
@@ -39,18 +39,20 @@ fun NavGraph(
         composable(
             route = BottomNavItem.Timer.route
         ) {
-            TimerScreen(
-                formattedTime = viewModel.formattedTime,
-                onStart = viewModel::start,
-                onPause = viewModel::pause,
-                onStop = viewModel::resetTimer
-            )
+            TimerScreen()
         }
 
         composable(
             route = BottomNavItem.Stopwatch.route
         ) {
-            Text(text = "Stopwatch")
+            StopwatchScreen(
+                formattedTime = viewModel.formattedTime,
+                isActive = viewModel.isActive,
+                isStart = viewModel.isStart,
+                onStart = viewModel::start,
+                onPause = viewModel::pause,
+                onStop = viewModel::resetTimer
+            )
         }
 
         composable(

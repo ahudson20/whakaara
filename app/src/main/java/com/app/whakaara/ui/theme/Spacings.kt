@@ -22,4 +22,5 @@ object Spacings {
     val space80 = 80.dp
     val spaceXxxxLarge = 96.dp
     val space100 = 100.dp
+    val space250 = 250.dp
 }

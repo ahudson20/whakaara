@@ -51,8 +51,8 @@ fun TimerInputField(
             ),
             textStyle = LocalTextStyle.current.copy(
                 textAlign = TextAlign.Center,
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold
+                fontSize = 48.sp,
+                fontWeight = FontWeight.Black
             ),
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = darkGreen,

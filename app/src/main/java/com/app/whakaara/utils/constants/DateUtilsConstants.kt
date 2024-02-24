@@ -11,4 +11,8 @@ object DateUtilsConstants {
     const val TIMER_STARTING_FORMAT = "00:00:000"
 
     const val BOTTOM_SHEET_ALARM_LABEL_OFF = "Off"
+
+    const val TIMER_HOURS_INPUT_REGEX = "^(0?[0-9]|1[0-9]|2[0-3])?$"
+    const val TIMER_MINUTES_AND_SECONDS_INPUT_REGEX = "^(0?[0-9]|[1-5][0-9])?$"
+    const val TIMER_INPUT_INITIAL_VALUE = "00"
 }

@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import com.app.whakaara.R
 
-val customFontFamily = FontFamily(
+private val customFontFamily = FontFamily(
     Font(R.font.azeretmono, FontWeight.Normal)
 )
 

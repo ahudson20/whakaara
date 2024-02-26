@@ -1,10 +1,15 @@
 package com.app.whakaara.utils
 
 import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
@@ -102,6 +107,30 @@ class DateUtils {
             return alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
                 alarmTime.get(Calendar.HOUR_OF_DAY) == currentTime.get(Calendar.HOUR_OF_DAY) &&
                 alarmTime.get(Calendar.MINUTE) == currentTime.get(Calendar.MINUTE)
+        }
+
+        fun hoursToMilliseconds(hours: Int): Long {
+            val millisecondsInHour: Long = 3600000 // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
+            return hours * millisecondsInHour
+        }
+
+        fun minutesToMilliseconds(minutes: Int): Long {
+            val millisecondsInMinute: Long = 60000 // 1 minute = 60 seconds = 60 * 1000 milliseconds
+            return minutes * millisecondsInMinute
+        }
+
+        fun secondsToMilliseconds(seconds: Int): Long {
+            val millisecondsInSecond: Long = 1000 // 1 second = 1000 milliseconds
+            return seconds * millisecondsInSecond
+        }
+
+        fun formatTimeTimerAndStopwatch(timeMillis: Long): String {
+            val localDateTime = LocalDateTime.ofInstant(
+                Instant.ofEpochMilli(timeMillis),
+                ZoneId.systemDefault()
+            )
+            val formatter = DateTimeFormatter.ofPattern(DateUtilsConstants.TIMER_MIN_SEC_MILLIS, Locale.getDefault())
+            return localDateTime.format(formatter)
         }
     }
 }

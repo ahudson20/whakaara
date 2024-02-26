@@ -57,4 +57,40 @@ class DateUtilsTest {
         // Then
         assertEquals("Off", initial)
     }
+
+    @Test
+    fun `convert Int representing hours to milliseconds`() {
+        // Given
+        val hours = 1
+
+        // When
+        val millis = DateUtils.hoursToMilliseconds(hours = hours)
+
+        // Then
+        assertEquals(millis, 3600000) // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
+    }
+
+    @Test
+    fun `convert Int representing minutes to milliseconds`() {
+        // Given
+        val minutes = 1
+
+        // When
+        val millis = DateUtils.minutesToMilliseconds(minutes = minutes)
+
+        // Then
+        assertEquals(millis, 60000) // 1 minute = 60 seconds = 60 * 1000 milliseconds
+    }
+
+    @Test
+    fun `convert Int representing seconds to milliseconds`() {
+        // Given
+        val seconds = 1
+
+        // When
+        val millis = DateUtils.secondsToMilliseconds(seconds = seconds)
+
+        // Then
+        assertEquals(millis, 1000) // 1 second = 1000 milliseconds
+    }
 }

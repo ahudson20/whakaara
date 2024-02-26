@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPlayPauseStop
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
@@ -18,9 +19,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
 fun Stopwatch(
-    formattedTime: String,
-    isActive: Boolean,
-    isStart: Boolean,
+    stopwatchState: StopwatchState,
     onStart: () -> Unit = {},
     onPause: () -> Unit = {},
     onStop: () -> Unit = {}
@@ -31,8 +30,8 @@ fun Stopwatch(
                 horizontalArrangement = Arrangement.spacedBy(spaceMedium)
             ) {
                 FloatingActionButtonPlayPauseStop(
-                    isPlaying = isActive,
-                    isStart = isStart,
+                    isPlaying = stopwatchState.isActive,
+                    isStart = stopwatchState.isStart,
                     onStop = onStop,
                     onPause = onPause,
                     onStart = onStart
@@ -48,7 +47,7 @@ fun Stopwatch(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            StopwatchDisplay(formattedTime = formattedTime)
+            StopwatchDisplay(formattedTime = stopwatchState.formattedTime)
         }
     }
 }
@@ -59,9 +58,7 @@ fun Stopwatch(
 fun StopwatchPreview() {
     WhakaaraTheme {
         Stopwatch(
-            formattedTime = "01:01:01",
-            isActive = false,
-            isStart = true
+            stopwatchState = StopwatchState()
         )
     }
 }

@@ -31,7 +31,8 @@ fun StopwatchDisplay(
     formattedTime: String
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .wrapContentSize(Alignment.Center)
     ) {
         Box(

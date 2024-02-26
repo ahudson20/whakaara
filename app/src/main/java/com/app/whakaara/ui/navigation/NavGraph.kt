@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.StopwatchState
+import com.app.whakaara.state.TimerState
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.screens.StopwatchScreen
@@ -17,7 +19,9 @@ fun NavGraph(
     navController: NavHostController,
     viewModel: MainViewModel,
     preferencesState: PreferencesState,
-    alarmState: AlarmState
+    alarmState: AlarmState,
+    stopwatchState: StopwatchState,
+    timerState: TimerState
 ) {
     NavHost(
         navController = navController,
@@ -39,19 +43,25 @@ fun NavGraph(
         composable(
             route = BottomNavItem.Timer.route
         ) {
-            TimerScreen()
+            TimerScreen(
+                timerState = timerState,
+                updateHours = viewModel::updateInputHours,
+                updateMinutes = viewModel::updateInputMinutes,
+                updateSeconds = viewModel::updateInputSeconds,
+                startTimer = viewModel::startTimer,
+                stopTimer = viewModel::resetTimer,
+                pauseTimer = viewModel::pauseTimer
+            )
         }
 
         composable(
             route = BottomNavItem.Stopwatch.route
         ) {
             StopwatchScreen(
-                formattedTime = viewModel.formattedTime,
-                isActive = viewModel.isActive,
-                isStart = viewModel.isStart,
-                onStart = viewModel::start,
-                onPause = viewModel::pause,
-                onStop = viewModel::resetTimer
+                stopwatchState = stopwatchState,
+                onStart = viewModel::startStopwatch,
+                onPause = viewModel::pauseStopwatch,
+                onStop = viewModel::resetStopwatch
             )
         }
 

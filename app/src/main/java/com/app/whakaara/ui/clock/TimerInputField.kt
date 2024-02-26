@@ -23,6 +23,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.darkGreen
 import com.app.whakaara.ui.theme.primaryGreen
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 
 @Composable
 fun TimerInputField(
@@ -47,6 +48,7 @@ fun TimerInputField(
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
+                    if (updateStringEvent.value.isBlank()) updateStringEvent.onValueChange(TIMER_INPUT_INITIAL_VALUE)
                 }
             ),
             textStyle = LocalTextStyle.current.copy(

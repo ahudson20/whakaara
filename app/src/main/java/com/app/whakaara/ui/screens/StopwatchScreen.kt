@@ -1,6 +1,7 @@
 package com.app.whakaara.ui.screens
 
 import androidx.compose.runtime.Composable
+import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.clock.Stopwatch
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -8,17 +9,13 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
 fun StopwatchScreen(
-    formattedTime: String,
-    isActive: Boolean,
-    isStart: Boolean,
+    stopwatchState: StopwatchState,
     onStart: () -> Unit,
     onPause: () -> Unit,
     onStop: () -> Unit
 ) {
     Stopwatch(
-        formattedTime = formattedTime,
-        isActive = isActive,
-        isStart = isStart,
+        stopwatchState = stopwatchState,
         onStart = onStart,
         onPause = onPause,
         onStop = onStop
@@ -31,9 +28,7 @@ fun StopwatchScreen(
 fun StopwatchScreenPreview() {
     WhakaaraTheme {
         StopwatchScreen(
-            formattedTime = "01:01:01",
-            isActive = false,
-            isStart = true,
+            stopwatchState = StopwatchState(),
             onStart = {},
             onPause = {},
             onStop = {}

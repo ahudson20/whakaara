@@ -12,8 +12,8 @@ import androidx.core.app.NotificationCompat
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
-import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utils.GeneralUtils
+import com.app.whakaara.utils.NotificationUtils.Companion.startMediaService
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES
@@ -68,8 +68,7 @@ class NotificationReceiver : BroadcastReceiver() {
                 )
             )
 
-            startAlarmSound(
-                context = context,
+            context.startMediaService(
                 autoSilenceTime = intent.getIntExtra(
                     INTENT_AUTO_SILENCE,
                     ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES
@@ -77,14 +76,6 @@ class NotificationReceiver : BroadcastReceiver() {
             )
         } catch (exception: Exception) {
             Log.d(NOTIFICATION_RECEIVER_EXCEPTION_TAG, exception.printStackTrace().toString())
-        }
-    }
-
-    private fun startAlarmSound(context: Context, autoSilenceTime: Int) {
-        Intent(context, MediaPlayerService::class.java).apply {
-            putExtra(INTENT_AUTO_SILENCE, autoSilenceTime)
-        }.also { mediaIntent ->
-            context.startService(mediaIntent)
         }
     }
 

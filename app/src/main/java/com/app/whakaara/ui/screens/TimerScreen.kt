@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +46,7 @@ fun TimerScreen(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(spaceMedium)
             ) {
+                // TODO: Add notification permission check here.
                 FloatingActionButtonPlayPauseStop(
                     isPlaying = timerState.isTimerActive,
                     isStart = timerState.isStart,
@@ -120,10 +120,6 @@ fun TimerScreen(
                     progress = timerState.progress,
                     time = timerState.time
                 )
-            }
-
-            if (timerState.celebration) {
-                Text(text = "!!CELEBRATION!!")
             }
         }
     }

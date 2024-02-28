@@ -57,7 +57,7 @@ class PermissionGrantedReceiver : BroadcastReceiver() {
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            getTimeInMillis(alarm),
+            getTimeInMillis(alarm.date),
             pendingIntent
         )
     }

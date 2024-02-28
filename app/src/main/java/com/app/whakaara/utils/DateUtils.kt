@@ -1,6 +1,5 @@
 package com.app.whakaara.utils
 
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
@@ -16,15 +15,14 @@ import java.util.concurrent.TimeUnit
 
 class DateUtils {
     companion object {
-        fun getTimeInMillis(alarm: Alarm): Long {
-            val alarmTime = alarm.date
+        fun getTimeInMillis(alarmDate: Calendar): Long {
             val currentTime = Calendar.getInstance()
 
-            if (checkIfSameDay(alarmTime, currentTime)) {
-                alarmTime.add(Calendar.DATE, 1)
+            if (checkIfSameDay(alarmDate, currentTime)) {
+                alarmDate.add(Calendar.DATE, 1)
             }
 
-            return alarmTime.timeInMillis
+            return alarmDate.timeInMillis
         }
 
         fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar): String {

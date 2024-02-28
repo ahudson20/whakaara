@@ -59,4 +59,6 @@
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>
     <string name="timer_screen_seconds_label">Seconds</string>
+    <string name="timer_notification_content_title">Timer Complete</string>
+    <string name="timer_notification_action_label">Stop</string>
 </resources>

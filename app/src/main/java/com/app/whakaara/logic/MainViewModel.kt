@@ -14,6 +14,7 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.receiver.NotificationReceiver
+import com.app.whakaara.receiver.TimerNotificationReceiver
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
@@ -28,6 +29,7 @@ import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
+import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
@@ -186,7 +188,7 @@ class MainViewModel @Inject constructor(
         )
         alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
-            getTimeInMillis(alarm),
+            getTimeInMillis(alarm.date),
             pendingIntent
         )
     }
@@ -303,20 +305,26 @@ class MainViewModel @Inject constructor(
     }
 
     fun startTimer() {
-        if (_timerState.value.isTimerPaused) {
-            startCountDownTimer(
-                timeToCountDown = _timerState.value.currentTime
-            )
-            updateTimerStateToStarted()
-        } else if (checkIfOneInputValueGreaterThanZero()) {
-            startCountDownTimer(
-                timeToCountDown = generateMillisecondsFromTimerInputValues(
+        if (!userHasNotGrantedAlarmPermission((app.getSystemService(Context.ALARM_SERVICE) as AlarmManager))) {
+            redirectUserToSpecialAppAccessScreen()
+        } else {
+            if (_timerState.value.isTimerPaused) {
+                startCountDownTimer(
+                    timeToCountDown = _timerState.value.currentTime
+                )
+                updateTimerStateToStarted()
+            } else if (checkIfOneInputValueGreaterThanZero()) {
+                val millisecondsFromTimerInput = generateMillisecondsFromTimerInputValues(
                     hours = _timerState.value.inputHours,
                     minutes = _timerState.value.inputMinutes,
                     seconds = _timerState.value.inputSeconds
                 )
-            )
-            updateTimerStateToStarted()
+                startCountDownTimer(
+                    timeToCountDown = millisecondsFromTimerInput
+                )
+                updateTimerStateToStarted()
+                createTimerNotification(milliseconds = millisecondsFromTimerInput)
+            }
         }
     }
 
@@ -325,7 +333,6 @@ class MainViewModel @Inject constructor(
             it.copy(
                 isTimerPaused = false,
                 isStart = false,
-                celebration = false,
                 isTimerActive = true
             )
         }
@@ -348,6 +355,23 @@ class MainViewModel @Inject constructor(
         return millis
     }
 
+    private fun createTimerNotification(
+        milliseconds: Long
+    ) {
+        val startReceiverIntent = Intent(app, TimerNotificationReceiver::class.java)
+        val pendingIntent = PendingIntentUtils.getBroadcast(
+            context = app,
+            id = INTENT_REQUEST_CODE,
+            intent = startReceiverIntent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        (app.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
+            AlarmManager.RTC_WAKEUP,
+            milliseconds,
+            pendingIntent
+        )
+    }
+
     private fun startCountDownTimer(
         timeToCountDown: Long
     ) {
@@ -367,13 +391,12 @@ class MainViewModel @Inject constructor(
                     it.copy(
                         isTimerPaused = false,
                         isTimerActive = false,
-                        celebration = true,
                         currentTime = ZERO_MILLIS,
                         inputHours = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
                         inputMinutes = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
                         inputSeconds = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
                         isStart = true,
-                        progress = 1.00F,
+                        progress = STARTING_CIRCULAR_PROGRESS,
                         time = TIMER_STARTING_FORMAT
                     )
                 }
@@ -399,13 +422,12 @@ class MainViewModel @Inject constructor(
             it.copy(
                 isTimerPaused = false,
                 isTimerActive = false,
-                celebration = false,
                 currentTime = ZERO_MILLIS,
                 inputHours = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
                 inputMinutes = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
                 inputSeconds = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
                 isStart = true,
-                progress = 1.00F,
+                progress = STARTING_CIRCULAR_PROGRESS,
                 time = TIMER_STARTING_FORMAT
             )
         }

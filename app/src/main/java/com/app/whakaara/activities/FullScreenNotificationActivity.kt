@@ -1,5 +1,6 @@
 package com.app.whakaara.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -49,6 +50,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()

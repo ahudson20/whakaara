@@ -53,11 +53,12 @@ class NotificationModule {
         @ApplicationContext
         context: Context
     ): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.baseline_access_time_24)
-            .setColor(Color.WHITE)
-            .setAutoCancel(true)
-            .setCategory(CATEGORY_ALARM)
-            .setSubText(context.getString(R.string.notification_sub_text))
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.baseline_access_time_24)
+            setAutoCancel(true)
+            setCategory(CATEGORY_ALARM)
+            setSubText(context.getString(R.string.notification_sub_text))
+        }
     }
 }

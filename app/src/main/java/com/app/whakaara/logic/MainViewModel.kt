@@ -3,7 +3,6 @@ package com.app.whakaara.logic
 import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.CountDownTimer
 import android.provider.Settings
@@ -25,7 +24,6 @@ import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
 import com.app.whakaara.utils.DateUtils.Companion.hoursToMilliseconds
 import com.app.whakaara.utils.DateUtils.Companion.minutesToMilliseconds
 import com.app.whakaara.utils.DateUtils.Companion.secondsToMilliseconds
-import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
@@ -34,9 +32,7 @@ import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,12 +51,13 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val app: Application,
     private val repository: AlarmRepository,
-    private val preferencesRepository: PreferencesRepository
+    private val preferencesRepository: PreferencesRepository,
+    private val alarmManager: AlarmManager
 ) : AndroidViewModel(app) {
 
     // alarm
-    private val _uiState = MutableStateFlow(AlarmState())
-    val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
+    private val _alarmState = MutableStateFlow(AlarmState())
+    val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()
 
     // preferences
     private val _preferencesState = MutableStateFlow(PreferencesState())
@@ -98,7 +95,7 @@ class MainViewModel @Inject constructor(
     //region alarm
     private fun getAllAlarms() = viewModelScope.launch {
         repository.getAllAlarmsFlow().flowOn(Dispatchers.IO).collect { allAlarms ->
-            _uiState.value = AlarmState(alarms = allAlarms)
+            _alarmState.value = AlarmState(alarms = allAlarms)
         }
     }
 
@@ -149,15 +146,14 @@ class MainViewModel @Inject constructor(
     private fun createAlarm(
         alarm: Alarm
     ) {
-        val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (!userHasNotGrantedAlarmPermission(alarmManager)) {
+        if (!userHasNotGrantedAlarmPermission()) {
             redirectUserToSpecialAppAccessScreen()
         } else {
             setExactAlarm(alarm, alarmManager)
         }
     }
 
-    private fun userHasNotGrantedAlarmPermission(alarmManager: AlarmManager) =
+    private fun userHasNotGrantedAlarmPermission() =
         alarmManager.canScheduleExactAlarms()
 
     private fun redirectUserToSpecialAppAccessScreen() {
@@ -170,9 +166,9 @@ class MainViewModel @Inject constructor(
         Intent(app, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
+//            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
             putExtra(INTENT_AUTO_SILENCE, preferencesUiState.value.preferences.autoSilenceTime)
-            putExtra(INTENT_TIME_FORMAT, preferencesUiState.value.preferences.is24HourFormat)
+//            putExtra(INTENT_TIME_FORMAT, preferencesUiState.value.preferences.is24HourFormat)
         }
 
     private fun setExactAlarm(
@@ -196,11 +192,10 @@ class MainViewModel @Inject constructor(
     private fun stopAlarm(
         alarm: Alarm
     ) {
-        val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(app, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
+//            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
         }
 
         val pendingIntent = PendingIntentUtils.getBroadcast(
@@ -214,7 +209,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        _uiState.value.alarms.forEach {
+        _alarmState.value.alarms.forEach {
             updateExistingAlarmInDatabase(
                 it.copy(
                     subTitle = getAlarmTimeFormatted(
@@ -305,7 +300,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun startTimer() {
-        if (!userHasNotGrantedAlarmPermission((app.getSystemService(Context.ALARM_SERVICE) as AlarmManager))) {
+        if (!userHasNotGrantedAlarmPermission()) {
             redirectUserToSpecialAppAccessScreen()
         } else {
             if (_timerState.value.isTimerPaused) {
@@ -359,13 +354,14 @@ class MainViewModel @Inject constructor(
         milliseconds: Long
     ) {
         val startReceiverIntent = Intent(app, TimerNotificationReceiver::class.java)
+
         val pendingIntent = PendingIntentUtils.getBroadcast(
             context = app,
             id = INTENT_REQUEST_CODE,
             intent = startReceiverIntent,
             flag = PendingIntent.FLAG_UPDATE_CURRENT
         )
-        (app.getSystemService(Context.ALARM_SERVICE) as AlarmManager).setExactAndAllowWhileIdle(
+        alarmManager.setExactAndAllowWhileIdle(
             AlarmManager.RTC_WAKEUP,
             milliseconds,
             pendingIntent

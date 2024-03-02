@@ -1,9 +1,12 @@
 package com.app.whakaara.module
 
+import android.app.AlarmManager
+import android.app.Application
 import android.app.Notification
 import android.app.Notification.CATEGORY_ALARM
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
@@ -61,4 +64,9 @@ class NotificationModule {
             setSubText(context.getString(R.string.notification_sub_text))
         }
     }
+
+    @Provides
+    @Singleton
+    fun provideAlarmManager(app: Application): AlarmManager =
+        app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
 }

@@ -46,13 +46,13 @@ fun TimerScreen(
             Row(
                 horizontalArrangement = Arrangement.spacedBy(spaceMedium)
             ) {
-                // TODO: Add notification permission check here.
                 FloatingActionButtonPlayPauseStop(
                     isPlaying = timerState.isTimerActive,
                     isStart = timerState.isStart,
                     onStop = stopTimer,
                     onPause = pauseTimer,
-                    onStart = startTimer
+                    onStart = startTimer,
+                    askForPermissions = true
                 )
             }
         },

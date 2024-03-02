@@ -57,12 +57,12 @@
         </receiver>
         <receiver android:name=".receiver.MediaServiceReceiver"
             android:exported="false">
-
         </receiver>
 
         <service
             android:name="com.app.whakaara.service.MediaPlayerService"
             android:enabled="true"
+            android:exported="false"
             />
     </application>
 

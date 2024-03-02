@@ -1,5 +1,8 @@
 package com.app.whakaara.ui.floatingactionbutton
 
+import android.Manifest
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
@@ -9,7 +12,11 @@ import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -18,11 +25,17 @@ import com.app.whakaara.ui.theme.BooleanPreviewProvider
 import com.app.whakaara.ui.theme.Spacings.spaceNone
 import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.app.whakaara.utils.NotificationUtils
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 
 @Composable
 fun FloatingActionButtonPlayPauseStop(
     isPlaying: Boolean,
     isStart: Boolean,
+    askForPermissions: Boolean,
     onStop: () -> Unit,
     onPause: () -> Unit,
     onStart: () -> Unit
@@ -31,9 +44,14 @@ fun FloatingActionButtonPlayPauseStop(
         horizontalArrangement = Arrangement.spacedBy(spaceXxLarge)
     ) {
         if (!isStart) {
-            FloatingActionButtonStop(onStop)
+            FloatingActionButtonStop(onStop = onStop)
         }
-        FloatingActionButtonPlayPause(isPlaying, onPause, onStart)
+        FloatingActionButtonPlayPause(
+            isPlaying = isPlaying,
+            askForPermissions = askForPermissions,
+            onPause = onPause,
+            onStart = onStart
+        )
     }
 }
 
@@ -50,19 +68,53 @@ fun FloatingActionButtonStop(onStop: () -> Unit) {
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun FloatingActionButtonPlayPause(
     isPlaying: Boolean,
+    askForPermissions: Boolean,
     onPause: () -> Unit,
     onStart: () -> Unit
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
+        if (wasGranted) {
+            onStart()
+        }
+    }
+
     FloatingActionButton(
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
         onClick = {
             if (isPlaying) {
                 onPause()
             } else {
-                onStart()
+                if (askForPermissions) {
+                    when (notificationPermissionState.status) {
+                        PermissionStatus.Granted -> {
+                            onStart()
+                        }
+                        else -> {
+                            /**PERMISSION DENIED - SHOW PROMPT**/
+                            if (notificationPermissionState.status.shouldShowRationale) {
+                                NotificationUtils.snackBarPromptPermission(
+                                    scope = scope,
+                                    snackBarHostState = snackbarHostState,
+                                    context = context
+                                )
+                            } else {
+                                /**FIRST TIME ACCESSING**/
+                                /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
+                                launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                            }
+                        }
+                    }
+                } else {
+                    onStart()
+                }
             }
         }
     ) {
@@ -89,6 +141,7 @@ fun FloatingActionButtonPlayPauseStopPreview(
         FloatingActionButtonPlayPauseStop(
             isPlaying = isPlaying,
             isStart = false,
+            askForPermissions = false,
             onStop = {},
             onPause = {},
             onStart = {}
@@ -114,6 +167,7 @@ fun FloatingActionButtonPlayPausePreview(
     WhakaaraTheme {
         FloatingActionButtonPlayPause(
             isPlaying = isPlaying,
+            askForPermissions = false,
             onStart = {},
             onPause = {}
         )

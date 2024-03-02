@@ -49,7 +49,7 @@ fun MainScreen(
     }
 
     val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
-    val alarms by viewModel.uiState.collectAsStateWithLifecycle()
+    val alarms by viewModel.alarmState.collectAsStateWithLifecycle()
     val stopwatch by viewModel.stopwatchState.collectAsStateWithLifecycle()
     val timer by viewModel.timerState.collectAsStateWithLifecycle()
     Scaffold(

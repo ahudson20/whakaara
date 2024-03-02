@@ -6,8 +6,10 @@ import android.app.Notification
 import android.app.Notification.CATEGORY_ALARM
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
@@ -18,6 +20,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -51,7 +54,7 @@ class NotificationModule {
     }
 
     @Provides
-    @Singleton
+    @Named("alarm")
     fun provideNotificationBuilder(
         @ApplicationContext
         context: Context
@@ -62,6 +65,23 @@ class NotificationModule {
             setAutoCancel(true)
             setCategory(CATEGORY_ALARM)
             setSubText(context.getString(R.string.notification_sub_text))
+        }
+    }
+
+    @Provides
+    @Named("timer")
+    fun provideNotificationBuilderForTimer(
+        @ApplicationContext
+        context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.baseline_access_time_24)
+            setCategory(CATEGORY_ALARM)
+            setSubText(context.getString(R.string.notification_sub_text))
+            setAutoCancel(false)
+            setContentTitle(context.getString(R.string.timer_notification_content_title))
+            setContentIntent(PendingIntent.getActivity(context, NotificationUtilsConstants.INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
         }
     }
 

@@ -5,7 +5,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
-import android.graphics.Color
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Handler
@@ -23,7 +22,6 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_NOTIFICATION_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
@@ -42,6 +40,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.UUID
 import javax.inject.Inject
+import javax.inject.Named
 
 @AndroidEntryPoint
 class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
@@ -54,6 +53,14 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
 
     @Inject
     lateinit var repo: AlarmRepository
+
+    @Inject
+    @Named("timer")
+    lateinit var timerNotificationBuilder: NotificationCompat.Builder
+
+    @Inject
+    @Named("alarm")
+    lateinit var alarmNotificationBuilder: NotificationCompat.Builder
 
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
@@ -152,12 +159,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        return NotificationCompat.Builder(applicationContext, NotificationUtilsConstants.CHANNEL_ID).apply {
-            color = Color.WHITE
-            setSmallIcon(R.drawable.baseline_access_time_24)
-            setAutoCancel(true)
-            setCategory(Notification.CATEGORY_ALARM)
-            setSubText(applicationContext.getString(R.string.notification_sub_text))
+        return alarmNotificationBuilder.apply {
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(pendingIntent, true)
@@ -173,14 +175,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             intent = intent,
             flag = PendingIntent.FLAG_UPDATE_CURRENT
         )
-        return NotificationCompat.Builder(applicationContext, NotificationUtilsConstants.CHANNEL_ID).apply {
-            color = Color.WHITE
-            setSmallIcon(R.drawable.baseline_access_time_24)
-            setCategory(Notification.CATEGORY_ALARM)
-            setSubText(applicationContext.getString(R.string.notification_sub_text))
-            setAutoCancel(false)
-            setContentTitle(applicationContext.getString(R.string.timer_notification_content_title))
-            setContentIntent(PendingIntent.getActivity(applicationContext, INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
+        return timerNotificationBuilder.apply {
             addAction(R.drawable.baseline_cancel_24, applicationContext.getString(R.string.timer_notification_action_label), pendingIntent)
         }.build()
     }

@@ -91,10 +91,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
                 setIsEnabledToFalse(alarmId = alarm.alarmId)
             }
 
-            val notification = createAlarmNotification(alarm = alarm)
             notificationManager.notify(
                 ALARM_NOTIFICATION_ID,
-                notification
+                createAlarmNotification(alarm = alarm)
             )
         } else {
             notificationManager.notify(

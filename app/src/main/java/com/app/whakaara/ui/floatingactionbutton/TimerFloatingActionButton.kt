@@ -16,7 +16,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -28,7 +30,6 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 
 @Composable
@@ -58,6 +59,7 @@ fun FloatingActionButtonPlayPauseStop(
 @Composable
 fun FloatingActionButtonStop(onStop: () -> Unit) {
     FloatingActionButton(
+        modifier = Modifier.testTag("floating action button stop"),
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
         onClick = onStop
     ) {
@@ -77,7 +79,9 @@ private fun FloatingActionButtonPlayPause(
     onStart: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-    val notificationPermissionState = rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS)
+    val notificationPermissionState = rememberPermissionStateSafe(
+        permission = Manifest.permission.POST_NOTIFICATIONS
+    )
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
@@ -87,6 +91,7 @@ private fun FloatingActionButtonPlayPause(
     }
 
     FloatingActionButton(
+        modifier = Modifier.testTag("floating action button play-pause"),
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
         onClick = {
             if (isPlaying) {

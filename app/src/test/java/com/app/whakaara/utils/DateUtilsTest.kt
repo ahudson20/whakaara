@@ -93,4 +93,36 @@ class DateUtilsTest {
         // Then
         assertEquals(millis, 1000) // 1 second = 1000 milliseconds
     }
+
+    @Test
+    fun `converting milliseconds to correct format for timer and stopwatch`() {
+        // Given
+        val millis = 1709460108645
+        val millisFormatted = "01:48:645"
+
+        // When
+        val formattedTime = DateUtils.formatTimeTimerAndStopwatch(timeMillis = millis)
+
+        // Then
+        assertEquals(formattedTime, millisFormatted)
+    }
+
+    @Test
+    fun `correct milliseconds from timer input values`() {
+        // Given
+        val hours = "2"
+        val minutes = "32"
+        val seconds = "1"
+        val millis: Long = 9121000
+
+        // When
+        val millisAfterConversion = DateUtils.generateMillisecondsFromTimerInputValues(
+            hours = hours,
+            minutes = minutes,
+            seconds = seconds
+        )
+
+        // Then
+        assertEquals(millis, millisAfterConversion)
+    }
 }

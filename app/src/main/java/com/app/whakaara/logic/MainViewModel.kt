@@ -19,11 +19,9 @@ import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.utils.DateUtils.Companion.formatTimeTimerAndStopwatch
+import com.app.whakaara.utils.DateUtils.Companion.generateMillisecondsFromTimerInputValues
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
-import com.app.whakaara.utils.DateUtils.Companion.hoursToMilliseconds
-import com.app.whakaara.utils.DateUtils.Companion.minutesToMilliseconds
-import com.app.whakaara.utils.DateUtils.Companion.secondsToMilliseconds
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
@@ -166,9 +164,7 @@ class MainViewModel @Inject constructor(
         Intent(app, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
-//            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
             putExtra(INTENT_AUTO_SILENCE, preferencesUiState.value.preferences.autoSilenceTime)
-//            putExtra(INTENT_TIME_FORMAT, preferencesUiState.value.preferences.is24HourFormat)
         }
 
     private fun setExactAlarm(
@@ -195,7 +191,6 @@ class MainViewModel @Inject constructor(
         val intent = Intent(app, NotificationReceiver::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarm.alarmId.toString()
-//            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
         }
 
         val pendingIntent = PendingIntentUtils.getBroadcast(
@@ -337,18 +332,6 @@ class MainViewModel @Inject constructor(
         ((_timerState.value.inputHours.toIntOrNull() ?: 0) > 0) ||
             ((_timerState.value.inputMinutes.toIntOrNull() ?: 0) > 0) ||
             ((_timerState.value.inputSeconds.toIntOrNull() ?: 0) > 0)
-
-    private fun generateMillisecondsFromTimerInputValues(
-        hours: String,
-        minutes: String,
-        seconds: String
-    ): Long {
-        var millis = ZERO_MILLIS
-        millis += hoursToMilliseconds(hours = hours.toIntOrNull() ?: 0)
-        millis += minutesToMilliseconds(minutes = minutes.toIntOrNull() ?: 0)
-        millis += secondsToMilliseconds(seconds = seconds.toIntOrNull() ?: 0)
-        return millis
-    }
 
     private fun createTimerNotification(
         milliseconds: Long

@@ -4,6 +4,7 @@ import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
+import com.app.whakaara.utils.constants.GeneralConstants
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDateTime
@@ -129,6 +130,18 @@ class DateUtils {
             )
             val formatter = DateTimeFormatter.ofPattern(DateUtilsConstants.TIMER_MIN_SEC_MILLIS, Locale.getDefault())
             return localDateTime.format(formatter)
+        }
+
+        fun generateMillisecondsFromTimerInputValues(
+            hours: String,
+            minutes: String,
+            seconds: String
+        ): Long {
+            var millis = GeneralConstants.ZERO_MILLIS
+            millis += hoursToMilliseconds(hours = hours.toIntOrNull() ?: 0)
+            millis += minutesToMilliseconds(minutes = minutes.toIntOrNull() ?: 0)
+            millis += secondsToMilliseconds(seconds = seconds.toIntOrNull() ?: 0)
+            return millis
         }
     }
 }

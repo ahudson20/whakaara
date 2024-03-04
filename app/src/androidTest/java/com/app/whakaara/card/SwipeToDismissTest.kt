@@ -17,6 +17,7 @@ class SwipeToDismissTest {
 
     @Test
     fun shouldDisplayDeleteIcon(): Unit = with(composeTestRule) {
+        // Given + When
         setContent {
             WhakaaraTheme {
                 DismissBackground(
@@ -24,6 +25,8 @@ class SwipeToDismissTest {
                 )
             }
         }
+
+        // Then
         onNodeWithContentDescription(label = "delete icon", ignoreCase = true).assertIsDisplayed()
     }
 }

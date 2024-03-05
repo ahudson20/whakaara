@@ -1,14 +1,17 @@
 package com.app.whakaara.activities
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
@@ -18,7 +21,6 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -38,17 +40,19 @@ class FullScreenNotificationActivity : ComponentActivity() {
         alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
 
         setContent {
+            val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
             WhakaaraTheme {
                 NotificationFullScreen(
                     alarm = alarm,
                     snooze = viewModel::snooze,
                     disable = viewModel::disable,
-                    is24HourFormat = intent.getBooleanExtra(INTENT_TIME_FORMAT, true)
+                    is24HourFormat = pref.preferences.is24HourFormat
                 )
             }
         }
     }
 
+    @SuppressLint("MissingSuperCall")
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()

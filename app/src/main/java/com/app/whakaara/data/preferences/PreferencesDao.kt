@@ -18,4 +18,7 @@ interface PreferencesDao {
 
     @Query("SELECT * FROM preferences_table")
     fun getPreferencesFlow(): Flow<Preferences>
+
+    @Query("SELECT * FROM preferences_table")
+    fun getPreferences(): Preferences
 }

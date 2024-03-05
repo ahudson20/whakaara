@@ -1,36 +1,25 @@
 package com.app.whakaara.logic
 
-import android.app.AlarmManager
-import android.app.Application
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.provider.Settings
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
+import android.os.CountDownTimer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
-import com.app.whakaara.receiver.NotificationReceiver
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.StopwatchState
+import com.app.whakaara.state.TimerState
+import com.app.whakaara.utils.DateUtils.Companion.formatTimeTimerAndStopwatch
+import com.app.whakaara.utils.DateUtils.Companion.generateMillisecondsFromTimerInputValues
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
-import com.app.whakaara.utils.DateUtils.Companion.getTimeInMillis
-import com.app.whakaara.utils.GeneralUtils
-import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_MIN_SEC_MILLIS
+import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
+import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
+import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIME_FORMAT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,39 +29,37 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
-import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val app: Application,
     private val repository: AlarmRepository,
-    private val preferencesRepository: PreferencesRepository
-) : AndroidViewModel(app) {
+    private val preferencesRepository: PreferencesRepository,
+    private val alarmManagerWrapper: AlarmManagerWrapper
+) : ViewModel() {
 
     // alarm
-    private val _uiState = MutableStateFlow(AlarmState())
-    val uiState: StateFlow<AlarmState> = _uiState.asStateFlow()
+    private val _alarmState = MutableStateFlow(AlarmState())
+    val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()
 
     // preferences
     private val _preferencesState = MutableStateFlow(PreferencesState())
     val preferencesUiState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
-    // timer
+    // stopwatch
     private var coroutineScope = CoroutineScope(Dispatchers.Main)
 
-    private var timeMillis by mutableLongStateOf(ZERO_MILLIS)
-    private var lastTimeStamp by mutableLongStateOf(ZERO_MILLIS)
+    private val _stopwatchState = MutableStateFlow(StopwatchState())
+    val stopwatchState: StateFlow<StopwatchState> = _stopwatchState.asStateFlow()
 
-    var formattedTime by mutableStateOf(TIMER_STARTING_FORMAT)
-    var isActive by mutableStateOf(false)
-    var isStart by mutableStateOf(true)
+    // timer
+    private var countDownTimer: CountDownTimer? = null
+
+    private val _timerState = MutableStateFlow(TimerState())
+    val timerState: StateFlow<TimerState> = _timerState.asStateFlow()
 
     init {
         getAllAlarms()
@@ -94,46 +81,58 @@ class MainViewModel @Inject constructor(
     //region alarm
     private fun getAllAlarms() = viewModelScope.launch {
         repository.getAllAlarmsFlow().flowOn(Dispatchers.IO).collect { allAlarms ->
-            _uiState.value = AlarmState(alarms = allAlarms)
+            _alarmState.value = AlarmState(alarms = allAlarms)
         }
     }
 
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        createAlarm(alarm)
+        alarmManagerWrapper.createAlarm(
+            alarmId = alarm.alarmId.toString(),
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            date = alarm.date
+        )
         repository.insert(alarm)
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        stopAlarm(alarm)
+        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         repository.delete(alarm)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
-        stopAlarm(alarm)
+        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = true))
-        stopAlarm(alarm)
-        createAlarm(alarm)
+        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
+        alarmManagerWrapper.createAlarm(
+            alarmId = alarm.alarmId.toString(),
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            date = alarm.date
+        )
     }
 
     fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm)
-        stopAlarm(alarm)
-        createAlarm(alarm)
+        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
+        alarmManagerWrapper.createAlarm(
+            alarmId = alarm.alarmId.toString(),
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            date = alarm.date
+        )
     }
 
     fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         val currentTimePlusTenMinutes = Calendar.getInstance().apply {
             add(Calendar.MINUTE, _preferencesState.value.preferences.snoozeTime)
         }
-        stopAlarm(alarm)
-        createAlarm(
-            alarm.copy(
-                date = currentTimePlusTenMinutes
-            )
+        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
+        alarmManagerWrapper.createAlarm(
+            alarmId = alarm.alarmId.toString(),
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            date = currentTimePlusTenMinutes
         )
     }
 
@@ -142,75 +141,8 @@ class MainViewModel @Inject constructor(
             repository.update(alarm)
         }
 
-    private fun createAlarm(
-        alarm: Alarm
-    ) {
-        val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        if (!userHasNotGrantedAlarmPermission(alarmManager)) {
-            redirectUserToSpecialAppAccessScreen()
-        } else {
-            setExactAlarm(alarm, alarmManager)
-        }
-    }
-
-    private fun userHasNotGrantedAlarmPermission(alarmManager: AlarmManager) =
-        alarmManager.canScheduleExactAlarms()
-
-    private fun redirectUserToSpecialAppAccessScreen() {
-        Intent().apply { action = Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM }.also {
-            app.applicationContext.startActivity(it)
-        }
-    }
-
-    private fun getStartReceiverIntent(alarm: Alarm) =
-        Intent(app, NotificationReceiver::class.java).apply {
-            // setting unique action allows for differentiation when deleting.
-            this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
-            putExtra(INTENT_AUTO_SILENCE, preferencesUiState.value.preferences.autoSilenceTime)
-            putExtra(INTENT_TIME_FORMAT, preferencesUiState.value.preferences.is24HourFormat)
-        }
-
-    private fun setExactAlarm(
-        alarm: Alarm,
-        alarmManager: AlarmManager
-    ) {
-        val startReceiverIntent = getStartReceiverIntent(alarm)
-        val pendingIntent = PendingIntentUtils.getBroadcast(
-            context = app,
-            id = INTENT_REQUEST_CODE,
-            intent = startReceiverIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        alarmManager.setExactAndAllowWhileIdle(
-            AlarmManager.RTC_WAKEUP,
-            getTimeInMillis(alarm),
-            pendingIntent
-        )
-    }
-
-    private fun stopAlarm(
-        alarm: Alarm
-    ) {
-        val alarmManager = app.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(app, NotificationReceiver::class.java).apply {
-            // setting unique action allows for differentiation when deleting.
-            this.action = alarm.alarmId.toString()
-            putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
-        }
-
-        val pendingIntent = PendingIntentUtils.getBroadcast(
-            context = app,
-            id = INTENT_REQUEST_CODE,
-            intent = intent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        alarmManager.cancel(pendingIntent)
-    }
-
     fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        _uiState.value.alarms.forEach {
+        _alarmState.value.alarms.forEach {
             updateExistingAlarmInDatabase(
                 it.copy(
                     subTitle = getAlarmTimeFormatted(
@@ -223,47 +155,177 @@ class MainViewModel @Inject constructor(
     }
     //endregion
 
-    //region timer
-    fun start() {
-        if (isActive) {
+    //region stopwatch
+    fun startStopwatch() {
+        if (_stopwatchState.value.isActive) {
             return
         }
 
         coroutineScope.launch {
-            lastTimeStamp = System.currentTimeMillis()
-            isActive = true
-            isStart = false
+            _stopwatchState.update {
+                it.copy(
+                    lastTimeStamp = System.currentTimeMillis(),
+                    isActive = true,
+                    isStart = false
+                )
+            }
 
-            while (isActive) {
+            while (_stopwatchState.value.isActive) {
                 delay(TIMER_START_DELAY_MILLIS)
-                timeMillis += System.currentTimeMillis() - lastTimeStamp
-                lastTimeStamp = System.currentTimeMillis()
-                formattedTime = formatTime(timeMillis)
+                val time = _stopwatchState.value.timeMillis + (System.currentTimeMillis() - _stopwatchState.value.lastTimeStamp)
+                _stopwatchState.update {
+                    it.copy(
+                        timeMillis = time,
+                        lastTimeStamp = System.currentTimeMillis(),
+                        formattedTime = formatTimeTimerAndStopwatch(time)
+                    )
+                }
             }
         }
     }
 
-    fun pause() {
-        isActive = false
+    fun pauseStopwatch() {
+        _stopwatchState.update {
+            it.copy(
+                isActive = false
+            )
+        }
+    }
+
+    fun resetStopwatch() {
+        coroutineScope.cancel()
+        coroutineScope = CoroutineScope(Dispatchers.Main)
+        _stopwatchState.update {
+            it.copy(
+                timeMillis = ZERO_MILLIS,
+                lastTimeStamp = ZERO_MILLIS,
+                formattedTime = TIMER_STARTING_FORMAT,
+                isActive = false,
+                isStart = true
+            )
+        }
+    }
+    //endregion
+
+    //region timer
+    fun updateInputHours(newValue: String) {
+        _timerState.update {
+            it.copy(
+                inputHours = newValue
+            )
+        }
+    }
+
+    fun updateInputMinutes(newValue: String) {
+        _timerState.update {
+            it.copy(
+                inputMinutes = newValue
+            )
+        }
+    }
+
+    fun updateInputSeconds(newValue: String) {
+        _timerState.update {
+            it.copy(
+                inputSeconds = newValue
+            )
+        }
+    }
+
+    fun startTimer() {
+        if (_timerState.value.isTimerPaused) {
+            startCountDownTimer(
+                timeToCountDown = _timerState.value.currentTime
+            )
+            updateTimerStateToStarted()
+        } else if (checkIfOneInputValueGreaterThanZero()) {
+            val millisecondsFromTimerInput = generateMillisecondsFromTimerInputValues(
+                hours = _timerState.value.inputHours,
+                minutes = _timerState.value.inputMinutes,
+                seconds = _timerState.value.inputSeconds
+            )
+            startCountDownTimer(
+                timeToCountDown = millisecondsFromTimerInput
+            )
+            updateTimerStateToStarted()
+            alarmManagerWrapper.createTimerNotification(milliseconds = millisecondsFromTimerInput)
+        }
+    }
+
+    private fun updateTimerStateToStarted() {
+        _timerState.update {
+            it.copy(
+                isTimerPaused = false,
+                isStart = false,
+                isTimerActive = true
+            )
+        }
+    }
+
+    private fun checkIfOneInputValueGreaterThanZero() =
+        ((_timerState.value.inputHours.toIntOrNull() ?: 0) > 0) ||
+            ((_timerState.value.inputMinutes.toIntOrNull() ?: 0) > 0) ||
+            ((_timerState.value.inputSeconds.toIntOrNull() ?: 0) > 0)
+
+    private fun startCountDownTimer(
+        timeToCountDown: Long
+    ) {
+        countDownTimer = object : CountDownTimer(timeToCountDown, TIMER_INTERVAL) {
+            override fun onTick(millisUntilFinished: Long) {
+                _timerState.update {
+                    it.copy(
+                        currentTime = millisUntilFinished,
+                        progress = millisUntilFinished.toFloat() / timeToCountDown,
+                        time = formatTimeTimerAndStopwatch(millisUntilFinished)
+                    )
+                }
+            }
+
+            override fun onFinish() {
+                _timerState.update {
+                    it.copy(
+                        isTimerPaused = false,
+                        isTimerActive = false,
+                        currentTime = ZERO_MILLIS,
+                        inputHours = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                        inputMinutes = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                        inputSeconds = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                        isStart = true,
+                        progress = STARTING_CIRCULAR_PROGRESS,
+                        time = TIMER_STARTING_FORMAT
+                    )
+                }
+            }
+        }.start()
+    }
+
+    fun pauseTimer() {
+        if (!_timerState.value.isTimerPaused) {
+            countDownTimer?.cancel()
+            _timerState.update {
+                it.copy(
+                    isTimerPaused = true,
+                    isTimerActive = false
+                )
+            }
+        }
     }
 
     fun resetTimer() {
-        coroutineScope.cancel()
-        coroutineScope = CoroutineScope(Dispatchers.Main)
-        timeMillis = ZERO_MILLIS
-        lastTimeStamp = ZERO_MILLIS
-        formattedTime = TIMER_STARTING_FORMAT
-        isActive = false
-        isStart = true
-    }
-
-    private fun formatTime(timeMillis: Long): String {
-        val localDateTime = LocalDateTime.ofInstant(
-            Instant.ofEpochMilli(timeMillis),
-            ZoneId.systemDefault()
-        )
-        val formatter = DateTimeFormatter.ofPattern(TIMER_MIN_SEC_MILLIS, Locale.getDefault())
-        return localDateTime.format(formatter)
+        countDownTimer?.cancel()
+        _timerState.update {
+            it.copy(
+                isTimerPaused = false,
+                isTimerActive = false,
+                currentTime = ZERO_MILLIS,
+                inputHours = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                inputMinutes = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                inputSeconds = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                isStart = true,
+                progress = STARTING_CIRCULAR_PROGRESS,
+                time = TIMER_STARTING_FORMAT
+            )
+        }
     }
     //endregion
 }

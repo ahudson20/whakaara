@@ -20,7 +20,7 @@ import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.GeneralConstants
+import com.app.whakaara.utils.constants.GeneralConstants.SETTINGS_SCREEN_TIME_LIST
 
 @Composable
 fun AlarmSettings(
@@ -78,10 +78,10 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        state = rememberIntSettingState(defaultValue = GeneralConstants.SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.snoozeTime }),
+        state = rememberIntSettingState(defaultValue = SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.snoozeTime }),
         modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
-        items = GeneralConstants.SETTINGS_SCREEN_TIME_LIST,
+        items = SETTINGS_SCREEN_TIME_LIST,
         onItemSelected = { _, text ->
             updatePreferences(
                 preferencesState.preferences.copy(
@@ -106,11 +106,11 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        state = rememberIntSettingState(defaultValue = GeneralConstants.SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.autoSilenceTime }),
+        state = rememberIntSettingState(defaultValue = SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.autoSilenceTime }),
         modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
-        items = GeneralConstants.SETTINGS_SCREEN_TIME_LIST,
+        items = SETTINGS_SCREEN_TIME_LIST,
         onItemSelected = { _, text ->
             updatePreferences(
                 preferencesState.preferences.copy(

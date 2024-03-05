@@ -10,4 +10,6 @@ class PreferencesImpl(
     override suspend fun updatePreferences(preferences: Preferences) = preferencesDao.updatePreferences(preferences)
 
     override fun getPreferencesFlow(): Flow<Preferences> = preferencesDao.getPreferencesFlow()
+
+    override fun getPreferences(): Preferences = preferencesDao.getPreferences()
 }

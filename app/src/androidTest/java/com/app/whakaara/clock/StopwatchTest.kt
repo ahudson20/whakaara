@@ -5,6 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.clock.Stopwatch
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
@@ -20,9 +21,11 @@ class StopwatchTest {
         setContent {
             WhakaaraTheme {
                 Stopwatch(
-                    formattedTime = "01:01:01",
-                    isActive = false,
-                    isStart = true
+                    stopwatchState = StopwatchState(
+                        formattedTime = "01:01:01",
+                        isActive = false,
+                        isStart = true
+                    )
                 )
             }
         }
@@ -39,9 +42,11 @@ class StopwatchTest {
         setContent {
             WhakaaraTheme {
                 Stopwatch(
-                    formattedTime = "01:01:01",
-                    isActive = false,
-                    isStart = false
+                    stopwatchState = StopwatchState(
+                        formattedTime = "01:01:01",
+                        isActive = false,
+                        isStart = false
+                    )
                 )
             }
         }
@@ -59,9 +64,11 @@ class StopwatchTest {
         setContent {
             WhakaaraTheme {
                 Stopwatch(
-                    formattedTime = "01:01:01",
-                    isActive = true,
-                    isStart = false
+                    stopwatchState = StopwatchState(
+                        formattedTime = "01:01:01",
+                        isActive = true,
+                        isStart = false
+                    )
                 )
             }
         }

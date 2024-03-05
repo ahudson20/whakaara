@@ -49,7 +49,9 @@ fun MainScreen(
     }
 
     val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
-    val alarms by viewModel.uiState.collectAsStateWithLifecycle()
+    val alarms by viewModel.alarmState.collectAsStateWithLifecycle()
+    val stopwatch by viewModel.stopwatchState.collectAsStateWithLifecycle()
+    val timer by viewModel.timerState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             TopBar(
@@ -101,7 +103,7 @@ fun MainScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(navController = navController, viewModel = viewModel, preferencesState = pref, alarmState = alarms)
+            NavGraph(navController = navController, viewModel = viewModel, preferencesState = pref, alarmState = alarms, stopwatchState = stopwatch, timerState = timer)
         }
     }
 }

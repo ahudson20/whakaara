@@ -13,6 +13,7 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
+import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
 import dagger.Module
@@ -89,4 +90,11 @@ class NotificationModule {
     @Singleton
     fun provideAlarmManager(app: Application): AlarmManager =
         app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
+
+    @Provides
+    @Singleton
+    fun providesAlarmManagerWrapper(
+        app: Application,
+        alarmManager: AlarmManager
+    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
 }

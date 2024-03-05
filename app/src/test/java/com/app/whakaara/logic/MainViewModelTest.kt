@@ -1,7 +1,5 @@
 package com.app.whakaara.logic
 
-import android.app.AlarmManager
-import android.app.Application
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.app.whakaara.data.alarm.Alarm
@@ -37,23 +35,21 @@ class MainViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    private lateinit var app: Application
     private lateinit var viewModel: MainViewModel
     private lateinit var repository: AlarmRepository
     private lateinit var preferencesRepository: PreferencesRepository
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
-    private lateinit var alarmManager: AlarmManager
+    private lateinit var alarmManagerWrapper: AlarmManagerWrapper
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         repository = mockk()
         preferencesRepository = mockk()
-        app = mockk()
-        alarmManager = mockk()
+        alarmManagerWrapper = mockk()
 
-        viewModel = MainViewModel(app, repository, preferencesRepository, alarmManager)
+        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper)
 
         alarms = listOf(
             Alarm(

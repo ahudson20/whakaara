@@ -31,7 +31,8 @@ class StopwatchTest {
         }
 
         // Then
-        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("01:01").assertIsDisplayed()
+        onNodeWithText("01").assertIsDisplayed()
 
         onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
     }
@@ -52,7 +53,8 @@ class StopwatchTest {
         }
 
         // Then
-        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("01:01").assertIsDisplayed()
+        onNodeWithText("01").assertIsDisplayed()
 
         onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
         onNodeWithContentDescription("Stop timer icon button").assertIsDisplayed().assertHasClickAction()
@@ -74,7 +76,8 @@ class StopwatchTest {
         }
 
         // Then
-        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("01:01").assertIsDisplayed()
+        onNodeWithText("01").assertIsDisplayed()
 
         onNodeWithContentDescription("Pause timer icon button").assertIsDisplayed().assertHasClickAction()
         onNodeWithContentDescription("Stop timer icon button").assertIsDisplayed().assertHasClickAction()

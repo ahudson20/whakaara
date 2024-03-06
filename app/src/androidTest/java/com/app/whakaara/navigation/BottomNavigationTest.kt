@@ -28,6 +28,6 @@ class BottomNavigationTest {
         // Then
         onNodeWithText("Alarm").assertIsDisplayed().assertIsSelectable()
         onNodeWithText("Timer").assertIsDisplayed().assertIsSelectable()
-        onNodeWithText("Settings").assertIsDisplayed().assertIsSelectable()
+        onNodeWithText("Stopwatch").assertIsDisplayed().assertIsSelectable()
     }
 }

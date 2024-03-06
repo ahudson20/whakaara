@@ -233,22 +233,23 @@ class MainViewModel @Inject constructor(
     }
 
     fun startTimer() {
+        val currentTimeInMillis = Calendar.getInstance().timeInMillis
         if (_timerState.value.isTimerPaused) {
             startCountDownTimer(
                 timeToCountDown = _timerState.value.currentTime
             )
             updateTimerStateToStarted()
+            alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + _timerState.value.currentTime)
         } else if (checkIfOneInputValueGreaterThanZero()) {
             val millisecondsFromTimerInput = generateMillisecondsFromTimerInputValues(
                 hours = _timerState.value.inputHours,
                 minutes = _timerState.value.inputMinutes,
                 seconds = _timerState.value.inputSeconds
             )
-            startCountDownTimer(
-                timeToCountDown = millisecondsFromTimerInput
-            )
+
+            startCountDownTimer(timeToCountDown = millisecondsFromTimerInput)
             updateTimerStateToStarted()
-            alarmManagerWrapper.createTimerNotification(milliseconds = millisecondsFromTimerInput)
+            alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + millisecondsFromTimerInput)
         }
     }
 
@@ -302,6 +303,7 @@ class MainViewModel @Inject constructor(
     fun pauseTimer() {
         if (!_timerState.value.isTimerPaused) {
             countDownTimer?.cancel()
+            alarmManagerWrapper.cancelTimerNotification()
             _timerState.update {
                 it.copy(
                     isTimerPaused = true,
@@ -313,6 +315,7 @@ class MainViewModel @Inject constructor(
 
     fun resetTimer() {
         countDownTimer?.cancel()
+        alarmManagerWrapper.cancelTimerNotification()
         _timerState.update {
             it.copy(
                 isTimerPaused = false,

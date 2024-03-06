@@ -15,16 +15,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.data.preferences.Preferences
+import com.app.whakaara.state.AlarmState
+import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.StopwatchState
+import com.app.whakaara.state.TimerState
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButton
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
+import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.ThemePreviews
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
@@ -36,29 +42,45 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    viewModel: MainViewModel
+    preferencesState: PreferencesState,
+    alarmState: AlarmState,
+    stopwatchState: StopwatchState,
+    timerState: TimerState,
+    create: (alarm: Alarm) -> Unit,
+    delete: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit,
+    updateHours: (newValue: String) -> Unit,
+    updateMinutes: (newValue: String) -> Unit,
+    updateSeconds: (newValue: String) -> Unit,
+    startTimer: () -> Unit,
+    stopTimer: () -> Unit,
+    pauseTimer: () -> Unit,
+    onStart: () -> Unit,
+    onPause: () -> Unit,
+    onStop: () -> Unit,
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val navController = rememberNavController()
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
-        if (wasGranted) {
-            isDialogShown.value = !isDialogShown.value
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
+            if (wasGranted) {
+                isDialogShown.value = !isDialogShown.value
+            }
         }
-    }
 
-    val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
-    val alarms by viewModel.alarmState.collectAsStateWithLifecycle()
-    val stopwatch by viewModel.stopwatchState.collectAsStateWithLifecycle()
-    val timer by viewModel.timerState.collectAsStateWithLifecycle()
     Scaffold(
         topBar = {
             TopBar(
                 route = navBackStackEntry?.destination?.route.toString(),
-                preferencesState = pref,
-                updatePreferences = viewModel::updatePreferences,
-                updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
+                preferencesState = preferencesState,
+                updatePreferences = updatePreferences,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
         },
         bottomBar = { BottomNavigation(navController = navController) },
@@ -79,13 +101,16 @@ fun MainScreen(
                                     set(Calendar.MINUTE, it.minute)
                                     set(Calendar.SECOND, 0)
                                 }
-                                viewModel.create(
+                                create(
                                     Alarm(
                                         date = date,
-                                        subTitle = getAlarmTimeFormatted(date = date, is24HourFormatEnabled = pref.preferences.is24HourFormat),
-                                        vibration = pref.preferences.isVibrateEnabled,
-                                        isSnoozeEnabled = pref.preferences.isSnoozeEnabled,
-                                        deleteAfterGoesOff = pref.preferences.deleteAfterGoesOff
+                                        subTitle = getAlarmTimeFormatted(
+                                            date = date,
+                                            is24HourFormatEnabled = preferencesState.preferences.is24HourFormat
+                                        ),
+                                        vibration = preferencesState.preferences.isVibrateEnabled,
+                                        isSnoozeEnabled = preferencesState.preferences.isSnoozeEnabled,
+                                        deleteAfterGoesOff = preferencesState.preferences.deleteAfterGoesOff
                                     )
                                 )
                                 isDialogShown.value = false
@@ -103,22 +128,62 @@ fun MainScreen(
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(navController = navController, viewModel = viewModel, preferencesState = pref, alarmState = alarms, stopwatchState = stopwatch, timerState = timer)
+            NavGraph(
+                navController = navController,
+                preferencesState = preferencesState,
+                alarmState = alarmState,
+                stopwatchState = stopwatchState,
+                timerState = timerState,
+
+                delete = delete,
+                disable = disable,
+                enable = enable,
+                reset = reset,
+
+                updateHours = updateHours,
+                updateMinutes = updateMinutes,
+                updateSeconds = updateSeconds,
+                startTimer = startTimer,
+                stopTimer = stopTimer,
+                pauseTimer = pauseTimer,
+
+                onStart = onStart,
+                onPause = onPause,
+                onStop = onStop,
+
+                updatePreferences = updatePreferences,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
+            )
         }
     }
 }
 
-/**
- * NOTE:
- * previews don't work for composables that have VM as parameter.
- * **/
-// @Composable
-// @ThemePreviews
-// @FontScalePreviews
-// fun MainPreview() {
-//     WhakaaraTheme {
-//         MainScreen(
-//             viewModel = hiltViewModel()
-//         )
-//     }
-// }
+@Composable
+@ThemePreviews
+@FontScalePreviews
+fun MainPreview() {
+    WhakaaraTheme {
+        MainScreen(
+            preferencesState = PreferencesState(),
+            alarmState = AlarmState(),
+            stopwatchState = StopwatchState(),
+            timerState = TimerState(),
+            create = {},
+            delete = {},
+            disable = {},
+            enable = {},
+            reset = {},
+            updateHours = {},
+            updateMinutes = {},
+            updateSeconds = {},
+            startTimer = {},
+            stopTimer = {},
+            pauseTimer = {},
+            onStart = {},
+            onPause = {},
+            onStop = {},
+            updatePreferences = {},
+            updateAllAlarmSubtitles = {}
+        )
+    }
+}

@@ -4,7 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
@@ -17,11 +18,30 @@ import com.app.whakaara.ui.screens.TimerScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    viewModel: MainViewModel,
+//    viewModel: MainViewModel,
     preferencesState: PreferencesState,
     alarmState: AlarmState,
     stopwatchState: StopwatchState,
-    timerState: TimerState
+    timerState: TimerState,
+
+    delete: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit,
+
+    updateHours: (newValue: String) -> Unit,
+    updateMinutes: (newValue: String) -> Unit,
+    updateSeconds: (newValue: String) -> Unit,
+    startTimer: () -> Unit,
+    stopTimer: () -> Unit,
+    pauseTimer: () -> Unit,
+
+    onStart: () -> Unit,
+    onPause: () -> Unit,
+    onStop: () -> Unit,
+
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -33,10 +53,10 @@ fun NavGraph(
             AlarmScreen(
                 alarmState = alarmState,
                 preferencesState = preferencesState,
-                delete = viewModel::delete,
-                disable = viewModel::disable,
-                enable = viewModel::enable,
-                reset = viewModel::reset
+                delete = delete,
+                disable = disable,
+                enable = enable,
+                reset = reset
             )
         }
 
@@ -45,12 +65,12 @@ fun NavGraph(
         ) {
             TimerScreen(
                 timerState = timerState,
-                updateHours = viewModel::updateInputHours,
-                updateMinutes = viewModel::updateInputMinutes,
-                updateSeconds = viewModel::updateInputSeconds,
-                startTimer = viewModel::startTimer,
-                stopTimer = viewModel::resetTimer,
-                pauseTimer = viewModel::pauseTimer
+                updateHours = updateHours,
+                updateMinutes = updateMinutes,
+                updateSeconds = updateSeconds,
+                startTimer = startTimer,
+                stopTimer = stopTimer,
+                pauseTimer = pauseTimer
             )
         }
 
@@ -59,9 +79,9 @@ fun NavGraph(
         ) {
             StopwatchScreen(
                 stopwatchState = stopwatchState,
-                onStart = viewModel::startStopwatch,
-                onPause = viewModel::pauseStopwatch,
-                onStop = viewModel::resetStopwatch
+                onStart = onStart,
+                onPause = onPause,
+                onStop = onStop
             )
         }
 
@@ -70,8 +90,8 @@ fun NavGraph(
         ) {
             SettingsScreen(
                 preferencesState = preferencesState,
-                updatePreferences = viewModel::updatePreferences,
-                updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
+                updatePreferences = updatePreferences,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
         }
     }

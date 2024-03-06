@@ -163,6 +163,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             setContentText(alarm.subTitle)
             setFullScreenIntent(pendingIntent, true)
             setWhen(alarm.date.timeInMillis)
+            setDeleteIntent(pendingIntent)
         }.build()
     }
 
@@ -176,6 +177,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         )
         return timerNotificationBuilder.apply {
             addAction(R.drawable.baseline_cancel_24, applicationContext.getString(R.string.timer_notification_action_label), pendingIntent)
+            setDeleteIntent(pendingIntent)
         }.build()
     }
 

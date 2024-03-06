@@ -59,7 +59,6 @@ class AlarmManagerWrapper @Inject constructor(
         val startReceiverIntent = getStartReceiverIntent(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
-            action = PLAY,
             type = NOTIFICATION_TYPE_ALARM
         )
 
@@ -85,7 +84,7 @@ class AlarmManagerWrapper @Inject constructor(
 
     private fun getStartReceiverIntent(
         autoSilenceTime: Int,
-        action: Int,
+        action: Int = PLAY,
         type: Int,
         alarmId: String? = null
     ) =
@@ -119,8 +118,8 @@ class AlarmManagerWrapper @Inject constructor(
         milliseconds: Long
     ) {
         val startReceiverIntent = getStartReceiverIntent(
+            alarmId = "timer_notification",
             autoSilenceTime = ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES,
-            action = PLAY,
             type = NOTIFICATION_TYPE_TIMER
         )
 
@@ -136,5 +135,25 @@ class AlarmManagerWrapper @Inject constructor(
             milliseconds,
             pendingIntent
         )
+    }
+
+    fun cancelTimerNotification() {
+        val startReceiverIntent = Intent(app, MediaPlayerService::class.java).apply {
+            this.action = "timer_notification"
+        }
+//            getStartReceiverIntent(
+//            alarmId = "timer_notification",
+//            autoSilenceTime = ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES,
+//            type = NOTIFICATION_TYPE_TIMER
+//        )
+
+        val pendingIntent = PendingIntentUtils.getService(
+            context = app,
+            id = INTENT_REQUEST_CODE,
+            intent = startReceiverIntent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        alarmManager.cancel(pendingIntent)
     }
 }

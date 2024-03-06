@@ -35,26 +35,13 @@
             android:theme="@style/Theme.Whakaara" />
 
         <receiver
-            android:name="com.app.whakaara.receiver.NotificationReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.NOTIFY" />
-            </intent-filter>
-        </receiver>
-        <receiver
             android:name="com.app.whakaara.receiver.PermissionGrantedReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-        <receiver
-            android:name=".receiver.TimerNotificationReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.intent.action.NOTIFY" />
-            </intent-filter>
-        </receiver>
+
         <receiver android:name=".receiver.MediaServiceReceiver"
             android:exported="false">
         </receiver>

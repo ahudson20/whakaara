@@ -14,6 +14,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_SOUND_T
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_TIMER_NOTIFICATION_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
@@ -118,7 +119,7 @@ class AlarmManagerWrapper @Inject constructor(
         milliseconds: Long
     ) {
         val startReceiverIntent = getStartReceiverIntent(
-            alarmId = "timer_notification",
+            alarmId = INTENT_TIMER_NOTIFICATION_ID,
             autoSilenceTime = ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES,
             type = NOTIFICATION_TYPE_TIMER
         )
@@ -139,13 +140,8 @@ class AlarmManagerWrapper @Inject constructor(
 
     fun cancelTimerNotification() {
         val startReceiverIntent = Intent(app, MediaPlayerService::class.java).apply {
-            this.action = "timer_notification"
+            this.action = INTENT_TIMER_NOTIFICATION_ID
         }
-//            getStartReceiverIntent(
-//            alarmId = "timer_notification",
-//            autoSilenceTime = ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES,
-//            type = NOTIFICATION_TYPE_TIMER
-//        )
 
         val pendingIntent = PendingIntentUtils.getService(
             context = app,

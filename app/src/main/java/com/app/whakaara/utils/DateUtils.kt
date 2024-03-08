@@ -1,18 +1,16 @@
 package com.app.whakaara.utils
 
-import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
-import com.app.whakaara.utils.constants.GeneralConstants
+import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_FORMAT
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_FORMAT
+import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 class DateUtils {
     companion object {
@@ -123,13 +121,16 @@ class DateUtils {
             return seconds * millisecondsInSecond
         }
 
-        fun formatTimeTimerAndStopwatch(timeMillis: Long): String {
-            val localDateTime = LocalDateTime.ofInstant(
-                Instant.ofEpochMilli(timeMillis),
-                ZoneId.systemDefault()
-            )
-            val formatter = DateTimeFormatter.ofPattern(DateUtilsConstants.TIMER_MIN_SEC_MILLIS, Locale.getDefault())
-            return localDateTime.format(formatter)
+        fun formatTimeForTimer(millis: Long): String {
+            return millis.milliseconds.toComponents { hours, minutes, seconds, _ ->
+                TIMER_FORMAT.format(hours, minutes, seconds)
+            }
+        }
+
+        fun formatTimeForStopwatch(millis: Long): String {
+            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
+                STOPWATCH_FORMAT.format(hours, minutes, seconds, TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS))
+            }
         }
 
         fun generateMillisecondsFromTimerInputValues(
@@ -137,7 +138,7 @@ class DateUtils {
             minutes: String,
             seconds: String
         ): Long {
-            var millis = GeneralConstants.ZERO_MILLIS
+            var millis = ZERO_MILLIS
             millis += hoursToMilliseconds(hours = hours.toIntOrNull() ?: 0)
             millis += minutesToMilliseconds(minutes = minutes.toIntOrNull() ?: 0)
             millis += secondsToMilliseconds(seconds = seconds.toIntOrNull() ?: 0)

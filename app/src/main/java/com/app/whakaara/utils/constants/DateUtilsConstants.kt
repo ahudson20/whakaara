@@ -7,8 +7,11 @@ object DateUtilsConstants {
     const val DATE_FORMAT_12_HOUR = "h:mm aa"
     const val DATE_FORMAT_12_HOUR_WITH_SECONDS = "hh:mm:ss aa"
 
-    const val TIMER_MIN_SEC_MILLIS = "mm:ss:SSS"
-    const val TIMER_STARTING_FORMAT = "00:00:000"
+    const val STOPWATCH_FORMAT = "%02d:%02d:%02d:%03d"
+    const val STOPWATCH_STARTING_TIME = "00:00:00:000"
+
+    const val TIMER_FORMAT = "%02d:%02d:%02d"
+    const val TIMER_STARTING_FORMAT = "00:00:00"
 
     const val BOTTOM_SHEET_ALARM_LABEL_OFF = "Off"
 

@@ -11,10 +11,12 @@ import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
-import com.app.whakaara.utils.DateUtils.Companion.formatTimeTimerAndStopwatch
+import com.app.whakaara.utils.DateUtils.Companion.formatTimeForStopwatch
+import com.app.whakaara.utils.DateUtils.Companion.formatTimeForTimer
 import com.app.whakaara.utils.DateUtils.Companion.generateMillisecondsFromTimerInputValues
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.constants.DateUtilsConstants
+import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
 import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
@@ -177,7 +179,9 @@ class MainViewModel @Inject constructor(
                     it.copy(
                         timeMillis = time,
                         lastTimeStamp = System.currentTimeMillis(),
-                        formattedTime = formatTimeTimerAndStopwatch(time)
+                        formattedTime = formatTimeForStopwatch(
+                            millis = time
+                        )
                     )
                 }
             }
@@ -199,7 +203,7 @@ class MainViewModel @Inject constructor(
             it.copy(
                 timeMillis = ZERO_MILLIS,
                 lastTimeStamp = ZERO_MILLIS,
-                formattedTime = TIMER_STARTING_FORMAT,
+                formattedTime = STOPWATCH_STARTING_TIME,
                 isActive = false,
                 isStart = true
             )
@@ -277,7 +281,9 @@ class MainViewModel @Inject constructor(
                     it.copy(
                         currentTime = millisUntilFinished,
                         progress = millisUntilFinished.toFloat() / timeToCountDown,
-                        time = formatTimeTimerAndStopwatch(millisUntilFinished)
+                        time = formatTimeForTimer(
+                            millis = millisUntilFinished
+                        )
                     )
                 }
             }

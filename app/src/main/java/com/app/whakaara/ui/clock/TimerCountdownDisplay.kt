@@ -58,7 +58,7 @@ fun TimerCountdownDisplayPreview() {
     WhakaaraTheme {
         TimerCountdownDisplay(
             progress = 1.0F,
-            time = "00:00:010"
+            time = "00:00:00"
         )
     }
 }

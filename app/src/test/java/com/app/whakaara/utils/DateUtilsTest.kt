@@ -95,13 +95,26 @@ class DateUtilsTest {
     }
 
     @Test
-    fun `converting milliseconds to correct format for timer and stopwatch`() {
+    fun `converting milliseconds to correct format for timer`() {
         // Given
-        val millis = 1709460108645
-        val millisFormatted = "01:48:645"
+        val millis = 12312312.toLong()
+        val millisFormatted = "03:25:12"
 
         // When
-        val formattedTime = DateUtils.formatTimeTimerAndStopwatch(timeMillis = millis)
+        val formattedTime = DateUtils.formatTimeForTimer(millis = millis)
+
+        // Then
+        assertEquals(formattedTime, millisFormatted)
+    }
+
+    @Test
+    fun `converting milliseconds to correct format for stopwatch`() {
+        // Given
+        val millis = 12312312.toLong()
+        val millisFormatted = "03:25:12:312"
+
+        // When
+        val formattedTime = DateUtils.formatTimeForStopwatch(millis = millis)
 
         // Then
         assertEquals(formattedTime, millisFormatted)

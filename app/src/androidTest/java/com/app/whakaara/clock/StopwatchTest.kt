@@ -22,7 +22,7 @@ class StopwatchTest {
             WhakaaraTheme {
                 Stopwatch(
                     stopwatchState = StopwatchState(
-                        formattedTime = "01:01:01",
+                        formattedTime = "01:01:01:001",
                         isActive = false,
                         isStart = true
                     )
@@ -31,8 +31,8 @@ class StopwatchTest {
         }
 
         // Then
-        onNodeWithText("01:01").assertIsDisplayed()
-        onNodeWithText("01").assertIsDisplayed()
+        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("001").assertIsDisplayed()
 
         onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
     }
@@ -44,7 +44,7 @@ class StopwatchTest {
             WhakaaraTheme {
                 Stopwatch(
                     stopwatchState = StopwatchState(
-                        formattedTime = "01:01:01",
+                        formattedTime = "01:01:01:001",
                         isActive = false,
                         isStart = false
                     )
@@ -53,8 +53,8 @@ class StopwatchTest {
         }
 
         // Then
-        onNodeWithText("01:01").assertIsDisplayed()
-        onNodeWithText("01").assertIsDisplayed()
+        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("001").assertIsDisplayed()
 
         onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
         onNodeWithContentDescription("Stop timer icon button").assertIsDisplayed().assertHasClickAction()
@@ -67,7 +67,7 @@ class StopwatchTest {
             WhakaaraTheme {
                 Stopwatch(
                     stopwatchState = StopwatchState(
-                        formattedTime = "01:01:01",
+                        formattedTime = "01:01:01:001",
                         isActive = true,
                         isStart = false
                     )
@@ -76,8 +76,8 @@ class StopwatchTest {
         }
 
         // Then
-        onNodeWithText("01:01").assertIsDisplayed()
-        onNodeWithText("01").assertIsDisplayed()
+        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("001").assertIsDisplayed()
 
         onNodeWithContentDescription("Pause timer icon button").assertIsDisplayed().assertHasClickAction()
         onNodeWithContentDescription("Stop timer icon button").assertIsDisplayed().assertHasClickAction()

@@ -15,8 +15,10 @@ import com.app.whakaara.utils.DateUtils.Companion.formatTimeForStopwatch
 import com.app.whakaara.utils.DateUtils.Companion.formatTimeForTimer
 import com.app.whakaara.utils.DateUtils.Companion.generateMillisecondsFromTimerInputValues
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
-import com.app.whakaara.utils.constants.DateUtilsConstants
 import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_FINISH
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_PAUSED
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
 import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
@@ -239,10 +241,8 @@ class MainViewModel @Inject constructor(
     fun startTimer() {
         val currentTimeInMillis = Calendar.getInstance().timeInMillis
         if (_timerState.value.isTimerPaused) {
-            startCountDownTimer(
-                timeToCountDown = _timerState.value.currentTime
-            )
-            updateTimerStateToStarted()
+            startCountDownTimer(timeToCountDown = _timerState.value.currentTime)
+            updateTimerStateToStarted(millisecondsToAdd = _timerState.value.currentTime)
             alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + _timerState.value.currentTime)
         } else if (checkIfOneInputValueGreaterThanZero()) {
             val millisecondsFromTimerInput = generateMillisecondsFromTimerInputValues(
@@ -252,17 +252,25 @@ class MainViewModel @Inject constructor(
             )
 
             startCountDownTimer(timeToCountDown = millisecondsFromTimerInput)
-            updateTimerStateToStarted()
+            updateTimerStateToStarted(millisecondsToAdd = millisecondsFromTimerInput)
             alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + millisecondsFromTimerInput)
         }
     }
 
-    private fun updateTimerStateToStarted() {
+    private fun updateTimerStateToStarted(
+        millisecondsToAdd: Long
+    ) {
         _timerState.update {
             it.copy(
                 isTimerPaused = false,
                 isStart = false,
-                isTimerActive = true
+                isTimerActive = true,
+                finishTime = getAlarmTimeFormatted(
+                    date = Calendar.getInstance().apply {
+                        add(Calendar.MILLISECOND, millisecondsToAdd.toInt())
+                    },
+                    is24HourFormatEnabled = _preferencesState.value.preferences.is24HourFormat
+                )
             )
         }
     }
@@ -294,12 +302,13 @@ class MainViewModel @Inject constructor(
                         isTimerPaused = false,
                         isTimerActive = false,
                         currentTime = ZERO_MILLIS,
-                        inputHours = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
-                        inputMinutes = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
-                        inputSeconds = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                        inputHours = TIMER_INPUT_INITIAL_VALUE,
+                        inputMinutes = TIMER_INPUT_INITIAL_VALUE,
+                        inputSeconds = TIMER_INPUT_INITIAL_VALUE,
                         isStart = true,
                         progress = STARTING_CIRCULAR_PROGRESS,
-                        time = TIMER_STARTING_FORMAT
+                        time = TIMER_STARTING_FORMAT,
+                        finishTime = TIMER_FINISH
                     )
                 }
             }
@@ -313,7 +322,8 @@ class MainViewModel @Inject constructor(
             _timerState.update {
                 it.copy(
                     isTimerPaused = true,
-                    isTimerActive = false
+                    isTimerActive = false,
+                    finishTime = TIMER_PAUSED
                 )
             }
         }
@@ -327,12 +337,13 @@ class MainViewModel @Inject constructor(
                 isTimerPaused = false,
                 isTimerActive = false,
                 currentTime = ZERO_MILLIS,
-                inputHours = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
-                inputMinutes = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
-                inputSeconds = DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+                inputHours = TIMER_INPUT_INITIAL_VALUE,
+                inputMinutes = TIMER_INPUT_INITIAL_VALUE,
+                inputSeconds = TIMER_INPUT_INITIAL_VALUE,
                 isStart = true,
                 progress = STARTING_CIRCULAR_PROGRESS,
-                time = TIMER_STARTING_FORMAT
+                time = TIMER_STARTING_FORMAT,
+                finishTime = TIMER_FINISH
             )
         }
     }

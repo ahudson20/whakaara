@@ -5,6 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -59,6 +60,7 @@ fun FloatingActionButtonPlayPauseStop(
 @Composable
 fun FloatingActionButtonStop(onStop: () -> Unit) {
     FloatingActionButton(
+        shape = CircleShape,
         modifier = Modifier.testTag("floating action button stop"),
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
         onClick = onStop
@@ -92,6 +94,7 @@ private fun FloatingActionButtonPlayPause(
 
     FloatingActionButton(
         modifier = Modifier.testTag("floating action button play-pause"),
+        shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
         onClick = {
             if (isPlaying) {

@@ -118,7 +118,8 @@ fun TimerScreen(
             } else {
                 TimerCountdownDisplay(
                     progress = timerState.progress,
-                    time = timerState.time
+                    time = timerState.time,
+                    finishTime = timerState.finishTime
                 )
             }
         }

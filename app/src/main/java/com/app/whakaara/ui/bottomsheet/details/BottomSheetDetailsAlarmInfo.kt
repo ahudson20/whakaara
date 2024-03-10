@@ -21,12 +21,9 @@ import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.app.whakaara.R
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.StringStateEvent
@@ -56,13 +53,16 @@ fun BottomSheetDetailsAlarmInfo(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(id = R.string.bottom_sheet_vibration_switch),
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold
-                ),
-                fontSize = 16.sp
-            )
+            Column {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(id = R.string.bottom_sheet_vibration_switch)
+                )
+                Text(
+                    style = MaterialTheme.typography.bodySmall,
+                    text = stringResource(id = R.string.bottom_sheet_vibration_switch_sub_title)
+                )
+            }
             Switch(
                 modifier = modifier.testTag("vibrate switch"),
                 checked = updateIsVibrationEnabled.value,
@@ -79,13 +79,16 @@ fun BottomSheetDetailsAlarmInfo(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(id = R.string.bottom_sheet_snooze_switch),
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold
-                ),
-                fontSize = 16.sp
-            )
+            Column {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(id = R.string.bottom_sheet_snooze_switch)
+                )
+                Text(
+                    style = MaterialTheme.typography.bodySmall,
+                    text = stringResource(id = R.string.bottom_sheet_snooze_switch_sub_title)
+                )
+            }
             Switch(
                 modifier = modifier.testTag("snooze switch"),
                 checked = updateIsSnoozeEnabled.value,
@@ -102,13 +105,16 @@ fun BottomSheetDetailsAlarmInfo(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(id = R.string.bottom_sheet_delete_switch),
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold
-                ),
-                fontSize = 16.sp
-            )
+            Column {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(id = R.string.bottom_sheet_delete_switch)
+                )
+                Text(
+                    style = MaterialTheme.typography.bodySmall,
+                    text = stringResource(id = R.string.bottom_sheet_delete_switch_sub_title)
+                )
+            }
             Switch(
                 modifier = modifier.testTag("delete switch"),
                 checked = updateDeleteAfterGoesOff.value,
@@ -125,13 +131,7 @@ fun BottomSheetDetailsAlarmInfo(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = stringResource(id = R.string.bottom_sheet_content_alarm_title),
-                style = TextStyle(
-                    fontWeight = FontWeight.Bold
-                ),
-                fontSize = 16.sp
-            )
+            Text(text = stringResource(id = R.string.bottom_sheet_content_alarm_title))
             Column {
                 TextField(
                     modifier = modifier.width(150.dp),

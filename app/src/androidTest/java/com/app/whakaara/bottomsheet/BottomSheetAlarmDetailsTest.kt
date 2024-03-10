@@ -41,19 +41,22 @@ class BottomSheetAlarmDetailsTest {
         }
 
         // Then
-        onNodeWithText(text = "Vibrate when alarm sounds").assertIsDisplayed()
+        onNodeWithText(text = "Vibrate").assertIsDisplayed()
+        onNodeWithText(text = "Vibrate on alarm").assertIsDisplayed()
         onNodeWithTag(testTag = "vibrate switch")
             .assertIsDisplayed()
             .assertIsToggleable()
             .assertIsOff()
 
         onNodeWithText(text = "Snooze").assertIsDisplayed()
+        onNodeWithText(text = "Snooze on alarm").assertIsDisplayed()
         onNodeWithTag(testTag = "snooze switch")
             .assertIsDisplayed()
             .assertIsToggleable()
             .assertIsOn()
 
-        onNodeWithText(text = "Delete after goes off").assertIsDisplayed()
+        onNodeWithText(text = "Single-use").assertIsDisplayed()
+        onNodeWithText(text = "Alarm will delete after going off").assertIsDisplayed()
         onNodeWithTag(testTag = "delete switch")
             .assertIsDisplayed()
             .assertIsToggleable()

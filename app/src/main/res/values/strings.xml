@@ -8,8 +8,11 @@
     <string name="bottom_sheet_title">Edit alarm</string>
     <string name="bottom_sheet_sub_title">Off</string>
     <string name="bottom_sheet_snooze_switch">Snooze</string>
-    <string name="bottom_sheet_vibration_switch">Vibrate when alarm sounds</string>
-    <string name="bottom_sheet_delete_switch">Delete after goes off</string>
+    <string name="bottom_sheet_snooze_switch_sub_title">Snooze on alarm</string>
+    <string name="bottom_sheet_vibration_switch">Vibrate</string>
+    <string name="bottom_sheet_vibration_switch_sub_title">Vibrate on alarm</string>
+    <string name="bottom_sheet_delete_switch">Single-use</string>
+    <string name="bottom_sheet_delete_switch_sub_title">Alarm will delete after going off</string>
     <string name="bottom_sheet_save_button">Save</string>
     <string name="bottom_sheet_close_button">Cancel</string>
     <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>

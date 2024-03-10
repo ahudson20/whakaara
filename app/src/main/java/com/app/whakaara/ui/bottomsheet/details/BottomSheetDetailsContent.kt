@@ -140,7 +140,7 @@ fun BottomSheetDetailsContent(
                     }
                 }
             ) {
-                Text(text = stringResource(id = R.string.bottom_sheet_save_button))
+                Text(text = stringResource(id = R.string.bottom_sheet_close_button))
             }
             Spacer(modifier = Modifier.width(space10))
             Button(
@@ -168,7 +168,7 @@ fun BottomSheetDetailsContent(
                     }
                 }
             ) {
-                Text(text = stringResource(id = R.string.bottom_sheet_close_button))
+                Text(text = stringResource(id = R.string.bottom_sheet_save_button))
             }
         }
     }

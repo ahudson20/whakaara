@@ -21,7 +21,7 @@ import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings
+import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -44,7 +44,7 @@ fun CardContainerSwipeToDismiss(
         if (alarms.alarms.isEmpty()) {
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth().padding(top = Spacings.space10),
+                    modifier = Modifier.fillMaxWidth().padding(top = space10),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
@@ -70,7 +70,7 @@ fun CardContainerSwipeToDismiss(
                 }
 
                 SwipeToDismissBox(
-                    modifier = Modifier.padding(start = spaceMedium, end = spaceMedium),
+                    modifier = Modifier.padding(start = spaceMedium, end = spaceMedium, bottom = space10),
                     state = dismissState,
                     enableDismissFromStartToEnd = false,
                     backgroundContent = {

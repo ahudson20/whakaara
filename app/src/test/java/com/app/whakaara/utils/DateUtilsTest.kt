@@ -14,7 +14,7 @@ class DateUtilsTest {
         val timeString = DateUtils.convertSecondsToHMm(time)
 
         // Then
-        assertEquals("Alarm in 7 hours 5 minutes", timeString)
+        assertEquals("Alarm in 7 hrs 5 mins", timeString)
     }
 
     @Test

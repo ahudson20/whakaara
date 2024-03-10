@@ -25,6 +25,7 @@ import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.settings.AlarmSettings
 import com.app.whakaara.ui.settings.GeneralSettings
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -56,7 +57,7 @@ fun SettingsScreen(
                 textAlign = Center,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(top = spaceMedium, bottom = spaceMedium)
+                    .padding(top = spaceMedium, bottom = space20)
                     .align(alignment = CenterHorizontally),
                 style = MaterialTheme.typography.titleLarge
             )

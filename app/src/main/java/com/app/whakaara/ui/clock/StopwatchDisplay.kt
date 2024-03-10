@@ -17,11 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
 import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space10
+import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.space250
 import com.app.whakaara.ui.theme.Spacings.spaceXSmall
-import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.darkGreen
 import com.app.whakaara.ui.theme.lightGreen
@@ -45,8 +45,8 @@ fun StopwatchDisplay(
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .size(space250 - space10)
-                    .border(width = spaceXxSmall, color = lightGreen, shape = CircleShape)
+                    .size(space250 - space20)
+                    .border(width = spaceXSmall, color = lightGreen, shape = CircleShape)
                     .clip(CircleShape)
                     .background(color = Color.Transparent)
             )
@@ -59,7 +59,7 @@ fun StopwatchDisplay(
                     .offset(y = spaceXSmall)
             ) {
                 Text(
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.displayLarge.copy(fontSize = 54.sp),
                     text =
                     if (formattedTime.substring(0, 2) == TIMER_INPUT_INITIAL_VALUE) {
                         formattedTime.substring(3, 8)
@@ -68,7 +68,7 @@ fun StopwatchDisplay(
                     }
                 )
                 Text(
-                    style = MaterialTheme.typography.headlineSmall,
+                    style = MaterialTheme.typography.titleLarge,
                     text = formattedTime.split(":")[3]
                 )
             }

@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -19,8 +20,9 @@ import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.constants.GeneralConstants.DELETE_ALARM_DELAY_MILLIS
@@ -31,7 +33,7 @@ import java.util.Calendar
 @Composable
 fun CardContainerSwipeToDismiss(
     alarms: AlarmState,
-    preferencesState: PreferencesState,
+    is24HourFormat: Boolean,
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
@@ -42,7 +44,7 @@ fun CardContainerSwipeToDismiss(
         if (alarms.alarms.isEmpty()) {
             item {
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().padding(top = Spacings.space10),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
@@ -68,6 +70,7 @@ fun CardContainerSwipeToDismiss(
                 }
 
                 SwipeToDismissBox(
+                    modifier = Modifier.padding(start = spaceMedium, end = spaceMedium),
                     state = dismissState,
                     enableDismissFromStartToEnd = false,
                     backgroundContent = {
@@ -76,7 +79,7 @@ fun CardContainerSwipeToDismiss(
                     content = {
                         Card(
                             alarm = alarm,
-                            preferencesState = preferencesState,
+                            is24HourFormat = is24HourFormat,
                             disable = disable,
                             enable = enable,
                             reset = reset
@@ -102,11 +105,10 @@ fun CardContainerSwipeToDismissPreview() {
                     )
                 )
             ),
-            preferencesState = PreferencesState(),
+            is24HourFormat = true,
             delete = {},
             disable = {},
-            enable = {},
-            reset = {}
-        )
+            enable = {}
+        ) {}
     }
 }

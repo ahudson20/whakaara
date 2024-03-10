@@ -3,7 +3,6 @@ package com.app.whakaara.ui.screens
 import androidx.compose.runtime.Composable
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -13,7 +12,7 @@ import java.util.Calendar
 @Composable
 fun AlarmScreen(
     alarmState: AlarmState,
-    preferencesState: PreferencesState,
+    is24HourFormat: Boolean,
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
@@ -21,7 +20,7 @@ fun AlarmScreen(
 ) {
     CardContainerSwipeToDismiss(
         alarms = alarmState,
-        preferencesState = preferencesState,
+        is24HourFormat = is24HourFormat,
         delete = delete,
         disable = disable,
         enable = enable,
@@ -51,7 +50,7 @@ fun AlarmScreenPreview() {
                     )
                 )
             ),
-            preferencesState = PreferencesState(),
+            is24HourFormat = true,
             delete = {},
             disable = {},
             enable = {},

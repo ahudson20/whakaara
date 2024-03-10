@@ -2,9 +2,17 @@ package com.app.whakaara.ui.bottomsheet.details
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,16 +21,22 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
+import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.HoursUpdateEvent
 import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
@@ -46,6 +60,7 @@ fun BottomSheetDetailsContent(
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
     var title by remember(alarm.title) { mutableStateOf(alarm.title) }
     var bottomText by remember { mutableStateOf(timeToAlarm) }
+    val context = LocalContext.current
 
     BackHandler(sheetState.visible) {
         coroutineScope.launch {
@@ -66,17 +81,8 @@ fun BottomSheetDetailsContent(
             }
     ) {
         BottomSheetDetailsTopBar(
-            coroutineScope = coroutineScope,
-            sheetState = sheetState,
-            alarm = alarm,
-            reset = reset,
-            pickerValue = timePickerValue,
-            isVibrationEnabled = isVibrationEnabled,
-            isSnoozeEnabled = isSnoozeEnabled,
-            deleteAfterGoesOff = deleteAfterGoesOff,
             bottomText = bottomText,
-            title = title,
-            is24HourFormat = is24HourFormat
+            title = title
         )
 
         BottomSheetTimePicker(
@@ -120,6 +126,51 @@ fun BottomSheetDetailsContent(
                 }
             )
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            OutlinedButton(
+                onClick = {
+                    coroutineScope.launch {
+                        sheetState.collapse()
+                    }
+                }
+            ) {
+                Text(text = stringResource(id = R.string.bottom_sheet_save_button))
+            }
+            Spacer(modifier = Modifier.width(space10))
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        reset(
+                            alarm.copy(
+                                date = alarm.date.apply {
+                                    set(Calendar.HOUR_OF_DAY, timePickerValue.hours)
+                                    set(Calendar.MINUTE, timePickerValue.minutes)
+                                },
+                                isEnabled = true,
+                                vibration = isVibrationEnabled,
+                                isSnoozeEnabled = isSnoozeEnabled,
+                                deleteAfterGoesOff = deleteAfterGoesOff,
+                                title = title,
+                                subTitle = getAlarmTimeFormatted(
+                                    date = alarm.date,
+                                    is24HourFormatEnabled = is24HourFormat
+                                )
+                            )
+                        )
+                        context.showToast(message = context.getString(R.string.bottom_sheet_save_button))
+                        sheetState.collapse()
+                    }
+                }
+            ) {
+                Text(text = stringResource(id = R.string.bottom_sheet_close_button))
+            }
+        }
     }
 }
 

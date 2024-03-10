@@ -18,7 +18,6 @@ import com.app.whakaara.ui.screens.TimerScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-//    viewModel: MainViewModel,
     preferencesState: PreferencesState,
     alarmState: AlarmState,
     stopwatchState: StopwatchState,
@@ -52,7 +51,7 @@ fun NavGraph(
         ) {
             AlarmScreen(
                 alarmState = alarmState,
-                preferencesState = preferencesState,
+                is24HourFormat = preferencesState.preferences.is24HourFormat,
                 delete = delete,
                 disable = disable,
                 enable = enable,

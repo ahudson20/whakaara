@@ -60,15 +60,15 @@ class DateUtils {
             val hours = seconds / (60 * 60) % 24
             val formattedString = StringBuilder()
             val hoursString = when {
-                hours.toInt() == 1 -> String.format("%d hour ", hours)
+                hours.toInt() == 1 -> "%d hour ".format(hours)
                 hours.toInt() == 0 -> ""
-                else -> String.format("%d hours ", hours)
+                else -> "%d hrs ".format(hours)
             }
             val minutesString = when {
-                minutes.toInt() == 1 -> String.format("%d minute ", minutes)
+                minutes.toInt() == 1 -> "%d minute ".format(minutes)
                 minutes.toInt() == 0 && hours.toInt() == 0 -> "less than 1 minute"
                 minutes.toInt() == 0 -> ""
-                else -> String.format("%d minutes ", minutes)
+                else -> "%d mins".format(minutes)
             }
 
             formattedString.append("Alarm in ")

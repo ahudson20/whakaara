@@ -8,7 +8,6 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils
@@ -48,7 +47,7 @@ class AlarmScreenTest {
             WhakaaraTheme {
                 AlarmScreen(
                     alarmState = AlarmState(listOf(firstAlarm, secondAlarm)),
-                    preferencesState = PreferencesState(),
+                    is24HourFormat = true,
                     delete = {},
                     disable = {},
                     enable = {},
@@ -58,11 +57,9 @@ class AlarmScreenTest {
         }
 
         // Then
-        onNodeWithText(text = "First Alarm Title").assertIsDisplayed()
         onNodeWithText(text = "First Alarm").assertIsDisplayed()
         onNodeWithText(text = timeToFirstAlarm).assertIsDisplayed()
 
-        onNodeWithText(text = "Second Alarm Title").assertIsDisplayed()
         onNodeWithText(text = "Second Alarm").assertIsDisplayed()
         onNodeWithText(text = timeToSecondAlarm).assertIsDisplayed()
 

@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -63,6 +64,7 @@ fun FloatingActionButtonStop(onStop: () -> Unit) {
         shape = CircleShape,
         modifier = Modifier.testTag("floating action button stop"),
         elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
+        containerColor = MaterialTheme.colorScheme.error,
         onClick = onStop
     ) {
         Icon(

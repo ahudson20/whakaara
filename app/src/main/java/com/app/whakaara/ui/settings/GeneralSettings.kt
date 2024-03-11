@@ -120,7 +120,7 @@ fun GeneralSettings(
             Text(text = stringResource(id = R.string.settings_screen_ringtone_title))
         },
         subtitle = {
-            Text(text = stringResource(id = R.string.settings_screen_ringtone_subtitle) + context.getNameFromUri(currentRingtoneUri))
+            Text(text = "${stringResource(id = R.string.settings_screen_ringtone_subtitle)} ${context.getNameFromUri(currentRingtoneUri)}")
         },
         onClick = {
             ringtonePicker.launch(ringtoneSelectionIntent)

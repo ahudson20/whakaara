@@ -9,9 +9,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismissBox
-import androidx.compose.material3.SwipeToDismissValue
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberSwipeToDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -54,13 +54,13 @@ fun CardContainerSwipeToDismiss(
             }
         } else {
             items(alarms.alarms, key = { it.alarmId }) { alarm ->
-                val dismissState = rememberSwipeToDismissState(
+                val dismissState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { distance: Float ->
                         distance * 1f
                     }
                 )
 
-                if (dismissState.currentValue != SwipeToDismissValue.Settled) {
+                if (dismissState.currentValue != SwipeToDismissBoxValue.Settled) {
                     LaunchedEffect(Unit) {
                         Toast.makeText(context, context.getString(R.string.notification_action_deleted, alarm.title), Toast.LENGTH_LONG).show()
                         delete(alarm)

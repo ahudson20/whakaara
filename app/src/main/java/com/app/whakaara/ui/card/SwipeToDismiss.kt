@@ -12,9 +12,9 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissState
-import androidx.compose.material3.SwipeToDismissValue
-import androidx.compose.material3.rememberSwipeToDismissState
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -33,9 +33,9 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DismissBackground(dismissState: SwipeToDismissState) {
+fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val isSwiping by remember(dismissState) {
-        derivedStateOf { dismissState.dismissDirection == SwipeToDismissValue.EndToStart && dismissState.progress > 0.1f }
+        derivedStateOf { dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart && dismissState.progress > 0.1f }
     }
 
     val color by animateColorAsState(
@@ -75,7 +75,7 @@ fun DismissBackground(dismissState: SwipeToDismissState) {
 fun DismissBackgroundPreview() {
     WhakaaraTheme {
         DismissBackground(
-            dismissState = rememberSwipeToDismissState()
+            dismissState = rememberSwipeToDismissBoxState()
         )
     }
 }

@@ -58,6 +58,9 @@
     <string name="settings_screen_auto_silence_subtitle">Set time after which alarms will be silenced</string>
     <string name="settings_screen_24_hour_format_title">24 hour format</string>
     <string name="settings_screen_24_hour_format_subtitle">If enabled, display using 24 hour format</string>
+    <string name="settings_screen_ringtone_selection_icon">Select ringtone</string>
+    <string name="settings_screen_ringtone_title">Select ringtone</string>
+    <string name="settings_screen_ringtone_subtitle">Current: </string>
 
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>

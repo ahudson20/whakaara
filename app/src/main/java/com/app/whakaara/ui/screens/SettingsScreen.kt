@@ -61,7 +61,10 @@ fun SettingsScreen(
                     .align(alignment = CenterHorizontally),
                 style = MaterialTheme.typography.titleLarge
             )
-            GeneralSettings()
+            GeneralSettings(
+                preferencesState = preferencesState,
+                updatePreferences = updatePreferences
+            )
             AlarmSettings(
                 preferencesState = preferencesState,
                 updatePreferences = updatePreferences,

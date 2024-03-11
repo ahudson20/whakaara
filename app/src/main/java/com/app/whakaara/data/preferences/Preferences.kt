@@ -12,5 +12,6 @@ data class Preferences(
     var isSnoozeEnabled: Boolean = true,
     var deleteAfterGoesOff: Boolean = false,
     var autoSilenceTime: Int = 10,
-    var snoozeTime: Int = 10
+    var snoozeTime: Int = 10,
+    var alarmSoundPath: String = ""
 )

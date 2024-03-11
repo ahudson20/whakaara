@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
 import android.media.MediaPlayer
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -13,12 +14,14 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Process.THREAD_PRIORITY_URGENT_AUDIO
+import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -52,7 +55,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     lateinit var notificationManager: NotificationManager
 
     @Inject
-    lateinit var repo: AlarmRepository
+    lateinit var alarmRepository: AlarmRepository
+
+    @Inject
+    lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
     @Named("timer")
@@ -80,7 +86,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     ) {
         if (data.getInt(NOTIFICATION_TYPE) == NOTIFICATION_TYPE_ALARM) {
             val alarm = runBlocking {
-                repo.getAlarmById(
+                alarmRepository.getAlarmById(
                     id = UUID.fromString(data.getString(INTENT_ALARM_ID))
                 )
             }
@@ -102,7 +108,20 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             )
         }
 
+        val alarmSound: Uri = runBlocking {
+            val path = preferencesRepository.getPreferences().alarmSoundPath
+            if (path.isNotEmpty()) {
+                Uri.parse(path)
+            } else {
+                Settings.System.DEFAULT_ALARM_ALERT_URI
+            }
+        }
+
         mediaPlayer.apply {
+            setDataSource(
+                applicationContext,
+                alarmSound
+            )
             setOnPreparedListener(this@MediaPlayerService)
             prepareAsync()
         }
@@ -110,29 +129,29 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
 
     private fun deleteAlarmById(alarmId: UUID) {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.deleteAlarmById(id = alarmId)
+            alarmRepository.deleteAlarmById(id = alarmId)
         }
     }
 
     private fun setIsEnabledToFalse(alarmId: UUID) {
         CoroutineScope(Dispatchers.IO).launch {
-            repo.isEnabled(id = alarmId, isEnabled = false)
+            alarmRepository.isEnabled(id = alarmId, isEnabled = false)
         }
     }
 
     private fun stop() {
         notificationManager.cancel(ALARM_NOTIFICATION_ID)
-
         try {
             if (mediaPlayer.isPlaying) {
                 mediaPlayer.stop()
             }
+
+            mediaPlayer.apply {
+                reset()
+                release()
+            }
         } catch (exception: IllegalStateException) {
             Log.e(MEDIA_SERVICE_EXCEPTION_TAG, "MediaPlayer was not initialized.. Cannot stop it...")
-        }
-        mediaPlayer.apply {
-            reset()
-            release()
         }
     }
 

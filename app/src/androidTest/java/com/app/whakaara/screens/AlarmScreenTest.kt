@@ -27,8 +27,7 @@ class AlarmScreenTest {
                 set(Calendar.HOUR_OF_DAY, 12)
                 set(Calendar.MINUTE, 34)
             },
-            title = "First Alarm Title",
-            subTitle = "First Alarm"
+            subTitle = "10:03PM"
         )
 
         val secondAlarm = Alarm(
@@ -36,8 +35,7 @@ class AlarmScreenTest {
                 set(Calendar.HOUR_OF_DAY, 7)
                 set(Calendar.MINUTE, 34)
             },
-            title = "Second Alarm Title",
-            subTitle = "Second Alarm"
+            subTitle = "03:03AM"
         )
         val timeToFirstAlarm = DateUtils.getInitialTimeToAlarm(true, firstAlarm.date)
         val timeToSecondAlarm = DateUtils.getInitialTimeToAlarm(true, secondAlarm.date)
@@ -57,10 +55,10 @@ class AlarmScreenTest {
         }
 
         // Then
-        onNodeWithText(text = "First Alarm").assertIsDisplayed()
+        onNodeWithText(text = "10:03PM").assertIsDisplayed()
         onNodeWithText(text = timeToFirstAlarm).assertIsDisplayed()
 
-        onNodeWithText(text = "Second Alarm").assertIsDisplayed()
+        onNodeWithText(text = "03:03AM").assertIsDisplayed()
         onNodeWithText(text = timeToSecondAlarm).assertIsDisplayed()
 
         onAllNodesWithTag(testTag = "alarm switch", useUnmergedTree = true)

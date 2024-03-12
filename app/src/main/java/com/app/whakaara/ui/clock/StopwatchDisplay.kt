@@ -60,7 +60,10 @@ fun StopwatchDisplay(
                     .offset(y = spaceSmall)
             ) {
                 Text(
-                    style = MaterialTheme.typography.displayLarge.copy(fontSize = 54.sp),
+                    style = MaterialTheme.typography.displayLarge.copy(
+                        fontSize = 54.sp,
+                        color = Color.White
+                    ),
                     text =
                     if (formattedTime.substring(0, 2) == TIMER_INPUT_INITIAL_VALUE) {
                         formattedTime.substring(3, 8)
@@ -69,7 +72,7 @@ fun StopwatchDisplay(
                     }
                 )
                 Text(
-                    style = MaterialTheme.typography.titleLarge,
+                    style = MaterialTheme.typography.titleLarge.copy(color = Color.White),
                     text = formattedTime.split(":")[3]
                 )
             }

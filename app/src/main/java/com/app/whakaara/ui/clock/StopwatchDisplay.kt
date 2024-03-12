@@ -20,7 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.Spacings.space250
+import com.app.whakaara.ui.theme.Spacings.space275
+import com.app.whakaara.ui.theme.Spacings.spaceSmall
 import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.darkGreen
@@ -38,14 +39,14 @@ fun StopwatchDisplay(
     ) {
         Box(
             modifier = Modifier
-                .size(space250)
+                .size(space275)
                 .clip(CircleShape)
                 .background(darkGreen)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .size(space250 - space20)
+                    .size(space275 - space20)
                     .border(width = spaceXSmall, color = lightGreen, shape = CircleShape)
                     .clip(CircleShape)
                     .background(color = Color.Transparent)
@@ -56,7 +57,7 @@ fun StopwatchDisplay(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .offset(y = spaceXSmall)
+                    .offset(y = spaceSmall)
             ) {
                 Text(
                     style = MaterialTheme.typography.displayLarge.copy(fontSize = 54.sp),
@@ -81,6 +82,6 @@ fun StopwatchDisplay(
 @FontScalePreviews
 fun StopwatchDisplayPreview() {
     StopwatchDisplay(
-        formattedTime = "00:00:00:000"
+        formattedTime = "10:10:00:000"
     )
 }

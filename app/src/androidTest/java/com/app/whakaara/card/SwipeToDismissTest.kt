@@ -1,7 +1,7 @@
 package com.app.whakaara.card
 
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberSwipeToDismissState
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
@@ -21,7 +21,7 @@ class SwipeToDismissTest {
         setContent {
             WhakaaraTheme {
                 DismissBackground(
-                    dismissState = rememberSwipeToDismissState()
+                    dismissState = rememberSwipeToDismissBoxState()
                 )
             }
         }

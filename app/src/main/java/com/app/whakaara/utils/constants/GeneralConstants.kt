@@ -7,4 +7,8 @@ object GeneralConstants {
     const val ZERO_MILLIS = 0L
     const val STARTING_CIRCULAR_PROGRESS = 1.00F
     const val RINGTONE_NONE_SELECTED = "None selected"
+
+    const val DEEPLINK_ALARM = "whakaara://alarm"
+    const val DEEPLINK_TIMER = "whakaara://timer"
+    const val DEEPLINK_STOPWATCH = "whakaara://stopwatch"
 }

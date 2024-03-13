@@ -6,6 +6,7 @@ import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
+import com.app.whakaara.data.preferences.SettingsTime
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -118,8 +119,8 @@ class MainViewModelTest {
                 assertEquals(true, this.preferences.isVibrateEnabled)
                 assertEquals(true, this.preferences.isSnoozeEnabled)
                 assertEquals(false, this.preferences.deleteAfterGoesOff)
-                assertEquals(10, this.preferences.autoSilenceTime)
-                assertEquals(10, this.preferences.snoozeTime)
+                assertEquals(SettingsTime.TEN, this.preferences.autoSilenceTime)
+                assertEquals(SettingsTime.TEN, this.preferences.snoozeTime)
             }
 
             cancelAndIgnoreRemainingEvents()

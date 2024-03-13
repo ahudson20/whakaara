@@ -11,7 +11,30 @@ data class Preferences(
     var isVibrateEnabled: Boolean = true,
     var isSnoozeEnabled: Boolean = true,
     var deleteAfterGoesOff: Boolean = false,
-    var autoSilenceTime: Int = 10,
-    var snoozeTime: Int = 10,
-    var alarmSoundPath: String = ""
+    var autoSilenceTime: SettingsTime = SettingsTime.TEN,
+    var snoozeTime: SettingsTime = SettingsTime.TEN,
+    var alarmSoundPath: String = "",
+    var vibrationPattern: VibrationPattern = VibrationPattern.CLICK
 )
+
+enum class VibrationPattern(val value: Int, val label: String) {
+    CLICK(0, "Click"),
+    DOUBLE(1, "Double click"),
+    HEAVY(2, "Heavy click"),
+    TICK(3, "Tick");
+
+    companion object {
+        fun fromOrdinalInt(value: Int) = VibrationPattern.values().first { it.ordinal == value }
+    }
+}
+
+enum class SettingsTime(val value: Int, val label: String) {
+    ONE(0, "One minute"),
+    FIVE(5, "Five minutes"),
+    TEN(10, "Ten minutes"),
+    FIFTEEN(15, "Fifteen minutes");
+
+    companion object {
+        fun fromOrdinalInt(value: Int) = SettingsTime.values().first { it.ordinal == value }
+    }
+}

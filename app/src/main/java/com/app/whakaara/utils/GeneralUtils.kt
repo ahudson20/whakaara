@@ -5,6 +5,7 @@ import android.media.RingtoneManager
 import android.net.Uri
 import android.widget.Toast
 import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.utils.constants.GeneralConstants.RINGTONE_NONE_SELECTED
 import com.google.gson.Gson
 
 class GeneralUtils {
@@ -14,7 +15,11 @@ class GeneralUtils {
         }
 
         fun Context.getNameFromUri(uri: Uri): String {
-            return RingtoneManager.getRingtone(this, uri).getTitle(this)
+            val ringtone = RingtoneManager.getRingtone(this, uri)
+            if (ringtone != null) {
+                return ringtone.getTitle(this)
+            }
+            return RINGTONE_NONE_SELECTED
         }
 
         /**

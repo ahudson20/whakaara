@@ -29,11 +29,11 @@ class PermissionGrantedReceiver : BroadcastReceiver() {
         when (intent?.action) {
             AlarmManager.ACTION_SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED -> {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val auto = preferencesRepo.getPreferences().autoSilenceTime
+                    val preferences = preferencesRepo.getPreferences()
                     repo.getAllAlarms().filter { it.isEnabled }.forEach {
                         alarmManagerWrapper.createAlarm(
                             alarmId = it.alarmId.toString(),
-                            autoSilenceTime = auto,
+                            autoSilenceTime = preferences.autoSilenceTime.value,
                             date = it.date
                         )
                     }

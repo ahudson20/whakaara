@@ -14,6 +14,9 @@ import android.os.IBinder
 import android.os.Looper
 import android.os.Message
 import android.os.Process.THREAD_PRIORITY_URGENT_AUDIO
+import android.os.VibrationAttributes
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -21,7 +24,9 @@ import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
+import com.app.whakaara.data.preferences.VibrationPattern
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -41,9 +46,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.TimerTask
 import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
 class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
@@ -61,6 +68,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     lateinit var preferencesRepository: PreferencesRepository
 
     @Inject
+    lateinit var vibrator: Vibrator
+
+    @Inject
     @Named("timer")
     lateinit var timerNotificationBuilder: NotificationCompat.Builder
 
@@ -70,6 +80,8 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
 
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
+
+    private lateinit var vibrationTask: TimerTask
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
@@ -84,6 +96,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     private fun play(
         data: Bundle
     ) {
+        val preferences: Preferences = runBlocking {
+            preferencesRepository.getPreferences()
+        }
+
         if (data.getInt(NOTIFICATION_TYPE) == NOTIFICATION_TYPE_ALARM) {
             val alarm = runBlocking {
                 alarmRepository.getAlarmById(
@@ -108,23 +124,20 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             )
         }
 
-        val alarmSound: Uri = runBlocking {
-            val path = preferencesRepository.getPreferences().alarmSoundPath
-            if (path.isNotEmpty()) {
-                Uri.parse(path)
-            } else {
-                Settings.System.DEFAULT_ALARM_ALERT_URI
-            }
-        }
-
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,
-                alarmSound
+                if (preferences.alarmSoundPath.isNotEmpty()) {
+                    Uri.parse(preferences.alarmSoundPath)
+                } else {
+                    Settings.System.DEFAULT_ALARM_ALERT_URI
+                }
             )
             setOnPreparedListener(this@MediaPlayerService)
             prepareAsync()
         }
+
+        if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
     }
 
     private fun deleteAlarmById(alarmId: UUID) {
@@ -139,8 +152,33 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         }
     }
 
+    private fun vibrate(
+        vibrationPattern: VibrationPattern
+    ) {
+        vibrationTask = timerTask {
+            val attributes = VibrationAttributes.Builder().apply {
+                setUsage(VibrationAttributes.USAGE_ALARM)
+            }.build()
+
+            val vibrationEffect = when (vibrationPattern) {
+                VibrationPattern.CLICK -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
+                VibrationPattern.DOUBLE -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
+                VibrationPattern.HEAVY -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
+                VibrationPattern.TICK -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+            }
+            vibrator.vibrate(vibrationEffect, attributes)
+        }
+        vibrationTask.run()
+    }
+
     private fun stop() {
+        // clear notification
         notificationManager.cancel(ALARM_NOTIFICATION_ID)
+
+        // cancel vibration if still running
+        if (::vibrationTask.isInitialized) vibrationTask.cancel()
+
+        // stop ringtone if running, release resources associated
         try {
             if (mediaPlayer.isPlaying) {
                 mediaPlayer.stop()
@@ -213,12 +251,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val action: Int = intent?.getIntExtra(SERVICE_ACTION, STOP) ?: STOP
-        val notificationType: Int = intent?.getIntExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM) ?: NOTIFICATION_TYPE_ALARM
-        val alarmId: String? = intent?.getStringExtra(INTENT_ALARM_ID)
         val bundle = Bundle().apply {
-            putInt(SERVICE_ACTION, action)
-            putInt(NOTIFICATION_TYPE, notificationType)
-            putString(INTENT_ALARM_ID, alarmId)
+            putInt(SERVICE_ACTION, intent?.getIntExtra(SERVICE_ACTION, STOP) ?: STOP)
+            putInt(NOTIFICATION_TYPE, intent?.getIntExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM) ?: NOTIFICATION_TYPE_ALARM)
+            putString(INTENT_ALARM_ID, intent?.getStringExtra(INTENT_ALARM_ID))
         }
 
         serviceHandler?.obtainMessage()?.also { msg ->

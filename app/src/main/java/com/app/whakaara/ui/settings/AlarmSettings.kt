@@ -14,13 +14,14 @@ import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
+import com.app.whakaara.data.preferences.SettingsTime
+import com.app.whakaara.data.preferences.VibrationPattern
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.GeneralConstants.SETTINGS_SCREEN_TIME_LIST
 
 @Composable
 fun AlarmSettings(
@@ -63,6 +64,21 @@ fun AlarmSettings(
         }
     )
 
+    SettingsListDropdown(
+        modifier = Modifier.height(space80),
+        enabled = preferencesState.preferences.isVibrateEnabled,
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.vibrationPattern.value),
+        title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },
+        items = VibrationPattern.values().map { it.label },
+        onItemSelected = { int, _ ->
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    vibrationPattern = VibrationPattern.fromOrdinalInt(value = int)
+                )
+            )
+        }
+    )
+
     SettingsSwitch(
         modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_title)) },
@@ -78,14 +94,15 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        state = rememberIntSettingState(defaultValue = SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.snoozeTime }),
         modifier = Modifier.height(space80),
+        enabled = preferencesState.preferences.isSnoozeEnabled,
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.snoozeTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
-        items = SETTINGS_SCREEN_TIME_LIST,
-        onItemSelected = { _, text ->
+        items = SettingsTime.values().map { it.label },
+        onItemSelected = { int, _ ->
             updatePreferences(
                 preferencesState.preferences.copy(
-                    snoozeTime = text.split(" ")[0].toInt()
+                    snoozeTime = SettingsTime.fromOrdinalInt(value = int)
                 )
             )
         }
@@ -106,15 +123,15 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        state = rememberIntSettingState(defaultValue = SETTINGS_SCREEN_TIME_LIST.indexOfFirst { it.split(" ")[0].toInt() == preferencesState.preferences.autoSilenceTime }),
         modifier = Modifier.height(space80),
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.autoSilenceTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
-        items = SETTINGS_SCREEN_TIME_LIST,
-        onItemSelected = { _, text ->
+        items = SettingsTime.values().map { it.label },
+        onItemSelected = { int, _ ->
             updatePreferences(
                 preferencesState.preferences.copy(
-                    autoSilenceTime = text.split(" ")[0].toInt()
+                    autoSilenceTime = SettingsTime.fromOrdinalInt(value = int)
                 )
             )
         }

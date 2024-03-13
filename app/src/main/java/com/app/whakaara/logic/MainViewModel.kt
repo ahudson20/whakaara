@@ -92,7 +92,7 @@ class MainViewModel @Inject constructor(
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = alarm.date
         )
         repository.insert(alarm)
@@ -113,7 +113,7 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = alarm.date
         )
     }
@@ -123,19 +123,19 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = alarm.date
         )
     }
 
     fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         val currentTimePlusTenMinutes = Calendar.getInstance().apply {
-            add(Calendar.MINUTE, _preferencesState.value.preferences.snoozeTime)
+            add(Calendar.MINUTE, _preferencesState.value.preferences.snoozeTime.value)
         }
         alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime,
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = currentTimePlusTenMinutes
         )
     }

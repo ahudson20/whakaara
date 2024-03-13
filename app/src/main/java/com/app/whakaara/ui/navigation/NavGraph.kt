@@ -6,16 +6,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.ui.screens.AlarmScreen
-import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.screens.StopwatchScreen
 import com.app.whakaara.ui.screens.TimerScreen
-import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_ALARM
+import com.app.whakaara.utils.constants.GeneralConstants
 import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_STOPWATCH
 import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_TIMER
 
@@ -41,10 +39,7 @@ fun NavGraph(
 
     onStart: () -> Unit,
     onPause: () -> Unit,
-    onStop: () -> Unit,
-
-    updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    onStop: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -54,7 +49,7 @@ fun NavGraph(
             route = BottomNavItem.Alarm.route,
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = DEEPLINK_ALARM
+                    uriPattern = GeneralConstants.DEEPLINK_ALARM
                 }
             )
         ) {
@@ -100,16 +95,6 @@ fun NavGraph(
                 onStart = onStart,
                 onPause = onPause,
                 onStop = onStop
-            )
-        }
-
-        composable(
-            route = BottomNavItem.Settings.route
-        ) {
-            SettingsScreen(
-                preferencesState = preferencesState,
-                updatePreferences = updatePreferences,
-                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
         }
     }

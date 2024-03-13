@@ -149,10 +149,7 @@ fun MainScreen(
 
                 onStart = onStart,
                 onPause = onPause,
-                onStop = onStop,
-
-                updatePreferences = updatePreferences,
-                updateAllAlarmSubtitles = updateAllAlarmSubtitles
+                onStop = onStop
             )
         }
     }

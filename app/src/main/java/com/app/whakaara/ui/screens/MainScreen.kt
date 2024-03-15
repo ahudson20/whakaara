@@ -162,7 +162,7 @@ fun MainPreview() {
     WhakaaraTheme {
         MainScreen(
             preferencesState = PreferencesState(),
-            alarmState = AlarmState(),
+            alarmState = AlarmState.Success(),
             stopwatchState = StopwatchState(),
             timerState = TimerState(),
             create = {},

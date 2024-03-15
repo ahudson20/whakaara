@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.state.AlarmState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
@@ -32,7 +31,7 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardContainerSwipeToDismiss(
-    alarms: AlarmState,
+    alarms: List<Alarm>,
     is24HourFormat: Boolean,
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
@@ -41,7 +40,7 @@ fun CardContainerSwipeToDismiss(
 ) {
     val context = LocalContext.current
     LazyColumn {
-        if (alarms.alarms.isEmpty()) {
+        if (alarms.isEmpty()) {
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(top = space10),
@@ -53,7 +52,7 @@ fun CardContainerSwipeToDismiss(
                 }
             }
         } else {
-            items(alarms.alarms, key = { it.alarmId }) { alarm ->
+            items(alarms, key = { it.alarmId }) { alarm ->
                 val dismissState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { distance: Float ->
                         distance * 1f
@@ -97,12 +96,10 @@ fun CardContainerSwipeToDismiss(
 fun CardContainerSwipeToDismissPreview() {
     WhakaaraTheme {
         CardContainerSwipeToDismiss(
-            alarms = AlarmState(
-                listOf(
-                    Alarm(
-                        date = Calendar.getInstance(),
-                        subTitle = "12:13 AM"
-                    )
+            alarms = listOf(
+                Alarm(
+                    date = Calendar.getInstance(),
+                    subTitle = "12:13 AM"
                 )
             ),
             is24HourFormat = true,

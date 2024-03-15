@@ -7,6 +7,7 @@ import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import com.app.whakaara.activities.MainActivity
+import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -151,5 +152,13 @@ class AlarmManagerWrapper @Inject constructor(
         )
 
         alarmManager.cancel(pendingIntent)
+    }
+
+    fun updateWidget() {
+        app.applicationContext.sendBroadcast(
+            Intent(app.applicationContext, AppWidgetReceiver::class.java).apply {
+                action = AppWidgetReceiver.UPDATE_ACTION
+            }
+        )
     }
 }

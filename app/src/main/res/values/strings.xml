@@ -75,4 +75,9 @@
     <string name="shortcut_timer_long_label">Start timer</string>
     <string name="shortcut_stopwatch_short_label">Stopwatch</string>
     <string name="shortcut_stopwatch_long_label">Start stopwatch</string>
+
+    <string name="app_widget_description">Shows next active alarm</string>
+    <string name="next_alarm_widget_icon_description">Alarm icon</string>
+    <string name="next_alarm_widget_title">Next alarm</string>
+    <string name="next_alarm_widget_none">None set</string>
 </resources>

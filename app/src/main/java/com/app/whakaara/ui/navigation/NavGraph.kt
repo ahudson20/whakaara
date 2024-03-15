@@ -10,6 +10,7 @@ import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
+import com.app.whakaara.ui.loading.Loading
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.StopwatchScreen
 import com.app.whakaara.ui.screens.TimerScreen
@@ -53,14 +54,17 @@ fun NavGraph(
                 }
             )
         ) {
-            AlarmScreen(
-                alarmState = alarmState,
-                is24HourFormat = preferencesState.preferences.is24HourFormat,
-                delete = delete,
-                disable = disable,
-                enable = enable,
-                reset = reset
-            )
+            when (alarmState) {
+                is AlarmState.Loading -> Loading()
+                is AlarmState.Success -> AlarmScreen(
+                    alarms = alarmState.alarms,
+                    is24HourFormat = preferencesState.preferences.is24HourFormat,
+                    delete = delete,
+                    disable = disable,
+                    enable = enable,
+                    reset = reset
+                )
+            }
         }
 
         composable(

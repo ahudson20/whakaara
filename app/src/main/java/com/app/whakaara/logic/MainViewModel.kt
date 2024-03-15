@@ -46,7 +46,7 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     // alarm
-    private val _alarmState = MutableStateFlow(AlarmState())
+    private val _alarmState = MutableStateFlow<AlarmState>(AlarmState.Loading)
     val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()
 
     // preferences
@@ -85,7 +85,7 @@ class MainViewModel @Inject constructor(
     //region alarm
     private fun getAllAlarms() = viewModelScope.launch {
         repository.getAllAlarmsFlow().flowOn(Dispatchers.IO).collect { allAlarms ->
-            _alarmState.value = AlarmState(alarms = allAlarms)
+            _alarmState.value = AlarmState.Success(alarms = allAlarms)
         }
     }
 
@@ -96,16 +96,19 @@ class MainViewModel @Inject constructor(
             date = alarm.date
         )
         repository.insert(alarm)
+        alarmManagerWrapper.updateWidget()
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         repository.delete(alarm)
+        alarmManagerWrapper.updateWidget()
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
+        alarmManagerWrapper.updateWidget()
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -116,6 +119,7 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = alarm.date
         )
+        alarmManagerWrapper.updateWidget()
     }
 
     fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -126,6 +130,7 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = alarm.date
         )
+        alarmManagerWrapper.updateWidget()
     }
 
     fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -138,6 +143,7 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             date = currentTimePlusTenMinutes
         )
+        alarmManagerWrapper.updateWidget()
     }
 
     private fun updateExistingAlarmInDatabase(alarm: Alarm) =
@@ -146,15 +152,18 @@ class MainViewModel @Inject constructor(
         }
 
     fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(Dispatchers.IO) {
-        _alarmState.value.alarms.forEach {
-            updateExistingAlarmInDatabase(
-                it.copy(
-                    subTitle = getAlarmTimeFormatted(
-                        it.date,
-                        format
+        val state = _alarmState.value
+        if (state is AlarmState.Success) {
+            state.alarms.forEach {
+                updateExistingAlarmInDatabase(
+                    it.copy(
+                        subTitle = getAlarmTimeFormatted(
+                            it.date,
+                            format
+                        )
                     )
                 )
-            )
+            }
         }
     }
     //endregion

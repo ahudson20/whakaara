@@ -144,6 +144,10 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-service:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
     testImplementation "androidx.lifecycle:lifecycle-runtime-testing:$lifecycle_version"
+
+    // For AppWidgets support
+    implementation "androidx.glance:glance-appwidget:1.0.0"
+    implementation "androidx.glance:glance-material3:1.0.0"
 }
 
 // Allow references to generated code

@@ -7,7 +7,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.state.AlarmState
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils
@@ -44,7 +43,7 @@ class AlarmScreenTest {
         setContent {
             WhakaaraTheme {
                 AlarmScreen(
-                    alarmState = AlarmState(listOf(firstAlarm, secondAlarm)),
+                    alarms = listOf(firstAlarm, secondAlarm),
                     is24HourFormat = true,
                     delete = {},
                     disable = {},

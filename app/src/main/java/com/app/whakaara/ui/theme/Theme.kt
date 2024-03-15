@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+import androidx.glance.material3.ColorProviders
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -258,6 +259,13 @@ val unspecified_scheme = ColorFamily(
     Color.Unspecified,
     Color.Unspecified
 )
+
+object WidgetTheme {
+    val colors = ColorProviders(
+        light = lightScheme,
+        dark = darkScheme
+    )
+}
 
 @Composable
 fun WhakaaraTheme(

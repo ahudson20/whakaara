@@ -164,6 +164,7 @@ class MainViewModel @Inject constructor(
                     )
                 )
             }
+            alarmManagerWrapper.updateWidget()
         }
     }
     //endregion

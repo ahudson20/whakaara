@@ -111,15 +111,9 @@ class AppWidget : GlanceAppWidget() {
                     )
                 } else {
                     GlanceText(
-                        text = LocalContext.current.getString(R.string.next_alarm_widget_title),
+                        text = nextAlarm.subTitle.filterNot { it.isWhitespace() },
                         font = R.font.azeret_mono_medium,
-                        fontSize = 16.sp,
-                        color = Color.White
-                    )
-                    GlanceText(
-                        text = nextAlarm.subTitle,
-                        font = R.font.azeret_mono_medium,
-                        fontSize = 24.sp,
+                        fontSize = 22.sp,
                         color = Color.White
                     )
                     GlanceText(

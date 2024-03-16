@@ -104,7 +104,7 @@ class AppWidget : GlanceAppWidget() {
             ) {
                 if (nextAlarm == null) {
                     GlanceText(
-                        text = LocalContext.current.getString(R.string.next_alarm_widget_none),
+                        text = LocalContext.current.getString(R.string.widget_next_alarm_none),
                         font = R.font.azeretmono,
                         fontSize = 16.sp,
                         color = Color.White
@@ -127,7 +127,7 @@ class AppWidget : GlanceAppWidget() {
 
             Image(
                 modifier = GlanceModifier.size(space40),
-                contentDescription = LocalContext.current.getString(R.string.next_alarm_widget_icon_description),
+                contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
                 provider = ImageProvider(R.drawable.outline_alarm_24),
                 contentScale = ContentScale.FillBounds,
                 colorFilter = ColorFilter.tint(ColorProvider(Color.White))

@@ -76,8 +76,11 @@
     <string name="shortcut_stopwatch_short_label">Stopwatch</string>
     <string name="shortcut_stopwatch_long_label">Start stopwatch</string>
 
-    <string name="app_widget_description">Shows next active alarm</string>
-    <string name="next_alarm_widget_icon_description">Alarm icon</string>
-    <string name="next_alarm_widget_title">Next alarm</string>
-    <string name="next_alarm_widget_none">None set</string>
+    <string name="widget_next_alarm_description">Shows next active alarm</string>
+    <string name="widget_next_alarm_icon_description">Alarm icon</string>
+    <string name="widget_next_alarm_title">Next alarm</string>
+    <string name="widget_next_alarm_none">None set</string>
+    <string name="widget_next_alarm_preview_time">12:59PM</string>
+    <string name="widget_next_alarm_preview_title">Wake up</string>
+    <string name="widget_shortcut_description">App shortcut</string>
 </resources>

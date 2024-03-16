@@ -7,6 +7,7 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.data.preferences.SettingsTime
+import com.app.whakaara.state.AlarmState
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -93,17 +95,22 @@ class MainViewModelTest {
     fun `init test - alarm state`() = runTest {
         // Given + When + Then
         viewModel.alarmState.test {
-            val alarmList = awaitItem()
-            assertEquals(2, alarmList.alarms.size)
+            val alarmState = awaitItem()
 
-            alarmList.alarms[0].apply {
-                assertEquals("First Alarm Title", this.title)
-                assertEquals("14:34 PM", this.subTitle)
-            }
+            assertTrue(alarmState is AlarmState.Success)
 
-            alarmList.alarms[1].apply {
-                assertEquals("Second Alarm Title", this.title)
-                assertEquals("14:34 PM", this.subTitle)
+            with(alarmState as AlarmState.Success) {
+                assertEquals(2, this.alarms.size)
+
+                this.alarms[0].apply {
+                    assertEquals("First Alarm Title", this.title)
+                    assertEquals("14:34 PM", this.subTitle)
+                }
+
+                this.alarms[1].apply {
+                    assertEquals("Second Alarm Title", this.title)
+                    assertEquals("14:34 PM", this.subTitle)
+                }
             }
 
             cancelAndIgnoreRemainingEvents()

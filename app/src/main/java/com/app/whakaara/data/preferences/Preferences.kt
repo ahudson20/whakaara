@@ -29,10 +29,10 @@ enum class VibrationPattern(val value: Int, val label: String) {
 }
 
 enum class SettingsTime(val value: Int, val label: String) {
-    ONE(0, "One minute"),
-    FIVE(5, "Five minutes"),
-    TEN(10, "Ten minutes"),
-    FIFTEEN(15, "Fifteen minutes");
+    ONE(0, "1 minute"),
+    FIVE(5, "5 minutes"),
+    TEN(10, "10 minutes"),
+    FIFTEEN(15, "15 minutes");
 
     companion object {
         fun fromOrdinalInt(value: Int) = SettingsTime.values().first { it.ordinal == value }

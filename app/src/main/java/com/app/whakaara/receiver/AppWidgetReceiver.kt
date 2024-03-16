@@ -36,14 +36,12 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        println("onReceive")
         if (intent.action == UPDATE_ACTION) {
             observeData(context = context)
         }
     }
 
     private fun observeData(context: Context) {
-        println("observeData")
         CoroutineScope(Dispatchers.IO).launch {
             val alarms = alarmRepository.getAllAlarms()
             val serializedList = Gson().toJson(alarms)

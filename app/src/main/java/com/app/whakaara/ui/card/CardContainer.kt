@@ -31,6 +31,7 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardContainerSwipeToDismiss(
+    modifier: Modifier = Modifier,
     alarms: List<Alarm>,
     is24HourFormat: Boolean,
     delete: (alarm: Alarm) -> Unit,
@@ -39,7 +40,9 @@ fun CardContainerSwipeToDismiss(
     reset: (alarm: Alarm) -> Unit
 ) {
     val context = LocalContext.current
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier
+    ) {
         if (alarms.isEmpty()) {
             item {
                 Row(

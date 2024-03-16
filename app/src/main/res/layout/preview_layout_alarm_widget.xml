@@ -1,46 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:layout_width="@dimen/dp_200"
     android:layout_height="@dimen/dp_100"
+    android:background="@drawable/layout_rounded"
     android:gravity="center_horizontal"
-    android:background="@drawable/layout_rounded">
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="@dimen/dp_100"
         android:layout_weight="3"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="@dimen/dp_16"
-            android:gravity="bottom"
+            android:layout_height="35dp"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
             android:text="@string/widget_next_alarm_preview_time"
             android:textColor="#ffffff"
-            android:textSize="22sp"/>
+            android:textSize="26sp" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginStart="@dimen/dp_16"
-            android:gravity="start"
+            android:layout_height="25dp"
+            android:layout_marginStart="@dimen/dp_0"
+            android:layout_marginBottom="20dp"
+            android:gravity="center"
             android:text="@string/widget_next_alarm_preview_title"
             android:textColor="#ffffff"
-            android:textSize="16sp"/>
+            android:textSize="20sp" />
 
     </LinearLayout>
-
-    <ImageView
-        android:layout_width="@dimen/dp_40"
-        android:layout_height="@dimen/dp_100"
-        android:layout_marginEnd="@dimen/dp_10"
-        android:src="@drawable/outline_alarm_24"
-        android:tint="@color/white"
-        tools:ignore="UseAppTint"
-        android:contentDescription="@string/widget_next_alarm_icon_description" />
 
 </LinearLayout>

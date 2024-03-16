@@ -30,6 +30,7 @@ fun NavGraph(
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit,
+    create: (alarm: Alarm) -> Unit,
 
     updateHours: (newValue: String) -> Unit,
     updateMinutes: (newValue: String) -> Unit,
@@ -58,11 +59,12 @@ fun NavGraph(
                 is AlarmState.Loading -> Loading()
                 is AlarmState.Success -> AlarmScreen(
                     alarms = alarmState.alarms,
-                    is24HourFormat = preferencesState.preferences.is24HourFormat,
+                    preferencesState = preferencesState,
                     delete = delete,
                     disable = disable,
                     enable = enable,
-                    reset = reset
+                    reset = reset,
+                    create = create
                 )
             }
         }

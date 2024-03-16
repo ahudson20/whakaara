@@ -9,5 +9,5 @@
     android:widgetCategory="home_screen"
     android:widgetFeatures="reconfigurable|configuration_optional"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:previewImage="@drawable/outline_alarm_24">
+    android:previewImage="@drawable/outline_access_alarm_48_green">
 </appwidget-provider>

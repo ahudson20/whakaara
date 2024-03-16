@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.datastore.preferences.core.Preferences
 import androidx.glance.ColorFilter
@@ -13,9 +15,11 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.LocalContext
+import androidx.glance.LocalSize
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
@@ -35,8 +39,7 @@ import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.receiver.AppWidgetReceiver
-import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.space40
+import com.app.whakaara.ui.theme.Spacings
 import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.WidgetTheme
 import com.google.gson.Gson
@@ -54,6 +57,16 @@ class AppWidget : GlanceAppWidget() {
     interface AlarmRepositoryEntryPoint {
         fun alarmRepository(): AlarmRepository
     }
+
+    override val sizeMode = SizeMode.Responsive(
+        setOf(
+            ONE_BY_ONE,
+            TWO_BY_ONE,
+            SMALL_SQUARE,
+            HORIZONTAL_RECTANGLE,
+            BIG_SQUARE
+        )
+    )
 
     override var stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
     override suspend fun provideGlance(context: Context, id: GlanceId) {
@@ -87,6 +100,7 @@ class AppWidget : GlanceAppWidget() {
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
     private fun NextAlarm(nextAlarm: Alarm?) {
+        val size = LocalSize.current
         Row(
             modifier = GlanceModifier
                 .padding(all = spaceXSmall)
@@ -96,42 +110,59 @@ class AppWidget : GlanceAppWidget() {
                 .clickable(actionStartActivity<MainActivity>()),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column(
-                modifier = GlanceModifier
-                    .defaultWeight()
-                    .padding(start = space10),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                if (nextAlarm == null) {
-                    GlanceText(
-                        text = LocalContext.current.getString(R.string.widget_next_alarm_none),
-                        font = R.font.azeretmono,
-                        fontSize = 16.sp,
-                        color = Color.White
-                    )
-                } else {
-                    GlanceText(
-                        text = nextAlarm.subTitle.filterNot { it.isWhitespace() },
-                        font = R.font.azeret_mono_medium,
-                        fontSize = 22.sp,
-                        color = Color.White
-                    )
-                    GlanceText(
-                        text = nextAlarm.title.take(15),
-                        font = R.font.azeret_mono_medium,
-                        fontSize = 16.sp,
-                        color = Color.White
-                    )
+            if (size.width <= ONE_BY_ONE.width) {
+                Image(
+                    modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .size(Spacings.space40),
+                    contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
+                    provider = ImageProvider(R.drawable.outline_alarm_24),
+                    contentScale = ContentScale.FillBounds,
+                    colorFilter = ColorFilter.tint(ColorProvider(Color.White))
+                )
+            } else {
+                Column(
+                    modifier = GlanceModifier
+                        .padding(start = Spacings.space10, end = Spacings.space10),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (nextAlarm == null) {
+                        GlanceText(
+                            modifier = GlanceModifier.fillMaxWidth(),
+                            text = LocalContext.current.getString(R.string.widget_next_alarm_none),
+                            font = R.font.azeretmono,
+                            fontSize = 26.sp,
+                            color = Color.White
+                        )
+                    } else {
+                        GlanceText(
+                            modifier = GlanceModifier.fillMaxWidth(),
+                            text = nextAlarm.subTitle.filterNot { it.isWhitespace() },
+                            font = R.font.azeret_mono_medium,
+                            fontSize = 26.sp,
+                            color = Color.White
+                        )
+                        if (size.width > TWO_BY_ONE.width) {
+                            GlanceText(
+                                modifier = GlanceModifier.fillMaxWidth(),
+                                text = nextAlarm.title,
+                                font = R.font.azeret_mono_medium,
+                                fontSize = 20.sp,
+                                color = Color.White
+                            )
+                        }
+                    }
                 }
             }
-
-            Image(
-                modifier = GlanceModifier.size(space40),
-                contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
-                provider = ImageProvider(R.drawable.outline_alarm_24),
-                contentScale = ContentScale.FillBounds,
-                colorFilter = ColorFilter.tint(ColorProvider(Color.White))
-            )
         }
+    }
+
+    companion object {
+        private val ONE_BY_ONE = DpSize(57.dp, 102.dp)
+        private val TWO_BY_ONE = DpSize(130.dp, 102.dp)
+        private val SMALL_SQUARE = DpSize(100.dp, 100.dp)
+        private val HORIZONTAL_RECTANGLE = DpSize(200.dp, 100.dp)
+        private val BIG_SQUARE = DpSize(250.dp, 250.dp)
     }
 }

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:targetCellWidth="3"
     android:targetCellHeight="1"
 
     android:updatePeriodMillis="0"
     android:description="@string/widget_next_alarm_description"
-    android:resizeMode="none"
+    android:resizeMode="horizontal"
     android:widgetCategory="home_screen"
     android:widgetFeatures="reconfigurable|configuration_optional"
 

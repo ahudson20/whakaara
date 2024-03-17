@@ -138,11 +138,14 @@ fun GeneralSettings(
         title = { Text(text = stringResource(id = R.string.settings_screen_app_theme_title)) },
         items = AppTheme.values().map { it.label },
         onItemSelected = { int, _ ->
-            updatePreferences(
-                preferencesState.preferences.copy(
-                    appTheme = AppTheme.fromOrdinalInt(value = int)
+            val selection = AppTheme.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.appTheme) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        appTheme = selection
+                    )
                 )
-            )
+            }
         }
     )
 }

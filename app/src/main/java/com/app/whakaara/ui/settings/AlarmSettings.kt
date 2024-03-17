@@ -71,11 +71,14 @@ fun AlarmSettings(
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },
         items = VibrationPattern.values().map { it.label },
         onItemSelected = { int, _ ->
-            updatePreferences(
-                preferencesState.preferences.copy(
-                    vibrationPattern = VibrationPattern.fromOrdinalInt(value = int)
+            val selection = VibrationPattern.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.vibrationPattern) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        vibrationPattern = selection
+                    )
                 )
-            )
+            }
         }
     )
 
@@ -100,11 +103,14 @@ fun AlarmSettings(
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
         items = SettingsTime.values().map { it.label },
         onItemSelected = { int, _ ->
-            updatePreferences(
-                preferencesState.preferences.copy(
-                    snoozeTime = SettingsTime.fromOrdinalInt(value = int)
+            val selection = SettingsTime.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.snoozeTime) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        snoozeTime = selection
+                    )
                 )
-            )
+            }
         }
     )
 
@@ -129,11 +135,14 @@ fun AlarmSettings(
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
         items = SettingsTime.values().map { it.label },
         onItemSelected = { int, _ ->
-            updatePreferences(
-                preferencesState.preferences.copy(
-                    autoSilenceTime = SettingsTime.fromOrdinalInt(value = int)
+            val selection = SettingsTime.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.autoSilenceTime) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        autoSilenceTime = selection
+                    )
                 )
-            )
+            }
         }
     )
 }

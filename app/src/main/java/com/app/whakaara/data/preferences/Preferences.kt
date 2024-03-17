@@ -14,7 +14,8 @@ data class Preferences(
     var autoSilenceTime: SettingsTime = SettingsTime.TEN,
     var snoozeTime: SettingsTime = SettingsTime.TEN,
     var alarmSoundPath: String = "",
-    var vibrationPattern: VibrationPattern = VibrationPattern.CLICK
+    var vibrationPattern: VibrationPattern = VibrationPattern.CLICK,
+    var appTheme: AppTheme = AppTheme.MODE_AUTO
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {
@@ -36,5 +37,15 @@ enum class SettingsTime(val value: Int, val label: String) {
 
     companion object {
         fun fromOrdinalInt(value: Int) = SettingsTime.values().first { it.ordinal == value }
+    }
+}
+
+enum class AppTheme(val label: String) {
+    MODE_DAY("Light mode"),
+    MODE_NIGHT("Dark mode"),
+    MODE_AUTO("System preference");
+
+    companion object {
+        fun fromOrdinalInt(value: Int) = values()[value]
     }
 }

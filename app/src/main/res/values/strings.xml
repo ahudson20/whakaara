@@ -62,6 +62,7 @@
     <string name="settings_screen_ringtone_selection_icon">Select ringtone</string>
     <string name="settings_screen_ringtone_title">Select ringtone</string>
     <string name="settings_screen_ringtone_subtitle">Current:</string>
+    <string name="settings_screen_app_theme_title">App Theme</string>
 
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>

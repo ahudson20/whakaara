@@ -1,6 +1,7 @@
 package com.app.whakaara.data.preferences.converters
 
 import androidx.room.TypeConverter
+import com.app.whakaara.data.preferences.AppTheme
 import com.app.whakaara.data.preferences.SettingsTime
 import com.app.whakaara.data.preferences.VibrationPattern
 
@@ -16,4 +17,10 @@ class PreferencesConverter {
 
     @TypeConverter
     fun fromTime(value: SettingsTime) = value.ordinal
+
+    @TypeConverter
+    fun toAppTheme(value: Int) = enumValues<AppTheme>()[value]
+
+    @TypeConverter
+    fun fromAppTheme(value: AppTheme) = value.ordinal
 }

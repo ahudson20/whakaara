@@ -21,8 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.alorma.compose.settings.storage.base.rememberIntSettingState
+import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.app.whakaara.R
+import com.app.whakaara.data.preferences.AppTheme
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
@@ -91,6 +94,7 @@ fun GeneralSettings(
             context.startActivity(Intent(Settings.ACTION_DATE_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
         }
     )
+
     SettingsMenuLink(
         modifier = Modifier.height(space80),
         icon = {
@@ -108,6 +112,7 @@ fun GeneralSettings(
             )
         }
     )
+
     SettingsMenuLink(
         modifier = Modifier.height(space80),
         icon = {
@@ -124,6 +129,20 @@ fun GeneralSettings(
         },
         onClick = {
             ringtonePicker.launch(ringtoneSelectionIntent)
+        }
+    )
+
+    SettingsListDropdown(
+        modifier = Modifier.height(space80),
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.appTheme.ordinal),
+        title = { Text(text = stringResource(id = R.string.settings_screen_app_theme_title)) },
+        items = AppTheme.values().map { it.label },
+        onItemSelected = { int, _ ->
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    appTheme = AppTheme.fromOrdinalInt(value = int)
+                )
+            )
         }
     )
 }

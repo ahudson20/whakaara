@@ -148,6 +148,9 @@ dependencies {
     // For AppWidgets support
     implementation "androidx.glance:glance-appwidget:1.0.0"
     implementation "androidx.glance:glance-material3:1.0.0"
+
+    // Splashscreen
+    implementation "androidx.core:core-splashscreen:1.1.0-alpha02"
 }
 
 // Allow references to generated code

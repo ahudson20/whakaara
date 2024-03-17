@@ -5,9 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.app.whakaara.data.preferences.AppTheme
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.ui.screens.MainScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -28,7 +30,15 @@ class MainActivity : ComponentActivity() {
             val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
             val timerState by viewModel.timerState.collectAsStateWithLifecycle()
 
-            WhakaaraTheme {
+            val useDarkColours = when (preferencesState.preferences.appTheme) {
+                AppTheme.MODE_DAY -> false
+                AppTheme.MODE_NIGHT -> true
+                AppTheme.MODE_AUTO -> isSystemInDarkTheme()
+            }
+
+            WhakaaraTheme(
+                darkTheme = useDarkColours
+            ) {
                 MainScreen(
                     preferencesState = preferencesState,
                     alarmState = alarmState,

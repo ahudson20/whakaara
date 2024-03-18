@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
@@ -30,7 +31,7 @@ import com.app.whakaara.data.preferences.VibrationPattern
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_NOTIFICATION_ID
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.FOREGROUND_SERVICE_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
@@ -48,6 +49,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.util.TimerTask
 import java.util.UUID
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.concurrent.timerTask
@@ -81,6 +83,11 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
 
+    private val handler = Handler(Looper.getMainLooper())
+    private val runnable = Runnable {
+        stop()
+    }
+
     private lateinit var vibrationTask: TimerTask
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
@@ -113,14 +120,16 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
                 setIsEnabledToFalse(alarmId = alarm.alarmId)
             }
 
-            notificationManager.notify(
-                ALARM_NOTIFICATION_ID,
-                createAlarmNotification(alarm = alarm)
+            startForeground(
+                FOREGROUND_SERVICE_ID,
+                createAlarmNotification(alarm = alarm),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             )
         } else {
-            notificationManager.notify(
-                ALARM_NOTIFICATION_ID,
-                createTimerNotification()
+            startForeground(
+                FOREGROUND_SERVICE_ID,
+                createTimerNotification(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             )
         }
 
@@ -138,6 +147,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         }
 
         if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
+
+        // set timeout on service
+        handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
     }
 
     private fun deleteAlarmById(alarmId: UUID) {
@@ -172,11 +184,14 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     }
 
     private fun stop() {
-        // clear notification
-        notificationManager.cancel(ALARM_NOTIFICATION_ID)
+        // Remove this service from foreground state, clear notification
+        stopForeground(STOP_FOREGROUND_REMOVE)
 
         // cancel vibration if still running
         if (::vibrationTask.isInitialized) vibrationTask.cancel()
+
+        // cancel countdown timer
+        handler.removeCallbacks(runnable)
 
         // stop ringtone if running, release resources associated
         try {
@@ -214,13 +229,20 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
+        val stopServiceIntent = Intent(applicationContext, MediaServiceReceiver::class.java)
+        val stopServicePendingIntent = PendingIntentUtils.getBroadcast(
+            context = applicationContext,
+            id = INTENT_REQUEST_CODE,
+            intent = stopServiceIntent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
         return alarmNotificationBuilder.apply {
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
             setFullScreenIntent(pendingIntent, true)
             setWhen(alarm.date.timeInMillis)
-            setDeleteIntent(pendingIntent)
+            setDeleteIntent(stopServicePendingIntent)
         }.build()
     }
 

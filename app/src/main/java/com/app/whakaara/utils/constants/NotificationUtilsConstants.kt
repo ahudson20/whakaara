@@ -29,4 +29,6 @@ object NotificationUtilsConstants {
     const val MEDIA_SERVICE_EXCEPTION_TAG = "MediaService exception"
 
     const val RINGTONE_SELECTOR_TITLE = "Pick Ringtone"
+
+    const val FOREGROUND_SERVICE_ID = 100
 }

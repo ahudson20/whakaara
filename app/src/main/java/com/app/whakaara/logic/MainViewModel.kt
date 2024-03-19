@@ -100,8 +100,8 @@ class MainViewModel @Inject constructor(
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         repository.delete(alarm)
+        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
         alarmManagerWrapper.updateWidget()
     }
 

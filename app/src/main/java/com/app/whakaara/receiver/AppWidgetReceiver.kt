@@ -13,9 +13,6 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.widget.AppWidget
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -42,7 +39,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
     }
 
     private fun observeData(context: Context) {
-        CoroutineScope(Dispatchers.IO).launch {
+        goAsync {
             val alarms = alarmRepository.getAllAlarms()
             val serializedList = Gson().toJson(alarms)
             val glanceId = GlanceAppWidgetManager(context).getGlanceIds(AppWidget::class.java).firstOrNull()

@@ -34,8 +34,7 @@ fun Stopwatch(
                     isStart = stopwatchState.isStart,
                     onStop = onStop,
                     onPause = onPause,
-                    onStart = onStart,
-                    askForPermissions = false
+                    onStart = onStart
                 )
             }
         },

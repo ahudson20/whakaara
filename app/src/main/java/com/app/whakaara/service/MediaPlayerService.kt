@@ -229,7 +229,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
-        val stopServiceIntent = Intent(applicationContext, MediaServiceReceiver::class.java)
+        val stopServiceIntent = Intent(applicationContext, MediaServiceReceiver::class.java).apply {
+            putExtra(INTENT_ALARM_ID, alarm.alarmId.toString())
+            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM)
+        }
         val stopServicePendingIntent = PendingIntentUtils.getBroadcast(
             context = applicationContext,
             id = INTENT_REQUEST_CODE,
@@ -247,7 +250,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     }
 
     private fun createTimerNotification(): Notification {
-        val intent = Intent(applicationContext, MediaServiceReceiver::class.java)
+        val intent = Intent(applicationContext, MediaServiceReceiver::class.java).apply {
+            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM)
+        }
         val pendingIntent = PendingIntentUtils.getBroadcast(
             context = applicationContext,
             id = INTENT_REQUEST_CODE,

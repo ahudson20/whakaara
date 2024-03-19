@@ -46,6 +46,9 @@
             android:name=".activities.FullScreenNotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Whakaara"
+            android:showForAllUsers="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true"
             tools:ignore="LockedOrientationActivity" />
 
         <receiver

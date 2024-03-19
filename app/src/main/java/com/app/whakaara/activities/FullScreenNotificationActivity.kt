@@ -1,6 +1,8 @@
 package com.app.whakaara.activities
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.KeyguardManager
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
@@ -36,6 +38,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         hideSystemBars()
+        turnScreenOnAndKeyguardOff()
 
         alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
 
@@ -70,5 +73,14 @@ class FullScreenNotificationActivity : ComponentActivity() {
         val windowInsetsController = WindowCompat.getInsetsController(window, window.decorView)
         windowInsetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    private fun Activity.turnScreenOnAndKeyguardOff() {
+        setShowWhenLocked(true)
+        setTurnScreenOn(true)
+
+        with(getSystemService(KEYGUARD_SERVICE) as KeyguardManager) {
+            requestDismissKeyguard(this@turnScreenOnAndKeyguardOff, null)
+        }
     }
 }

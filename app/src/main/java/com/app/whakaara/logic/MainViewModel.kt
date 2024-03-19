@@ -1,6 +1,8 @@
 package com.app.whakaara.logic
 
+import android.app.NotificationManager
 import android.os.CountDownTimer
+import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.data.alarm.Alarm
@@ -24,6 +26,8 @@ import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGR
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_NOTIFICATION_ID
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_SUB_TEXT_PAUSED
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -37,12 +41,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: AlarmRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val alarmManagerWrapper: AlarmManagerWrapper
+    private val alarmManagerWrapper: AlarmManagerWrapper,
+    @Named("stopwatch")
+    private val stopwatchNotificationBuilder: NotificationCompat.Builder,
+    private val notificationManager: NotificationManager
 ) : ViewModel() {
 
     // alarm
@@ -176,9 +184,24 @@ class MainViewModel @Inject constructor(
         }
 
         coroutineScope.launch {
+            val lastTimeStamp = System.currentTimeMillis()
+            val setWhen = if (_stopwatchState.value.isStart) {
+                lastTimeStamp
+            } else {
+                lastTimeStamp - _stopwatchState.value.timeMillis
+            }
+
+            notificationManager.notify(
+                STOPWATCH_NOTIFICATION_ID,
+                stopwatchNotificationBuilder.apply {
+                    setWhen(setWhen)
+                    setUsesChronometer(true)
+                }.build()
+            )
+
             _stopwatchState.update {
                 it.copy(
-                    lastTimeStamp = System.currentTimeMillis(),
+                    lastTimeStamp = lastTimeStamp,
                     isActive = true,
                     isStart = false
                 )
@@ -206,6 +229,13 @@ class MainViewModel @Inject constructor(
                 isActive = false
             )
         }
+        notificationManager.notify(
+            STOPWATCH_NOTIFICATION_ID,
+            stopwatchNotificationBuilder.apply {
+                setUsesChronometer(false)
+                setSubText(STOPWATCH_SUB_TEXT_PAUSED)
+            }.build()
+        )
     }
 
     fun resetStopwatch() {
@@ -220,6 +250,7 @@ class MainViewModel @Inject constructor(
                 isStart = true
             )
         }
+        notificationManager.cancel(STOPWATCH_NOTIFICATION_ID)
     }
     //endregion
 

@@ -76,6 +76,7 @@
     <string name="shortcut_timer_long_label">Start timer</string>
     <string name="shortcut_stopwatch_short_label">Stopwatch</string>
     <string name="shortcut_stopwatch_long_label">Start stopwatch</string>
+    <string name="stopwatch_notification_sub_text">Elapsed time</string>
 
     <string name="widget_next_alarm_description">Shows next active alarm</string>
     <string name="widget_next_alarm_icon_description">Alarm icon</string>

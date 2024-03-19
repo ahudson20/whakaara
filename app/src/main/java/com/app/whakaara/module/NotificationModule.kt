@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.Notification
 import android.app.Notification.CATEGORY_ALARM
+import android.app.Notification.CATEGORY_STOPWATCH
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -83,6 +84,24 @@ class NotificationModule {
             setAutoCancel(false)
             setContentTitle(context.getString(R.string.timer_notification_content_title))
             setContentIntent(PendingIntent.getActivity(context, NotificationUtilsConstants.INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
+        }
+    }
+
+    @Provides
+    @Named("stopwatch")
+    fun providesNotificationBuilderForStopwatch(
+        @ApplicationContext
+        context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.outline_timer_24)
+            setCategory(CATEGORY_STOPWATCH)
+            setAutoCancel(false)
+            setOngoing(true)
+            setSubText(context.getString(R.string.stopwatch_notification_sub_text))
+            setContentTitle(context.getString(R.string.shortcut_stopwatch_short_label))
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         }
     }
 

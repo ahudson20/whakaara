@@ -14,7 +14,8 @@ object NotificationUtilsConstants {
     const val ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES = 10
 
     const val SERVICE_ACTION = "action"
-    const val ALARM_NOTIFICATION_ID = 300
+    const val STOPWATCH_NOTIFICATION_ID = 400
+    const val STOPWATCH_SUB_TEXT_PAUSED = "Paused"
     const val PLAY = 1
     const val STOP = -1
 

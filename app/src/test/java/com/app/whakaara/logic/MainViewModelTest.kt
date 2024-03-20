@@ -1,6 +1,8 @@
 package com.app.whakaara.logic
 
+import android.app.NotificationManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.core.app.NotificationCompat
 import app.cash.turbine.test
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
@@ -44,6 +46,8 @@ class MainViewModelTest {
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
     private lateinit var alarmManagerWrapper: AlarmManagerWrapper
+    private lateinit var notificationManager: NotificationManager
+    private lateinit var stopwatchNotificationBuilder: NotificationCompat.Builder
 
     @Before
     fun setUp() {
@@ -51,8 +55,10 @@ class MainViewModelTest {
         repository = mockk()
         preferencesRepository = mockk()
         alarmManagerWrapper = mockk()
+        notificationManager = mockk()
+        stopwatchNotificationBuilder = mockk()
 
-        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper)
+        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper, stopwatchNotificationBuilder, notificationManager)
 
         alarms = listOf(
             Alarm(

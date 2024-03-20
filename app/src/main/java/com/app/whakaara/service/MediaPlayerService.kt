@@ -262,6 +262,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         return timerNotificationBuilder.apply {
             addAction(R.drawable.baseline_cancel_24, applicationContext.getString(R.string.timer_notification_action_label), pendingIntent)
             setDeleteIntent(pendingIntent)
+            setContentText(applicationContext.getString(R.string.timer_notification_content_text))
         }.build()
     }
 

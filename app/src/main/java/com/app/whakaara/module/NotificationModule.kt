@@ -84,7 +84,6 @@ class NotificationModule {
             setAutoCancel(false)
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setContentTitle(context.getString(R.string.timer_notification_content_title))
-            setContentText(context.getString(R.string.timer_notification_content_text))
             setContentIntent(PendingIntent.getActivity(context, NotificationUtilsConstants.INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
         }
     }

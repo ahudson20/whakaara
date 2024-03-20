@@ -28,6 +28,7 @@ import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLI
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_NOTIFICATION_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_SUB_TEXT_PAUSED
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_SUB_TEXT_PLAYING
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -196,6 +197,7 @@ class MainViewModel @Inject constructor(
                 stopwatchNotificationBuilder.apply {
                     setWhen(setWhen)
                     setUsesChronometer(true)
+                    setSubText(STOPWATCH_SUB_TEXT_PLAYING)
                 }.build()
             )
 

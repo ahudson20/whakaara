@@ -15,6 +15,7 @@ object NotificationUtilsConstants {
 
     const val SERVICE_ACTION = "action"
     const val STOPWATCH_NOTIFICATION_ID = 400
+    const val STOPWATCH_SUB_TEXT_PLAYING = "Elapsed time"
     const val STOPWATCH_SUB_TEXT_PAUSED = "Paused"
     const val PLAY = 1
     const val STOP = -1

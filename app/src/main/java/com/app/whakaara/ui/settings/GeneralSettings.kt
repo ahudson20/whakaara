@@ -35,7 +35,6 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils.Companion.getNameFromUri
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.RINGTONE_SELECTOR_TITLE
 
 @Composable
 fun GeneralSettings(
@@ -52,7 +51,7 @@ fun GeneralSettings(
     val ringtoneSelectionIntent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
         putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
         putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-        putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, RINGTONE_SELECTOR_TITLE)
+        putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, context.getString(R.string.ringtone_selection_activity_title))
         putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtoneUri)
         putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
     }

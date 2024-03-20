@@ -14,9 +14,8 @@ object NotificationUtilsConstants {
     const val ALARM_SOUND_TIMEOUT_DEFAULT_MINUTES = 10
 
     const val SERVICE_ACTION = "action"
+    const val TIMER_NOTIFICATION_ID = 300
     const val STOPWATCH_NOTIFICATION_ID = 400
-    const val STOPWATCH_SUB_TEXT_PLAYING = "Elapsed time"
-    const val STOPWATCH_SUB_TEXT_PAUSED = "Paused"
     const val PLAY = 1
     const val STOP = -1
 
@@ -29,8 +28,6 @@ object NotificationUtilsConstants {
 
     const val MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG = "MediaReceiver exception"
     const val MEDIA_SERVICE_EXCEPTION_TAG = "MediaService exception"
-
-    const val RINGTONE_SELECTOR_TITLE = "Pick Ringtone"
 
     const val FOREGROUND_SERVICE_ID = 100
 }

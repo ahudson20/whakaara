@@ -44,7 +44,7 @@ class MediaServiceReceiver : BroadcastReceiver() {
                     alarmManagerWrapper.updateWidget()
                 }
                 if (alarmType == NOTIFICATION_TYPE_TIMER) {
-                    alarmManagerWrapper.cancelTimerNotification()
+                    alarmManagerWrapper.cancelTimerAlarm()
                 }
                 context.stopService(Intent(context, MediaPlayerService::class.java))
             } catch (exception: Exception) {

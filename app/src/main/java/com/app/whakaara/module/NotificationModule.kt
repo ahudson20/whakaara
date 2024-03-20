@@ -65,6 +65,7 @@ class NotificationModule {
             color = Color.WHITE
             setSmallIcon(R.drawable.baseline_access_time_24)
             setAutoCancel(true)
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setCategory(CATEGORY_ALARM)
             setSubText(context.getString(R.string.notification_sub_text))
         }
@@ -80,9 +81,10 @@ class NotificationModule {
             color = Color.WHITE
             setSmallIcon(R.drawable.baseline_access_time_24)
             setCategory(CATEGORY_ALARM)
-            setSubText(context.getString(R.string.notification_sub_text))
             setAutoCancel(false)
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setContentTitle(context.getString(R.string.timer_notification_content_title))
+            setContentText(context.getString(R.string.timer_notification_content_text))
             setContentIntent(PendingIntent.getActivity(context, NotificationUtilsConstants.INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
         }
     }
@@ -114,6 +116,11 @@ class NotificationModule {
     @Singleton
     fun providesAlarmManagerWrapper(
         app: Application,
-        alarmManager: AlarmManager
-    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
+        alarmManager: AlarmManager,
+        notificationManager: NotificationManager,
+        @Named("timer")
+        timerNotificationBuilder: NotificationCompat.Builder,
+        @Named("stopwatch")
+        stopwatchNotificationBuilder: NotificationCompat.Builder
+    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, stopwatchNotificationBuilder)
 }

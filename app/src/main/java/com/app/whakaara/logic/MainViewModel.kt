@@ -1,8 +1,6 @@
 package com.app.whakaara.logic
 
-import android.app.NotificationManager
 import android.os.CountDownTimer
-import androidx.core.app.NotificationCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.data.alarm.Alarm
@@ -27,8 +25,7 @@ import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_NOTIFICATION_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_SUB_TEXT_PAUSED
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_SUB_TEXT_PLAYING
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_NOTIFICATION_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -42,16 +39,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
-import javax.inject.Named
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val repository: AlarmRepository,
     private val preferencesRepository: PreferencesRepository,
-    private val alarmManagerWrapper: AlarmManagerWrapper,
-    @Named("stopwatch")
-    private val stopwatchNotificationBuilder: NotificationCompat.Builder,
-    private val notificationManager: NotificationManager
+    private val alarmManagerWrapper: AlarmManagerWrapper
 ) : ViewModel() {
 
     // alarm
@@ -99,60 +92,72 @@ class MainViewModel @Inject constructor(
     }
 
     fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
-        alarmManagerWrapper.createAlarm(
-            alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
-            date = alarm.date
-        )
         repository.insert(alarm)
-        alarmManagerWrapper.updateWidget()
+        with(alarmManagerWrapper) {
+            createAlarm(
+                alarmId = alarm.alarmId.toString(),
+                autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+                date = alarm.date
+            )
+            updateWidget()
+        }
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(alarm)
-        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.updateWidget()
+        with(alarmManagerWrapper) {
+            stopAlarm(alarmId = alarm.alarmId.toString())
+            updateWidget()
+        }
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
-        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.updateWidget()
+        with(alarmManagerWrapper) {
+            stopAlarm(alarmId = alarm.alarmId.toString())
+            updateWidget()
+        }
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = true))
-        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.createAlarm(
-            alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
-            date = alarm.date
-        )
-        alarmManagerWrapper.updateWidget()
+        with(alarmManagerWrapper) {
+            stopAlarm(alarmId = alarm.alarmId.toString())
+            createAlarm(
+                alarmId = alarm.alarmId.toString(),
+                autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+                date = alarm.date
+            )
+            updateWidget()
+        }
     }
 
     fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm)
-        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.createAlarm(
-            alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
-            date = alarm.date
-        )
-        alarmManagerWrapper.updateWidget()
+        with(alarmManagerWrapper) {
+            stopAlarm(alarmId = alarm.alarmId.toString())
+            createAlarm(
+                alarmId = alarm.alarmId.toString(),
+                autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+                date = alarm.date
+            )
+            updateWidget()
+        }
     }
 
     fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         val currentTimePlusTenMinutes = Calendar.getInstance().apply {
             add(Calendar.MINUTE, _preferencesState.value.preferences.snoozeTime.value)
         }
-        alarmManagerWrapper.stopAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.createAlarm(
-            alarmId = alarm.alarmId.toString(),
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
-            date = currentTimePlusTenMinutes
-        )
-        alarmManagerWrapper.updateWidget()
+        with(alarmManagerWrapper) {
+            stopAlarm(alarmId = alarm.alarmId.toString())
+            createAlarm(
+                alarmId = alarm.alarmId.toString(),
+                autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+                date = currentTimePlusTenMinutes
+            )
+            updateWidget()
+        }
     }
 
     private fun updateExistingAlarmInDatabase(alarm: Alarm) =
@@ -192,14 +197,7 @@ class MainViewModel @Inject constructor(
                 lastTimeStamp - _stopwatchState.value.timeMillis
             }
 
-            notificationManager.notify(
-                STOPWATCH_NOTIFICATION_ID,
-                stopwatchNotificationBuilder.apply {
-                    setWhen(setWhen)
-                    setUsesChronometer(true)
-                    setSubText(STOPWATCH_SUB_TEXT_PLAYING)
-                }.build()
-            )
+            alarmManagerWrapper.createStopwatchNotification(milliseconds = setWhen)
 
             _stopwatchState.update {
                 it.copy(
@@ -231,13 +229,7 @@ class MainViewModel @Inject constructor(
                 isActive = false
             )
         }
-        notificationManager.notify(
-            STOPWATCH_NOTIFICATION_ID,
-            stopwatchNotificationBuilder.apply {
-                setUsesChronometer(false)
-                setSubText(STOPWATCH_SUB_TEXT_PAUSED)
-            }.build()
-        )
+        alarmManagerWrapper.pauseStopwatchNotification()
     }
 
     fun resetStopwatch() {
@@ -252,7 +244,7 @@ class MainViewModel @Inject constructor(
                 isStart = true
             )
         }
-        notificationManager.cancel(STOPWATCH_NOTIFICATION_ID)
+        alarmManagerWrapper.cancelNotification(STOPWATCH_NOTIFICATION_ID)
     }
     //endregion
 
@@ -361,7 +353,10 @@ class MainViewModel @Inject constructor(
     fun pauseTimer() {
         if (!_timerState.value.isTimerPaused) {
             countDownTimer?.cancel()
-            alarmManagerWrapper.cancelTimerNotification()
+            with(alarmManagerWrapper) {
+                cancelTimerAlarm()
+                pauseTimerNotificationCountdown()
+            }
             _timerState.update {
                 it.copy(
                     isTimerPaused = true,
@@ -374,7 +369,10 @@ class MainViewModel @Inject constructor(
 
     fun resetTimer() {
         countDownTimer?.cancel()
-        alarmManagerWrapper.cancelTimerNotification()
+        with(alarmManagerWrapper) {
+            cancelTimerAlarm()
+            cancelNotification(id = TIMER_NOTIFICATION_ID)
+        }
         _timerState.update {
             it.copy(
                 isTimerPaused = false,

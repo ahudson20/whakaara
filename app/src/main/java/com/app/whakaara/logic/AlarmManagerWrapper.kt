@@ -2,10 +2,14 @@ package com.app.whakaara.logic
 
 import android.app.AlarmManager
 import android.app.Application
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationCompat.CATEGORY_ALARM
+import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.service.MediaPlayerService
@@ -21,12 +25,20 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.PLAY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTION
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_NOTIFICATION_ID
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_NOTIFICATION_ID
 import java.util.Calendar
 import javax.inject.Inject
+import javax.inject.Named
 
 class AlarmManagerWrapper @Inject constructor(
     private val app: Application,
-    private val alarmManager: AlarmManager
+    private val alarmManager: AlarmManager,
+    private val notificationManager: NotificationManager,
+    @Named("timer")
+    private val timerNotificationBuilder: NotificationCompat.Builder,
+    @Named("stopwatch")
+    private val stopwatchNotificationBuilder: NotificationCompat.Builder
 ) {
     fun createAlarm(
         alarmId: String,
@@ -137,9 +149,41 @@ class AlarmManagerWrapper @Inject constructor(
             milliseconds,
             pendingIntent
         )
+        startTimerNotificationCountdown(milliseconds = milliseconds)
     }
 
-    fun cancelTimerNotification() {
+    private fun startTimerNotificationCountdown(
+        milliseconds: Long
+    ) {
+        notificationManager.notify(
+            TIMER_NOTIFICATION_ID,
+            timerNotificationBuilder.apply {
+                setWhen(milliseconds)
+                setUsesChronometer(true)
+                setChronometerCountDown(true)
+                setAutoCancel(false)
+                setTimeoutAfter(milliseconds - System.currentTimeMillis())
+                setCategory(CATEGORY_ALARM)
+                setOngoing(true)
+                setContentTitle(app.applicationContext.getString(R.string.timer_notification_title_active))
+                setSubText(app.applicationContext.getString(R.string.timer_notification_sub_text_active))
+            }.build()
+        )
+    }
+
+    fun pauseTimerNotificationCountdown() {
+        notificationManager.notify(
+            TIMER_NOTIFICATION_ID,
+            timerNotificationBuilder.apply {
+                setUsesChronometer(false)
+                setChronometerCountDown(false)
+                setContentTitle(app.applicationContext.getString(R.string.timer_notification_title_paused))
+                setSubText(app.applicationContext.getString(R.string.notification_sub_text_pasused))
+            }.build()
+        )
+    }
+
+    fun cancelTimerAlarm() {
         val startReceiverIntent = Intent(app, MediaPlayerService::class.java).apply {
             this.action = INTENT_TIMER_NOTIFICATION_ID
         }
@@ -160,5 +204,32 @@ class AlarmManagerWrapper @Inject constructor(
                 action = AppWidgetReceiver.UPDATE_ACTION
             }
         )
+    }
+
+    fun createStopwatchNotification(
+        milliseconds: Long
+    ) {
+        notificationManager.notify(
+            STOPWATCH_NOTIFICATION_ID,
+            stopwatchNotificationBuilder.apply {
+                setWhen(milliseconds)
+                setUsesChronometer(true)
+                setSubText(app.applicationContext.getString(R.string.stopwatch_notification_sub_text))
+            }.build()
+        )
+    }
+
+    fun pauseStopwatchNotification() {
+        notificationManager.notify(
+            STOPWATCH_NOTIFICATION_ID,
+            stopwatchNotificationBuilder.apply {
+                setUsesChronometer(false)
+                setSubText(app.applicationContext.getString(R.string.notification_sub_text_pasused))
+            }.build()
+        )
+    }
+
+    fun cancelNotification(id: Int) {
+        notificationManager.cancel(id)
     }
 }

@@ -68,6 +68,7 @@
     <string name="timer_screen_minutes_label">Minutes</string>
     <string name="timer_screen_seconds_label">Seconds</string>
     <string name="timer_notification_content_title">Timer Complete</string>
+    <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>
     <string name="timer_notification_action_label">Stop</string>
 
     <string name="shortcut_alarm_short_label">Alarm</string>
@@ -77,6 +78,10 @@
     <string name="shortcut_stopwatch_short_label">Stopwatch</string>
     <string name="shortcut_stopwatch_long_label">Start stopwatch</string>
     <string name="stopwatch_notification_sub_text">Elapsed time</string>
+    <string name="timer_notification_title_active">Timer active</string>
+    <string name="timer_notification_sub_text_active">Time left</string>
+    <string name="timer_notification_title_paused">Timer paused</string>
+    <string name="notification_sub_text_pasused">Paused</string>
 
     <string name="widget_next_alarm_description">Shows next active alarm</string>
     <string name="widget_next_alarm_icon_description">Alarm icon</string>
@@ -85,4 +90,6 @@
     <string name="widget_next_alarm_preview_time">12:59PM</string>
     <string name="widget_next_alarm_preview_title">Wake up now!</string>
     <string name="widget_shortcut_description">App shortcut</string>
+
+    <string name="ringtone_selection_activity_title">Pick Ringtone</string>
 </resources>

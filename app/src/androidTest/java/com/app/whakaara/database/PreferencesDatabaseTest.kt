@@ -10,6 +10,7 @@ import app.cash.turbine.test
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesDao
 import com.app.whakaara.data.preferences.PreferencesDatabase
+import com.app.whakaara.data.preferences.SettingsTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -61,8 +62,8 @@ class PreferencesDatabaseTest {
             isVibrateEnabled = false,
             isSnoozeEnabled = true,
             deleteAfterGoesOff = false,
-            autoSilenceTime = 123,
-            snoozeTime = 321
+            autoSilenceTime = SettingsTime.TEN,
+            snoozeTime = SettingsTime.TEN
         )
         preferencesDao.insert(preferences = preferences)
 
@@ -80,8 +81,8 @@ class PreferencesDatabaseTest {
             isVibrateEnabled = false,
             isSnoozeEnabled = true,
             deleteAfterGoesOff = false,
-            autoSilenceTime = 123,
-            snoozeTime = 321
+            autoSilenceTime = SettingsTime.TEN,
+            snoozeTime = SettingsTime.TEN
         )
         preferencesDao.insert(preferences = preferences)
 
@@ -89,19 +90,19 @@ class PreferencesDatabaseTest {
         preferencesDao.updatePreferences(
             preferences = preferences.copy(
                 id = 100,
-                autoSilenceTime = 999,
-                snoozeTime = 888
+                autoSilenceTime = SettingsTime.FIFTEEN,
+                snoozeTime = SettingsTime.FIFTEEN
             )
         )
 
         preferencesDao.getPreferencesFlow().test {
             val updated = awaitItem()
             updated.apply {
-                assertNotEquals(123, this.autoSilenceTime)
-                assertNotEquals(321, this.snoozeTime)
+                assertNotEquals(SettingsTime.TEN, this.autoSilenceTime)
+                assertNotEquals(SettingsTime.TEN, this.snoozeTime)
 
-                assertEquals(999, this.autoSilenceTime)
-                assertEquals(888, this.snoozeTime)
+                assertEquals(SettingsTime.FIFTEEN, this.autoSilenceTime)
+                assertEquals(SettingsTime.FIFTEEN, this.snoozeTime)
             }
             cancel()
         }

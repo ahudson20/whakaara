@@ -8,4 +8,6 @@ interface PreferencesRepository {
     suspend fun updatePreferences(preferences: Preferences)
 
     fun getPreferencesFlow(): Flow<Preferences>
+
+    fun getPreferences(): Preferences
 }

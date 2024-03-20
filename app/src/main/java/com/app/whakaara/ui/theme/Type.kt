@@ -1,28 +1,37 @@
 package com.app.whakaara.ui.theme
 
-import androidx.compose.material.Typography
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.material3.Typography
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import com.app.whakaara.R
 
-// Set of Material typography styles to start with
+private val mediumFontFamily = FontFamily(
+    Font(R.font.azeret_mono_medium)
+)
+
+private val regularFontFamily = FontFamily(
+    Font(R.font.azeret_mono_regular)
+)
+
+private val defaultTypography = Typography()
 val Typography = Typography(
-    body1 = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
-    )
-    /* Other default text styles to override
-    button = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.W500,
-        fontSize = 14.sp
-    ),
-    caption = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 12.sp
-    )
-    */
+    displayLarge = defaultTypography.displayLarge.copy(fontFamily = regularFontFamily),
+    displayMedium = defaultTypography.displayMedium.copy(fontFamily = regularFontFamily),
+    displaySmall = defaultTypography.displaySmall.copy(fontFamily = regularFontFamily),
+
+    headlineLarge = defaultTypography.headlineLarge.copy(fontFamily = regularFontFamily),
+    headlineMedium = defaultTypography.headlineMedium.copy(fontFamily = regularFontFamily),
+    headlineSmall = defaultTypography.headlineSmall.copy(fontFamily = regularFontFamily),
+
+    titleLarge = defaultTypography.titleLarge.copy(fontFamily = regularFontFamily),
+    titleMedium = defaultTypography.titleMedium.copy(fontFamily = mediumFontFamily),
+    titleSmall = defaultTypography.titleSmall.copy(fontFamily = mediumFontFamily),
+
+    bodyLarge = defaultTypography.bodyLarge.copy(fontFamily = regularFontFamily),
+    bodyMedium = defaultTypography.bodyMedium.copy(fontFamily = regularFontFamily),
+    bodySmall = defaultTypography.bodySmall.copy(fontFamily = regularFontFamily),
+
+    labelLarge = defaultTypography.labelLarge.copy(fontFamily = mediumFontFamily),
+    labelMedium = defaultTypography.labelMedium.copy(fontFamily = mediumFontFamily),
+    labelSmall = defaultTypography.labelSmall.copy(fontFamily = mediumFontFamily)
 )

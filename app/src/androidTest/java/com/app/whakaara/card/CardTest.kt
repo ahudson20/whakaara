@@ -7,7 +7,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.card.Card
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
@@ -38,17 +37,15 @@ class CardTest {
             WhakaaraTheme {
                 Card(
                     alarm = alarm,
-                    preferencesState = PreferencesState(),
+                    is24HourFormat = true,
                     disable = {},
-                    enable = {},
-                    reset = {}
-                )
+                    enable = {}
+                ) {}
             }
         }
 
         // Then
-        onNodeWithText(text = "Alarm").assertIsDisplayed()
-        onNodeWithText(text = "12:13 AM").assertIsDisplayed()
+        onNodeWithText(text = "12:13AM").assertIsDisplayed()
         onNodeWithText(text = timeToAlarm).assertIsDisplayed()
         onNodeWithTag(testTag = "alarm switch")
             .assertIsDisplayed()

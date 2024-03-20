@@ -11,6 +11,41 @@ data class Preferences(
     var isVibrateEnabled: Boolean = true,
     var isSnoozeEnabled: Boolean = true,
     var deleteAfterGoesOff: Boolean = false,
-    var autoSilenceTime: Int = 10,
-    var snoozeTime: Int = 10
+    var autoSilenceTime: SettingsTime = SettingsTime.TEN,
+    var snoozeTime: SettingsTime = SettingsTime.TEN,
+    var alarmSoundPath: String = "",
+    var vibrationPattern: VibrationPattern = VibrationPattern.CLICK,
+    var appTheme: AppTheme = AppTheme.MODE_AUTO
 )
+
+enum class VibrationPattern(val value: Int, val label: String) {
+    CLICK(0, "Click"),
+    DOUBLE(1, "Double click"),
+    HEAVY(2, "Heavy click"),
+    TICK(3, "Tick");
+
+    companion object {
+        fun fromOrdinalInt(value: Int) = VibrationPattern.values().first { it.ordinal == value }
+    }
+}
+
+enum class SettingsTime(val value: Int, val label: String) {
+    ONE(0, "1 minute"),
+    FIVE(5, "5 minutes"),
+    TEN(10, "10 minutes"),
+    FIFTEEN(15, "15 minutes");
+
+    companion object {
+        fun fromOrdinalInt(value: Int) = SettingsTime.values().first { it.ordinal == value }
+    }
+}
+
+enum class AppTheme(val label: String) {
+    MODE_DAY("Light mode"),
+    MODE_NIGHT("Dark mode"),
+    MODE_AUTO("System preference");
+
+    companion object {
+        fun fromOrdinalInt(value: Int) = values()[value]
+    }
+}

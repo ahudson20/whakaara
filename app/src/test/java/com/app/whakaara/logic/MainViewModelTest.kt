@@ -1,12 +1,15 @@
 package com.app.whakaara.logic
 
-import android.app.Application
+import android.app.NotificationManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.core.app.NotificationCompat
 import app.cash.turbine.test
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
+import com.app.whakaara.data.preferences.SettingsTime
+import com.app.whakaara.state.AlarmState
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +21,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -36,21 +40,25 @@ class MainViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
 
-    private lateinit var app: Application
     private lateinit var viewModel: MainViewModel
     private lateinit var repository: AlarmRepository
     private lateinit var preferencesRepository: PreferencesRepository
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
+    private lateinit var alarmManagerWrapper: AlarmManagerWrapper
+    private lateinit var notificationManager: NotificationManager
+    private lateinit var stopwatchNotificationBuilder: NotificationCompat.Builder
 
     @Before
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         repository = mockk()
         preferencesRepository = mockk()
-        app = mockk()
+        alarmManagerWrapper = mockk()
+        notificationManager = mockk()
+        stopwatchNotificationBuilder = mockk()
 
-        viewModel = MainViewModel(app, repository, preferencesRepository)
+        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper, stopwatchNotificationBuilder, notificationManager)
 
         alarms = listOf(
             Alarm(
@@ -92,18 +100,23 @@ class MainViewModelTest {
     @Test
     fun `init test - alarm state`() = runTest {
         // Given + When + Then
-        viewModel.uiState.test {
-            val alarmList = awaitItem()
-            assertEquals(2, alarmList.alarms.size)
+        viewModel.alarmState.test {
+            val alarmState = awaitItem()
 
-            alarmList.alarms[0].apply {
-                assertEquals("First Alarm Title", this.title)
-                assertEquals("14:34 PM", this.subTitle)
-            }
+            assertTrue(alarmState is AlarmState.Success)
 
-            alarmList.alarms[1].apply {
-                assertEquals("Second Alarm Title", this.title)
-                assertEquals("14:34 PM", this.subTitle)
+            with(alarmState as AlarmState.Success) {
+                assertEquals(2, this.alarms.size)
+
+                this.alarms[0].apply {
+                    assertEquals("First Alarm Title", this.title)
+                    assertEquals("14:34 PM", this.subTitle)
+                }
+
+                this.alarms[1].apply {
+                    assertEquals("Second Alarm Title", this.title)
+                    assertEquals("14:34 PM", this.subTitle)
+                }
             }
 
             cancelAndIgnoreRemainingEvents()
@@ -119,8 +132,8 @@ class MainViewModelTest {
                 assertEquals(true, this.preferences.isVibrateEnabled)
                 assertEquals(true, this.preferences.isSnoozeEnabled)
                 assertEquals(false, this.preferences.deleteAfterGoesOff)
-                assertEquals(10, this.preferences.autoSilenceTime)
-                assertEquals(10, this.preferences.snoozeTime)
+                assertEquals(SettingsTime.TEN, this.preferences.autoSilenceTime)
+                assertEquals(SettingsTime.TEN, this.preferences.snoozeTime)
             }
 
             cancelAndIgnoreRemainingEvents()

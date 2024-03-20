@@ -1,14 +1,25 @@
 package com.app.whakaara.utils
 
 import android.content.Context
+import android.media.RingtoneManager
+import android.net.Uri
 import android.widget.Toast
 import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.utils.constants.GeneralConstants.RINGTONE_NONE_SELECTED
 import com.google.gson.Gson
 
 class GeneralUtils {
     companion object {
         fun Context.showToast(message: String, length: Int = Toast.LENGTH_LONG) {
             Toast.makeText(this, message, length).show()
+        }
+
+        fun Context.getNameFromUri(uri: Uri): String {
+            val ringtone = RingtoneManager.getRingtone(this, uri)
+            if (ringtone != null) {
+                return ringtone.getTitle(this)
+            }
+            return RINGTONE_NONE_SELECTED
         }
 
         /**

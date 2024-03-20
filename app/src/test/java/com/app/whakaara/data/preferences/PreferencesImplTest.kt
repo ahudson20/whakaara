@@ -50,8 +50,8 @@ class PreferencesImplTest {
     fun `insert preferences`() = runTest {
         // Given
         val preferences = Preferences(
-            autoSilenceTime = 123,
-            snoozeTime = 456
+            autoSilenceTime = SettingsTime.TEN,
+            snoozeTime = SettingsTime.TEN
         )
         val preferencesSlot = slot<Preferences>()
         coEvery { preferencesDao.insert(any()) } returns mockk()
@@ -62,8 +62,8 @@ class PreferencesImplTest {
         // Then
         coVerify(atLeast = 1) { preferencesDao.insert(capture(preferencesSlot)) }
         with(preferencesSlot.captured) {
-            assertEquals(123, autoSilenceTime)
-            assertEquals(456, snoozeTime)
+            assertEquals(10, autoSilenceTime.value)
+            assertEquals(10, snoozeTime.value)
         }
     }
 
@@ -71,8 +71,8 @@ class PreferencesImplTest {
     fun `update preferences`() = runTest {
         // Given
         val preferences = Preferences(
-            autoSilenceTime = 123,
-            snoozeTime = 456
+            autoSilenceTime = SettingsTime.FIFTEEN,
+            snoozeTime = SettingsTime.TEN
         )
         val preferencesSlot = slot<Preferences>()
         coEvery { preferencesDao.updatePreferences(any()) } returns mockk()
@@ -83,8 +83,8 @@ class PreferencesImplTest {
         // Then
         coVerify(atLeast = 1) { preferencesDao.updatePreferences(capture(preferencesSlot)) }
         with(preferencesSlot.captured) {
-            assertEquals(123, autoSilenceTime)
-            assertEquals(456, snoozeTime)
+            assertEquals(15, autoSilenceTime.value)
+            assertEquals(10, snoozeTime.value)
         }
     }
 }

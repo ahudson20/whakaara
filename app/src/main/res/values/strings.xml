@@ -8,8 +8,11 @@
     <string name="bottom_sheet_title">Edit alarm</string>
     <string name="bottom_sheet_sub_title">Off</string>
     <string name="bottom_sheet_snooze_switch">Snooze</string>
-    <string name="bottom_sheet_vibration_switch">Vibrate when alarm sounds</string>
-    <string name="bottom_sheet_delete_switch">Delete after goes off</string>
+    <string name="bottom_sheet_snooze_switch_sub_title">Snooze on alarm</string>
+    <string name="bottom_sheet_vibration_switch">Vibrate</string>
+    <string name="bottom_sheet_vibration_switch_sub_title">Vibrate on alarm</string>
+    <string name="bottom_sheet_delete_switch">Single-use</string>
+    <string name="bottom_sheet_delete_switch_sub_title">Alarm will delete after going off</string>
     <string name="bottom_sheet_save_button">Save</string>
     <string name="bottom_sheet_close_button">Cancel</string>
     <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>
@@ -29,19 +32,24 @@
 
     <string name="notification_sub_text">Tap to dismiss</string>
 
+    <string name="alarm_screen_empty_list">No alarms to display</string>
+
     <string name="floating_action_button_icon_description">Create alarm</string>
     <string name="delete_icon_content_description">Delete icon</string>
     <string name="pause_timer_icon_content_description">Pause timer icon button</string>
     <string name="start_timer_icon_content_description">Start timer icon button</string>
     <string name="stop_timer_icon_content_description">Stop timer icon button</string>
     <string name="system_time_icon_content_description">System time</string>
+    <string name="settings_icon_content_description">Alarm settings icon</string>
 
+    <string name="settings_screen_title">Settings</string>
     <string name="settings_screen_general_title">General settings</string>
     <string name="settings_screen_system_time">Edit system time</string>
     <string name="settings_screen_app_settings">App settings</string>
     <string name="settings_screen_alarm_settings_title">Alarm Settings</string>
     <string name="settings_screen_vibrate_title">Vibrate</string>
     <string name="settings_screen_vibrate_subtitle">Vibrate when alarms go off</string>
+    <string name="settings_screen_vibrate_pattern_title">Vibration pattern</string>
     <string name="settings_screen_snooze_title">Snooze</string>
     <string name="settings_screen_snooze_subtitle">Allow alarms to be snoozed</string>
     <string name="settings_screen_delete_title">Delete</string>
@@ -49,6 +57,32 @@
     <string name="settings_screen_snooze_duration_title">Snooze duration</string>
     <string name="settings_screen_auto_silence_title">Auto silence</string>
     <string name="settings_screen_auto_silence_subtitle">Set time after which alarms will be silenced</string>
-    <string name="settings_screen_24_hour_format_title">Alarms displayed in 24 hour format</string>
-    <string name="settings_screen_24_hour_format_subtitle">If enabled display using 24 hour format, else 12 hour format</string>
+    <string name="settings_screen_24_hour_format_title">24 hour format</string>
+    <string name="settings_screen_24_hour_format_subtitle">If enabled, display using 24 hour format</string>
+    <string name="settings_screen_ringtone_selection_icon">Select ringtone</string>
+    <string name="settings_screen_ringtone_title">Select ringtone</string>
+    <string name="settings_screen_ringtone_subtitle">Current:</string>
+    <string name="settings_screen_app_theme_title">App Theme</string>
+
+    <string name="timer_screen_hour_label">Hours</string>
+    <string name="timer_screen_minutes_label">Minutes</string>
+    <string name="timer_screen_seconds_label">Seconds</string>
+    <string name="timer_notification_content_title">Timer Complete</string>
+    <string name="timer_notification_action_label">Stop</string>
+
+    <string name="shortcut_alarm_short_label">Alarm</string>
+    <string name="shortcut_alarm_long_label">Create alarm</string>
+    <string name="shortcut_timer_short_label">Timer</string>
+    <string name="shortcut_timer_long_label">Start timer</string>
+    <string name="shortcut_stopwatch_short_label">Stopwatch</string>
+    <string name="shortcut_stopwatch_long_label">Start stopwatch</string>
+    <string name="stopwatch_notification_sub_text">Elapsed time</string>
+
+    <string name="widget_next_alarm_description">Shows next active alarm</string>
+    <string name="widget_next_alarm_icon_description">Alarm icon</string>
+    <string name="widget_next_alarm_title">Next alarm</string>
+    <string name="widget_next_alarm_none">None set</string>
+    <string name="widget_next_alarm_preview_time">12:59PM</string>
+    <string name="widget_next_alarm_preview_title">Wake up now!</string>
+    <string name="widget_shortcut_description">App shortcut</string>
 </resources>

@@ -3,6 +3,7 @@ package com.app.whakaara.settings
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.settings.GeneralSettings
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
@@ -15,10 +16,16 @@ class GeneralSettingsTest {
 
     @Test
     fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given + When
+        // Given
+        val preferencesState = PreferencesState()
+
+        // When
         setContent {
             WhakaaraTheme {
-                GeneralSettings()
+                GeneralSettings(
+                    preferencesState = preferencesState,
+                    updatePreferences = {}
+                )
             }
         }
 

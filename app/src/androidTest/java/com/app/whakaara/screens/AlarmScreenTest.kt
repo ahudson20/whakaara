@@ -7,7 +7,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -28,8 +27,7 @@ class AlarmScreenTest {
                 set(Calendar.HOUR_OF_DAY, 12)
                 set(Calendar.MINUTE, 34)
             },
-            title = "First Alarm Title",
-            subTitle = "First Alarm"
+            subTitle = "10:03PM"
         )
 
         val secondAlarm = Alarm(
@@ -37,8 +35,7 @@ class AlarmScreenTest {
                 set(Calendar.HOUR_OF_DAY, 7)
                 set(Calendar.MINUTE, 34)
             },
-            title = "Second Alarm Title",
-            subTitle = "Second Alarm"
+            subTitle = "03:03AM"
         )
         val timeToFirstAlarm = DateUtils.getInitialTimeToAlarm(true, firstAlarm.date)
         val timeToSecondAlarm = DateUtils.getInitialTimeToAlarm(true, secondAlarm.date)
@@ -47,23 +44,22 @@ class AlarmScreenTest {
         setContent {
             WhakaaraTheme {
                 AlarmScreen(
-                    alarmState = AlarmState(listOf(firstAlarm, secondAlarm)),
+                    alarms = listOf(firstAlarm, secondAlarm),
                     preferencesState = PreferencesState(),
                     delete = {},
                     disable = {},
                     enable = {},
-                    reset = {}
+                    reset = {},
+                    create = {}
                 )
             }
         }
 
         // Then
-        onNodeWithText(text = "First Alarm Title").assertIsDisplayed()
-        onNodeWithText(text = "First Alarm").assertIsDisplayed()
+        onNodeWithText(text = "10:03PM").assertIsDisplayed()
         onNodeWithText(text = timeToFirstAlarm).assertIsDisplayed()
 
-        onNodeWithText(text = "Second Alarm Title").assertIsDisplayed()
-        onNodeWithText(text = "Second Alarm").assertIsDisplayed()
+        onNodeWithText(text = "03:03AM").assertIsDisplayed()
         onNodeWithText(text = timeToSecondAlarm).assertIsDisplayed()
 
         onAllNodesWithTag(testTag = "alarm switch", useUnmergedTree = true)

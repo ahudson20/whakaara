@@ -1,13 +1,20 @@
 package com.app.whakaara.module
 
+import android.app.AlarmManager
+import android.app.Application
 import android.app.Notification
 import android.app.Notification.CATEGORY_ALARM
+import android.app.Notification.CATEGORY_STOPWATCH
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
+import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
 import dagger.Module
@@ -15,6 +22,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -48,16 +56,64 @@ class NotificationModule {
     }
 
     @Provides
-    @Singleton
+    @Named("alarm")
     fun provideNotificationBuilder(
         @ApplicationContext
         context: Context
     ): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.baseline_access_time_24)
-            .setColor(Color.WHITE)
-            .setAutoCancel(true)
-            .setCategory(CATEGORY_ALARM)
-            .setSubText(context.getString(R.string.notification_sub_text))
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.baseline_access_time_24)
+            setAutoCancel(true)
+            setCategory(CATEGORY_ALARM)
+            setSubText(context.getString(R.string.notification_sub_text))
+        }
     }
+
+    @Provides
+    @Named("timer")
+    fun provideNotificationBuilderForTimer(
+        @ApplicationContext
+        context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.baseline_access_time_24)
+            setCategory(CATEGORY_ALARM)
+            setSubText(context.getString(R.string.notification_sub_text))
+            setAutoCancel(false)
+            setContentTitle(context.getString(R.string.timer_notification_content_title))
+            setContentIntent(PendingIntent.getActivity(context, NotificationUtilsConstants.INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
+        }
+    }
+
+    @Provides
+    @Named("stopwatch")
+    fun providesNotificationBuilderForStopwatch(
+        @ApplicationContext
+        context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.outline_timer_24)
+            setCategory(CATEGORY_STOPWATCH)
+            setAutoCancel(false)
+            setOngoing(true)
+            setSubText(context.getString(R.string.stopwatch_notification_sub_text))
+            setContentTitle(context.getString(R.string.shortcut_stopwatch_short_label))
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideAlarmManager(app: Application): AlarmManager =
+        app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
+
+    @Provides
+    @Singleton
+    fun providesAlarmManagerWrapper(
+        app: Application,
+        alarmManager: AlarmManager
+    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
 }

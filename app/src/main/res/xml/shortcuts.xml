@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/outline_alarm_24"
+        android:shortcutId="shortcut_alarm"
+        android:shortcutShortLabel="@string/shortcut_alarm_short_label"
+        android:shortcutLongLabel="@string/shortcut_alarm_long_label">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.app.whakaara"
+            android:targetClass="com.app.whakaara.activities.MainActivity"
+            android:data="whakaara://alarm"/>
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/outline_hourglass_empty_24"
+        android:shortcutId="shortcut_timer"
+        android:shortcutShortLabel="@string/shortcut_timer_short_label"
+        android:shortcutLongLabel="@string/shortcut_timer_long_label">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.app.whakaara"
+            android:targetClass="com.app.whakaara.activities.MainActivity"
+            android:data="whakaara://timer"/>
+
+    </shortcut>
+
+    <shortcut
+        android:enabled="true"
+        android:icon="@drawable/outline_timer_24"
+        android:shortcutId="shortcut_stopwatch"
+        android:shortcutShortLabel="@string/shortcut_stopwatch_short_label"
+        android:shortcutLongLabel="@string/shortcut_stopwatch_long_label">
+
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.app.whakaara"
+            android:targetClass="com.app.whakaara.activities.MainActivity"
+            android:data="whakaara://stopwatch"/>
+
+    </shortcut>
+</shortcuts>

@@ -6,33 +6,36 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SwipeToDismissState
-import androidx.compose.material3.SwipeToDismissValue
-import androidx.compose.material3.rememberSwipeToDismissState
+import androidx.compose.material3.SwipeToDismissBoxState
+import androidx.compose.material3.SwipeToDismissBoxValue
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DismissBackground(dismissState: SwipeToDismissState) {
+fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val isSwiping by remember(dismissState) {
-        derivedStateOf { dismissState.dismissDirection == SwipeToDismissValue.EndToStart && dismissState.progress > 0.1f }
+        derivedStateOf { dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart && dismissState.progress > 0.1f }
     }
 
     val color by animateColorAsState(
@@ -50,6 +53,7 @@ fun DismissBackground(dismissState: SwipeToDismissState) {
 
     Box(
         Modifier
+            .clip(shape = RoundedCornerShape(Spacings.space100))
             .fillMaxSize()
             .background(color),
         contentAlignment = Alignment.CenterEnd
@@ -71,7 +75,7 @@ fun DismissBackground(dismissState: SwipeToDismissState) {
 fun DismissBackgroundPreview() {
     WhakaaraTheme {
         DismissBackground(
-            dismissState = rememberSwipeToDismissState()
+            dismissState = rememberSwipeToDismissBoxState()
         )
     }
 }

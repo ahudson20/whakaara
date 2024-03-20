@@ -1,25 +1,27 @@
 package com.app.whakaara.utils
 
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
+import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_FORMAT
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_FORMAT
+import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.time.Duration.Companion.milliseconds
 
 class DateUtils {
     companion object {
-        fun getTimeInMillis(alarm: Alarm): Long {
-            val alarmTime = alarm.date
+        fun getTimeInMillis(alarmDate: Calendar): Long {
             val currentTime = Calendar.getInstance()
 
-            if (checkIfSameDay(alarmTime, currentTime)) {
-                alarmTime.add(Calendar.DATE, 1)
+            if (checkIfSameDay(alarmDate, currentTime)) {
+                alarmDate.add(Calendar.DATE, 1)
             }
 
-            return alarmTime.timeInMillis
+            return alarmDate.timeInMillis
         }
 
         fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar): String {
@@ -58,15 +60,15 @@ class DateUtils {
             val hours = seconds / (60 * 60) % 24
             val formattedString = StringBuilder()
             val hoursString = when {
-                hours.toInt() == 1 -> String.format("%d hour ", hours)
+                hours.toInt() == 1 -> "%d hour ".format(hours)
                 hours.toInt() == 0 -> ""
-                else -> String.format("%d hours ", hours)
+                else -> "%d hrs ".format(hours)
             }
             val minutesString = when {
-                minutes.toInt() == 1 -> String.format("%d minute ", minutes)
+                minutes.toInt() == 1 -> "%d minute ".format(minutes)
                 minutes.toInt() == 0 && hours.toInt() == 0 -> "less than 1 minute"
                 minutes.toInt() == 0 -> ""
-                else -> String.format("%d minutes ", minutes)
+                else -> "%d mins".format(minutes)
             }
 
             formattedString.append("Alarm in ")
@@ -102,6 +104,45 @@ class DateUtils {
             return alarmTime.get(Calendar.DATE) == currentTime.get(Calendar.DATE) &&
                 alarmTime.get(Calendar.HOUR_OF_DAY) == currentTime.get(Calendar.HOUR_OF_DAY) &&
                 alarmTime.get(Calendar.MINUTE) == currentTime.get(Calendar.MINUTE)
+        }
+
+        fun hoursToMilliseconds(hours: Int): Long {
+            val millisecondsInHour: Long = 3600000 // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
+            return hours * millisecondsInHour
+        }
+
+        fun minutesToMilliseconds(minutes: Int): Long {
+            val millisecondsInMinute: Long = 60000 // 1 minute = 60 seconds = 60 * 1000 milliseconds
+            return minutes * millisecondsInMinute
+        }
+
+        fun secondsToMilliseconds(seconds: Int): Long {
+            val millisecondsInSecond: Long = 1000 // 1 second = 1000 milliseconds
+            return seconds * millisecondsInSecond
+        }
+
+        fun formatTimeForTimer(millis: Long): String {
+            return millis.milliseconds.toComponents { hours, minutes, seconds, _ ->
+                TIMER_FORMAT.format(hours, minutes, seconds)
+            }
+        }
+
+        fun formatTimeForStopwatch(millis: Long): String {
+            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
+                STOPWATCH_FORMAT.format(hours, minutes, seconds, TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS))
+            }
+        }
+
+        fun generateMillisecondsFromTimerInputValues(
+            hours: String,
+            minutes: String,
+            seconds: String
+        ): Long {
+            var millis = ZERO_MILLIS
+            millis += hoursToMilliseconds(hours = hours.toIntOrNull() ?: 0)
+            millis += minutesToMilliseconds(minutes = minutes.toIntOrNull() ?: 0)
+            millis += secondsToMilliseconds(seconds = seconds.toIntOrNull() ?: 0)
+            return millis
         }
     }
 }

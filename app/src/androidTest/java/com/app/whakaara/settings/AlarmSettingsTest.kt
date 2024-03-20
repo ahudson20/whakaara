@@ -27,8 +27,8 @@ class AlarmSettingsTest {
         // Then
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
-        onNodeWithText(text = "Alarms displayed in 24 hour format").assertIsDisplayed()
-        onNodeWithText(text = "If enabled display using 24 hour format, else 12 hour format").assertIsDisplayed()
+        onNodeWithText(text = "24 hour format").assertIsDisplayed()
+        onNodeWithText(text = "If enabled, display using 24 hour format").assertIsDisplayed()
 
         onNodeWithText(text = "Vibrate").assertIsDisplayed()
         onNodeWithText(text = "Vibrate when alarms go off").assertIsDisplayed()

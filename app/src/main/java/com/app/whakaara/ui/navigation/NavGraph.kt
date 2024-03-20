@@ -4,55 +4,103 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.app.whakaara.logic.MainViewModel
+import androidx.navigation.navDeepLink
+import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.StopwatchState
+import com.app.whakaara.state.TimerState
+import com.app.whakaara.ui.loading.Loading
 import com.app.whakaara.ui.screens.AlarmScreen
-import com.app.whakaara.ui.screens.SettingsScreen
+import com.app.whakaara.ui.screens.StopwatchScreen
 import com.app.whakaara.ui.screens.TimerScreen
+import com.app.whakaara.utils.constants.GeneralConstants
+import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_STOPWATCH
+import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_TIMER
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    viewModel: MainViewModel,
     preferencesState: PreferencesState,
-    alarmState: AlarmState
+    alarmState: AlarmState,
+    stopwatchState: StopwatchState,
+    timerState: TimerState,
+
+    delete: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit,
+    create: (alarm: Alarm) -> Unit,
+
+    updateHours: (newValue: String) -> Unit,
+    updateMinutes: (newValue: String) -> Unit,
+    updateSeconds: (newValue: String) -> Unit,
+    startTimer: () -> Unit,
+    stopTimer: () -> Unit,
+    pauseTimer: () -> Unit,
+
+    onStart: () -> Unit,
+    onPause: () -> Unit,
+    onStop: () -> Unit
 ) {
     NavHost(
         navController = navController,
         startDestination = BottomNavItem.Alarm.route
     ) {
         composable(
-            route = BottomNavItem.Alarm.route
-        ) {
-            AlarmScreen(
-                alarmState = alarmState,
-                preferencesState = preferencesState,
-                delete = viewModel::delete,
-                disable = viewModel::disable,
-                enable = viewModel::enable,
-                reset = viewModel::reset
+            route = BottomNavItem.Alarm.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = GeneralConstants.DEEPLINK_ALARM
+                }
             )
+        ) {
+            when (alarmState) {
+                is AlarmState.Loading -> Loading()
+                is AlarmState.Success -> AlarmScreen(
+                    alarms = alarmState.alarms,
+                    preferencesState = preferencesState,
+                    delete = delete,
+                    disable = disable,
+                    enable = enable,
+                    reset = reset,
+                    create = create
+                )
+            }
         }
 
         composable(
-            route = BottomNavItem.Timer.route
+            route = BottomNavItem.Timer.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = DEEPLINK_TIMER
+                }
+            )
         ) {
             TimerScreen(
-                formattedTime = viewModel.formattedTime,
-                onStart = viewModel::start,
-                onPause = viewModel::pause,
-                onStop = viewModel::resetTimer
+                timerState = timerState,
+                updateHours = updateHours,
+                updateMinutes = updateMinutes,
+                updateSeconds = updateSeconds,
+                startTimer = startTimer,
+                stopTimer = stopTimer,
+                pauseTimer = pauseTimer
             )
         }
 
         composable(
-            route = BottomNavItem.Settings.route
+            route = BottomNavItem.Stopwatch.route,
+            deepLinks = listOf(
+                navDeepLink {
+                    uriPattern = DEEPLINK_STOPWATCH
+                }
+            )
         ) {
-            SettingsScreen(
-                preferencesState = preferencesState,
-                updatePreferences = viewModel::updatePreferences,
-                updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
+            StopwatchScreen(
+                stopwatchState = stopwatchState,
+                onStart = onStart,
+                onPause = onPause,
+                onStop = onStop
             )
         }
     }

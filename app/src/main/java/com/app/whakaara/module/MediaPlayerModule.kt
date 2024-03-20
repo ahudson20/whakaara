@@ -1,13 +1,14 @@
 package com.app.whakaara.module
 
-import android.content.Context
+import android.app.Application
+import android.app.Service
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.provider.Settings
+import android.os.Vibrator
+import android.os.VibratorManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,21 +17,19 @@ import javax.inject.Singleton
 class MediaPlayerModule {
 
     @Provides
-    @Singleton
-    fun provideMediaPlayer(
-        @ApplicationContext
-        context: Context
-    ): MediaPlayer = MediaPlayer().apply {
+    fun provideMediaPlayer(): MediaPlayer = MediaPlayer().apply {
         setAudioAttributes(
             AudioAttributes.Builder()
                 .setUsage(AudioAttributes.USAGE_ALARM)
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build()
         )
-        setDataSource(
-            context,
-            Settings.System.DEFAULT_ALARM_ALERT_URI ?: Settings.System.DEFAULT_RINGTONE_URI
-        )
         isLooping = true
     }
+
+    @Provides
+    @Singleton
+    fun providesVibrator(
+        app: Application
+    ): Vibrator = (app.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
 }

@@ -146,16 +146,14 @@ class WidgetConfig : ComponentActivity() {
                                         val glanceAppWidget: GlanceAppWidget = AppWidget()
                                         val serializedBackground = Gson().toJson(colorBackground)
                                         val serializedText = Gson().toJson(colorText)
-                                        val glanceId = GlanceAppWidgetManager(this@WidgetConfig).getGlanceIds(AppWidget::class.java).firstOrNull()
-                                        if (glanceId != null) {
-                                            updateAppWidgetState(this@WidgetConfig, PreferencesGlanceStateDefinition, glanceId) { prefs ->
-                                                prefs.toMutablePreferences().apply {
-                                                    this[backgroundKey] = serializedBackground
-                                                    this[textKey] = serializedText
-                                                }
+                                        val glanceId = GlanceAppWidgetManager(this@WidgetConfig).getGlanceIdBy(appWidgetId)
+                                        updateAppWidgetState(this@WidgetConfig, PreferencesGlanceStateDefinition, glanceId) { prefs ->
+                                            prefs.toMutablePreferences().apply {
+                                                this[backgroundKey] = serializedBackground
+                                                this[textKey] = serializedText
                                             }
-                                            glanceAppWidget.update(this@WidgetConfig, glanceId)
                                         }
+                                        glanceAppWidget.update(this@WidgetConfig, glanceId)
                                     }
                                     setResult(
                                         Activity.RESULT_OK,

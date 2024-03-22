@@ -51,6 +51,14 @@
             android:turnScreenOn="true"
             tools:ignore="LockedOrientationActivity" />
 
+        <activity android:name=".activities.WidgetConfig"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+
+
         <receiver
             android:name="com.app.whakaara.receiver.RecreateAlarmsReceiver"
             android:exported="false">

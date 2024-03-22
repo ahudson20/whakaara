@@ -9,6 +9,7 @@
     android:resizeMode="horizontal"
     android:widgetCategory="home_screen"
     android:widgetFeatures="reconfigurable|configuration_optional"
+    android:configure="com.app.whakaara.activities.WidgetConfig"
 
     android:initialLayout="@layout/glance_default_loading_layout"
     android:previewLayout="@layout/preview_layout_alarm_widget"

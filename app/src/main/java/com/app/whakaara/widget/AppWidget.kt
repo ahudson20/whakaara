@@ -36,6 +36,7 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.unit.ColorProvider
 import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
+import com.app.whakaara.activities.WidgetConfig
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.receiver.AppWidgetReceiver
@@ -85,6 +86,20 @@ class AppWidget : GlanceAppWidget() {
         provideContent {
             val prefs = currentState<Preferences>()
             val deserializedList = prefs[AppWidgetReceiver.allAlarmsKey] ?: ""
+            val deserializedBackgroundColour = prefs[WidgetConfig.backgroundKey] ?: ""
+            val deserializedTextColour = prefs[WidgetConfig.textKey] ?: ""
+
+            val backgroundColour: Color = if (deserializedBackgroundColour.isNotBlank()) {
+                Gson().fromJson(deserializedBackgroundColour, Color::class.java)
+            } else {
+                Color(appContext.getColor(R.color.dark_green))
+            }
+            val textColour = if (deserializedTextColour.isNotBlank()) {
+                Gson().fromJson(deserializedTextColour, Color::class.java)
+            } else {
+                Color.White
+            }
+
             val nextAlarm = if (deserializedList.isNotBlank()) {
                 Gson().fromJson(deserializedList, object : TypeToken<List<Alarm>>() {}.type)
             } else {
@@ -92,21 +107,29 @@ class AppWidget : GlanceAppWidget() {
             }.filter { it.isEnabled }.minByOrNull { it.date.timeInMillis }
 
             GlanceTheme(colors = WidgetTheme.colors) {
-                NextAlarm(nextAlarm = nextAlarm)
+                NextAlarm(
+                    nextAlarm = nextAlarm,
+                    textColour = textColour,
+                    backgroundColor = backgroundColour
+                )
             }
         }
     }
 
     @OptIn(ExperimentalLayoutApi::class)
     @Composable
-    private fun NextAlarm(nextAlarm: Alarm?) {
+    private fun NextAlarm(
+        nextAlarm: Alarm?,
+        textColour: Color,
+        backgroundColor: Color
+    ) {
         val size = LocalSize.current
         Row(
             modifier = GlanceModifier
                 .padding(all = spaceXSmall)
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(R.color.dark_green)
+                .background(backgroundColor)
                 .clickable(actionStartActivity<MainActivity>()),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -118,7 +141,7 @@ class AppWidget : GlanceAppWidget() {
                     contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
                     provider = ImageProvider(R.drawable.outline_alarm_24),
                     contentScale = ContentScale.FillBounds,
-                    colorFilter = ColorFilter.tint(ColorProvider(Color.White))
+                    colorFilter = ColorFilter.tint(ColorProvider(textColour))
                 )
             } else {
                 Column(
@@ -133,7 +156,7 @@ class AppWidget : GlanceAppWidget() {
                             text = LocalContext.current.getString(R.string.widget_next_alarm_none),
                             font = R.font.azeretmono,
                             fontSize = 26.sp,
-                            color = Color.White
+                            color = textColour
                         )
                     } else {
                         GlanceText(
@@ -141,7 +164,7 @@ class AppWidget : GlanceAppWidget() {
                             text = nextAlarm.subTitle.filterNot { it.isWhitespace() },
                             font = R.font.azeret_mono_medium,
                             fontSize = 26.sp,
-                            color = Color.White
+                            color = textColour
                         )
                         if (size.width > TWO_BY_ONE.width) {
                             GlanceText(
@@ -149,7 +172,7 @@ class AppWidget : GlanceAppWidget() {
                                 text = nextAlarm.title,
                                 font = R.font.azeret_mono_medium,
                                 fontSize = 20.sp,
-                                color = Color.White
+                                color = textColour
                             )
                         }
                     }

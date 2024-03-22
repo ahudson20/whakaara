@@ -34,5 +34,7 @@ class GeneralUtils {
         fun convertStringToAlarmObject(string: String?): Alarm {
             return Gson().fromJson(string, Alarm::class.java)
         }
+
+        fun Float.toColorInt(): Int = (this * 255 + 0.5f).toInt()
     }
 }

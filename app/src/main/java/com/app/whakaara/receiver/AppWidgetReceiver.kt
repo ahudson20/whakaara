@@ -50,8 +50,8 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
         GlobalScope.launch(Dispatchers.IO) {
             val alarms = alarmRepository.getAllAlarms()
             val serializedList = Gson().toJson(alarms)
-            val glanceId = GlanceAppWidgetManager(context).getGlanceIds(AppWidget::class.java).firstOrNull()
-            if (glanceId != null) {
+            val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(AppWidget::class.java)
+            glanceIds.forEach { glanceId ->
                 updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
                     prefs.toMutablePreferences().apply {
                         this[allAlarmsKey] = serializedList

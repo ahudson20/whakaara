@@ -21,9 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
 import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsMenuLink
+import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.AppTheme
 import com.app.whakaara.data.preferences.Preferences
@@ -39,7 +41,8 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants
 @Composable
 fun GeneralSettings(
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val currentRingtoneUri: Uri = if (preferencesState.preferences.alarmSoundPath.isNotEmpty()) {
@@ -147,6 +150,21 @@ fun GeneralSettings(
             }
         }
     )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80),
+        state = rememberBooleanSettingState(preferencesState.preferences.is24HourFormat),
+        title = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_subtitle)) },
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    is24HourFormat = it
+                )
+            )
+            updateAllAlarmSubtitles(it)
+        }
+    )
 }
 
 @Composable
@@ -157,7 +175,8 @@ fun GeneralSettingsPreview() {
         Column {
             GeneralSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {}
+                updatePreferences = {},
+                updateAllAlarmSubtitles = {}
             )
         }
     }

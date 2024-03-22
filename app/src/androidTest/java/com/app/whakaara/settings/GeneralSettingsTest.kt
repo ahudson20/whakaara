@@ -24,7 +24,8 @@ class GeneralSettingsTest {
             WhakaaraTheme {
                 GeneralSettings(
                     preferencesState = preferencesState,
-                    updatePreferences = {}
+                    updatePreferences = {},
+                    updateAllAlarmSubtitles = {}
                 )
             }
         }

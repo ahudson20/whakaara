@@ -19,8 +19,7 @@ class AlarmSettingsTest {
         setContent {
             AlarmSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {},
-                updateAllAlarmSubtitles = {}
+                updatePreferences = {}
             )
         }
 

@@ -63,12 +63,12 @@ fun SettingsScreen(
             )
             GeneralSettings(
                 preferencesState = preferencesState,
-                updatePreferences = updatePreferences
+                updatePreferences = updatePreferences,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
             AlarmSettings(
                 preferencesState = preferencesState,
-                updatePreferences = updatePreferences,
-                updateAllAlarmSubtitles = updateAllAlarmSubtitles
+                updatePreferences = updatePreferences
             )
         }
     }

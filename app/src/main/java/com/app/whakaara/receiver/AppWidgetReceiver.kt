@@ -37,7 +37,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == UPDATE_ACTION) {
+        if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             observeData(context = context)
         }
     }
@@ -50,9 +50,13 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
         GlobalScope.launch(Dispatchers.IO) {
             val alarms = alarmRepository.getAllAlarms()
             val serializedList = Gson().toJson(alarms)
-            val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(AppWidget::class.java)
+            val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(glanceAppWidget.javaClass)
             glanceIds.forEach { glanceId ->
-                updateAppWidgetState(context, PreferencesGlanceStateDefinition, glanceId) { prefs ->
+                updateAppWidgetState(
+                    context = context,
+                    definition = PreferencesGlanceStateDefinition,
+                    glanceId = glanceId
+                ) { prefs ->
                     prefs.toMutablePreferences().apply {
                         this[allAlarmsKey] = serializedList
                     }
@@ -64,6 +68,5 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
 
     companion object {
         val allAlarmsKey = stringPreferencesKey("all_alarms")
-        const val UPDATE_ACTION = "updateAction"
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -199,9 +200,9 @@ class AlarmManagerWrapper @Inject constructor(
     }
 
     fun updateWidget() {
-        app.applicationContext.sendBroadcast(
-            Intent(app.applicationContext, AppWidgetReceiver::class.java).apply {
-                action = AppWidgetReceiver.UPDATE_ACTION
+        app.sendBroadcast(
+            Intent(app, AppWidgetReceiver::class.java).apply {
+                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             }
         )
     }

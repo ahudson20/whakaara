@@ -74,10 +74,13 @@
         </receiver>
 
         <receiver android:name=".receiver.MediaServiceReceiver"
+            android:enabled="true"
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".receiver.AppWidgetReceiver" android:exported="true">
+        <receiver android:name=".receiver.AppWidgetReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -86,7 +89,9 @@
                 android:resource="@xml/next_alarm_widget_info" />
         </receiver>
 
-        <receiver android:name=".widget.AppShortcutWidgetReceiver" android:exported="true">
+        <receiver android:name=".widget.AppShortcutWidgetReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

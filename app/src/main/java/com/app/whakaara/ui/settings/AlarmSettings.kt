@@ -3,51 +3,46 @@ package com.app.whakaara.ui.settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Widgets
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
 import com.alorma.compose.settings.ui.SettingsListDropdown
+import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.SettingsTime
 import com.app.whakaara.data.preferences.VibrationPattern
+import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import kotlinx.coroutines.launch
 
 @Composable
 fun AlarmSettings(
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
+    val context = LocalContext.current
     Text(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
         text = stringResource(id = R.string.settings_screen_alarm_settings_title)
-    )
-
-    SettingsSwitch(
-        modifier = Modifier.height(space80),
-        state = rememberBooleanSettingState(preferencesState.preferences.is24HourFormat),
-        title = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_title)) },
-        subtitle = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_subtitle)) },
-        onCheckedChange = {
-            updatePreferences(
-                preferencesState.preferences.copy(
-                    is24HourFormat = it
-                )
-            )
-            updateAllAlarmSubtitles(it)
-        }
     )
 
     SettingsSwitch(
@@ -145,6 +140,25 @@ fun AlarmSettings(
             }
         }
     )
+
+    SettingsMenuLink(
+        modifier = Modifier.height(space80),
+        icon = {
+            Icon(
+                imageVector = Icons.Default.Widgets,
+                contentDescription = stringResource(id = R.string.settings_screen_add_widget_icon)
+            )
+        },
+        title = { Text(text = stringResource(id = R.string.settings_screen_add_widget_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_add_widget_subtitle)) },
+        onClick = {
+            scope.launch {
+                GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
+                    receiver = AppWidgetReceiver::class.java
+                )
+            }
+        }
+    )
 }
 
 @Composable
@@ -155,8 +169,7 @@ fun AlarmSettingsPreview() {
         Column {
             AlarmSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {},
-                updateAllAlarmSubtitles = {}
+                updatePreferences = {}
             )
         }
     }

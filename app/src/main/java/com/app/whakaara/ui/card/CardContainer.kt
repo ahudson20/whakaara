@@ -1,6 +1,5 @@
 package com.app.whakaara.ui.card
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +23,7 @@ import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.GeneralConstants.DELETE_ALARM_DELAY_MILLIS
-import kotlinx.coroutines.delay
+import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,16 +56,14 @@ fun CardContainerSwipeToDismiss(
             items(alarms, key = { it.alarmId }) { alarm ->
                 val dismissState = rememberSwipeToDismissBoxState(
                     positionalThreshold = { distance: Float ->
-                        distance * 1f
+                        distance * 0.7f
                     }
                 )
 
                 if (dismissState.currentValue != SwipeToDismissBoxValue.Settled) {
                     LaunchedEffect(Unit) {
-                        Toast.makeText(context, context.getString(R.string.notification_action_deleted, alarm.title), Toast.LENGTH_LONG).show()
+                        context.showToast(context.getString(R.string.notification_action_deleted, alarm.title))
                         delete(alarm)
-                        delay(DELETE_ALARM_DELAY_MILLIS)
-                        dismissState.reset()
                     }
                 }
 

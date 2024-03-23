@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.ui.screens.NotificationFullScreen
+import com.app.whakaara.ui.screens.AlarmFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
@@ -30,7 +30,7 @@ class NotificationFullScreenTest {
         // When
         setContent {
             WhakaaraTheme {
-                NotificationFullScreen(
+                AlarmFullScreen(
                     alarm = alarm,
                     snooze = {},
                     disable = {},
@@ -63,7 +63,7 @@ class NotificationFullScreenTest {
         // When
         setContent {
             WhakaaraTheme {
-                NotificationFullScreen(
+                AlarmFullScreen(
                     alarm = alarm,
                     snooze = {},
                     disable = {},

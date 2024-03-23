@@ -7,10 +7,8 @@ import android.app.Notification.CATEGORY_ALARM
 import android.app.Notification.CATEGORY_STOPWATCH
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
-import android.content.Intent
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
@@ -68,6 +66,7 @@ class NotificationModule {
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setCategory(CATEGORY_ALARM)
             setSubText(context.getString(R.string.notification_sub_text))
+            priority = NotificationCompat.PRIORITY_MAX
         }
     }
 
@@ -84,7 +83,6 @@ class NotificationModule {
             setAutoCancel(false)
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setContentTitle(context.getString(R.string.timer_notification_content_title))
-            setContentIntent(PendingIntent.getActivity(context, NotificationUtilsConstants.INTENT_REQUEST_CODE, Intent(), PendingIntent.FLAG_IMMUTABLE))
         }
     }
 

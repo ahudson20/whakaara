@@ -14,6 +14,7 @@ import android.os.HandlerThread
 import android.os.IBinder
 import android.os.Looper
 import android.os.Message
+import android.os.PowerManager
 import android.os.Process.THREAD_PRIORITY_URGENT_AUDIO
 import android.os.VibrationAttributes
 import android.os.VibrationEffect
@@ -31,6 +32,7 @@ import com.app.whakaara.data.preferences.VibrationPattern
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
+import com.app.whakaara.utils.constants.GeneralConstants.WAKE_LOCK_TAG
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.FOREGROUND_SERVICE_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
@@ -39,6 +41,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUES
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.MEDIA_SERVICE_EXCEPTION_TAG
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.PLAY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTION
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP
@@ -80,6 +83,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     @Named("alarm")
     lateinit var alarmNotificationBuilder: NotificationCompat.Builder
 
+    @Inject
+    lateinit var powerManager: PowerManager
+
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
 
@@ -89,6 +95,8 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     }
 
     private lateinit var vibrationTask: TimerTask
+    private lateinit var wakeLock: PowerManager.WakeLock
+
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
@@ -105,6 +113,14 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     ) {
         val preferences: Preferences = runBlocking {
             preferencesRepository.getPreferences()
+        }
+
+        if (!powerManager.isInteractive) {
+            wakeLock = powerManager.run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG).apply {
+                    acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+                }
+            }
         }
 
         if (data.getInt(NOTIFICATION_TYPE) == NOTIFICATION_TYPE_ALARM) {
@@ -184,6 +200,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     }
 
     private fun stop() {
+        // release wakelock
+        if (::wakeLock.isInitialized) wakeLock.release()
+
         // Remove this service from foreground state, clear notification
         stopForeground(STOP_FOREGROUND_REMOVE)
 
@@ -211,9 +230,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     private fun createAlarmNotification(
         alarm: Alarm
     ): Notification {
-        val intent = Intent().apply {
+        val fullScreenIntent = Intent().apply {
             setClass(applicationContext, FullScreenNotificationActivity::class.java)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM)
             putExtra(INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))
 
             /**
@@ -223,10 +243,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
              * */
             action = INTENT_EXTRA_ACTION_ARBITRARY
         }
-        val pendingIntent = PendingIntentUtils.getActivity(
+        val fullScreenPendingIntent = PendingIntentUtils.getActivity(
             applicationContext,
             INTENT_REQUEST_CODE,
-            intent,
+            fullScreenIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         val stopServiceIntent = Intent(applicationContext, MediaServiceReceiver::class.java).apply {
@@ -243,13 +263,32 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         return alarmNotificationBuilder.apply {
             setContentTitle(alarm.title)
             setContentText(alarm.subTitle)
-            setFullScreenIntent(pendingIntent, true)
+            setFullScreenIntent(fullScreenPendingIntent, true)
             setWhen(alarm.date.timeInMillis)
             setDeleteIntent(stopServicePendingIntent)
         }.build()
     }
 
     private fun createTimerNotification(): Notification {
+        val fullScreenIntent = Intent().apply {
+            setClass(applicationContext, FullScreenNotificationActivity::class.java)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_TIMER)
+
+            /**
+             * Unsure why I need to set an action here.
+             * If I don't, I can't get the extras in the activity this intent starts.
+             * https://stackoverflow.com/questions/15343840/intent-extras-missing-when-activity-started#:~:text=We%20stumbled%20upon,might%20fix%20it.
+             * */
+            action = INTENT_EXTRA_ACTION_ARBITRARY
+        }
+        val fullScreenPendingIntent = PendingIntentUtils.getActivity(
+            applicationContext,
+            INTENT_REQUEST_CODE,
+            fullScreenIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         val intent = Intent(applicationContext, MediaServiceReceiver::class.java).apply {
             putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM)
         }
@@ -261,6 +300,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         )
         return timerNotificationBuilder.apply {
             addAction(R.drawable.baseline_cancel_24, applicationContext.getString(R.string.timer_notification_action_label), pendingIntent)
+            setFullScreenIntent(fullScreenPendingIntent, true)
             setDeleteIntent(pendingIntent)
             setContentText(applicationContext.getString(R.string.timer_notification_content_text))
         }.build()

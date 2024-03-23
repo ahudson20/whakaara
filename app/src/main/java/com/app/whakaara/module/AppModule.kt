@@ -1,6 +1,7 @@
 package com.app.whakaara.module
 
 import android.content.Context
+import android.os.PowerManager
 import androidx.room.Room
 import com.app.whakaara.data.alarm.AlarmDao
 import com.app.whakaara.data.alarm.AlarmDatabase
@@ -69,4 +70,10 @@ class AppModule {
     ): PreferencesRepository = PreferencesImpl(
         preferencesDao = preferencesDao
     )
+
+    @Provides
+    fun providesPowerManager(
+        @ApplicationContext
+        context: Context
+    ): PowerManager = (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
 }

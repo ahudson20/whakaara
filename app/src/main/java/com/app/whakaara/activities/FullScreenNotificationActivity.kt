@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.KeyguardManager
 import android.content.Intent
-import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -18,13 +17,15 @@ import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.service.MediaPlayerService
-import com.app.whakaara.ui.screens.NotificationFullScreen
+import com.app.whakaara.ui.screens.AlarmFullScreen
+import com.app.whakaara.ui.screens.TimerFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class FullScreenNotificationActivity : ComponentActivity() {
@@ -32,25 +33,36 @@ class FullScreenNotificationActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var alarm: Alarm
 
-    @Inject
-    lateinit var mediaPlayer: MediaPlayer
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val notificationType = intent.getIntExtra(NOTIFICATION_TYPE, -1)
+        if (notificationType == -1) {
+            finish()
+        }
+
         hideSystemBars()
         turnScreenOnAndKeyguardOff()
 
-        alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
+        if (notificationType == NOTIFICATION_TYPE_ALARM) {
+            alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
+        }
 
         setContent {
             val pref by viewModel.preferencesUiState.collectAsStateWithLifecycle()
             WhakaaraTheme {
-                NotificationFullScreen(
-                    alarm = alarm,
-                    snooze = viewModel::snooze,
-                    disable = viewModel::disable,
-                    is24HourFormat = pref.preferences.is24HourFormat
-                )
+                if (notificationType == NOTIFICATION_TYPE_ALARM) {
+                    AlarmFullScreen(
+                        alarm = alarm,
+                        snooze = viewModel::snooze,
+                        disable = viewModel::disable,
+                        is24HourFormat = pref.preferences.is24HourFormat
+                    )
+                } else {
+                    TimerFullScreen(
+                        resetTimer = viewModel::resetTimer,
+                        is24HourFormat = pref.preferences.is24HourFormat
+                    )
+                }
             }
         }
     }

@@ -14,7 +14,7 @@ import com.app.whakaara.ui.loading.Loading
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.StopwatchScreen
 import com.app.whakaara.ui.screens.TimerScreen
-import com.app.whakaara.utils.constants.GeneralConstants
+import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_ALARM
 import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_STOPWATCH
 import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_TIMER
 
@@ -51,7 +51,7 @@ fun NavGraph(
             route = BottomNavItem.Alarm.route,
             deepLinks = listOf(
                 navDeepLink {
-                    uriPattern = GeneralConstants.DEEPLINK_ALARM
+                    uriPattern = DEEPLINK_ALARM
                 }
             )
         ) {

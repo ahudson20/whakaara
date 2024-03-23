@@ -4,6 +4,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.res.ResourcesCompat
+import com.app.whakaara.R
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -29,6 +31,8 @@ fun TextClock(
                 timeZone?.let { this.timeZone = it }
                 textSize = 45f
                 setTextColor(textColor)
+                typeface = ResourcesCompat.getFont(context, R.font.azeret_mono_medium)
+                isAllCaps = true
             }
         }
     )

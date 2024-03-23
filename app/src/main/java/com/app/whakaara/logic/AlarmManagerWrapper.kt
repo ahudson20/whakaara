@@ -176,6 +176,7 @@ class AlarmManagerWrapper @Inject constructor(
         notificationManager.notify(
             TIMER_NOTIFICATION_ID,
             timerNotificationBuilder.apply {
+                setWhen(System.currentTimeMillis())
                 setUsesChronometer(false)
                 setChronometerCountDown(false)
                 setContentTitle(app.applicationContext.getString(R.string.timer_notification_title_paused))

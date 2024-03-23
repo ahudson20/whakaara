@@ -23,13 +23,13 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.space20
+import com.app.whakaara.ui.theme.Spacings.space250
 import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -134,7 +134,7 @@ fun BottomSheetDetailsAlarmInfo(
             Text(text = stringResource(id = R.string.bottom_sheet_content_alarm_title))
             Column {
                 TextField(
-                    modifier = modifier.width(150.dp),
+                    modifier = modifier.width(space250),
                     value = updateTitle.value,
                     onValueChange = { if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) updateTitle.onValueChange(it) },
                     colors = TextFieldDefaults.colors(

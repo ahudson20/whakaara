@@ -5,6 +5,8 @@ import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_FORMAT
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_FORMAT
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIME_UNTIL_ALARM_FORMATTED_STRING_MINUTES_STRING
+import com.app.whakaara.utils.constants.DateUtilsConstants.TIME_UNTIL_ALARM_FORMATTED_STRING_PREFIX
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -66,12 +68,12 @@ class DateUtils {
             }
             val minutesString = when {
                 minutes.toInt() == 1 -> "%d minute ".format(minutes)
-                minutes.toInt() == 0 && hours.toInt() == 0 -> "less than 1 minute"
+                minutes.toInt() == 0 && hours.toInt() == 0 -> TIME_UNTIL_ALARM_FORMATTED_STRING_MINUTES_STRING
                 minutes.toInt() == 0 -> ""
                 else -> "%d mins".format(minutes)
             }
 
-            formattedString.append("Alarm in ")
+            formattedString.append(TIME_UNTIL_ALARM_FORMATTED_STRING_PREFIX)
             if (hoursString.isNotBlank()) formattedString.append(hoursString)
             if (minutesString.isNotBlank()) formattedString.append(minutesString)
             return formattedString.toString().trim()
@@ -80,20 +82,15 @@ class DateUtils {
         private fun getDifferenceFromCurrentTimeInMillis(
             time: Calendar
         ): Long {
-            val timeNowNoSeconds = Calendar.getInstance().apply {
-                set(Calendar.SECOND, 0)
-            }
-            var newTime: Calendar = time
+            val timeNow = Calendar.getInstance()
 
-            if (checkIfSameDay(time, timeNowNoSeconds)) {
-                newTime = Calendar.getInstance().apply {
+            if (checkIfSameDay(time, timeNow)) {
+                time.apply {
                     add(Calendar.DATE, 1)
-                    set(Calendar.HOUR_OF_DAY, time.get(Calendar.HOUR_OF_DAY))
-                    set(Calendar.MINUTE, time.get(Calendar.MINUTE))
                 }
             }
 
-            return newTime.timeInMillis - timeNowNoSeconds.timeInMillis
+            return time.timeInMillis - timeNow.timeInMillis
         }
 
         private fun checkIfSameDay(alarmTime: Calendar, currentTime: Calendar): Boolean {

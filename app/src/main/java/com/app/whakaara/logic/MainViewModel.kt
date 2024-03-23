@@ -276,19 +276,18 @@ class MainViewModel @Inject constructor(
     fun startTimer() {
         val currentTimeInMillis = Calendar.getInstance().timeInMillis
         if (_timerState.value.isTimerPaused) {
+            alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + _timerState.value.currentTime)
             startCountDownTimer(timeToCountDown = _timerState.value.currentTime)
             updateTimerStateToStarted(millisecondsToAdd = _timerState.value.currentTime)
-            alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + _timerState.value.currentTime)
         } else if (checkIfOneInputValueGreaterThanZero()) {
             val millisecondsFromTimerInput = generateMillisecondsFromTimerInputValues(
                 hours = _timerState.value.inputHours,
                 minutes = _timerState.value.inputMinutes,
                 seconds = _timerState.value.inputSeconds
             )
-
+            alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + millisecondsFromTimerInput)
             startCountDownTimer(timeToCountDown = millisecondsFromTimerInput)
             updateTimerStateToStarted(millisecondsToAdd = millisecondsFromTimerInput)
-            alarmManagerWrapper.createTimerNotification(milliseconds = currentTimeInMillis + millisecondsFromTimerInput)
         }
     }
 
@@ -352,11 +351,11 @@ class MainViewModel @Inject constructor(
 
     fun pauseTimer() {
         if (!_timerState.value.isTimerPaused) {
-            countDownTimer?.cancel()
             with(alarmManagerWrapper) {
                 cancelTimerAlarm()
                 pauseTimerNotificationCountdown()
             }
+            countDownTimer?.cancel()
             _timerState.update {
                 it.copy(
                     isTimerPaused = true,
@@ -368,11 +367,11 @@ class MainViewModel @Inject constructor(
     }
 
     fun resetTimer() {
-        countDownTimer?.cancel()
         with(alarmManagerWrapper) {
             cancelTimerAlarm()
             cancelNotification(id = TIMER_NOTIFICATION_ID)
         }
+        countDownTimer?.cancel()
         _timerState.update {
             it.copy(
                 isTimerPaused = false,

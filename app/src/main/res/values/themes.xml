@@ -4,4 +4,10 @@
     <style name="Theme.Whakaara" parent="android:Theme.Material.Light.NoActionBar">
         <item name="android:statusBarColor">@color/purple_700</item>
     </style>
+
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/dark_green_40</item>
+        <item name="postSplashScreenTheme">@style/Theme.Whakaara</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/animated_logo</item>
+    </style>
 </resources>

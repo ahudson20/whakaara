@@ -151,6 +151,9 @@ dependencies {
 
     // Splashscreen
     implementation "androidx.core:core-splashscreen:1.1.0-alpha02"
+
+    // Lottie animation
+    implementation "com.airbnb.android:lottie-compose:6.4.0"
 }
 
 // Allow references to generated code

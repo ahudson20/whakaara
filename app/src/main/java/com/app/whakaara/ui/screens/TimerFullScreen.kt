@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.ui.clock.TextClock
 import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
@@ -51,7 +51,7 @@ fun TimerFullScreen(
 
             Row {
                 Button(
-                    modifier = Modifier.padding(Spacings.spaceMedium),
+                    modifier = Modifier.padding(spaceMedium),
                     onClick = {
                         resetTimer()
                         context.showToast(message = context.getString(R.string.timer_full_screen_cancelled))

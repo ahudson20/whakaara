@@ -49,14 +49,20 @@ fun MainScreen(
 
     Scaffold(
         topBar = {
-            TopBar(
-                route = navBackStackEntry?.destination?.route.toString(),
-                preferencesState = preferencesState,
-                updatePreferences = updatePreferences,
-                updateAllAlarmSubtitles = updateAllAlarmSubtitles
-            )
+            if (!preferencesState.preferences.shouldShowOnboarding) {
+                TopBar(
+                    route = navBackStackEntry?.destination?.route.toString(),
+                    preferencesState = preferencesState,
+                    updatePreferences = updatePreferences,
+                    updateAllAlarmSubtitles = updateAllAlarmSubtitles
+                )
+            }
         },
-        bottomBar = { BottomNavigation(navController = navController) }
+        bottomBar = {
+            if (!preferencesState.preferences.shouldShowOnboarding) {
+                BottomNavigation(navController = navController)
+            }
+        }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavGraph(
@@ -81,7 +87,9 @@ fun MainScreen(
 
                 onStart = onStart,
                 onPause = onPause,
-                onStop = onStop
+                onStop = onStop,
+
+                updatePreferences = updatePreferences
             )
         }
     }

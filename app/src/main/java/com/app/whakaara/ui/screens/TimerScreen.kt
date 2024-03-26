@@ -40,8 +40,9 @@ import com.app.whakaara.ui.clock.TimerCountdownDisplay
 import com.app.whakaara.ui.clock.TimerInputField
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
 import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.Spacings.spaceNone
+import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.NotificationUtils
@@ -83,13 +84,13 @@ fun TimerScreen(
                 horizontalArrangement = Arrangement.spacedBy(spaceMedium)
             ) {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(Spacings.spaceXxLarge)
+                    horizontalArrangement = Arrangement.spacedBy(spaceXxLarge)
                 ) {
                     if (!timerState.isStart) {
                         FloatingActionButton(
                             shape = CircleShape,
                             modifier = Modifier.testTag("floating action button stop"),
-                            elevation = FloatingActionButtonDefaults.elevation(pressedElevation = Spacings.spaceNone),
+                            elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
                             containerColor = MaterialTheme.colorScheme.error,
                             onClick = {
                                 stopTimer()
@@ -104,7 +105,7 @@ fun TimerScreen(
                     FloatingActionButton(
                         modifier = Modifier.testTag("floating action button play-pause"),
                         shape = CircleShape,
-                        elevation = FloatingActionButtonDefaults.elevation(pressedElevation = Spacings.spaceNone),
+                        elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
                         onClick = {
                             if (timerState.isTimerActive) {
                                 pauseTimer()

@@ -8,9 +8,11 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.data.preferences.AppTheme
 import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.state.AlarmState
 import com.app.whakaara.ui.screens.MainScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +26,11 @@ class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        installSplashScreen().setKeepOnScreenCondition {
+            viewModel.alarmState.value is AlarmState.Loading && !viewModel.isReady.value
+        }
+
         setContent {
             val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
             val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()

@@ -73,7 +73,7 @@ class WidgetConfig : ComponentActivity() {
             val blueBackground = rememberSaveable { mutableFloatStateOf(0f) }
             val colorBackground by remember {
                 derivedStateOf {
-                    Color(redBackground.value, greenBackground.value, blueBackground.value, alphaBackground.value)
+                    Color(redBackground.floatValue, greenBackground.floatValue, blueBackground.floatValue, alphaBackground.floatValue)
                 }
             }
 
@@ -83,7 +83,7 @@ class WidgetConfig : ComponentActivity() {
             val blueText = rememberSaveable { mutableFloatStateOf(0f) }
             val colorText by remember {
                 derivedStateOf {
-                    Color(redText.value, greenText.value, blueText.value, alphaText.value)
+                    Color(redText.floatValue, greenText.floatValue, blueText.floatValue, alphaText.floatValue)
                 }
             }
 

@@ -15,7 +15,8 @@ data class Preferences(
     var snoozeTime: SettingsTime = SettingsTime.TEN,
     var alarmSoundPath: String = "",
     var vibrationPattern: VibrationPattern = VibrationPattern.CLICK,
-    var appTheme: AppTheme = AppTheme.MODE_AUTO
+    var appTheme: AppTheme = AppTheme.MODE_AUTO,
+    var shouldShowOnboarding: Boolean = false
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {

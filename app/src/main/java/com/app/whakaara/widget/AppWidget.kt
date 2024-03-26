@@ -40,7 +40,8 @@ import com.app.whakaara.activities.WidgetConfig
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.receiver.AppWidgetReceiver
-import com.app.whakaara.ui.theme.Spacings
+import com.app.whakaara.ui.theme.Spacings.space10
+import com.app.whakaara.ui.theme.Spacings.space40
 import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.WidgetTheme
 import com.google.gson.Gson
@@ -137,7 +138,7 @@ class AppWidget : GlanceAppWidget() {
                 Image(
                     modifier = GlanceModifier
                         .fillMaxWidth()
-                        .size(Spacings.space40),
+                        .size(space40),
                     contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
                     provider = ImageProvider(R.drawable.outline_alarm_24),
                     contentScale = ContentScale.FillBounds,
@@ -146,7 +147,7 @@ class AppWidget : GlanceAppWidget() {
             } else {
                 Column(
                     modifier = GlanceModifier
-                        .padding(start = Spacings.space10, end = Spacings.space10),
+                        .padding(start = space10, end = space10),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

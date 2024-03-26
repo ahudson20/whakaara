@@ -12,4 +12,6 @@ object GeneralConstants {
     const val DEEPLINK_STOPWATCH = "whakaara://stopwatch"
 
     const val WAKE_LOCK_TAG = "whakaara::WakelockTag"
+
+    const val ONBOARDING_ROUTE = "onboarding"
 }

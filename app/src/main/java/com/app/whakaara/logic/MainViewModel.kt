@@ -52,6 +52,8 @@ class MainViewModel @Inject constructor(
     val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()
 
     // preferences
+    private val _isReady = MutableStateFlow(false)
+    val isReady = _isReady.asStateFlow()
     private val _preferencesState = MutableStateFlow(PreferencesState())
     val preferencesUiState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
@@ -76,6 +78,7 @@ class MainViewModel @Inject constructor(
     private fun getPreferences() = viewModelScope.launch {
         preferencesRepository.getPreferencesFlow().flowOn(Dispatchers.IO).collect { preferences ->
             _preferencesState.value = PreferencesState(preferences = preferences)
+            _isReady.value = true
         }
     }
 

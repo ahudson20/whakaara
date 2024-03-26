@@ -5,6 +5,7 @@ import androidx.compose.ui.graphics.Color
 val darkGreen = Color(0xFF436436)
 val primaryGreen = Color(0xFFD6F599)
 val lightGreen = Color(0xFFD2FF28)
+val lightBlueAnimation = Color(0xFFF3FAFF)
 
 val primaryLight = Color(0xFF506527)
 val onPrimaryLight = Color(0xFFFFFFFF)

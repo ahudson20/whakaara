@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings.space200
 import com.app.whakaara.ui.theme.Spacings.space5
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -38,7 +39,7 @@ fun ColourPicker(
                 modifier = Modifier
                     .padding(15.dp)
                     .width(50.dp)
-                    .height(200.dp)
+                    .height(space200)
                     .background(color, shape = MaterialTheme.shapes.large)
             )
             Column(
@@ -65,7 +66,7 @@ fun PreviewColourPicker() {
     val blueBackground = rememberSaveable { mutableFloatStateOf(0f) }
     val colorBackground by remember {
         derivedStateOf {
-            Color(redBackground.value, greenBackground.value, blueBackground.value, alphaBackground.value)
+            Color(redBackground.floatValue, greenBackground.floatValue, blueBackground.floatValue, alphaBackground.floatValue)
         }
     }
 

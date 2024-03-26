@@ -34,19 +34,26 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.R
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.widget.ColourPicker
+import com.app.whakaara.utils.GeneralUtils.Companion.convertStringToColour
 import com.app.whakaara.widget.AppWidget
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class WidgetConfig : ComponentActivity() {
 
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+
+    @Inject
+    lateinit var dataStore: PreferencesDataStore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,21 +73,29 @@ class WidgetConfig : ComponentActivity() {
         }
 
         setContent {
-            // unsure if possible to access widget state here to pre-set the slider values to current values
-            val alphaBackground = rememberSaveable { mutableFloatStateOf(1f) }
-            val redBackground = rememberSaveable { mutableFloatStateOf(0f) }
-            val greenBackground = rememberSaveable { mutableFloatStateOf(0f) }
-            val blueBackground = rememberSaveable { mutableFloatStateOf(0f) }
+            val textColourString = runBlocking {
+                dataStore.readTextColour.first()
+            }
+            val backgroundColourString = runBlocking {
+                dataStore.readBackgroundColour.first()
+            }
+            val textColor = remember { convertStringToColour(textColourString) }
+            val backgroundColor = remember { convertStringToColour(backgroundColourString) }
+
+            val alphaBackground = rememberSaveable { mutableFloatStateOf(backgroundColor.alpha) }
+            val redBackground = rememberSaveable { mutableFloatStateOf(backgroundColor.red) }
+            val greenBackground = rememberSaveable { mutableFloatStateOf(backgroundColor.green) }
+            val blueBackground = rememberSaveable { mutableFloatStateOf(backgroundColor.blue) }
             val colorBackground by remember {
                 derivedStateOf {
                     Color(redBackground.floatValue, greenBackground.floatValue, blueBackground.floatValue, alphaBackground.floatValue)
                 }
             }
 
-            val alphaText = rememberSaveable { mutableFloatStateOf(1f) }
-            val redText = rememberSaveable { mutableFloatStateOf(0f) }
-            val greenText = rememberSaveable { mutableFloatStateOf(0f) }
-            val blueText = rememberSaveable { mutableFloatStateOf(0f) }
+            val alphaText = rememberSaveable { mutableFloatStateOf(textColor.alpha) }
+            val redText = rememberSaveable { mutableFloatStateOf(textColor.red) }
+            val greenText = rememberSaveable { mutableFloatStateOf(textColor.green) }
+            val blueText = rememberSaveable { mutableFloatStateOf(textColor.blue) }
             val colorText by remember {
                 derivedStateOf {
                     Color(redText.floatValue, greenText.floatValue, blueText.floatValue, alphaText.floatValue)
@@ -147,6 +162,7 @@ class WidgetConfig : ComponentActivity() {
                                         val serializedBackground = Gson().toJson(colorBackground)
                                         val serializedText = Gson().toJson(colorText)
                                         val glanceId = GlanceAppWidgetManager(this@WidgetConfig).getGlanceIdBy(appWidgetId)
+                                        dataStore.saveColour(serializedBackground, serializedText)
                                         updateAppWidgetState(this@WidgetConfig, PreferencesGlanceStateDefinition, glanceId) { prefs ->
                                             prefs.toMutablePreferences().apply {
                                                 this[backgroundKey] = serializedBackground

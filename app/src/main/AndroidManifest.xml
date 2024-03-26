@@ -54,7 +54,8 @@
             tools:ignore="LockedOrientationActivity" />
 
         <activity android:name=".activities.WidgetConfig"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/Theme.Whakaara">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
             </intent-filter>

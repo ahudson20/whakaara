@@ -8,10 +8,14 @@ import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.data.preferences.SettingsTime
 import com.app.whakaara.state.AlarmState
+import com.app.whakaara.state.StopwatchState
+import com.app.whakaara.state.TimerState
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -44,6 +48,10 @@ class MainViewModelTest {
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
     private lateinit var alarmManagerWrapper: AlarmManagerWrapper
+    private lateinit var timerManagerWrapper: TimerManagerWrapper
+    private lateinit var stopwatchManagerWrapper: StopwatchManagerWrapper
+    private lateinit var stopwatchState: StopwatchState
+    private lateinit var timerState: TimerState
 
     @Before
     fun setUp() {
@@ -51,8 +59,15 @@ class MainViewModelTest {
         repository = mockk()
         preferencesRepository = mockk()
         alarmManagerWrapper = mockk()
+        timerManagerWrapper = mockk()
+        stopwatchManagerWrapper = mockk()
+        stopwatchState = StopwatchState()
+        timerState = TimerState()
 
-        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper)
+        every { stopwatchManagerWrapper.stopwatchState } returns MutableStateFlow(stopwatchState)
+        every { timerManagerWrapper.timerState } returns MutableStateFlow(timerState)
+
+        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper, timerManagerWrapper, stopwatchManagerWrapper)
 
         alarms = listOf(
             Alarm(

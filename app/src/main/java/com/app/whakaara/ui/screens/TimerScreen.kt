@@ -45,6 +45,7 @@ import com.app.whakaara.ui.theme.Spacings.spaceNone
 import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.NotificationUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_HOURS_INPUT_REGEX
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
@@ -52,6 +53,7 @@ import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_MINUTES_AND_SEC
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.shouldShowRationale
+import java.util.Calendar
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -62,7 +64,8 @@ fun TimerScreen(
     updateSeconds: (newValue: String) -> Unit,
     startTimer: () -> Unit,
     stopTimer: () -> Unit,
-    pauseTimer: () -> Unit
+    pauseTimer: () -> Unit,
+    is24HourFormat: Boolean
 ) {
     val focusManager = LocalFocusManager.current
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
@@ -210,7 +213,19 @@ fun TimerScreen(
                 TimerCountdownDisplay(
                     progress = timerState.progress,
                     time = timerState.time,
-                    finishTime = timerState.finishTime
+                    finishTime = if (timerState.isTimerPaused) {
+                        context.getString(R.string.timer_screen_paused)
+                    } else {
+                        DateUtils.getAlarmTimeFormatted(
+                            date = Calendar.getInstance().apply {
+                                add(
+                                    Calendar.MILLISECOND,
+                                    timerState.millisecondsFromTimerInput.toInt()
+                                )
+                            },
+                            is24HourFormatEnabled = is24HourFormat
+                        )
+                    }
                 )
             }
         }
@@ -229,7 +244,8 @@ fun TimerPreview() {
             updateSeconds = {},
             startTimer = {},
             pauseTimer = {},
-            stopTimer = {}
+            stopTimer = {},
+            is24HourFormat = false
         )
     }
 }

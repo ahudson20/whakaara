@@ -13,6 +13,9 @@ import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.logic.AlarmManagerWrapper
+import com.app.whakaara.logic.CountDownTimerUtil
+import com.app.whakaara.logic.StopwatchManagerWrapper
+import com.app.whakaara.logic.TimerManagerWrapper
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
 import dagger.Module
@@ -113,11 +116,30 @@ class NotificationModule {
     @Singleton
     fun providesAlarmManagerWrapper(
         app: Application,
+        alarmManager: AlarmManager
+    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
+
+    @Provides
+    @Singleton
+    fun providesTimerManagerWrapper(
+        app: Application,
         alarmManager: AlarmManager,
         notificationManager: NotificationManager,
         @Named("timer")
         timerNotificationBuilder: NotificationCompat.Builder,
+        countDownTimerUtil: CountDownTimerUtil
+    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil)
+
+    @Provides
+    @Singleton
+    fun providesStopwatchManagerWrapper(
+        app: Application,
+        notificationManager: NotificationManager,
         @Named("stopwatch")
         stopwatchNotificationBuilder: NotificationCompat.Builder
-    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, stopwatchNotificationBuilder)
+    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder)
+
+    @Provides
+    @Singleton
+    fun providesCountDownTimerUtil(): CountDownTimerUtil = CountDownTimerUtil()
 }

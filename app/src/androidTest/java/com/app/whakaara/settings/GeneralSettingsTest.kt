@@ -34,5 +34,9 @@ class GeneralSettingsTest {
         onNodeWithText(text = "General settings").assertIsDisplayed()
         onNodeWithText(text = "Edit system time").assertIsDisplayed()
         onNodeWithText(text = "App settings").assertIsDisplayed()
+        onNodeWithText(text = "App theme").assertIsDisplayed()
+        onNodeWithText(text = "System preference").assertIsDisplayed()
+        onNodeWithText(text = "24 hour format").assertIsDisplayed()
+        onNodeWithText(text = "If enabled, display using 24 hour format").assertIsDisplayed()
     }
 }

@@ -81,6 +81,16 @@
             android:exported="false">
         </receiver>
 
+        <receiver android:name=".receiver.TimerReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+
+        <receiver android:name=".receiver.StopwatchReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+
         <receiver android:name=".receiver.AppWidgetReceiver"
             android:enabled="true"
             android:exported="true">

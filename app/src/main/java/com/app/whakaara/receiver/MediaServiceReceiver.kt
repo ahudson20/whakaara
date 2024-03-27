@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.app.whakaara.logic.AlarmManagerWrapper
+import com.app.whakaara.logic.TimerManagerWrapper
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG
@@ -31,6 +32,9 @@ class MediaServiceReceiver : BroadcastReceiver() {
     @Inject
     lateinit var alarmManagerWrapper: AlarmManagerWrapper
 
+    @Inject
+    lateinit var timerManagerWrapper: TimerManagerWrapper
+
     override fun onReceive(context: Context, intent: Intent) {
         val alarmId = intent.getStringExtra(INTENT_ALARM_ID) ?: ""
         val alarmType = intent.getIntExtra(NOTIFICATION_TYPE, -1)
@@ -40,11 +44,10 @@ class MediaServiceReceiver : BroadcastReceiver() {
         goAsync {
             try {
                 if (alarmType == NOTIFICATION_TYPE_ALARM) {
-                    alarmManagerWrapper.stopAlarm(alarmId = alarmId)
-                    alarmManagerWrapper.updateWidget()
+                    alarmManagerWrapper.deleteAlarm(alarmId = alarmId)
                 }
                 if (alarmType == NOTIFICATION_TYPE_TIMER) {
-                    alarmManagerWrapper.cancelTimerAlarm()
+                    timerManagerWrapper.cancelTimerAlarm()
                 }
                 context.stopService(Intent(context, MediaPlayerService::class.java))
             } catch (exception: Exception) {

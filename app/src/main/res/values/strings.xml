@@ -73,6 +73,7 @@
     <string name="timer_notification_content_title">Timer Complete</string>
     <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>
     <string name="timer_notification_action_label">Stop</string>
+    <string name="timer_screen_paused">Paused</string>
 
     <string name="shortcut_alarm_short_label">Alarm</string>
     <string name="shortcut_alarm_long_label">Create alarm</string>
@@ -116,4 +117,8 @@
     <string name="onboarding_sub_text">This app requires permission to send you notifications!</string>
     <string name="onboarding_welcome_title">Welcome to whakaara</string>
     <string name="onboarding_welcome_sub_text">This screen will guide you through the most important setup steps</string>
+
+    <string name="notification_timer_play_action_label">Resume</string>
+    <string name="notification_timer_pause_action_label">Pause</string>
+    <string name="notification_timer_stop_action_label">Stop</string>
 </resources>

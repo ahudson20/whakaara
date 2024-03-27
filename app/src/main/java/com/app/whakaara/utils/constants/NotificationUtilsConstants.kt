@@ -30,4 +30,12 @@ object NotificationUtilsConstants {
     const val MEDIA_SERVICE_EXCEPTION_TAG = "MediaService exception"
 
     const val FOREGROUND_SERVICE_ID = 100
+
+    const val TIMER_RECEIVER_ACTION_START = "start_timer"
+    const val TIMER_RECEIVER_ACTION_PAUSE = "pause_timer"
+    const val TIMER_RECEIVER_ACTION_STOP = "stop_timer"
+
+    const val STOPWATCH_RECEIVER_ACTION_START = "start_stopwatch"
+    const val STOPWATCH_RECEIVER_ACTION_PAUSE = "pause_stopwatch"
+    const val STOPWATCH_RECEIVER_ACTION_STOP = "stop_stopwatch"
 }

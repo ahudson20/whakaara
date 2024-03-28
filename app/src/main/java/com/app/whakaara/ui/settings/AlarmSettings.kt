@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
@@ -66,7 +67,7 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space80).testTag(tag = "alarm vibrate drop down"),
         enabled = preferencesState.preferences.isVibrateEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.vibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },

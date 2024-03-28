@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
@@ -41,7 +42,7 @@ fun TimerSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space80).testTag("timer vibrate switch"),
         state = rememberBooleanSettingState(preferencesState.preferences.isVibrationTimerEnabled),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_timer_vibrate_subtitle)) },
@@ -55,7 +56,7 @@ fun TimerSettings(
     )
 
     SettingsListDropdown(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space80).testTag("timer vibrate dropdown"),
         enabled = preferencesState.preferences.isVibrationTimerEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.timerVibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },

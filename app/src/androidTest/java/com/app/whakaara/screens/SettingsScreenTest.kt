@@ -2,6 +2,7 @@ package com.app.whakaara.screens
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
 import com.app.whakaara.state.PreferencesState
@@ -40,13 +41,13 @@ class SettingsScreenTest {
 
         onNodeWithText(text = "App settings").assertIsDisplayed()
 
-        onNodeWithText(text = "App settings").assertIsDisplayed()
+        onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
         onNodeWithText(text = "24 hour format").performScrollTo().assertIsDisplayed()
         onNodeWithText(text = "If enabled, display using 24 hour format").assertIsDisplayed()
 
-        onNodeWithText(text = "Vibrate").performScrollTo().assertIsDisplayed()
-        onNodeWithText(text = "Vibrate when alarms go off").assertIsDisplayed()
+        onNodeWithText(text = "Vibrate when alarms go off").performScrollTo().assertIsDisplayed()
+        onNodeWithTag(testTag = "alarm vibrate drop down")
 
         onNodeWithText(text = "Snooze").performScrollTo().assertIsDisplayed()
         onNodeWithText(text = "Allow alarms to be snoozed").assertIsDisplayed()
@@ -58,5 +59,12 @@ class SettingsScreenTest {
 
         onNodeWithText(text = "Auto silence").performScrollTo().assertIsDisplayed()
         onNodeWithText(text = "Set time after which alarms will be silenced").assertIsDisplayed()
+
+        onNodeWithText(text = "Create widget").performScrollTo().assertIsDisplayed()
+        onNodeWithText(text = "Display next alarm in a widget").assertIsDisplayed()
+
+        onNodeWithText(text = "Timer settings").performScrollTo().assertIsDisplayed()
+        onNodeWithTag(testTag = "timer vibrate switch").performScrollTo().assertIsDisplayed()
+        onNodeWithTag(testTag = "timer vibrate dropdown").performScrollTo().assertIsDisplayed()
     }
 }

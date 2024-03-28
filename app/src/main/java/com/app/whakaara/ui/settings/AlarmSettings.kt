@@ -1,5 +1,9 @@
 package com.app.whakaara.ui.settings
 
+import android.app.Service
+import android.os.VibrationAttributes
+import android.os.VibrationEffect
+import android.os.VibratorManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,6 +27,14 @@ import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.SettingsTime
 import com.app.whakaara.data.preferences.VibrationPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPatternAmplitude
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
@@ -39,6 +51,7 @@ fun AlarmSettings(
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
+    val vibrator = (context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
     Text(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
@@ -67,6 +80,16 @@ fun AlarmSettings(
         items = VibrationPattern.values().map { it.label },
         onItemSelected = { int, _ ->
             val selection = VibrationPattern.fromOrdinalInt(value = int)
+            val vibrationEffect = when (selection) {
+                VibrationPattern.CLICK -> VibrationEffect.createWaveform(clickPattern, clickPatternAmplitude, -1)
+                VibrationPattern.DOUBLE -> VibrationEffect.createWaveform(doubleClickPattern, doubleClickPatternAmplitude, -1)
+                VibrationPattern.HEAVY -> VibrationEffect.createWaveform(heavyClickPattern, heavyClickPatternAmplitude, -1)
+                VibrationPattern.TICK -> VibrationEffect.createWaveform(tickPattern, tickPatternAmplitude, -1)
+            }
+            val attributes = VibrationAttributes.Builder().apply {
+                setUsage(VibrationAttributes.USAGE_NOTIFICATION)
+            }.build()
+            vibrator.vibrate(vibrationEffect, attributes)
             if (selection != preferencesState.preferences.vibrationPattern) {
                 updatePreferences(
                     preferencesState.preferences.copy(

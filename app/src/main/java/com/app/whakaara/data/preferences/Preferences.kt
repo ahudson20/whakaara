@@ -27,6 +27,18 @@ enum class VibrationPattern(val value: Int, val label: String) {
 
     companion object {
         fun fromOrdinalInt(value: Int) = VibrationPattern.values().first { it.ordinal == value }
+
+        val clickPattern = longArrayOf(0, 200)
+        val clickPatternAmplitude = intArrayOf(0, 200)
+
+        val doubleClickPattern = longArrayOf(0, 200)
+        val doubleClickPatternAmplitude = intArrayOf(0, 200)
+
+        val heavyClickPattern = longArrayOf(0, 200)
+        val heavyClickPatternAmplitude = intArrayOf(0, 200)
+
+        val tickPattern = longArrayOf(0, 200)
+        val tickPatternAmplitude = intArrayOf(0, 200)
     }
 }
 

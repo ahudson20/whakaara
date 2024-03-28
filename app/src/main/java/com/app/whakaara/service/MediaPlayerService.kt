@@ -29,6 +29,14 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.data.preferences.VibrationPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPattern
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPatternAmplitude
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -189,10 +197,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             }.build()
 
             val vibrationEffect = when (vibrationPattern) {
-                VibrationPattern.CLICK -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_CLICK)
-                VibrationPattern.DOUBLE -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_DOUBLE_CLICK)
-                VibrationPattern.HEAVY -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_HEAVY_CLICK)
-                VibrationPattern.TICK -> VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+                VibrationPattern.CLICK -> VibrationEffect.createWaveform(clickPattern, clickPatternAmplitude, 0)
+                VibrationPattern.DOUBLE -> VibrationEffect.createWaveform(doubleClickPattern, doubleClickPatternAmplitude, 0)
+                VibrationPattern.HEAVY -> VibrationEffect.createWaveform(heavyClickPattern, heavyClickPatternAmplitude, 0)
+                VibrationPattern.TICK -> VibrationEffect.createWaveform(tickPattern, tickPatternAmplitude, 0)
             }
             vibrator.vibrate(vibrationEffect, attributes)
         }

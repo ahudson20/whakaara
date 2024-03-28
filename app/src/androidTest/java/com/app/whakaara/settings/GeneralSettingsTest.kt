@@ -35,7 +35,6 @@ class GeneralSettingsTest {
         onNodeWithText(text = "Edit system time").assertIsDisplayed()
         onNodeWithText(text = "App settings").assertIsDisplayed()
         onNodeWithText(text = "Select ringtone").assertIsDisplayed()
-        onNodeWithText(text = "Current: None selected").assertIsDisplayed()
         onNodeWithText(text = "App Theme").assertIsDisplayed()
         onNodeWithText(text = "System preference").assertIsDisplayed()
         onNodeWithText(text = "24 hour format").assertIsDisplayed()

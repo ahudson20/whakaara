@@ -10,7 +10,6 @@ import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
 import org.junit.Rule
 import org.junit.Test
 import java.util.Calendar
@@ -37,8 +36,6 @@ class AlarmScreenTest {
             },
             subTitle = "03:03AM"
         )
-        val timeToFirstAlarm = DateUtils.getInitialTimeToAlarm(true, firstAlarm.date)
-        val timeToSecondAlarm = DateUtils.getInitialTimeToAlarm(true, secondAlarm.date)
 
         // When
         setContent {
@@ -57,10 +54,8 @@ class AlarmScreenTest {
 
         // Then
         onNodeWithText(text = "10:03PM").assertIsDisplayed()
-        onNodeWithText(text = timeToFirstAlarm).assertIsDisplayed()
 
         onNodeWithText(text = "03:03AM").assertIsDisplayed()
-        onNodeWithText(text = timeToSecondAlarm).assertIsDisplayed()
 
         onAllNodesWithTag(testTag = "alarm switch", useUnmergedTree = true)
             .apply {

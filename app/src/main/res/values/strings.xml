@@ -49,6 +49,7 @@
     <string name="settings_screen_alarm_settings_title">Alarm Settings</string>
     <string name="settings_screen_vibrate_title">Vibrate</string>
     <string name="settings_screen_vibrate_subtitle">Vibrate when alarms go off</string>
+    <string name="settings_screen_timer_vibrate_subtitle">Vibrate when timers go off</string>
     <string name="settings_screen_vibrate_pattern_title">Vibration pattern</string>
     <string name="settings_screen_snooze_title">Snooze</string>
     <string name="settings_screen_snooze_subtitle">Allow alarms to be snoozed</string>
@@ -66,6 +67,7 @@
     <string name="settings_screen_add_widget_title">Create widget</string>
     <string name="settings_screen_add_widget_subtitle">Display next alarm in a widget</string>
     <string name="settings_screen_add_widget_icon">Add widget next alarm icon</string>
+    <string name="settings_screen_timer_settings_title">Timer settings</string>
 
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>

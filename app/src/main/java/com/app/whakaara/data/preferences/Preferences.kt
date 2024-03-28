@@ -1,5 +1,6 @@
 package com.app.whakaara.data.preferences
 
+import android.os.VibrationEffect
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -16,7 +17,9 @@ data class Preferences(
     var alarmSoundPath: String = "",
     var vibrationPattern: VibrationPattern = VibrationPattern.CLICK,
     var appTheme: AppTheme = AppTheme.MODE_AUTO,
-    var shouldShowOnboarding: Boolean = false
+    var shouldShowOnboarding: Boolean = false,
+    var isVibrationTimerEnabled: Boolean = true,
+    var timerVibrationPattern: VibrationPattern = VibrationPattern.CLICK
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {
@@ -27,18 +30,27 @@ enum class VibrationPattern(val value: Int, val label: String) {
 
     companion object {
         fun fromOrdinalInt(value: Int) = VibrationPattern.values().first { it.ordinal == value }
+        fun createWaveForm(selection: VibrationPattern, repeat: Int): VibrationEffect = when (selection) {
+            CLICK -> VibrationEffect.createWaveform(clickPattern, clickPatternAmplitude, repeat)
+            DOUBLE -> VibrationEffect.createWaveform(doubleClickPattern, doubleClickPatternAmplitude, repeat)
+            HEAVY -> VibrationEffect.createWaveform(heavyClickPattern, heavyClickPatternAmplitude, repeat)
+            TICK -> VibrationEffect.createWaveform(tickPattern, tickPatternAmplitude, repeat)
+        }
 
-        val clickPattern = longArrayOf(0, 200)
-        val clickPatternAmplitude = intArrayOf(0, 200)
+        const val REPEAT = 0
+        const val SINGLE = -1
 
-        val doubleClickPattern = longArrayOf(0, 200)
-        val doubleClickPatternAmplitude = intArrayOf(0, 200)
+        private val clickPattern = longArrayOf(0, 200)
+        private val clickPatternAmplitude = intArrayOf(0, 255)
 
-        val heavyClickPattern = longArrayOf(0, 200)
-        val heavyClickPatternAmplitude = intArrayOf(0, 200)
+        private val doubleClickPattern = longArrayOf(0, 200, 160, 200)
+        private val doubleClickPatternAmplitude = intArrayOf(0, 255, 0, 255)
 
-        val tickPattern = longArrayOf(0, 200)
-        val tickPatternAmplitude = intArrayOf(0, 200)
+        private val heavyClickPattern = longArrayOf(0, 230)
+        private val heavyClickPatternAmplitude = intArrayOf(0, 255)
+
+        private val tickPattern = longArrayOf(0, 100)
+        private val tickPatternAmplitude = intArrayOf(0, 100)
     }
 }
 

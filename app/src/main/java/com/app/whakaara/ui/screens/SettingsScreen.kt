@@ -25,6 +25,7 @@ import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.settings.AlarmSettings
 import com.app.whakaara.ui.settings.GeneralSettings
+import com.app.whakaara.ui.settings.TimerSettings
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
@@ -71,6 +72,13 @@ fun SettingsScreen(
                 modifier = Modifier.padding(top = spaceMedium)
             )
             AlarmSettings(
+                preferencesState = preferencesState,
+                updatePreferences = updatePreferences
+            )
+            HorizontalDivider(
+                modifier = Modifier.padding(top = spaceMedium)
+            )
+            TimerSettings(
                 preferencesState = preferencesState,
                 updatePreferences = updatePreferences
             )

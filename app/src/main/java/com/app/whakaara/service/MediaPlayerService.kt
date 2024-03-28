@@ -17,7 +17,6 @@ import android.os.Message
 import android.os.PowerManager
 import android.os.Process.THREAD_PRIORITY_URGENT_AUDIO
 import android.os.VibrationAttributes
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.provider.Settings
 import android.util.Log
@@ -29,14 +28,7 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.data.preferences.VibrationPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPatternAmplitude
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPatternAmplitude
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPatternAmplitude
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.REPEAT
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -149,12 +141,16 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
                 createAlarmNotification(alarm = alarm),
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             )
+
+            if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
         } else {
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createTimerNotification(),
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             )
+
+            if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
         }
 
         mediaPlayer.apply {
@@ -169,8 +165,6 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             setOnPreparedListener(this@MediaPlayerService)
             prepareAsync()
         }
-
-        if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
 
         // set timeout on service
         handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
@@ -196,12 +190,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
                 setUsage(VibrationAttributes.USAGE_ALARM)
             }.build()
 
-            val vibrationEffect = when (vibrationPattern) {
-                VibrationPattern.CLICK -> VibrationEffect.createWaveform(clickPattern, clickPatternAmplitude, 0)
-                VibrationPattern.DOUBLE -> VibrationEffect.createWaveform(doubleClickPattern, doubleClickPatternAmplitude, 0)
-                VibrationPattern.HEAVY -> VibrationEffect.createWaveform(heavyClickPattern, heavyClickPatternAmplitude, 0)
-                VibrationPattern.TICK -> VibrationEffect.createWaveform(tickPattern, tickPatternAmplitude, 0)
-            }
+            val vibrationEffect = VibrationPattern.createWaveForm(
+                selection = vibrationPattern,
+                repeat = REPEAT
+            )
             vibrator.vibrate(vibrationEffect, attributes)
         }
         vibrationTask.run()

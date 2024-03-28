@@ -2,7 +2,6 @@ package com.app.whakaara.ui.settings
 
 import android.app.Service
 import android.os.VibrationAttributes
-import android.os.VibrationEffect
 import android.os.VibratorManager
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -27,14 +26,8 @@ import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.SettingsTime
 import com.app.whakaara.data.preferences.VibrationPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.clickPatternAmplitude
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.doubleClickPatternAmplitude
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.heavyClickPatternAmplitude
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.tickPatternAmplitude
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.SINGLE
+import com.app.whakaara.data.preferences.VibrationPattern.Companion.createWaveForm
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
@@ -80,12 +73,7 @@ fun AlarmSettings(
         items = VibrationPattern.values().map { it.label },
         onItemSelected = { int, _ ->
             val selection = VibrationPattern.fromOrdinalInt(value = int)
-            val vibrationEffect = when (selection) {
-                VibrationPattern.CLICK -> VibrationEffect.createWaveform(clickPattern, clickPatternAmplitude, -1)
-                VibrationPattern.DOUBLE -> VibrationEffect.createWaveform(doubleClickPattern, doubleClickPatternAmplitude, -1)
-                VibrationPattern.HEAVY -> VibrationEffect.createWaveform(heavyClickPattern, heavyClickPatternAmplitude, -1)
-                VibrationPattern.TICK -> VibrationEffect.createWaveform(tickPattern, tickPatternAmplitude, -1)
-            }
+            val vibrationEffect = createWaveForm(selection = selection, repeat = SINGLE)
             val attributes = VibrationAttributes.Builder().apply {
                 setUsage(VibrationAttributes.USAGE_NOTIFICATION)
             }.build()

@@ -42,7 +42,8 @@ fun MainScreen(
     onPause: () -> Unit,
     onStop: () -> Unit,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
+    filterAlarmList: (shouldFilter: Boolean) -> Unit
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -54,7 +55,8 @@ fun MainScreen(
                     route = navBackStackEntry?.destination?.route.toString(),
                     preferencesState = preferencesState,
                     updatePreferences = updatePreferences,
-                    updateAllAlarmSubtitles = updateAllAlarmSubtitles
+                    updateAllAlarmSubtitles = updateAllAlarmSubtitles,
+                    filterAlarmList = filterAlarmList
                 )
             }
         },
@@ -120,7 +122,8 @@ fun MainPreview() {
             onPause = {},
             onStop = {},
             updatePreferences = {},
-            updateAllAlarmSubtitles = {}
+            updateAllAlarmSubtitles = {},
+            filterAlarmList = {}
         )
     }
 }

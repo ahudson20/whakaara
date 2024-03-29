@@ -68,6 +68,8 @@
     <string name="settings_screen_add_widget_subtitle">Display next alarm in a widget</string>
     <string name="settings_screen_add_widget_icon">Add widget next alarm icon</string>
     <string name="settings_screen_timer_settings_title">Timer settings</string>
+    <string name="settings_screen_sort_alarm_list_title">Next enabled</string>
+    <string name="settings_screen_sort_alarm_list_sub_title">Sort alarms by next enabled</string>
 
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>

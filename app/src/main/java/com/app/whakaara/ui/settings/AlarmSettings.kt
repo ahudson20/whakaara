@@ -41,7 +41,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun AlarmSettings(
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
+    filterAlarmList: (shouldFilter: Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -50,6 +51,21 @@ fun AlarmSettings(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
         text = stringResource(id = R.string.settings_screen_alarm_settings_title)
+    )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80),
+        state = rememberBooleanSettingState(preferencesState.preferences.filteredAlarmList),
+        title = { Text(text = stringResource(id = R.string.settings_screen_sort_alarm_list_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_sort_alarm_list_sub_title)) },
+        onCheckedChange = {
+            filterAlarmList(it)
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    filteredAlarmList = it
+                )
+            )
+        }
     )
 
     SettingsSwitch(
@@ -181,7 +197,8 @@ fun AlarmSettingsPreview() {
         Column {
             AlarmSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {}
+                updatePreferences = {},
+                filterAlarmList = {}
             )
         }
     }

@@ -13,7 +13,8 @@ fun BottomSheetSettingsWrapper(
     state: BottomSheetState,
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
+    filterAlarmList: (shouldFilter: Boolean) -> Unit
 ) {
     BottomSheet(
         backgroundColor = MaterialTheme.colorScheme.surface,
@@ -23,7 +24,8 @@ fun BottomSheetSettingsWrapper(
         SettingsScreen(
             preferencesState = preferencesState,
             updatePreferences = updatePreferences,
-            updateAllAlarmSubtitles = updateAllAlarmSubtitles
+            updateAllAlarmSubtitles = updateAllAlarmSubtitles,
+            filterAlarmList = filterAlarmList
         )
     }
 }

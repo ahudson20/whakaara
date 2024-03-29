@@ -208,6 +208,7 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
 
         // cancel vibration if still running
         if (::vibrationTask.isInitialized) vibrationTask.cancel()
+        vibrator.cancel()
 
         // cancel countdown timer
         handler.removeCallbacks(runnable)

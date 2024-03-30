@@ -54,6 +54,20 @@ fun AlarmSettings(
 
     SettingsSwitch(
         modifier = Modifier.height(space80),
+        state = rememberBooleanSettingState(preferencesState.preferences.filteredAlarmList),
+        title = { Text(text = stringResource(id = R.string.settings_screen_sort_alarm_list_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_sort_alarm_list_sub_title)) },
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    filteredAlarmList = it
+                )
+            )
+        }
+    )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80),
         state = rememberBooleanSettingState(preferencesState.preferences.isVibrateEnabled),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_vibrate_subtitle)) },

@@ -19,7 +19,8 @@ data class Preferences(
     var appTheme: AppTheme = AppTheme.MODE_AUTO,
     var shouldShowOnboarding: Boolean = false,
     var isVibrationTimerEnabled: Boolean = true,
-    var timerVibrationPattern: VibrationPattern = VibrationPattern.CLICK
+    var timerVibrationPattern: VibrationPattern = VibrationPattern.CLICK,
+    var filteredAlarmList: Boolean = false
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {

@@ -116,7 +116,7 @@ dependencies {
     implementation "com.chargemap.compose:numberpicker:1.0.3"
 
     // https://github.com/alorma/Compose-Settings
-    implementation "com.github.alorma:compose-settings-ui-m3:0.27.0"
+    implementation "com.github.alorma:compose-settings-ui-m3:1.0.3"
 
     // https://github.com/cashapp/turbine
     testImplementation "app.cash.turbine:turbine:$turbine_version"

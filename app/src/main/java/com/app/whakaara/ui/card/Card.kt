@@ -31,7 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsWrapper
+import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space20
@@ -42,6 +42,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
 import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
+import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -140,13 +141,19 @@ fun Card(
         }
     }
 
-    BottomSheetDetailsWrapper(
-        alarm = alarm,
-        timeToAlarm = timeToAlarm,
-        is24HourFormat = is24HourFormat,
+    BottomSheet(
+        backgroundColor = MaterialTheme.colorScheme.surface,
         state = sheetState,
-        reset = reset
-    )
+        skipPeeked = true
+    ) {
+        BottomSheetDetailsContent(
+            alarm = alarm,
+            timeToAlarm = timeToAlarm,
+            is24HourFormat = is24HourFormat,
+            sheetState = sheetState,
+            reset = reset
+        )
+    }
 }
 
 @Composable

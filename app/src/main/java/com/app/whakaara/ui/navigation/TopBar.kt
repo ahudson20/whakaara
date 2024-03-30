@@ -5,6 +5,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -13,10 +14,11 @@ import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.ui.bottomsheet.settings.BottomSheetSettingsWrapper
+import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
 import kotlinx.coroutines.launch
 import java.util.Locale
@@ -57,12 +59,17 @@ fun TopBar(
         }
     )
 
-    BottomSheetSettingsWrapper(
+    BottomSheet(
+        backgroundColor = MaterialTheme.colorScheme.surface,
         state = sheetState,
-        preferencesState = preferencesState,
-        updatePreferences = updatePreferences,
-        updateAllAlarmSubtitles = updateAllAlarmSubtitles
-    )
+        skipPeeked = true
+    ) {
+        SettingsScreen(
+            preferencesState = preferencesState,
+            updatePreferences = updatePreferences,
+            updateAllAlarmSubtitles = updateAllAlarmSubtitles
+        )
+    }
 }
 
 @Composable

@@ -39,8 +39,9 @@ class CardTest {
                     alarm = alarm,
                     is24HourFormat = true,
                     disable = {},
-                    enable = {}
-                ) {}
+                    enable = {},
+                    reset = {}
+                )
             }
         }
 

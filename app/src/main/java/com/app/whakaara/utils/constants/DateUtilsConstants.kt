@@ -12,8 +12,6 @@ object DateUtilsConstants {
 
     const val TIMER_FORMAT = "%02d:%02d:%02d"
     const val TIMER_STARTING_FORMAT = "00:00:00"
-    const val TIMER_FINISH = "00:00"
-    const val TIMER_PAUSED = "Paused"
 
     const val BOTTOM_SHEET_ALARM_LABEL_OFF = "Off"
 

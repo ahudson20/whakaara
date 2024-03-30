@@ -38,4 +38,6 @@ object NotificationUtilsConstants {
     const val STOPWATCH_RECEIVER_ACTION_START = "start_stopwatch"
     const val STOPWATCH_RECEIVER_ACTION_PAUSE = "pause_stopwatch"
     const val STOPWATCH_RECEIVER_ACTION_STOP = "stop_stopwatch"
+
+    const val STOP_FULL_SCREEN_ACTIVITY = "finish_activity"
 }

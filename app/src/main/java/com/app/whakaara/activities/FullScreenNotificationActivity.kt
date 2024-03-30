@@ -3,7 +3,10 @@ package com.app.whakaara.activities
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.KeyguardManager
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,6 +16,7 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.logic.MainViewModel
@@ -25,6 +29,7 @@ import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +37,15 @@ class FullScreenNotificationActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
     private lateinit var alarm: Alarm
+
+    private val broadCastReceiverFinishActivity = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                STOP_FULL_SCREEN_ACTIVITY -> finishAndRemoveTask()
+                else -> return
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +56,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
 
         hideSystemBars()
         turnScreenOnAndKeyguardOff()
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadCastReceiverFinishActivity, IntentFilter("finish_activity"))
 
         if (notificationType == NOTIFICATION_TYPE_ALARM) {
             alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
@@ -80,6 +95,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         applicationContext.stopService(Intent(this@FullScreenNotificationActivity, MediaPlayerService::class.java))
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadCastReceiverFinishActivity)
     }
 
     private fun hideSystemBars() {

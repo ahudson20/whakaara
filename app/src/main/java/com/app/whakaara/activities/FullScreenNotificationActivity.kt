@@ -56,7 +56,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
 
         hideSystemBars()
         turnScreenOnAndKeyguardOff()
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadCastReceiverFinishActivity, IntentFilter("finish_activity"))
+        LocalBroadcastManager.getInstance(this).registerReceiver(broadCastReceiverFinishActivity, IntentFilter(STOP_FULL_SCREEN_ACTIVITY))
 
         if (notificationType == NOTIFICATION_TYPE_ALARM) {
             alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))

@@ -21,6 +21,7 @@ import android.os.Vibrator
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.data.alarm.Alarm
@@ -45,6 +46,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.PLAY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTION
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -226,6 +228,9 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
         } catch (exception: IllegalStateException) {
             Log.e(MEDIA_SERVICE_EXCEPTION_TAG, "MediaPlayer was not initialized.. Cannot stop it...")
         }
+
+        // cancel fullScreenIntent
+        LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(STOP_FULL_SCREEN_ACTIVITY))
     }
 
     private fun createAlarmNotification(

@@ -29,8 +29,7 @@ fun TopBar(
     route: String,
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
-    filterAlarmList: (shouldFilter: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
@@ -68,8 +67,7 @@ fun TopBar(
         SettingsScreen(
             preferencesState = preferencesState,
             updatePreferences = updatePreferences,
-            updateAllAlarmSubtitles = updateAllAlarmSubtitles,
-            filterAlarmList = filterAlarmList
+            updateAllAlarmSubtitles = updateAllAlarmSubtitles
         )
     }
 }
@@ -83,8 +81,7 @@ fun TopBarPreview() {
             route = "alarm",
             preferencesState = PreferencesState(),
             updatePreferences = {},
-            updateAllAlarmSubtitles = {},
-            filterAlarmList = {}
+            updateAllAlarmSubtitles = {}
         )
     }
 }

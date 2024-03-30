@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -139,28 +138,6 @@ class MainViewModel @Inject constructor(
                 )
             }
             alarmManagerWrapper.updateWidget()
-        }
-    }
-
-    fun filterAlarmList(shouldFilter: Boolean) {
-        if (shouldFilter) {
-            val state = _alarmState.value
-            if (state is AlarmState.Success) {
-                val (enabled, disabled) = state.alarms.partition { it.isEnabled }
-
-                val sortedEnabledList = with(enabled) {
-                    this.sortedBy { it.date.timeInMillis }
-                }.toMutableList()
-
-                val recombinedList: List<Alarm> = (sortedEnabledList + disabled).toList()
-                _alarmState.update {
-                    state.copy(
-                        alarms = recombinedList
-                    )
-                }
-            }
-        } else {
-            getAllAlarms()
         }
     }
     //endregion

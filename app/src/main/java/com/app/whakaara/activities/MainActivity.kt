@@ -66,8 +66,7 @@ class MainActivity : ComponentActivity() {
                     onPause = viewModel::pauseStopwatch,
                     onStop = viewModel::resetStopwatch,
                     updatePreferences = viewModel::updatePreferences,
-                    updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles,
-                    filterAlarmList = viewModel::filterAlarmList
+                    updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
                 )
             }
         }

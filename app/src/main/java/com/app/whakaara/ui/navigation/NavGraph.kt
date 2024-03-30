@@ -83,7 +83,17 @@ fun NavGraph(
             when (alarmState) {
                 is AlarmState.Loading -> Loading()
                 is AlarmState.Success -> AlarmScreen(
-                    alarms = alarmState.alarms,
+                    alarms = if (preferencesState.preferences.filteredAlarmList) {
+                        val (enabled, disabled) = alarmState.alarms.partition { it.isEnabled }
+
+                        val sortedEnabledList = with(enabled) {
+                            this.sortedBy { it.date.timeInMillis }
+                        }.toMutableList()
+
+                        (sortedEnabledList + disabled).toList()
+                    } else {
+                        alarmState.alarms
+                    },
                     preferencesState = preferencesState,
                     delete = delete,
                     disable = disable,

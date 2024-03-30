@@ -27,8 +27,7 @@ class SettingsScreenTest {
                 SettingsScreen(
                     preferencesState = state,
                     updatePreferences = {},
-                    updateAllAlarmSubtitles = {},
-                    filterAlarmList = {}
+                    updateAllAlarmSubtitles = {}
                 )
             }
         }

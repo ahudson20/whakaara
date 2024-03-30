@@ -38,8 +38,7 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
-    filterAlarmList: (shouldFilter: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -74,8 +73,7 @@ fun SettingsScreen(
             )
             AlarmSettings(
                 preferencesState = preferencesState,
-                updatePreferences = updatePreferences,
-                filterAlarmList = filterAlarmList
+                updatePreferences = updatePreferences
             )
             HorizontalDivider(
                 modifier = Modifier.padding(top = spaceMedium)
@@ -96,8 +94,7 @@ fun SettingsScreenPreview() {
         SettingsScreen(
             preferencesState = PreferencesState(),
             updatePreferences = {},
-            updateAllAlarmSubtitles = {},
-            filterAlarmList = {}
+            updateAllAlarmSubtitles = {}
         )
     }
 }

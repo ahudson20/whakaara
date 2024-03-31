@@ -1,12 +1,11 @@
 package com.app.whakaara.utils
 
-import com.app.whakaara.utils.constants.DateUtilsConstants.BOTTOM_SHEET_ALARM_LABEL_OFF
+import android.content.Context
+import com.app.whakaara.R
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_FORMAT
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_FORMAT
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIME_UNTIL_ALARM_FORMATTED_STRING_MINUTES_STRING
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIME_UNTIL_ALARM_FORMATTED_STRING_PREFIX
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -26,16 +25,17 @@ class DateUtils {
             return alarmDate.timeInMillis
         }
 
-        fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar): String {
+        fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar, context: Context): String {
             return if (!isEnabled) {
-                BOTTOM_SHEET_ALARM_LABEL_OFF
+                context.getString(R.string.card_alarm_sub_title_off)
             } else {
-                return convertSecondsToHMm(
+                convertSecondsToHMm(
                     seconds = TimeUnit.MILLISECONDS.toSeconds(
                         getDifferenceFromCurrentTimeInMillis(
                             time = time
                         )
-                    )
+                    ),
+                    context = context
                 )
             }
         }
@@ -45,37 +45,36 @@ class DateUtils {
             return SimpleDateFormat(format, Locale.getDefault()).format(date.time).uppercase()
         }
 
-        fun getTimeUntilAlarmFormatted(date: Calendar): String {
+        fun Context.getTimeUntilAlarmFormatted(date: Calendar): String {
             return convertSecondsToHMm(
                 seconds = TimeUnit.MILLISECONDS.toSeconds(
                     getDifferenceFromCurrentTimeInMillis(
                         time = date
                     )
-                )
+                ),
+                context = this
             )
         }
 
         fun convertSecondsToHMm(
-            seconds: Long
+            seconds: Long,
+            context: Context
         ): String {
             val minutes = seconds / 60 % 60
             val hours = seconds / (60 * 60) % 24
             val formattedString = StringBuilder()
             val hoursString = when {
-                hours.toInt() == 1 -> "%d hour ".format(hours)
                 hours.toInt() == 0 -> ""
-                else -> "%d hrs ".format(hours)
+                else -> context.resources.getQuantityString(R.plurals.hours, hours.toInt(), hours.toInt())
             }
             val minutesString = when {
-                minutes.toInt() == 1 -> "%d minute ".format(minutes)
-                minutes.toInt() == 0 && hours.toInt() == 0 -> TIME_UNTIL_ALARM_FORMATTED_STRING_MINUTES_STRING
-                minutes.toInt() == 0 -> ""
-                else -> "%d mins".format(minutes)
+                minutes.toInt() == 0 && hours.toInt() != 0 -> ""
+                else -> context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes.toInt())
             }
 
-            formattedString.append(TIME_UNTIL_ALARM_FORMATTED_STRING_PREFIX)
-            if (hoursString.isNotBlank()) formattedString.append(hoursString)
-            if (minutesString.isNotBlank()) formattedString.append(minutesString)
+            formattedString.append(context.resources.getString(R.string.time_until_alarm_formatted_prefix) + " ")
+            if (hoursString.isNotBlank()) formattedString.append("$hoursString ")
+            if (minutesString.isNotBlank()) formattedString.append("$minutesString ")
             return formattedString.toString().trim()
         }
 

@@ -90,7 +90,7 @@ fun BottomSheetDetailsContent(
                 value = timePickerValue,
                 onValueChange = { newValue ->
                     timePickerValue = newValue
-                    bottomText = getTimeUntilAlarmFormatted(
+                    bottomText = context.getTimeUntilAlarmFormatted(
                         date = Calendar.getInstance().apply {
                             set(Calendar.HOUR_OF_DAY, newValue.hours)
                             set(Calendar.MINUTE, newValue.minutes)

@@ -40,7 +40,6 @@ import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
-import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
@@ -64,7 +63,8 @@ fun Card(
         mutableStateOf(
             getInitialTimeToAlarm(
                 isEnabled = valueSlider,
-                time = alarm.date
+                time = alarm.date,
+                context = context
             )
         )
     }
@@ -73,7 +73,8 @@ fun Card(
     LaunchedEffect(key1 = alarm.date, key2 = valueSlider) {
         timeToAlarm = getInitialTimeToAlarm(
             isEnabled = valueSlider,
-            time = alarm.date
+            time = alarm.date,
+            context = context
         )
     }
 
@@ -84,7 +85,8 @@ fun Card(
     ) { _, _ ->
         timeToAlarm = getInitialTimeToAlarm(
             isEnabled = valueSlider,
-            time = alarm.date
+            time = alarm.date,
+            context = context
         )
     }
 
@@ -133,7 +135,7 @@ fun Card(
                     } else {
                         enable(alarm)
                         context.showToast(
-                            message = getTimeUntilAlarmFormatted(date = alarm.date)
+                            message = timeToAlarm
                         )
                     }
                 }

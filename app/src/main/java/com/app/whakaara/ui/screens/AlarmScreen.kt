@@ -32,6 +32,7 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.app.whakaara.utils.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -137,7 +138,7 @@ fun AlarmScreen(
                     )
                     isDialogShown.value = false
                     context.showToast(
-                        message = DateUtils.getTimeUntilAlarmFormatted(date = date)
+                        message = context.getTimeUntilAlarmFormatted(date = date)
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },

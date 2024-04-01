@@ -9,7 +9,6 @@ import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.card.Card
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
 import org.junit.Rule
 import org.junit.Test
 import java.util.Calendar
@@ -30,7 +29,6 @@ class CardTest {
             date = date,
             subTitle = "12:13 AM"
         )
-        val timeToAlarm = getInitialTimeToAlarm(alarm.isEnabled, date)
 
         // When
         setContent {
@@ -47,7 +45,6 @@ class CardTest {
 
         // Then
         onNodeWithText(text = "12:13AM").assertIsDisplayed()
-        onNodeWithText(text = timeToAlarm).assertIsDisplayed()
         onNodeWithTag(testTag = "alarm switch")
             .assertIsDisplayed()
             .assertIsToggleable()

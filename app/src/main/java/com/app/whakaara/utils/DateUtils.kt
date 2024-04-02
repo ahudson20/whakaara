@@ -70,6 +70,7 @@ class DateUtils {
             }
             val minutesString = when {
                 minutes.toInt() == 0 && hours.toInt() != 0 -> ""
+                minutes.toInt() == 0 && hours.toInt() == 0 -> context.getString(R.string.alarm_less_than_one_minute)
                 else -> context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes.toInt())
             }
 

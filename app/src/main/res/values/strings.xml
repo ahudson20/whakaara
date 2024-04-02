@@ -127,4 +127,6 @@
     <string name="notification_timer_stop_action_label">Stop</string>
 
     <string name="time_until_alarm_formatted_prefix">Alarm in</string>
+
+    <string name="alarm_less_than_one_minute">less than 1 minute</string>
 </resources>

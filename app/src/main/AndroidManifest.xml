@@ -91,6 +91,11 @@
             android:exported="false">
         </receiver>
 
+        <receiver android:name=".receiver.UpcomingAlarmReceiver"
+            android:exported="false"
+            android:enabled="true">
+        </receiver>
+
         <receiver android:name=".receiver.AppWidgetReceiver"
             android:enabled="true"
             android:exported="true">

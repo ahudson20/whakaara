@@ -40,6 +40,7 @@ import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
+import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utils.GeneralUtils.Companion.showToast
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
@@ -135,7 +136,7 @@ fun Card(
                     } else {
                         enable(alarm)
                         context.showToast(
-                            message = timeToAlarm
+                            message = context.getTimeUntilAlarmFormatted(date = alarm.date)
                         )
                     }
                 }

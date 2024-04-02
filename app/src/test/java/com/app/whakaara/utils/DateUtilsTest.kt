@@ -1,20 +1,37 @@
 package com.app.whakaara.utils
 
+import android.content.Context
+import com.app.whakaara.R
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 import java.util.Calendar
 
 class DateUtilsTest {
+
+    private val mockContext = mockk<Context>(relaxed = true)
+
+    @Before
+    fun setUp() {
+        every { mockContext.resources.getQuantityString(R.plurals.minutes, 0, 0) } returns "less than 1 minute"
+        every { mockContext.resources.getString(R.string.time_until_alarm_formatted_prefix) } returns "Alarm in"
+        every { mockContext.getString(R.string.card_alarm_sub_title_off) } returns "Off"
+    }
+
     @Test
     fun `convert seconds to time until alarm string`() {
         // Given
         val time: Long = 111222333
+        every { mockContext.resources.getQuantityString(R.plurals.minutes, 5, 5) } returns "5 minutes"
+        every { mockContext.resources.getQuantityString(R.plurals.hours, 7, 7) } returns "7 hours"
 
         // When
-        val timeString = DateUtils.convertSecondsToHMm(time)
+        val timeString = DateUtils.convertSecondsToHMm(time, mockContext)
 
         // Then
-        assertEquals("Alarm in 7 hrs 5 mins", timeString)
+        assertEquals("Alarm in 7 hours 5 minutes", timeString)
     }
 
     @Test
@@ -52,7 +69,7 @@ class DateUtilsTest {
     @Test
     fun `get initial time to alarm when alarm disabled`() {
         // Given + When
-        val initial = DateUtils.getInitialTimeToAlarm(false, Calendar.getInstance())
+        val initial = DateUtils.getInitialTimeToAlarm(false, Calendar.getInstance(), mockContext)
 
         // Then
         assertEquals("Off", initial)

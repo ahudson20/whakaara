@@ -43,8 +43,17 @@ class SettingsScreenTest {
 
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
+        onNodeWithText(text = "App Theme").performScrollTo().assertIsDisplayed()
+
+        onNodeWithText(text = "Dynamic theming").performScrollTo().assertIsDisplayed()
+
         onNodeWithText(text = "24 hour format").performScrollTo().assertIsDisplayed()
         onNodeWithText(text = "If enabled, display using 24 hour format").assertIsDisplayed()
+
+        onNodeWithText(text = "Alarm Settings").performScrollTo().assertIsDisplayed()
+
+        onNodeWithText(text = "Next enabled").performScrollTo().assertIsDisplayed()
+        onNodeWithText(text = "Sort alarms by next enabled").performScrollTo().assertIsDisplayed()
 
         onNodeWithText(text = "Vibrate when alarms go off").performScrollTo().assertIsDisplayed()
         onNodeWithTag(testTag = "alarm vibrate drop down")

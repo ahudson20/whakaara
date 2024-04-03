@@ -5,6 +5,7 @@
         <item quantity="other">%d hours</item>
     </plurals>
     <plurals name="minutes">
+        <!--https://issuetracker.google.com/issues/36917255-->
         <item quantity="zero">less than 1 minute</item>
         <item quantity="one">%d minute</item>
         <item quantity="other">%d minutes</item>

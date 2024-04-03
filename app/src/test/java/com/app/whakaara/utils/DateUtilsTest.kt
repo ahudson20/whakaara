@@ -18,6 +18,7 @@ class DateUtilsTest {
         every { mockContext.resources.getQuantityString(R.plurals.minutes, 0, 0) } returns "less than 1 minute"
         every { mockContext.resources.getString(R.string.time_until_alarm_formatted_prefix) } returns "Alarm in"
         every { mockContext.getString(R.string.card_alarm_sub_title_off) } returns "Off"
+        every { mockContext.getString(R.string.alarm_less_than_one_minute) } returns "less than 1 minute"
     }
 
     @Test

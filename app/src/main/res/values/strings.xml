@@ -70,6 +70,10 @@
     <string name="settings_screen_timer_settings_title">Timer settings</string>
     <string name="settings_screen_sort_alarm_list_title">Next enabled</string>
     <string name="settings_screen_sort_alarm_list_sub_title">Sort alarms by next enabled</string>
+    <string name="settings_screen_upcoming_alarm_notification_title">Upcoming alarm</string>
+    <string name="settings_screen_upcoming_alarm_notification_subtitle">Receive a notification before each alarm</string>
+    <string name="settings_screen_upcoming_alarm_notification_time_title">Upcoming alarm time</string>
+    <string name="settings_screen_upcoming_alarm_notification_time_subtitle">Time before alarm to display notification</string>
 
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>
@@ -127,4 +131,6 @@
     <string name="notification_timer_stop_action_label">Stop</string>
 
     <string name="time_until_alarm_formatted_prefix">Alarm in</string>
+
+    <string name="alarm_less_than_one_minute">less than 1 minute</string>
 </resources>

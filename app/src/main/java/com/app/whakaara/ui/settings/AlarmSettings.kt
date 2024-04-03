@@ -137,6 +137,39 @@ fun AlarmSettings(
 
     SettingsSwitch(
         modifier = Modifier.height(space80),
+        title = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_subtitle)) },
+        state = rememberBooleanSettingState(preferencesState.preferences.upcomingAlarmNotification),
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    upcomingAlarmNotification = it
+                )
+            )
+        }
+    )
+
+    SettingsListDropdown(
+        modifier = Modifier.height(space80),
+        enabled = preferencesState.preferences.upcomingAlarmNotification,
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.upcomingAlarmNotificationTime.ordinal),
+        title = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_time_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_time_subtitle)) },
+        items = SettingsTime.values().map { it.label },
+        onItemSelected = { int, _ ->
+            val selection = SettingsTime.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.upcomingAlarmNotificationTime) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        upcomingAlarmNotificationTime = selection
+                    )
+                )
+            }
+        }
+    )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80),
         title = { Text(text = stringResource(id = R.string.settings_screen_delete_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_delete_subtitle)) },
         state = rememberBooleanSettingState(preferencesState.preferences.deleteAfterGoesOff),

@@ -108,6 +108,25 @@ class NotificationModule {
     }
 
     @Provides
+    @Named("upcoming")
+    fun providesNotificationBuilderForUpcomingAlarm(
+        @ApplicationContext
+        context: Context
+    ): NotificationCompat.Builder {
+        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+            color = Color.WHITE
+            setSmallIcon(R.drawable.outline_timer_24)
+            setCategory(CATEGORY_ALARM)
+            setAutoCancel(true)
+            setContentTitle("Upcoming alarm")
+            setSubText("Time to alarm")
+            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+            setUsesChronometer(true)
+            setChronometerCountDown(true)
+        }
+    }
+
+    @Provides
     @Singleton
     fun provideAlarmManager(app: Application): AlarmManager =
         app.getSystemService(Service.ALARM_SERVICE) as AlarmManager

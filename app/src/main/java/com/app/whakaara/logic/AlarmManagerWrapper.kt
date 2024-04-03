@@ -9,6 +9,7 @@ import android.provider.Settings
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.receiver.AppWidgetReceiver
+import com.app.whakaara.receiver.UpcomingAlarmReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -19,6 +20,10 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.PLAY
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTION
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -30,12 +35,16 @@ class AlarmManagerWrapper @Inject constructor(
     fun createAlarm(
         alarmId: String,
         date: Calendar,
-        autoSilenceTime: Int
+        autoSilenceTime: Int,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         startAlarm(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
-            date = date
+            date = date,
+            upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+            upcomingAlarmNotificationTime = upcomingAlarmNotificationTime
         )
         updateWidget()
     }
@@ -50,13 +59,18 @@ class AlarmManagerWrapper @Inject constructor(
     fun stopStartUpdateWidget(
         alarmId: String,
         date: Calendar,
-        autoSilenceTime: Int
+        autoSilenceTime: Int,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         stopAlarm(alarmId = alarmId)
+        stopUpcomingAlarmNotification(alarmId = alarmId, alarmDate = date)
         startAlarm(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
-            date = date
+            date = date,
+            upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+            upcomingAlarmNotificationTime = upcomingAlarmNotificationTime
         )
         updateWidget()
     }
@@ -64,7 +78,9 @@ class AlarmManagerWrapper @Inject constructor(
     private fun startAlarm(
         alarmId: String,
         autoSilenceTime: Int,
-        date: Calendar
+        date: Calendar,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         if (!userHasNotGrantedAlarmPermission()) {
             redirectUserToSpecialAppAccessScreen()
@@ -72,7 +88,9 @@ class AlarmManagerWrapper @Inject constructor(
             setExactAlarm(
                 alarmId = alarmId,
                 autoSilenceTime = autoSilenceTime,
-                date = date
+                date = date,
+                upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+                upcomingAlarmNotificationTime = upcomingAlarmNotificationTime
             )
         }
     }
@@ -89,8 +107,15 @@ class AlarmManagerWrapper @Inject constructor(
     private fun setExactAlarm(
         alarmId: String,
         autoSilenceTime: Int,
-        date: Calendar
+        date: Calendar,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
+        val triggerTime = DateUtils.getTimeAsDate(alarmDate = date)
+        val triggerTimeMinusTenMinutes = (triggerTime.clone() as Calendar).apply {
+            add(Calendar.MINUTE, -upcomingAlarmNotificationTime)
+        }
+
         val startReceiverIntent = getStartReceiverIntent(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
@@ -111,8 +136,29 @@ class AlarmManagerWrapper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val upcomingAlarmIntent = Intent(app, UpcomingAlarmReceiver::class.java).apply {
+            action = alarmId
+            putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_START)
+            putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, triggerTime.timeInMillis)
+        }
+
+        val pendingIntent = PendingIntentUtils.getBroadcast(
+            context = app,
+            id = INTENT_REQUEST_CODE,
+            intent = upcomingAlarmIntent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        if (triggerTimeMinusTenMinutes.timeInMillis > Calendar.getInstance().timeInMillis && upcomingAlarmNotificationEnabled) {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                triggerTimeMinusTenMinutes.timeInMillis,
+                pendingIntent
+            )
+        }
+
         alarmManager.setAlarmClock(
-            AlarmManager.AlarmClockInfo(DateUtils.getTimeInMillis(alarmDate = date), alarmInfoPendingIntent),
+            AlarmManager.AlarmClockInfo(triggerTime.timeInMillis, alarmInfoPendingIntent),
             alarmPendingIntent
         )
     }
@@ -155,5 +201,33 @@ class AlarmManagerWrapper @Inject constructor(
                 action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             }
         )
+    }
+
+    fun stopUpcomingAlarmNotification(
+        alarmId: String,
+        alarmDate: Calendar
+    ) {
+        val triggerTime = DateUtils.getTimeAsDate(alarmDate = alarmDate)
+
+        val upcomingAlarmIntent = Intent(app, UpcomingAlarmReceiver::class.java).apply {
+            action = alarmId
+        }
+
+        val upcomingAlarmPendingIntent = PendingIntentUtils.getBroadcast(
+            context = app,
+            id = INTENT_REQUEST_CODE,
+            intent = upcomingAlarmIntent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        // cancel upcoming alarm
+        alarmManager.cancel(upcomingAlarmPendingIntent)
+
+        // send broadcast to cancel notification
+        upcomingAlarmIntent.also { intent ->
+            intent.putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_STOP)
+            intent.putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, triggerTime.timeInMillis)
+            app.applicationContext.sendBroadcast(intent)
+        }
     }
 }

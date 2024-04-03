@@ -39,5 +39,10 @@ object NotificationUtilsConstants {
     const val STOPWATCH_RECEIVER_ACTION_PAUSE = "pause_stopwatch"
     const val STOPWATCH_RECEIVER_ACTION_STOP = "stop_stopwatch"
 
+    const val UPCOMING_ALARM_INTENT_ACTION = "intent_action"
+    const val UPCOMING_ALARM_INTENT_TRIGGER_TIME = "trigger_time"
+    const val UPCOMING_ALARM_RECEIVER_ACTION_START = "start_upcoming_alarm_notification"
+    const val UPCOMING_ALARM_RECEIVER_ACTION_STOP = "stop_upcoming_alarm_notification"
+
     const val STOP_FULL_SCREEN_ACTIVITY = "finish_activity"
 }

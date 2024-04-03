@@ -76,18 +76,22 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
             date = alarm.date,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(alarm = alarm)
         alarmManagerWrapper.deleteAlarm(alarmId = alarm.alarmId.toString())
+        alarmManagerWrapper.stopUpcomingAlarmNotification(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         alarmManagerWrapper.deleteAlarm(alarmId = alarm.alarmId.toString())
+        alarmManagerWrapper.stopUpcomingAlarmNotification(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -95,7 +99,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
             date = alarm.date,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 
@@ -104,7 +110,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
             date = alarm.date,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 
@@ -115,7 +123,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
             date = currentTimePlusTenMinutes,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 

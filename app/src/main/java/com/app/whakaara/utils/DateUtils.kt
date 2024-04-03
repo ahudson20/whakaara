@@ -15,14 +15,15 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class DateUtils {
     companion object {
-        fun getTimeInMillis(alarmDate: Calendar): Long {
+
+        fun getTimeAsDate(alarmDate: Calendar): Calendar {
             val currentTime = Calendar.getInstance()
 
             if (checkIfSameDay(alarmDate, currentTime)) {
                 alarmDate.add(Calendar.DATE, 1)
             }
 
-            return alarmDate.timeInMillis
+            return alarmDate
         }
 
         fun getInitialTimeToAlarm(isEnabled: Boolean, time: Calendar, context: Context): String {
@@ -69,6 +70,7 @@ class DateUtils {
             }
             val minutesString = when {
                 minutes.toInt() == 0 && hours.toInt() != 0 -> ""
+                minutes.toInt() == 0 && hours.toInt() == 0 -> context.getString(R.string.alarm_less_than_one_minute)
                 else -> context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes.toInt())
             }
 

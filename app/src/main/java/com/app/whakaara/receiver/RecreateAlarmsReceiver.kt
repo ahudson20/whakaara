@@ -40,7 +40,9 @@ class RecreateAlarmsReceiver : BroadcastReceiver() {
                 alarmManagerWrapper.createAlarm(
                     alarmId = it.alarmId.toString(),
                     autoSilenceTime = preferences.autoSilenceTime.value,
-                    date = it.date
+                    date = it.date,
+                    upcomingAlarmNotificationEnabled = preferences.upcomingAlarmNotification,
+                    upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value
                 )
             }
         }

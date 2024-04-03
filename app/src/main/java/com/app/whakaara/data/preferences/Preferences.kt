@@ -20,7 +20,9 @@ data class Preferences(
     var shouldShowOnboarding: Boolean = false,
     var isVibrationTimerEnabled: Boolean = true,
     var timerVibrationPattern: VibrationPattern = VibrationPattern.CLICK,
-    var filteredAlarmList: Boolean = false
+    var filteredAlarmList: Boolean = false,
+    var upcomingAlarmNotification: Boolean = true,
+    var upcomingAlarmNotificationTime: SettingsTime = SettingsTime.TEN
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {
@@ -56,7 +58,7 @@ enum class VibrationPattern(val value: Int, val label: String) {
 }
 
 enum class SettingsTime(val value: Int, val label: String) {
-    ONE(0, "1 minute"),
+    ONE(1, "1 minute"),
     FIVE(5, "5 minutes"),
     TEN(10, "10 minutes"),
     FIFTEEN(15, "15 minutes");

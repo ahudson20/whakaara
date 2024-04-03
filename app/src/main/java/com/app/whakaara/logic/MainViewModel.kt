@@ -76,7 +76,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
             date = alarm.date,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 
@@ -97,7 +99,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
             date = alarm.date,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 
@@ -106,7 +110,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
             date = alarm.date,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 
@@ -117,7 +123,9 @@ class MainViewModel @Inject constructor(
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
             date = currentTimePlusTenMinutes,
-            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value
+            autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
+            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
         )
     }
 

@@ -35,12 +35,16 @@ class AlarmManagerWrapper @Inject constructor(
     fun createAlarm(
         alarmId: String,
         date: Calendar,
-        autoSilenceTime: Int
+        autoSilenceTime: Int,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         startAlarm(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
-            date = date
+            date = date,
+            upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+            upcomingAlarmNotificationTime = upcomingAlarmNotificationTime
         )
         updateWidget()
     }
@@ -55,14 +59,18 @@ class AlarmManagerWrapper @Inject constructor(
     fun stopStartUpdateWidget(
         alarmId: String,
         date: Calendar,
-        autoSilenceTime: Int
+        autoSilenceTime: Int,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         stopAlarm(alarmId = alarmId)
         stopUpcomingAlarmNotification(alarmId = alarmId, alarmDate = date)
         startAlarm(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
-            date = date
+            date = date,
+            upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+            upcomingAlarmNotificationTime = upcomingAlarmNotificationTime
         )
         updateWidget()
     }
@@ -70,7 +78,9 @@ class AlarmManagerWrapper @Inject constructor(
     private fun startAlarm(
         alarmId: String,
         autoSilenceTime: Int,
-        date: Calendar
+        date: Calendar,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         if (!userHasNotGrantedAlarmPermission()) {
             redirectUserToSpecialAppAccessScreen()
@@ -78,7 +88,9 @@ class AlarmManagerWrapper @Inject constructor(
             setExactAlarm(
                 alarmId = alarmId,
                 autoSilenceTime = autoSilenceTime,
-                date = date
+                date = date,
+                upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+                upcomingAlarmNotificationTime = upcomingAlarmNotificationTime
             )
         }
     }
@@ -95,11 +107,13 @@ class AlarmManagerWrapper @Inject constructor(
     private fun setExactAlarm(
         alarmId: String,
         autoSilenceTime: Int,
-        date: Calendar
+        date: Calendar,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int
     ) {
         val triggerTime = DateUtils.getTimeAsDate(alarmDate = date)
         val triggerTimeMinusTenMinutes = (triggerTime.clone() as Calendar).apply {
-            add(Calendar.MINUTE, -10)
+            add(Calendar.MINUTE, -upcomingAlarmNotificationTime)
         }
 
         val startReceiverIntent = getStartReceiverIntent(
@@ -135,7 +149,7 @@ class AlarmManagerWrapper @Inject constructor(
             flag = PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        if (triggerTimeMinusTenMinutes.timeInMillis > Calendar.getInstance().timeInMillis) {
+        if (triggerTimeMinusTenMinutes.timeInMillis > Calendar.getInstance().timeInMillis && upcomingAlarmNotificationEnabled) {
             alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 triggerTimeMinusTenMinutes.timeInMillis,

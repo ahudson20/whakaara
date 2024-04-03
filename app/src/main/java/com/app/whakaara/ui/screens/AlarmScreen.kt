@@ -3,6 +3,7 @@ package com.app.whakaara.ui.screens
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -114,7 +115,7 @@ fun AlarmScreen(
             reset = reset
         )
 
-        if (isDialogShown.value) {
+        AnimatedVisibility(isDialogShown.value) {
             TimePickerDialog(
                 onDismissRequest = { isDialogShown.value = false },
                 initialTime = LocalTime.now().plusMinutes(1).noSeconds(),

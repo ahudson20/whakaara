@@ -142,7 +142,7 @@ fun AlarmScreen(
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
-                is24HourFormat = true
+                is24HourFormat = preferencesState.preferences.is24HourFormat
             )
         }
     }

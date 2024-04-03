@@ -55,13 +55,13 @@ class SettingsScreenTest {
         onNodeWithText(text = "Snooze duration").performScrollTo().assertIsDisplayed()
 
         onNodeWithText(text = "Delete").performScrollTo().assertIsDisplayed()
-        onNodeWithText(text = "Alarms are deleted after they go off").assertIsDisplayed()
+        onNodeWithText(text = "Alarms are deleted after they go off").performScrollTo().assertIsDisplayed()
 
         onNodeWithText(text = "Auto silence").performScrollTo().assertIsDisplayed()
-        onNodeWithText(text = "Set time after which alarms will be silenced").assertIsDisplayed()
+        onNodeWithText(text = "Set time after which alarms will be silenced").performScrollTo().assertIsDisplayed()
 
         onNodeWithText(text = "Create widget").performScrollTo().assertIsDisplayed()
-        onNodeWithText(text = "Display next alarm in a widget").assertIsDisplayed()
+        onNodeWithText(text = "Display next alarm in a widget").performScrollTo().assertIsDisplayed()
 
         onNodeWithText(text = "Timer settings").performScrollTo().assertIsDisplayed()
         onNodeWithTag(testTag = "timer vibrate switch").performScrollTo().assertIsDisplayed()

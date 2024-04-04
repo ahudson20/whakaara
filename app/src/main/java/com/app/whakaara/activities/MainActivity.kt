@@ -44,7 +44,8 @@ class MainActivity : ComponentActivity() {
             }
 
             WhakaaraTheme(
-                darkTheme = useDarkColours
+                darkTheme = useDarkColours,
+                dynamicColor = preferencesState.preferences.dynamicTheme
             ) {
                 MainScreen(
                     preferencesState = preferencesState,

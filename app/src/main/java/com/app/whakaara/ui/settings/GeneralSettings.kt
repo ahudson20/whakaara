@@ -153,6 +153,20 @@ fun GeneralSettings(
 
     SettingsSwitch(
         modifier = Modifier.height(space80),
+        state = rememberBooleanSettingState(preferencesState.preferences.dynamicTheme),
+        title = { Text(text = stringResource(id = R.string.settings_screen_dynamic_theme_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_dynamic_theme_subtitle)) },
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    dynamicTheme = it
+                )
+            )
+        }
+    )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80),
         state = rememberBooleanSettingState(preferencesState.preferences.is24HourFormat),
         title = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_subtitle)) },

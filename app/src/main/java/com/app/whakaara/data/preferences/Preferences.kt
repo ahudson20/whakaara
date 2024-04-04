@@ -22,7 +22,8 @@ data class Preferences(
     var timerVibrationPattern: VibrationPattern = VibrationPattern.CLICK,
     var filteredAlarmList: Boolean = false,
     var upcomingAlarmNotification: Boolean = true,
-    var upcomingAlarmNotificationTime: SettingsTime = SettingsTime.TEN
+    var upcomingAlarmNotificationTime: SettingsTime = SettingsTime.TEN,
+    val dynamicTheme: Boolean = false
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {

@@ -43,6 +43,7 @@ object NotificationUtilsConstants {
     const val UPCOMING_ALARM_INTENT_TRIGGER_TIME = "trigger_time"
     const val UPCOMING_ALARM_RECEIVER_ACTION_START = "start_upcoming_alarm_notification"
     const val UPCOMING_ALARM_RECEIVER_ACTION_STOP = "stop_upcoming_alarm_notification"
+    const val UPCOMING_ALARM_RECEIVER_ACTION_CANCEL = "cancel_upcoming_alarm_notification"
 
     const val STOP_FULL_SCREEN_ACTIVITY = "finish_activity"
 }

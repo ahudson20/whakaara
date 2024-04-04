@@ -1,16 +1,23 @@
 package com.app.whakaara.receiver
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.app.whakaara.R
+import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.logic.AlarmManagerWrapper
+import com.app.whakaara.utils.PendingIntentUtils
+import com.app.whakaara.utils.constants.NotificationUtilsConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,42 +31,80 @@ class UpcomingAlarmReceiver : BroadcastReceiver() {
     @Named("upcoming")
     lateinit var upcomingAlarmNotificationBuilder: NotificationCompat.Builder
 
+    @Inject
+    lateinit var alarmRepository: AlarmRepository
+
+    @Inject
+    lateinit var alarmManagerWrapper: AlarmManagerWrapper
+
     override fun onReceive(context: Context, intent: Intent) {
         val actionsList = listOf(
             UPCOMING_ALARM_RECEIVER_ACTION_START,
-            UPCOMING_ALARM_RECEIVER_ACTION_STOP
+            UPCOMING_ALARM_RECEIVER_ACTION_STOP,
+            UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
         )
         val intentAction = intent.getStringExtra(UPCOMING_ALARM_INTENT_ACTION)
         if (!actionsList.contains(intentAction)) return
 
         val millis = intent.getLongExtra(
             UPCOMING_ALARM_INTENT_TRIGGER_TIME,
-            Calendar.getInstance().apply {
-                add(Calendar.MINUTE, 10)
-            }.timeInMillis
+            0L
         )
 
         goAsync {
             when (intentAction) {
-                UPCOMING_ALARM_RECEIVER_ACTION_START -> startNotification(millis = millis)
-                UPCOMING_ALARM_RECEIVER_ACTION_STOP -> stopNotification(millis = millis)
+                UPCOMING_ALARM_RECEIVER_ACTION_START -> {
+                    startNotification(millis = millis, context = context, alarmId = intent.action)
+                }
+                UPCOMING_ALARM_RECEIVER_ACTION_STOP -> {
+                    stopNotification(millis = millis)
+                }
+                UPCOMING_ALARM_RECEIVER_ACTION_CANCEL -> {
+                    cancelUpcomingAlarm(alarmId = intent.action, millis = millis)
+                }
             }
         }
     }
 
     private fun startNotification(
-        millis: Long
+        alarmId: String?,
+        millis: Long,
+        context: Context
     ) {
+        val intent = Intent(context, UpcomingAlarmReceiver::class.java).apply {
+            action = alarmId
+            putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_CANCEL)
+            putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, millis)
+        }
+        val pendingIntent = PendingIntentUtils.getBroadcast(
+            context = context,
+            id = NotificationUtilsConstants.INTENT_REQUEST_CODE,
+            intent = intent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
         notificationManager.notify(
             millis.toInt(),
             upcomingAlarmNotificationBuilder.apply {
                 setTimeoutAfter(millis - System.currentTimeMillis())
                 setWhen(millis)
+                addAction(0, context.getString(R.string.notification_upcoming_alarm_cancel), pendingIntent)
             }.build()
         )
     }
 
     private fun stopNotification(millis: Long) {
         notificationManager.cancel(millis.toInt())
+    }
+
+    private suspend fun cancelUpcomingAlarm(
+        alarmId: String?,
+        millis: Long
+    ) {
+        if (alarmId != null) {
+            alarmRepository.isEnabled(id = UUID.fromString(alarmId), isEnabled = false)
+            alarmManagerWrapper.deleteAlarm(alarmId = alarmId)
+            stopNotification(millis = millis)
+        }
     }
 }

@@ -8,6 +8,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.receiver.StopwatchReceiver
+import com.app.whakaara.state.Lap
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -96,7 +97,29 @@ class StopwatchManagerWrapper @Inject constructor(
                 lastTimeStamp = ZERO_MILLIS,
                 formattedTime = STOPWATCH_STARTING_TIME,
                 isActive = false,
-                isStart = true
+                isStart = true,
+                lapList = mutableListOf()
+            )
+        }
+    }
+
+    fun lapStopwatch() {
+        val diff: Long
+        val current = stopwatchState.value.timeMillis
+        diff = if (stopwatchState.value.lapList.isEmpty()) {
+            0
+        } else {
+            val previousLapValue = stopwatchState.value.lapList.last()
+            current - previousLapValue.time
+        }
+        val nextLap = Lap(
+            time = current,
+            diff = diff
+        )
+        val newList = stopwatchState.value.lapList.plus(nextLap).toMutableList()
+        stopwatchState.update {
+            it.copy(
+                lapList = newList
             )
         }
     }

@@ -164,6 +164,10 @@ class MainViewModel @Inject constructor(
     fun resetStopwatch() {
         stopwatchManagerWrapper.resetStopwatch()
     }
+
+    fun lapStopwatch() {
+        stopwatchManagerWrapper.lapStopwatch()
+    }
     //endregion
 
     //region timer

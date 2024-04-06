@@ -3,6 +3,13 @@ package com.app.whakaara.ui.screens
 import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,16 +17,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Pause
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -31,17 +29,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.ui.clock.TimerCountdownDisplay
 import com.app.whakaara.ui.clock.TimerInputField
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPlayPause
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStop
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.Spacings.spaceNone
 import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -84,31 +82,17 @@ fun TimerScreen(
         },
         floatingActionButton = {
             Row(
-                horizontalArrangement = Arrangement.spacedBy(spaceMedium)
+                horizontalArrangement = Arrangement.spacedBy(spaceXxLarge)
             ) {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(spaceXxLarge)
-                ) {
-                    if (!timerState.isStart) {
-                        FloatingActionButton(
-                            shape = CircleShape,
-                            modifier = Modifier.testTag("floating action button stop"),
-                            elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
-                            containerColor = MaterialTheme.colorScheme.error,
-                            onClick = {
-                                stopTimer()
-                            }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Stop,
-                                contentDescription = stringResource(id = R.string.stop_timer_icon_content_description)
-                            )
-                        }
+                AnimatedVisibility(!timerState.isStart) {
+                    FloatingActionButtonStop {
+                        stopTimer()
                     }
-                    FloatingActionButton(
-                        modifier = Modifier.testTag("floating action button play-pause"),
-                        shape = CircleShape,
-                        elevation = FloatingActionButtonDefaults.elevation(pressedElevation = spaceNone),
+                }
+
+                AnimatedVisibility(timerState.inputHours != TIMER_INPUT_INITIAL_VALUE || timerState.inputMinutes != TIMER_INPUT_INITIAL_VALUE || timerState.inputSeconds != TIMER_INPUT_INITIAL_VALUE) {
+                    FloatingActionButtonPlayPause(
+                        isPlaying = timerState.isTimerActive,
                         onClick = {
                             if (timerState.isTimerActive) {
                                 pauseTimer()
@@ -117,6 +101,7 @@ fun TimerScreen(
                                     PermissionStatus.Granted -> {
                                         startTimer()
                                     }
+
                                     else -> {
                                         /**PERMISSION DENIED - SHOW PROMPT**/
                                         if (notificationPermissionState.status.shouldShowRationale) {
@@ -134,19 +119,7 @@ fun TimerScreen(
                                 }
                             }
                         }
-                    ) {
-                        if (timerState.isTimerActive) {
-                            Icon(
-                                imageVector = Icons.Filled.Pause,
-                                contentDescription = stringResource(id = R.string.pause_timer_icon_content_description)
-                            )
-                        } else {
-                            Icon(
-                                imageVector = Icons.Filled.PlayArrow,
-                                contentDescription = stringResource(id = R.string.start_timer_icon_content_description)
-                            )
-                        }
-                    }
+                    )
                 }
             }
         },
@@ -169,64 +142,75 @@ fun TimerScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            if (!timerState.isTimerActive && !timerState.isTimerPaused) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = spaceMedium, end = spaceMedium),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TimerInputField(
-                        label = stringResource(id = R.string.timer_screen_hour_label),
-                        regex = TIMER_HOURS_INPUT_REGEX,
-                        updateStringEvent = StringStateEvent(
-                            value = timerState.inputHours,
-                            onValueChange = { newValue ->
-                                updateHours(newValue)
-                            }
+            AnimatedContent(
+                targetState = (!timerState.isTimerActive && !timerState.isTimerPaused),
+                transitionSpec = {
+                    (
+                        fadeIn(animationSpec = tween(1000, delayMillis = 90)) +
+                            scaleIn(initialScale = 0.92f, animationSpec = tween(300, delayMillis = 90))
+                        ).togetherWith(fadeOut(animationSpec = tween(600)))
+                },
+                label = ""
+            ) { targetState ->
+                if (targetState) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = spaceMedium, end = spaceMedium),
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        TimerInputField(
+                            label = stringResource(id = R.string.timer_screen_hour_label),
+                            regex = TIMER_HOURS_INPUT_REGEX,
+                            updateStringEvent = StringStateEvent(
+                                value = timerState.inputHours,
+                                onValueChange = { newValue ->
+                                    updateHours(newValue)
+                                }
+                            )
                         )
-                    )
 
-                    TimerInputField(
-                        label = stringResource(id = R.string.timer_screen_minutes_label),
-                        regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
-                        updateStringEvent = StringStateEvent(
-                            value = timerState.inputMinutes,
-                            onValueChange = { newValue ->
-                                updateMinutes(newValue)
-                            }
+                        TimerInputField(
+                            label = stringResource(id = R.string.timer_screen_minutes_label),
+                            regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
+                            updateStringEvent = StringStateEvent(
+                                value = timerState.inputMinutes,
+                                onValueChange = { newValue ->
+                                    updateMinutes(newValue)
+                                }
+                            )
                         )
-                    )
 
-                    TimerInputField(
-                        label = stringResource(id = R.string.timer_screen_seconds_label),
-                        regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
-                        updateStringEvent = StringStateEvent(
-                            value = timerState.inputSeconds,
-                            onValueChange = { newValue ->
-                                updateSeconds(newValue)
-                            }
-                        )
-                    )
-                }
-            } else {
-                TimerCountdownDisplay(
-                    progress = timerState.progress,
-                    time = timerState.time,
-                    finishTime = if (timerState.isTimerPaused) {
-                        context.getString(R.string.timer_screen_paused)
-                    } else {
-                        DateUtils.getAlarmTimeFormatted(
-                            date = Calendar.getInstance().apply {
-                                add(
-                                    Calendar.MILLISECOND,
-                                    timerState.millisecondsFromTimerInput.toInt()
-                                )
-                            },
-                            is24HourFormatEnabled = is24HourFormat
+                        TimerInputField(
+                            label = stringResource(id = R.string.timer_screen_seconds_label),
+                            regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
+                            updateStringEvent = StringStateEvent(
+                                value = timerState.inputSeconds,
+                                onValueChange = { newValue ->
+                                    updateSeconds(newValue)
+                                }
+                            )
                         )
                     }
-                )
+                } else {
+                    TimerCountdownDisplay(
+                        progress = timerState.progress,
+                        time = timerState.time,
+                        finishTime = if (timerState.isTimerPaused) {
+                            context.getString(R.string.timer_screen_paused)
+                        } else {
+                            DateUtils.getAlarmTimeFormatted(
+                                date = Calendar.getInstance().apply {
+                                    add(
+                                        Calendar.MILLISECOND,
+                                        timerState.millisecondsFromTimerInput.toInt()
+                                    )
+                                },
+                                is24HourFormatEnabled = is24HourFormat
+                            )
+                        }
+                    )
+                }
             }
         }
     }

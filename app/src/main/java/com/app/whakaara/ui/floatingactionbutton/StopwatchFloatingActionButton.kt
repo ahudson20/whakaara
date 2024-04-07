@@ -84,7 +84,7 @@ private fun FloatingActionButtonLap(onLap: () -> Unit) {
     ) {
         Icon(
             imageVector = Icons.Filled.Refresh,
-            contentDescription = stringResource(id = R.string.stop_timer_icon_content_description)
+            contentDescription = stringResource(id = R.string.lap_timer_icon_content_description)
         )
     }
 }

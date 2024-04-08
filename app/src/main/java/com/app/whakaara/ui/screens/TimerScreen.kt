@@ -147,7 +147,7 @@ fun TimerScreen(
                 transitionSpec = {
                     (
                         fadeIn(animationSpec = tween(1000, delayMillis = 90)) +
-                            scaleIn(initialScale = 0.92f, animationSpec = tween(300, delayMillis = 90))
+                            scaleIn(initialScale = 0.4f, animationSpec = tween(300, delayMillis = 90))
                         ).togetherWith(fadeOut(animationSpec = tween(600)))
                 },
                 label = ""

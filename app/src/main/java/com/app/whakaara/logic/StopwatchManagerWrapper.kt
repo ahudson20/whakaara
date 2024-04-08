@@ -107,10 +107,9 @@ class StopwatchManagerWrapper @Inject constructor(
         val diff: Long
         val current = stopwatchState.value.timeMillis
         diff = if (stopwatchState.value.lapList.isEmpty()) {
-            0
+            current
         } else {
-            val previousLapValue = stopwatchState.value.lapList.last()
-            current - previousLapValue.time
+            current - stopwatchState.value.lapList.last().time
         }
         val nextLap = Lap(
             time = current,

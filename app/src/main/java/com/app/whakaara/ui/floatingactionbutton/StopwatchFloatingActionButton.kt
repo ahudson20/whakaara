@@ -1,10 +1,15 @@
 package com.app.whakaara.ui.floatingactionbutton
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -15,7 +20,9 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,10 +46,16 @@ fun FloatingActionButtonWithLap(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier.weight(1f).fillMaxWidth().clip(shape = RoundedCornerShape(50)),
             horizontalArrangement = Arrangement.End
         ) {
             AnimatedVisibility(
+                enter = fadeIn() + expandHorizontally(
+                    expandFrom = Alignment.Start
+                ),
+                exit = fadeOut() + shrinkHorizontally(
+                    shrinkTowards = Alignment.Start
+                ),
                 visible = !isStart
             ) {
                 FloatingActionButtonStop(
@@ -60,7 +73,7 @@ fun FloatingActionButtonWithLap(
             )
         }
         Row(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier.weight(1f).fillMaxWidth().clip(shape = RoundedCornerShape(50)),
             horizontalArrangement = Arrangement.Start
         ) {
             AnimatedVisibility(isPlaying) {
@@ -75,7 +88,8 @@ private fun FloatingActionButtonLap(onLap: () -> Unit) {
     FloatingActionButton(
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp
+            defaultElevation = 0.dp,
+            pressedElevation = 0.dp
         ),
         containerColor = MaterialTheme.colorScheme.error,
         onClick = {
@@ -118,7 +132,8 @@ fun FloatingActionButtonStop(
         modifier = Modifier.testTag("floating action button stop"),
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp
+            defaultElevation = 0.dp,
+            pressedElevation = 0.dp
         ),
         containerColor = MaterialTheme.colorScheme.error,
         onClick = onStop
@@ -140,7 +155,8 @@ fun FloatingActionButtonPlayPause(
         modifier = modifier.testTag("floating action button play-pause"),
         shape = CircleShape,
         elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp
+            defaultElevation = 0.dp,
+            pressedElevation = 0.dp
         ),
         onClick = onClick
     ) {

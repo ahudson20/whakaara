@@ -77,7 +77,8 @@ fun AlarmScreen(
             FloatingActionButton(
                 shape = CircleShape,
                 elevation = FloatingActionButtonDefaults.elevation(
-                    defaultElevation = 0.dp
+                    defaultElevation = 0.dp,
+                    pressedElevation = 0.dp
                 ),
                 onClick = {
                     /**PERMISSION GRANTED**/

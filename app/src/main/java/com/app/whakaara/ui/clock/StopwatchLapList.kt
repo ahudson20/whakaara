@@ -113,7 +113,6 @@ fun Modifier.verticalFadingEdge(
         val bottomFadingEdgeStrength by derivedStateOf {
             lazyListState.layoutInfo.run {
                 val lastItem = visibleItemsInfo.lastOrNull()
-                println(lastItem?.index)
                 if (lastItem == null) {
                     0f
                 } else {

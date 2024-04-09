@@ -81,7 +81,9 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        modifier = Modifier.height(space80).testTag(tag = "alarm vibrate drop down"),
+        modifier = Modifier
+            .height(space80)
+            .testTag(tag = "alarm vibrate drop down"),
         enabled = preferencesState.preferences.isVibrateEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.vibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },

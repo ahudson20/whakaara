@@ -8,5 +8,11 @@ data class StopwatchState(
     val lastTimeStamp: Long = ZERO_MILLIS,
     val formattedTime: String = STOPWATCH_STARTING_TIME,
     val isActive: Boolean = false,
-    val isStart: Boolean = true
+    val isStart: Boolean = true,
+    val lapList: MutableList<Lap> = mutableListOf()
+)
+
+data class Lap(
+    val time: Long,
+    val diff: Long
 )

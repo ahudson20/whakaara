@@ -5,6 +5,7 @@ import com.app.whakaara.R
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_FORMAT
+import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_FORMAT_NO_HOURS
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_FORMAT
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import java.text.SimpleDateFormat
@@ -128,6 +129,16 @@ class DateUtils {
         fun formatTimeForStopwatch(millis: Long): String {
             return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
                 STOPWATCH_FORMAT.format(hours, minutes, seconds, TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS))
+            }
+        }
+
+        fun formatTimeForStopwatchLap(millis: Long): String {
+            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
+                if (hours == 0L) {
+                    STOPWATCH_FORMAT_NO_HOURS.format(minutes, seconds, TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS))
+                } else {
+                    STOPWATCH_FORMAT.format(hours, minutes, seconds, TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS))
+                }
             }
         }
 

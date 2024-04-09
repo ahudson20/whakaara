@@ -29,7 +29,8 @@ class StopwatchScreenTest {
                     stopwatchState = state,
                     onStart = {},
                     onPause = {},
-                    onStop = {}
+                    onStop = {},
+                    onLap = {}
                 )
             }
         }
@@ -56,7 +57,8 @@ class StopwatchScreenTest {
                     stopwatchState = state,
                     onStart = {},
                     onPause = {},
-                    onStop = {}
+                    onStop = {},
+                    onLap = {}
                 )
             }
         }

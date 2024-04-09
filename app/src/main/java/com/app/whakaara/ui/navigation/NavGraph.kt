@@ -45,6 +45,7 @@ fun NavGraph(
     onStart: () -> Unit,
     onPause: () -> Unit,
     onStop: () -> Unit,
+    onLap: () -> Unit,
 
     updatePreferences: (preferences: Preferences) -> Unit
 ) {
@@ -136,7 +137,8 @@ fun NavGraph(
                 stopwatchState = stopwatchState,
                 onStart = onStart,
                 onPause = onPause,
-                onStop = onStop
+                onStop = onStop,
+                onLap = onLap
             )
         }
     }

@@ -8,6 +8,7 @@ object DateUtilsConstants {
     const val DATE_FORMAT_12_HOUR_WITH_SECONDS = "hh:mm:ss aa"
 
     const val STOPWATCH_FORMAT = "%02d:%02d:%02d:%03d"
+    const val STOPWATCH_FORMAT_NO_HOURS = "%02d:%02d:%03d"
     const val STOPWATCH_STARTING_TIME = "00:00:00:000"
 
     const val TIMER_FORMAT = "%02d:%02d:%02d"

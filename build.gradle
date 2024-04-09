@@ -8,7 +8,7 @@ buildscript {
         work_version = '2.9.0'
         time_picker_version = '0.7.2'
         accompanist_permissions = '0.31.5-beta'
-        ktlint_gradle_version = '11.4.2'
+        ktlint_gradle_version = '11.6.0'
         hilt_agp_version = '2.43.2'
         room_version = '2.6.1'
         mockk_version = '1.13.5'

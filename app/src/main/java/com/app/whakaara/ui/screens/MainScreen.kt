@@ -41,6 +41,7 @@ fun MainScreen(
     onStart: () -> Unit,
     onPause: () -> Unit,
     onStop: () -> Unit,
+    onLap: () -> Unit,
     updatePreferences: (preferences: Preferences) -> Unit,
     updateAllAlarmSubtitles: (format: Boolean) -> Unit
 ) {
@@ -88,6 +89,7 @@ fun MainScreen(
                 onStart = onStart,
                 onPause = onPause,
                 onStop = onStop,
+                onLap = onLap,
 
                 updatePreferences = updatePreferences
             )
@@ -119,6 +121,7 @@ fun MainPreview() {
             onStart = {},
             onPause = {},
             onStop = {},
+            onLap = {},
             updatePreferences = {},
             updateAllAlarmSubtitles = {}
         )

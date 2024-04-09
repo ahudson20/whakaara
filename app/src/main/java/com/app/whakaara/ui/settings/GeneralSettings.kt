@@ -1,7 +1,9 @@
 package com.app.whakaara.ui.settings
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.provider.Settings
@@ -11,20 +13,25 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
+import com.alorma.compose.settings.storage.base.rememberFloatSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
 import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsMenuLink
+import com.alorma.compose.settings.ui.SettingsSlider
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.AppTheme
@@ -37,6 +44,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.GeneralUtils.Companion.getNameFromUri
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
+import kotlin.math.roundToInt
 
 @Composable
 fun GeneralSettings(
@@ -58,6 +66,9 @@ fun GeneralSettings(
         putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtoneUri)
         putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
     }
+    val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val originalAlarmVolume = remember { mutableIntStateOf(audioManager.getStreamVolume(AudioManager.STREAM_ALARM)) }
+    val maxValue = remember { audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM) }
 
     val ringtonePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -131,6 +142,23 @@ fun GeneralSettings(
         },
         onClick = {
             ringtonePicker.launch(ringtoneSelectionIntent)
+        }
+    )
+
+    SettingsSlider(
+        title = { Text(text = stringResource(id = R.string.settings_screen_alarm_volume_title, originalAlarmVolume.intValue)) },
+        icon = {
+            Icon(
+                imageVector = Icons.AutoMirrored.Default.VolumeUp,
+                contentDescription = stringResource(id = R.string.settings_screen_alarm_volume_icon)
+            )
+        },
+        state = rememberFloatSettingState(originalAlarmVolume.intValue.toFloat()),
+        steps = maxValue - 2,
+        valueRange = 1f..maxValue.toFloat(),
+        onValueChange = { value ->
+            originalAlarmVolume.intValue = value.roundToInt()
+            audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalAlarmVolume.intValue, 0)
         }
     )
 

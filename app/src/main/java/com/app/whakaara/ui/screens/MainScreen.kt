@@ -38,6 +38,7 @@ fun MainScreen(
     startTimer: () -> Unit,
     stopTimer: () -> Unit,
     pauseTimer: () -> Unit,
+    restartTimer: () -> Unit,
     onStart: () -> Unit,
     onPause: () -> Unit,
     onStop: () -> Unit,
@@ -85,6 +86,7 @@ fun MainScreen(
                 startTimer = startTimer,
                 stopTimer = stopTimer,
                 pauseTimer = pauseTimer,
+                restartTimer = restartTimer,
 
                 onStart = onStart,
                 onPause = onPause,
@@ -118,6 +120,7 @@ fun MainPreview() {
             startTimer = {},
             stopTimer = {},
             pauseTimer = {},
+            restartTimer = {},
             onStart = {},
             onPause = {},
             onStop = {},

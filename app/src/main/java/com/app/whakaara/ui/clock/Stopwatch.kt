@@ -14,7 +14,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonWithLap
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonRow
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.Spacings.spaceNone
@@ -34,13 +34,12 @@ fun Stopwatch(
     val scope = rememberCoroutineScope()
     Scaffold(
         floatingActionButton = {
-            FloatingActionButtonWithLap(
+            FloatingActionButtonRow(
                 isPlaying = stopwatchState.isActive,
                 isStart = stopwatchState.isStart,
                 onStop = onStop,
-                onPause = onPause,
-                onStart = onStart,
-                onLap = {
+                onPlayPause = if (stopwatchState.isActive) onPause else onStart,
+                onExtraButtonClicked = {
                     onLap()
                     scope.launch {
                         if (stopwatchState.lapList.lastIndex >= 0) {

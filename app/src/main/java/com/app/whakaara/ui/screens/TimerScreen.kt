@@ -4,11 +4,9 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -35,12 +33,10 @@ import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.ui.clock.TimerCountdownDisplay
 import com.app.whakaara.ui.clock.TimerInputField
-import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonPlayPause
-import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonStop
+import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonRow
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils
@@ -62,6 +58,7 @@ fun TimerScreen(
     updateSeconds: (newValue: String) -> Unit,
     startTimer: () -> Unit,
     stopTimer: () -> Unit,
+    restartTimer: () -> Unit,
     pauseTimer: () -> Unit,
     is24HourFormat: Boolean
 ) {
@@ -81,47 +78,43 @@ fun TimerScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         floatingActionButton = {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(spaceXxLarge)
-            ) {
-                AnimatedVisibility(!timerState.isStart) {
-                    FloatingActionButtonStop {
-                        stopTimer()
-                    }
-                }
+            FloatingActionButtonRow(
+                isPlaying = timerState.isTimerActive,
+                isStart = timerState.isStart,
+                isPlayButtonVisible = timerState.inputHours != TIMER_INPUT_INITIAL_VALUE ||
+                    timerState.inputMinutes != TIMER_INPUT_INITIAL_VALUE ||
+                    timerState.inputSeconds != TIMER_INPUT_INITIAL_VALUE,
+                onStop = stopTimer,
+                onPlayPause = {
+                    if (timerState.isTimerActive) {
+                        pauseTimer()
+                    } else {
+                        when (notificationPermissionState.status) {
+                            PermissionStatus.Granted -> {
+                                startTimer()
+                            }
 
-                AnimatedVisibility(timerState.inputHours != TIMER_INPUT_INITIAL_VALUE || timerState.inputMinutes != TIMER_INPUT_INITIAL_VALUE || timerState.inputSeconds != TIMER_INPUT_INITIAL_VALUE) {
-                    FloatingActionButtonPlayPause(
-                        isPlaying = timerState.isTimerActive,
-                        onClick = {
-                            if (timerState.isTimerActive) {
-                                pauseTimer()
-                            } else {
-                                when (notificationPermissionState.status) {
-                                    PermissionStatus.Granted -> {
-                                        startTimer()
-                                    }
-
-                                    else -> {
-                                        /**PERMISSION DENIED - SHOW PROMPT**/
-                                        if (notificationPermissionState.status.shouldShowRationale) {
-                                            NotificationUtils.snackBarPromptPermission(
-                                                scope = scope,
-                                                snackBarHostState = snackbarHostState,
-                                                context = context
-                                            )
-                                        } else {
-                                            /**FIRST TIME ACCESSING**/
-                                            /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
-                                            launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
-                                        }
-                                    }
+                            else -> {
+                                /**PERMISSION DENIED - SHOW PROMPT**/
+                                if (notificationPermissionState.status.shouldShowRationale) {
+                                    NotificationUtils.snackBarPromptPermission(
+                                        scope = scope,
+                                        snackBarHostState = snackbarHostState,
+                                        context = context
+                                    )
+                                } else {
+                                    /**FIRST TIME ACCESSING**/
+                                    /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
+                                    launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                                 }
                             }
                         }
-                    )
+                    }
+                },
+                onExtraButtonClicked = {
+                    restartTimer()
                 }
-            }
+            )
         },
         floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
@@ -145,10 +138,8 @@ fun TimerScreen(
             AnimatedContent(
                 targetState = (!timerState.isTimerActive && !timerState.isTimerPaused),
                 transitionSpec = {
-                    (
-                        fadeIn(animationSpec = tween(1000, delayMillis = 90)) +
-                            scaleIn(initialScale = 0.4f, animationSpec = tween(300, delayMillis = 90))
-                        ).togetherWith(fadeOut(animationSpec = tween(600)))
+                    (scaleIn(animationSpec = tween(1000, delayMillis = 90)))
+                        .togetherWith(scaleOut(animationSpec = tween(600)))
                 },
                 label = ""
             ) { targetState ->
@@ -229,6 +220,7 @@ fun TimerPreview() {
             startTimer = {},
             pauseTimer = {},
             stopTimer = {},
+            restartTimer = {},
             is24HourFormat = false
         )
     }

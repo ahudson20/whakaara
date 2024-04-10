@@ -71,7 +71,11 @@ fun FloatingActionButtonRow(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            AnimatedVisibility(isPlayButtonVisible) {
+            AnimatedVisibility(
+                visible = isPlayButtonVisible,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
                 FloatingActionButtonPlayPause(
                     isPlaying = isPlaying,
                     onClick = onPlayPause

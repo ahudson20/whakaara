@@ -41,6 +41,7 @@ fun NavGraph(
     startTimer: () -> Unit,
     stopTimer: () -> Unit,
     pauseTimer: () -> Unit,
+    restartTimer: () -> Unit,
 
     onStart: () -> Unit,
     onPause: () -> Unit,
@@ -121,6 +122,7 @@ fun NavGraph(
                 startTimer = startTimer,
                 stopTimer = stopTimer,
                 pauseTimer = pauseTimer,
+                restartTimer = restartTimer,
                 is24HourFormat = preferencesState.preferences.is24HourFormat
             )
         }

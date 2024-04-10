@@ -30,23 +30,25 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.ui.theme.BooleanPreviewProvider
-import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
-fun FloatingActionButtonWithLap(
+fun FloatingActionButtonRow(
     isPlaying: Boolean,
     isStart: Boolean,
+    isPlayButtonVisible: Boolean = true,
     onStop: () -> Unit,
-    onPause: () -> Unit,
-    onStart: () -> Unit,
-    onLap: () -> Unit
+    onPlayPause: () -> Unit,
+    onExtraButtonClicked: () -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         Row(
-            modifier = Modifier.weight(1f).fillMaxWidth().clip(shape = RoundedCornerShape(50)),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(50)),
             horizontalArrangement = Arrangement.End
         ) {
             AnimatedVisibility(
@@ -64,68 +66,40 @@ fun FloatingActionButtonWithLap(
             }
         }
         Row(
-            modifier = Modifier.weight(1f).fillMaxWidth(),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            FloatingActionButtonPlayPause(
-                isPlaying = isPlaying,
-                onClick = if (isPlaying) onPause else onStart
-            )
+            AnimatedVisibility(
+                visible = isPlayButtonVisible,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                FloatingActionButtonPlayPause(
+                    isPlaying = isPlaying,
+                    onClick = onPlayPause
+                )
+            }
         }
         Row(
-            modifier = Modifier.weight(1f).fillMaxWidth().clip(shape = RoundedCornerShape(50)),
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(50)),
             horizontalArrangement = Arrangement.Start
         ) {
             AnimatedVisibility(isPlaying) {
-                FloatingActionButtonLap(onLap)
+                FloatingActionButtonExtraAction(
+                    onExtraButtonClicked = onExtraButtonClicked
+                )
             }
         }
     }
 }
 
 @Composable
-private fun FloatingActionButtonLap(onLap: () -> Unit) {
-    FloatingActionButton(
-        shape = CircleShape,
-        elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp,
-            pressedElevation = 0.dp
-        ),
-        containerColor = MaterialTheme.colorScheme.error,
-        onClick = {
-            onLap()
-        }
-    ) {
-        Icon(
-            imageVector = Icons.Filled.Refresh,
-            contentDescription = stringResource(id = R.string.lap_timer_icon_content_description)
-        )
-    }
-}
-
-@Composable
-fun FloatingActionButtonPlayPauseStop(
-    isPlaying: Boolean,
-    isStart: Boolean,
-    onStop: () -> Unit,
-    onPause: () -> Unit,
-    onStart: () -> Unit
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(spaceXxLarge)
-    ) {
-        if (!isStart) {
-            FloatingActionButtonStop(onStop = onStop)
-        }
-        FloatingActionButtonPlayPause(
-            isPlaying = isPlaying,
-            onClick = if (isPlaying) onPause else onStart
-        )
-    }
-}
-
-@Composable
-fun FloatingActionButtonStop(
+private fun FloatingActionButtonStop(
     onStop: () -> Unit
 ) {
     FloatingActionButton(
@@ -146,7 +120,7 @@ fun FloatingActionButtonStop(
 }
 
 @Composable
-fun FloatingActionButtonPlayPause(
+private fun FloatingActionButtonPlayPause(
     modifier: Modifier = Modifier,
     isPlaying: Boolean,
     onClick: () -> Unit
@@ -174,18 +148,22 @@ fun FloatingActionButtonPlayPause(
     }
 }
 
-@Preview
 @Composable
-fun FloatingActionButtonPlayPauseStopPreview(
-    @PreviewParameter(BooleanPreviewProvider::class) isPlaying: Boolean
-) {
-    WhakaaraTheme {
-        FloatingActionButtonPlayPauseStop(
-            isPlaying = isPlaying,
-            isStart = false,
-            onStop = {},
-            onPause = {},
-            onStart = {}
+private fun FloatingActionButtonExtraAction(onExtraButtonClicked: () -> Unit) {
+    FloatingActionButton(
+        shape = CircleShape,
+        elevation = FloatingActionButtonDefaults.elevation(
+            defaultElevation = 0.dp,
+            pressedElevation = 0.dp
+        ),
+        containerColor = MaterialTheme.colorScheme.error,
+        onClick = {
+            onExtraButtonClicked()
+        }
+    ) {
+        Icon(
+            imageVector = Icons.Filled.Refresh,
+            contentDescription = stringResource(id = R.string.lap_reset_icon_content_description)
         )
     }
 }
@@ -209,6 +187,16 @@ fun FloatingActionButtonPlayPausePreview(
         FloatingActionButtonPlayPause(
             isPlaying = isPlaying,
             onClick = {}
+        )
+    }
+}
+
+@Preview
+@Composable
+fun FloatingActionButtonExtraActionPreview() {
+    WhakaaraTheme {
+        FloatingActionButtonExtraAction(
+            onExtraButtonClicked = {}
         )
     }
 }

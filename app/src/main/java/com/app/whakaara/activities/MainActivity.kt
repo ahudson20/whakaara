@@ -63,6 +63,7 @@ class MainActivity : ComponentActivity() {
                     startTimer = viewModel::startTimer,
                     stopTimer = viewModel::resetTimer,
                     pauseTimer = viewModel::pauseTimer,
+                    restartTimer = viewModel::restartTimer,
                     onStart = viewModel::startStopwatch,
                     onPause = viewModel::pauseStopwatch,
                     onStop = viewModel::resetStopwatch,

@@ -175,6 +175,24 @@ class TimerManagerWrapper @Inject constructor(
         }
     }
 
+    fun restartTimer() {
+        cancelNotification()
+        cancelTimerAlarm()
+        countDownTimerUtil.cancel()
+        timerState.update {
+            it.copy(
+                isTimerPaused = false,
+                isTimerActive = false,
+                currentTime = ZERO_MILLIS,
+                isStart = true,
+                progress = STARTING_CIRCULAR_PROGRESS,
+                time = TIMER_STARTING_FORMAT,
+                millisecondsFromTimerInput = ZERO_MILLIS
+            )
+        }
+        startTimer()
+    }
+
     private fun createTimerNotification(
         milliseconds: Long
     ) {

@@ -194,5 +194,9 @@ class MainViewModel @Inject constructor(
     fun resetTimer() {
         timerManagerWrapper.resetTimer()
     }
+
+    fun restartTimer() {
+        timerManagerWrapper.restartTimer()
+    }
     // endregion
 }

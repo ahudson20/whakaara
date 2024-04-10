@@ -81,6 +81,6 @@ class StopwatchTest {
 
         onNodeWithContentDescription(label = "Pause timer icon button").assertIsDisplayed().assertHasClickAction()
         onNodeWithContentDescription(label = "Stop timer icon button").assertIsDisplayed().assertHasClickAction()
-        onNodeWithContentDescription(label = "Lap timer icon button").assertIsDisplayed().assertHasClickAction()
+        onNodeWithContentDescription(label = "Extra fab icon button").assertIsDisplayed().assertHasClickAction()
     }
 }

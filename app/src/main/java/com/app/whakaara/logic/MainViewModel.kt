@@ -78,7 +78,8 @@ class MainViewModel @Inject constructor(
             date = alarm.date,
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
-            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
+            repeatAlarmDaily = alarm.repeatDaily
         )
     }
 
@@ -101,7 +102,8 @@ class MainViewModel @Inject constructor(
             date = alarm.date,
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
-            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
+            repeatAlarmDaily = alarm.repeatDaily
         )
     }
 
@@ -112,7 +114,8 @@ class MainViewModel @Inject constructor(
             date = alarm.date,
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
-            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
+            repeatAlarmDaily = alarm.repeatDaily
         )
     }
 
@@ -125,7 +128,8 @@ class MainViewModel @Inject constructor(
             date = currentTimePlusTenMinutes,
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
-            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value
+            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
+            repeatAlarmDaily = alarm.repeatDaily
         )
     }
 

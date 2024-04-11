@@ -42,7 +42,8 @@ class RecreateAlarmsReceiver : BroadcastReceiver() {
                     autoSilenceTime = preferences.autoSilenceTime.value,
                     date = it.date,
                     upcomingAlarmNotificationEnabled = preferences.upcomingAlarmNotification,
-                    upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value
+                    upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value,
+                    repeatAlarmDaily = it.repeatDaily
                 )
             }
         }

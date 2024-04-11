@@ -11,8 +11,13 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.AutoDelete
+import androidx.compose.material.icons.outlined.Repeat
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -29,14 +34,17 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.space28
 import com.app.whakaara.ui.theme.Spacings.space80
+import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
@@ -110,11 +118,29 @@ fun Card(
                     .padding(start = space28, end = space28),
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    modifier = Modifier.alpha(alpha = alpha),
-                    text = alarm.subTitle.filterNot { it.isWhitespace() },
-                    style = MaterialTheme.typography.headlineSmall
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        modifier = Modifier.alpha(alpha = alpha),
+                        text = alarm.subTitle.filterNot { it.isWhitespace() },
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+
+                    if (alarm.repeatDaily) {
+                        Icon(
+                            modifier = Modifier.padding(start = space10).size(spaceMedium),
+                            imageVector = Icons.Outlined.Repeat,
+                            contentDescription = stringResource(id = R.string.card_repeat_daily_icon_content_description)
+                        )
+                    } else if (alarm.deleteAfterGoesOff) {
+                        Icon(
+                            modifier = Modifier.padding(start = space10).size(spaceMedium),
+                            imageVector = Icons.Outlined.AutoDelete,
+                            contentDescription = stringResource(id = R.string.card_alarm_single_shot_content_description)
+                        )
+                    }
+                }
                 Text(
                     modifier = Modifier.alpha(alpha = alpha),
                     text = timeToAlarm,

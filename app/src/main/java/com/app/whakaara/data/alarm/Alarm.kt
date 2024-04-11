@@ -15,5 +15,6 @@ data class Alarm(
     var vibration: Boolean = true,
     var isEnabled: Boolean = true,
     var isSnoozeEnabled: Boolean = true,
-    var deleteAfterGoesOff: Boolean = false
+    var deleteAfterGoesOff: Boolean = false,
+    var repeatDaily: Boolean = false
 )

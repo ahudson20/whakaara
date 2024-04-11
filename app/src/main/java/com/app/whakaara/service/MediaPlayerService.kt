@@ -132,10 +132,12 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
                 )
             }
 
-            if (alarm.deleteAfterGoesOff) {
-                deleteAlarmById(alarmId = alarm.alarmId)
-            } else {
-                setIsEnabledToFalse(alarmId = alarm.alarmId)
+            if (!alarm.repeatDaily) {
+                if (alarm.deleteAfterGoesOff) {
+                    deleteAlarmById(alarmId = alarm.alarmId)
+                } else {
+                    setIsEnabledToFalse(alarmId = alarm.alarmId)
+                }
             }
 
             startForeground(

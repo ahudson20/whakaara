@@ -28,7 +28,7 @@ class GeneralUtilsTest {
 
         // Then
         assertEquals(
-            "{\"alarmId\":\"19de4fcc-1c68-485c-b817-0290faec649d\",\"date\":{\"year\":2023,\"month\":6,\"dayOfMonth\":13,\"hourOfDay\":12,\"minute\":34,\"second\":0},\"title\":\"Alarm\",\"subTitle\":\"subTitle\",\"vibration\":true,\"isEnabled\":true,\"isSnoozeEnabled\":true,\"deleteAfterGoesOff\":false}",
+            "{\"alarmId\":\"19de4fcc-1c68-485c-b817-0290faec649d\",\"date\":{\"year\":2023,\"month\":6,\"dayOfMonth\":13,\"hourOfDay\":12,\"minute\":34,\"second\":0},\"title\":\"Alarm\",\"subTitle\":\"subTitle\",\"vibration\":true,\"isEnabled\":true,\"isSnoozeEnabled\":true,\"deleteAfterGoesOff\":false,\"repeatDaily\":false}",
             alarmString
         )
     }
@@ -36,7 +36,7 @@ class GeneralUtilsTest {
     @Test
     fun `convert String to Alarm`() {
         // Given
-        val alarmString = "{\"alarmId\":\"19de4fcc-1c68-485c-b817-0290faec649d\",\"date\":{\"year\":2023,\"month\":6,\"dayOfMonth\":13,\"hourOfDay\":12,\"minute\":34,\"second\":0},\"title\":\"Alarm\",\"subTitle\":\"subTitle\",\"vibration\":true,\"isEnabled\":true,\"isSnoozeEnabled\":true,\"deleteAfterGoesOff\":false}"
+        val alarmString = "{\"alarmId\":\"19de4fcc-1c68-485c-b817-0290faec649d\",\"date\":{\"year\":2023,\"month\":6,\"dayOfMonth\":13,\"hourOfDay\":12,\"minute\":34,\"second\":0},\"title\":\"Alarm\",\"subTitle\":\"subTitle\",\"vibration\":true,\"isEnabled\":true,\"isSnoozeEnabled\":true,\"deleteAfterGoesOff\":false,\"repeatDaily\":false}"
 
         // When
         val alarmFromString = GeneralUtils.convertStringToAlarmObject(string = alarmString)

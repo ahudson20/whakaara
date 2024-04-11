@@ -19,8 +19,12 @@
     <string name="bottom_sheet_content_alarm_title">Title</string>
     <string name="bottom_sheet_icon_cancel_content_description">Cancel alarm changes</string>
     <string name="bottom_sheet_icon_save_content_description">Save alarm changes</string>
+    <string name="bottom_sheet_repeat_switch_title">Repeating</string>
+    <string name="bottom_sheet_repeat_switch_sub_title">Alarm will repeat daily</string>
 
     <string name="card_alarm_sub_title_off">Off</string>
+    <string name="card_repeat_daily_icon_content_description">Repeat alarm daily icon</string>
+    <string name="card_alarm_single_shot_content_description">Delete after goes off icon</string>
 
     <string name="notification_action_deleted">%1$s deleted</string>
     <string name="notification_action_cancelled">%1$s cancelled</string>

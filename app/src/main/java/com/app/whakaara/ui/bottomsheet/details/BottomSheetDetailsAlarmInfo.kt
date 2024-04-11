@@ -41,7 +41,8 @@ fun BottomSheetDetailsAlarmInfo(
     updateIsVibrationEnabled: BooleanStateEvent,
     updateIsSnoozeEnabled: BooleanStateEvent,
     updateDeleteAfterGoesOff: BooleanStateEvent,
-    updateTitle: StringStateEvent
+    updateTitle: StringStateEvent,
+    updateRepeatDaily: BooleanStateEvent
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -118,8 +119,36 @@ fun BottomSheetDetailsAlarmInfo(
             Switch(
                 modifier = modifier.testTag("delete switch"),
                 checked = updateDeleteAfterGoesOff.value,
+                enabled = !updateRepeatDaily.value,
                 onCheckedChange = {
                     updateDeleteAfterGoesOff.onValueChange(it)
+                }
+            )
+        }
+
+        Row(
+            modifier = modifier
+                .padding(start = space10, end = space10, top = space20)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    style = MaterialTheme.typography.bodyLarge,
+                    text = stringResource(id = R.string.bottom_sheet_repeat_switch_title)
+                )
+                Text(
+                    style = MaterialTheme.typography.bodySmall,
+                    text = stringResource(id = R.string.bottom_sheet_repeat_switch_sub_title)
+                )
+            }
+            Switch(
+                modifier = modifier.testTag("repeat alarm switch"),
+                checked = updateRepeatDaily.value,
+                enabled = !updateDeleteAfterGoesOff.value,
+                onCheckedChange = {
+                    updateRepeatDaily.onValueChange(it)
                 }
             )
         }
@@ -177,6 +206,9 @@ private fun BottomSheetAlarmDetailsPreview() {
                 value = true
             ),
             updateDeleteAfterGoesOff = BooleanStateEvent(
+                value = false
+            ),
+            updateRepeatDaily = BooleanStateEvent(
                 value = false
             ),
             updateTitle = StringStateEvent(

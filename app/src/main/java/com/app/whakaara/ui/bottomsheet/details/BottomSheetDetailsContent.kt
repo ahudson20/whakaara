@@ -58,6 +58,7 @@ fun BottomSheetDetailsContent(
     var isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
     var isSnoozeEnabled by remember(alarm.isSnoozeEnabled) { mutableStateOf(alarm.isSnoozeEnabled) }
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
+    var isRepeatDaily by remember(alarm.repeatDaily) { mutableStateOf(alarm.repeatDaily) }
     var title by remember(alarm.title) { mutableStateOf(alarm.title) }
     var bottomText by remember { mutableStateOf(timeToAlarm) }
     val context = LocalContext.current
@@ -119,6 +120,12 @@ fun BottomSheetDetailsContent(
                     deleteAfterGoesOff = newValue
                 }
             ),
+            updateRepeatDaily = BooleanStateEvent(
+                value = isRepeatDaily,
+                onValueChange = { newValue ->
+                    isRepeatDaily = newValue
+                }
+            ),
             updateTitle = StringStateEvent(
                 value = title,
                 onValueChange = { newValue ->
@@ -156,6 +163,7 @@ fun BottomSheetDetailsContent(
                                 vibration = isVibrationEnabled,
                                 isSnoozeEnabled = isSnoozeEnabled,
                                 deleteAfterGoesOff = deleteAfterGoesOff,
+                                repeatDaily = isRepeatDaily,
                                 title = title,
                                 subTitle = getAlarmTimeFormatted(
                                     date = alarm.date,

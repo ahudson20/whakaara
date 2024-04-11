@@ -19,6 +19,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +29,7 @@ import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.HoursUpdateEvent
+import com.app.whakaara.state.ListStateEvent
 import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
@@ -59,6 +61,7 @@ fun BottomSheetDetailsContent(
     var isSnoozeEnabled by remember(alarm.isSnoozeEnabled) { mutableStateOf(alarm.isSnoozeEnabled) }
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
     var isRepeatDaily by remember(alarm.repeatDaily) { mutableStateOf(alarm.repeatDaily) }
+    val checkedList = remember(alarm.daysOfWeek) { alarm.daysOfWeek.toMutableStateList() }
     var title by remember(alarm.title) { mutableStateOf(alarm.title) }
     var bottomText by remember { mutableStateOf(timeToAlarm) }
     val context = LocalContext.current
@@ -126,6 +129,16 @@ fun BottomSheetDetailsContent(
                     isRepeatDaily = newValue
                 }
             ),
+            updateCheckedList = ListStateEvent(
+                value = checkedList,
+                onValueChange = { newValue ->
+                    if (newValue in checkedList) {
+                        checkedList.remove(newValue)
+                    } else {
+                        checkedList.add(newValue)
+                    }
+                }
+            ),
             updateTitle = StringStateEvent(
                 value = title,
                 onValueChange = { newValue ->
@@ -164,6 +177,7 @@ fun BottomSheetDetailsContent(
                                 isSnoozeEnabled = isSnoozeEnabled,
                                 deleteAfterGoesOff = deleteAfterGoesOff,
                                 repeatDaily = isRepeatDaily,
+                                daysOfWeek = checkedList,
                                 title = title,
                                 subTitle = getAlarmTimeFormatted(
                                     date = alarm.date,

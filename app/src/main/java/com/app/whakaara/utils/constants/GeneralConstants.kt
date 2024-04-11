@@ -14,4 +14,6 @@ object GeneralConstants {
     const val WAKE_LOCK_TAG = "whakaara::WakelockTag"
 
     const val ONBOARDING_ROUTE = "onboarding"
+
+    val DAYS_OF_WEEK = listOf("M", "T", "W", "T", "F", "S", "S")
 }

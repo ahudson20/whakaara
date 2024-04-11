@@ -33,6 +33,9 @@ class BottomSheetAlarmDetailsTest {
                     updateDeleteAfterGoesOff = BooleanStateEvent(
                         value = false
                     ),
+                    updateRepeatDaily = BooleanStateEvent(
+                        value = false
+                    ),
                     updateTitle = StringStateEvent(
                         value = "Alarm"
                     )

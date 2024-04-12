@@ -69,7 +69,8 @@ class MainActivity : ComponentActivity() {
                     onStop = viewModel::resetStopwatch,
                     onLap = viewModel::lapStopwatch,
                     updatePreferences = viewModel::updatePreferences,
-                    updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles
+                    updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles,
+                    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = viewModel::updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
                 )
             }
         }

@@ -44,7 +44,8 @@ fun MainScreen(
     onStop: () -> Unit,
     onLap: () -> Unit,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
+    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -56,7 +57,8 @@ fun MainScreen(
                     route = navBackStackEntry?.destination?.route.toString(),
                     preferencesState = preferencesState,
                     updatePreferences = updatePreferences,
-                    updateAllAlarmSubtitles = updateAllAlarmSubtitles
+                    updateAllAlarmSubtitles = updateAllAlarmSubtitles,
+                    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
                 )
             }
         },
@@ -126,7 +128,8 @@ fun MainPreview() {
             onStop = {},
             onLap = {},
             updatePreferences = {},
-            updateAllAlarmSubtitles = {}
+            updateAllAlarmSubtitles = {},
+            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
         )
     }
 }

@@ -19,7 +19,8 @@ class AlarmSettingsTest {
         setContent {
             AlarmSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {}
+                updatePreferences = {},
+                updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
             )
         }
 

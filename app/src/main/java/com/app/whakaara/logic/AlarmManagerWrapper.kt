@@ -38,7 +38,8 @@ class AlarmManagerWrapper @Inject constructor(
         autoSilenceTime: Int,
         upcomingAlarmNotificationEnabled: Boolean,
         upcomingAlarmNotificationTime: Int,
-        repeatAlarmDaily: Boolean
+        repeatAlarmDaily: Boolean,
+        daysOfWeek: MutableList<Int>
     ) {
         startAlarm(
             alarmId = alarmId,
@@ -46,7 +47,8 @@ class AlarmManagerWrapper @Inject constructor(
             date = date,
             upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
             upcomingAlarmNotificationTime = upcomingAlarmNotificationTime,
-            repeatAlarmDaily = repeatAlarmDaily
+            repeatAlarmDaily = repeatAlarmDaily,
+            daysOfWeek = daysOfWeek
         )
         updateWidget()
     }
@@ -64,17 +66,19 @@ class AlarmManagerWrapper @Inject constructor(
         autoSilenceTime: Int,
         upcomingAlarmNotificationEnabled: Boolean,
         upcomingAlarmNotificationTime: Int,
-        repeatAlarmDaily: Boolean
+        repeatAlarmDaily: Boolean,
+        daysOfWeek: MutableList<Int>
     ) {
         stopAlarm(alarmId = alarmId)
-        stopUpcomingAlarmNotification(alarmId = alarmId, alarmDate = date)
+        cancelUpcomingAlarm(alarmId = alarmId, alarmDate = date)
         startAlarm(
             alarmId = alarmId,
             autoSilenceTime = autoSilenceTime,
             date = date,
             upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
             upcomingAlarmNotificationTime = upcomingAlarmNotificationTime,
-            repeatAlarmDaily = repeatAlarmDaily
+            repeatAlarmDaily = repeatAlarmDaily,
+            daysOfWeek = daysOfWeek
         )
         updateWidget()
     }
@@ -85,18 +89,26 @@ class AlarmManagerWrapper @Inject constructor(
         date: Calendar,
         upcomingAlarmNotificationEnabled: Boolean,
         upcomingAlarmNotificationTime: Int,
-        repeatAlarmDaily: Boolean
+        repeatAlarmDaily: Boolean,
+        daysOfWeek: MutableList<Int>
     ) {
         if (!userHasNotGrantedAlarmPermission()) {
             redirectUserToSpecialAppAccessScreen()
         } else {
-            setExactAlarm(
+            setAlarm(
                 alarmId = alarmId,
                 autoSilenceTime = autoSilenceTime,
                 date = date,
-                upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+                repeatAlarmDaily = repeatAlarmDaily,
+                daysOfWeek = daysOfWeek
+            )
+            setUpcomingAlarm(
+                alarmId = alarmId,
+                alarmDate = date,
                 upcomingAlarmNotificationTime = upcomingAlarmNotificationTime,
-                repeatAlarmDaily = repeatAlarmDaily
+                upcomingAlarmNotificationEnabled = upcomingAlarmNotificationEnabled,
+                repeatAlarmDaily = repeatAlarmDaily,
+                daysOfWeek = daysOfWeek
             )
         }
     }
@@ -110,18 +122,14 @@ class AlarmManagerWrapper @Inject constructor(
         alarmManager.canScheduleExactAlarms()
 
     @OptIn(ExperimentalLayoutApi::class)
-    private fun setExactAlarm(
+    private fun setAlarm(
         alarmId: String,
         autoSilenceTime: Int,
         date: Calendar,
-        upcomingAlarmNotificationEnabled: Boolean,
-        upcomingAlarmNotificationTime: Int,
-        repeatAlarmDaily: Boolean
+        repeatAlarmDaily: Boolean,
+        daysOfWeek: MutableList<Int>
     ) {
         val triggerTime = DateUtils.getTimeAsDate(alarmDate = date)
-        val triggerTimeMinusTenMinutes = (triggerTime.clone() as Calendar).apply {
-            add(Calendar.MINUTE, -upcomingAlarmNotificationTime)
-        }
 
         val startReceiverIntent = getStartReceiverIntent(
             alarmId = alarmId,
@@ -143,6 +151,34 @@ class AlarmManagerWrapper @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        if (repeatAlarmDaily || daysOfWeek.isNotEmpty()) {
+            alarmManager.setRepeating(
+                AlarmManager.RTC_WAKEUP,
+                triggerTime.timeInMillis,
+                AlarmManager.INTERVAL_DAY,
+                alarmPendingIntent
+            )
+        } else {
+            alarmManager.setAlarmClock(
+                AlarmManager.AlarmClockInfo(triggerTime.timeInMillis, alarmInfoPendingIntent),
+                alarmPendingIntent
+            )
+        }
+    }
+
+    fun setUpcomingAlarm(
+        alarmId: String,
+        alarmDate: Calendar,
+        upcomingAlarmNotificationEnabled: Boolean,
+        upcomingAlarmNotificationTime: Int,
+        repeatAlarmDaily: Boolean,
+        daysOfWeek: MutableList<Int>
+    ) {
+        val triggerTime = DateUtils.getTimeAsDate(alarmDate = alarmDate)
+        val triggerTimeMinusTenMinutes = (triggerTime.clone() as Calendar).apply {
+            add(Calendar.MINUTE, -upcomingAlarmNotificationTime)
+        }
+
         val upcomingAlarmIntent = Intent(app, UpcomingAlarmReceiver::class.java).apply {
             action = alarmId
             putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_START)
@@ -157,7 +193,7 @@ class AlarmManagerWrapper @Inject constructor(
         )
 
         if (triggerTimeMinusTenMinutes.timeInMillis > Calendar.getInstance().timeInMillis && upcomingAlarmNotificationEnabled) {
-            if (repeatAlarmDaily) {
+            if (repeatAlarmDaily || daysOfWeek.isNotEmpty()) {
                 alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
                     triggerTimeMinusTenMinutes.timeInMillis,
@@ -171,20 +207,6 @@ class AlarmManagerWrapper @Inject constructor(
                     pendingIntent
                 )
             }
-        }
-
-        if (repeatAlarmDaily) {
-            alarmManager.setRepeating(
-                AlarmManager.RTC_WAKEUP,
-                triggerTime.timeInMillis,
-                AlarmManager.INTERVAL_DAY,
-                alarmPendingIntent
-            )
-        } else {
-            alarmManager.setAlarmClock(
-                AlarmManager.AlarmClockInfo(triggerTime.timeInMillis, alarmInfoPendingIntent),
-                alarmPendingIntent
-            )
         }
     }
 
@@ -228,7 +250,7 @@ class AlarmManagerWrapper @Inject constructor(
         )
     }
 
-    fun stopUpcomingAlarmNotification(
+    fun cancelUpcomingAlarm(
         alarmId: String,
         alarmDate: Calendar
     ) {

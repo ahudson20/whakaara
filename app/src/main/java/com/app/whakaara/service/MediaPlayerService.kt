@@ -33,7 +33,7 @@ import com.app.whakaara.data.preferences.VibrationPattern.Companion.REPEAT
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.GeneralConstants.WAKE_LOCK_TAG
+import com.app.whakaara.utils.constants.GeneralConstants
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.FOREGROUND_SERVICE_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
@@ -52,6 +52,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
 import java.util.TimerTask
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -117,14 +118,6 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             preferencesRepository.getPreferences()
         }
 
-        if (!powerManager.isInteractive) {
-            wakeLock = powerManager.run {
-                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_TAG).apply {
-                    acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
-                }
-            }
-        }
-
         if (data.getInt(NOTIFICATION_TYPE) == NOTIFICATION_TYPE_ALARM) {
             val alarm = runBlocking {
                 alarmRepository.getAlarmById(
@@ -132,7 +125,12 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
                 )
             }
 
-            if (!alarm.repeatDaily) {
+            val today = LocalDate.now().getDayOfWeek().value - 1
+            if (alarm.daysOfWeek.isNotEmpty() && !alarm.daysOfWeek.contains(today)) {
+                this.stopSelf()
+            }
+
+            if (!alarm.repeatDaily || alarm.daysOfWeek.isEmpty()) {
                 if (alarm.deleteAfterGoesOff) {
                     deleteAlarmById(alarmId = alarm.alarmId)
                 } else {
@@ -155,6 +153,14 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             )
 
             if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
+        }
+
+        if (!powerManager.isInteractive) {
+            wakeLock = powerManager.run {
+                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, GeneralConstants.WAKE_LOCK_TAG).apply {
+                    acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+                }
+            }
         }
 
         mediaPlayer.apply {

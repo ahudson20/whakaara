@@ -43,7 +43,8 @@ class RecreateAlarmsReceiver : BroadcastReceiver() {
                     date = it.date,
                     upcomingAlarmNotificationEnabled = preferences.upcomingAlarmNotification,
                     upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value,
-                    repeatAlarmDaily = it.repeatDaily
+                    repeatAlarmDaily = it.repeatDaily,
+                    daysOfWeek = it.daysOfWeek
                 )
             }
         }

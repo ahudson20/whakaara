@@ -170,7 +170,7 @@ class MainViewModel @Inject constructor(
                         alarmManagerWrapper.setUpcomingAlarm(
                             alarmId = it.alarmId.toString(),
                             alarmDate = it.date,
-                            upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
+                            upcomingAlarmNotificationEnabled = true,
                             upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
                             repeatAlarmDaily = it.repeatDaily,
                             daysOfWeek = it.daysOfWeek

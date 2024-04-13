@@ -86,14 +86,18 @@ class MainViewModel @Inject constructor(
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(alarm = alarm)
-        alarmManagerWrapper.deleteAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        with(alarmManagerWrapper) {
+            deleteAlarm(alarmId = alarm.alarmId.toString())
+            cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        }
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
-        alarmManagerWrapper.deleteAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        with(alarmManagerWrapper) {
+            deleteAlarm(alarmId = alarm.alarmId.toString())
+            cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        }
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {

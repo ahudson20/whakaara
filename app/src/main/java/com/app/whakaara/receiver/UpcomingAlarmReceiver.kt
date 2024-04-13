@@ -2,7 +2,6 @@ package com.app.whakaara.receiver
 
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
@@ -22,7 +21,7 @@ import javax.inject.Inject
 import javax.inject.Named
 
 @AndroidEntryPoint
-class UpcomingAlarmReceiver : BroadcastReceiver() {
+class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var notificationManager: NotificationManager
@@ -38,6 +37,7 @@ class UpcomingAlarmReceiver : BroadcastReceiver() {
     lateinit var alarmManagerWrapper: AlarmManagerWrapper
 
     override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         val actionsList = listOf(
             UPCOMING_ALARM_RECEIVER_ACTION_START,
             UPCOMING_ALARM_RECEIVER_ACTION_STOP,

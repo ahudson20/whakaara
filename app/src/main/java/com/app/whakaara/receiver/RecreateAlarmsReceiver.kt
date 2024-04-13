@@ -3,6 +3,7 @@ package com.app.whakaara.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.CallSuper
 import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.logic.AlarmManagerWrapper
@@ -10,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class RecreateAlarmsReceiver : BroadcastReceiver() {
+class RecreateAlarmsReceiver : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var repo: AlarmRepository
@@ -21,7 +22,8 @@ class RecreateAlarmsReceiver : BroadcastReceiver() {
     @Inject
     lateinit var alarmManagerWrapper: AlarmManagerWrapper
 
-    override fun onReceive(context: Context, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         val actionsList = listOf(
             "android.intent.action.DATE_CHANGED",
             "android.intent.action.TIME_SET",
@@ -32,7 +34,7 @@ class RecreateAlarmsReceiver : BroadcastReceiver() {
             "android.intent.action.MY_PACKAGE_REPLACED",
             "android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"
         )
-        if (!actionsList.contains(intent?.action)) return
+        if (!actionsList.contains(intent.action)) return
 
         goAsync {
             val preferences = preferencesRepo.getPreferences()
@@ -49,4 +51,9 @@ class RecreateAlarmsReceiver : BroadcastReceiver() {
             }
         }
     }
+}
+
+abstract class HiltBroadcastReceiver : BroadcastReceiver() {
+    @CallSuper
+    override fun onReceive(context: Context, intent: Intent) {}
 }

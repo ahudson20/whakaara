@@ -264,12 +264,7 @@ class MainViewModel @Inject constructor(
             }
 
             preferencesDatastore.saveTimerData(
-                TimerStateDataStore(
-                    remainingTimeInMillis = 0L,
-                    isActive = false,
-                    isPaused = false,
-                    timeStamp = 0L
-                )
+                state = TimerStateDataStore()
             )
         }
     }

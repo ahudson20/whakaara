@@ -1,6 +1,5 @@
 package com.app.whakaara.receiver
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.app.whakaara.logic.StopwatchManagerWrapper
@@ -11,11 +10,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StopwatchReceiver : BroadcastReceiver() {
+class StopwatchReceiver : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var stopwatchManagerWrapper: StopwatchManagerWrapper
     override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         val actionsList = listOf(STOPWATCH_RECEIVER_ACTION_START, STOPWATCH_RECEIVER_ACTION_PAUSE, STOPWATCH_RECEIVER_ACTION_STOP)
         if (!actionsList.contains(intent.action)) return
 

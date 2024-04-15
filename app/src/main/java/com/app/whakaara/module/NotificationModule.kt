@@ -24,6 +24,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -148,8 +149,9 @@ class NotificationModule {
         @Named("timer")
         timerNotificationBuilder: NotificationCompat.Builder,
         countDownTimerUtil: CountDownTimerUtil,
-        preferencesDataStore: PreferencesDataStore
-    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDataStore)
+        preferencesDataStore: PreferencesDataStore,
+        coroutineScope: CoroutineScope
+    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDataStore, coroutineScope)
 
     @Provides
     @Singleton

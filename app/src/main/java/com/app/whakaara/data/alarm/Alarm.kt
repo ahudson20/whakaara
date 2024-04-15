@@ -16,5 +16,6 @@ data class Alarm(
     var isEnabled: Boolean = true,
     var isSnoozeEnabled: Boolean = true,
     var deleteAfterGoesOff: Boolean = false,
-    var repeatDaily: Boolean = false
+    var repeatDaily: Boolean = false,
+    var daysOfWeek: MutableList<Int> = mutableListOf()
 )

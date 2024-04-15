@@ -132,7 +132,8 @@ class AppWidget : GlanceAppWidget() {
                 .fillMaxHeight()
                 .background(backgroundColor)
                 .clickable(actionStartActivity<MainActivity>()),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (size.width <= ONE_BY_ONE.width) {
                 Image(

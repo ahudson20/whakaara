@@ -41,7 +41,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun AlarmSettings(
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
+    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -148,6 +149,7 @@ fun AlarmSettings(
                     upcomingAlarmNotification = it
                 )
             )
+            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(it)
         }
     )
 
@@ -230,7 +232,8 @@ fun AlarmSettingsPreview() {
         Column {
             AlarmSettings(
                 preferencesState = PreferencesState(),
-                updatePreferences = {}
+                updatePreferences = {},
+                updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
             )
         }
     }

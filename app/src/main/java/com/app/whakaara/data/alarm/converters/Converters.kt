@@ -1,6 +1,8 @@
 package com.app.whakaara.data.alarm.converters
 
 import androidx.room.TypeConverter
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.util.Calendar
 
 class Converters {
@@ -12,5 +14,15 @@ class Converters {
     @TypeConverter
     fun dateToTimestamp(calendar: Calendar?): Long? {
         return calendar?.timeInMillis
+    }
+
+    @TypeConverter
+    fun fromString(value: String): MutableList<Int> {
+        return Gson().fromJson(value, object : TypeToken<ArrayList<Int>>() {}.type)
+    }
+
+    @TypeConverter
+    fun listToString(value: MutableList<Int>): String {
+        return Gson().toJson(value)
     }
 }

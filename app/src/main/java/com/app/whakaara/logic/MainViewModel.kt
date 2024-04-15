@@ -79,20 +79,25 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
             upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
-            repeatAlarmDaily = alarm.repeatDaily
+            repeatAlarmDaily = alarm.repeatDaily,
+            daysOfWeek = alarm.daysOfWeek
         )
     }
 
     fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         repository.delete(alarm = alarm)
-        alarmManagerWrapper.deleteAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.stopUpcomingAlarmNotification(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        with(alarmManagerWrapper) {
+            deleteAlarm(alarmId = alarm.alarmId.toString())
+            cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        }
     }
 
     fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
-        alarmManagerWrapper.deleteAlarm(alarmId = alarm.alarmId.toString())
-        alarmManagerWrapper.stopUpcomingAlarmNotification(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        with(alarmManagerWrapper) {
+            deleteAlarm(alarmId = alarm.alarmId.toString())
+            cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
+        }
     }
 
     fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
@@ -103,7 +108,8 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
             upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
-            repeatAlarmDaily = alarm.repeatDaily
+            repeatAlarmDaily = alarm.repeatDaily,
+            daysOfWeek = alarm.daysOfWeek
         )
     }
 
@@ -115,7 +121,8 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
             upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
-            repeatAlarmDaily = alarm.repeatDaily
+            repeatAlarmDaily = alarm.repeatDaily,
+            daysOfWeek = alarm.daysOfWeek
         )
     }
 
@@ -129,7 +136,8 @@ class MainViewModel @Inject constructor(
             autoSilenceTime = _preferencesState.value.preferences.autoSilenceTime.value,
             upcomingAlarmNotificationEnabled = _preferencesState.value.preferences.upcomingAlarmNotification,
             upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
-            repeatAlarmDaily = alarm.repeatDaily
+            repeatAlarmDaily = alarm.repeatDaily,
+            daysOfWeek = alarm.daysOfWeek
         )
     }
 
@@ -152,6 +160,33 @@ class MainViewModel @Inject constructor(
                 )
             }
             alarmManagerWrapper.updateWidget()
+        }
+    }
+
+    fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
+        shouldEnableUpcomingAlarmNotification: Boolean
+    ) = viewModelScope.launch {
+        val state = _alarmState.value
+        if (state is AlarmState.Success) {
+            state.alarms.forEach {
+                if (it.isEnabled) {
+                    if (shouldEnableUpcomingAlarmNotification) {
+                        alarmManagerWrapper.setUpcomingAlarm(
+                            alarmId = it.alarmId.toString(),
+                            alarmDate = it.date,
+                            upcomingAlarmNotificationEnabled = true,
+                            upcomingAlarmNotificationTime = _preferencesState.value.preferences.upcomingAlarmNotificationTime.value,
+                            repeatAlarmDaily = it.repeatDaily,
+                            daysOfWeek = it.daysOfWeek
+                        )
+                    } else {
+                        alarmManagerWrapper.cancelUpcomingAlarm(
+                            alarmId = it.alarmId.toString(),
+                            alarmDate = it.date
+                        )
+                    }
+                }
+            }
         }
     }
     //endregion

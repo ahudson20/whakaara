@@ -17,3 +17,8 @@ data class HoursUpdateEvent(
     val value: Hours = FullHours(0, 0),
     val onValueChange: (Hours) -> Unit = {}
 )
+
+data class ListStateEvent(
+    val value: MutableList<Int> = mutableListOf(),
+    val onValueChange: (Int) -> Unit = {}
+)

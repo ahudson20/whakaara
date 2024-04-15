@@ -159,8 +159,9 @@ class NotificationModule {
         app: Application,
         notificationManager: NotificationManager,
         @Named("stopwatch")
-        stopwatchNotificationBuilder: NotificationCompat.Builder
-    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder)
+        stopwatchNotificationBuilder: NotificationCompat.Builder,
+        coroutineScope: CoroutineScope
+    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, coroutineScope)
 
     @Provides
     @Singleton

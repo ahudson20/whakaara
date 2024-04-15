@@ -21,8 +21,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_REC
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_START
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_STOP
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
@@ -34,9 +33,9 @@ class StopwatchManagerWrapper @Inject constructor(
     private val app: Application,
     private val notificationManager: NotificationManager,
     @Named("stopwatch")
-    private val stopwatchNotificationBuilder: NotificationCompat.Builder
+    private val stopwatchNotificationBuilder: NotificationCompat.Builder,
+    private val coroutineScope: CoroutineScope
 ) {
-    private var coroutineScope = CoroutineScope(Dispatchers.Main)
     val stopwatchState = MutableStateFlow(StopwatchState())
 
     fun startStopwatch() {
@@ -88,8 +87,7 @@ class StopwatchManagerWrapper @Inject constructor(
     }
 
     fun resetStopwatch() {
-        coroutineScope.cancel()
-        coroutineScope = CoroutineScope(Dispatchers.Main)
+        coroutineScope.coroutineContext.cancelChildren()
         cancelNotification()
         stopwatchState.update {
             it.copy(

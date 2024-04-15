@@ -4,18 +4,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
+import com.app.whakaara.state.TimerStateDataStore
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -27,7 +30,8 @@ class MainViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
     private val alarmManagerWrapper: AlarmManagerWrapper,
     private val timerManagerWrapper: TimerManagerWrapper,
-    private val stopwatchManagerWrapper: StopwatchManagerWrapper
+    private val stopwatchManagerWrapper: StopwatchManagerWrapper,
+    private val preferencesDatastore: PreferencesDataStore
 ) : ViewModel() {
 
     // alarm
@@ -230,12 +234,66 @@ class MainViewModel @Inject constructor(
         timerManagerWrapper.pauseTimer()
     }
 
-    fun resetTimer() {
+    fun resetTimer() = viewModelScope.launch {
         timerManagerWrapper.resetTimer()
+        preferencesDatastore.saveTimerData(
+            TimerStateDataStore(
+                remainingTimeInMillis = 0L,
+                isActive = false,
+                isPaused = false
+            )
+        )
     }
 
     fun restartTimer() {
         timerManagerWrapper.restartTimer()
+    }
+
+    fun recreateTimer() = viewModelScope.launch(Dispatchers.Main) {
+        val status = preferencesDatastore.readTimerStatus.first()
+        val difference = System.currentTimeMillis() - status.timeStamp
+        if (status.remainingTimeInMillis > 0 && timerState.value.isStart && (status.remainingTimeInMillis > difference)) {
+            if (status.isActive) {
+                timerManagerWrapper.recreateActiveTimer(
+                    milliseconds = status.remainingTimeInMillis - difference
+                )
+            } else if (status.isPaused) {
+                timerManagerWrapper.recreatePausedTimer(
+                    milliseconds = status.remainingTimeInMillis - difference
+                )
+            }
+        }
+
+        preferencesDatastore.saveTimerData(
+            TimerStateDataStore(
+                remainingTimeInMillis = 0L,
+                isActive = false,
+                isPaused = false,
+                timeStamp = 0L
+            )
+        )
+    }
+
+    fun saveTimerStateForRecreation() = viewModelScope.launch(Dispatchers.IO) {
+        if (!timerState.value.isStart) {
+            preferencesDatastore.saveTimerData(
+                TimerStateDataStore(
+                    remainingTimeInMillis = timerState.value.currentTime,
+                    isActive = timerState.value.isTimerActive,
+                    isPaused = timerState.value.isTimerPaused,
+                    timeStamp = System.currentTimeMillis()
+                )
+            )
+        } else {
+            preferencesDatastore.saveTimerData(
+                TimerStateDataStore(
+                    remainingTimeInMillis = 0L,
+                    isActive = false,
+                    isPaused = false,
+                    timeStamp = 0L
+                )
+            )
+        }
     }
     // endregion
 }

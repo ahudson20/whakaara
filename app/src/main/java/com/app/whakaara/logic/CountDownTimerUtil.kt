@@ -2,9 +2,8 @@ package com.app.whakaara.logic
 
 import android.os.CountDownTimer
 import com.app.whakaara.utils.constants.GeneralConstants.TIMER_INTERVAL
-import javax.inject.Inject
 
-class CountDownTimerUtil @Inject constructor() {
+class CountDownTimerUtil {
 
     private lateinit var timer: CountDownTimer
 
@@ -26,6 +25,6 @@ class CountDownTimerUtil @Inject constructor() {
     }
 
     fun cancel() {
-        timer.cancel()
+        if (::timer.isInitialized) timer.cancel()
     }
 }

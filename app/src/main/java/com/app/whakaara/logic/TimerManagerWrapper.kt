@@ -8,9 +8,11 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.receiver.TimerReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.state.TimerState
+import com.app.whakaara.state.TimerStateDataStore
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
@@ -32,7 +34,9 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_STOP
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.runBlocking
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -42,7 +46,8 @@ class TimerManagerWrapper @Inject constructor(
     private val notificationManager: NotificationManager,
     @Named("timer")
     private val timerNotificationBuilder: NotificationCompat.Builder,
-    private val countDownTimerUtil: CountDownTimerUtil
+    private val countDownTimerUtil: CountDownTimerUtil,
+    private val preferencesDatastore: PreferencesDataStore
 ) {
     val timerState = MutableStateFlow(TimerState())
 
@@ -66,6 +71,24 @@ class TimerManagerWrapper @Inject constructor(
         timerState.update {
             it.copy(
                 inputSeconds = newValue
+            )
+        }
+    }
+
+    fun recreateActiveTimer(
+        milliseconds: Long
+    ) {
+        countDownTimerUtil.cancel()
+        startCountDownTimer(timeToCountDown = milliseconds)
+        timerState.update {
+            it.copy(
+                isTimerPaused = false,
+                isStart = false,
+                isTimerActive = true,
+                millisecondsFromTimerInput = milliseconds,
+                inputHours = TimeUnit.MILLISECONDS.toHours(milliseconds).toString(),
+                inputMinutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds).toString(),
+                inputSeconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds).toString()
             )
         }
     }
@@ -137,8 +160,34 @@ class TimerManagerWrapper @Inject constructor(
                         millisecondsFromTimerInput = ZERO_MILLIS
                     )
                 }
+                runBlocking {
+                    preferencesDatastore.saveTimerData(
+                        TimerStateDataStore(
+                            remainingTimeInMillis = 0L,
+                            isActive = false,
+                            isPaused = false
+                        )
+                    )
+                }
             }
         )
+    }
+
+    fun recreatePausedTimer(
+        milliseconds: Long
+    ) {
+        timerState.update {
+            it.copy(
+                isStart = false,
+                isTimerActive = false,
+                isTimerPaused = true,
+                currentTime = milliseconds,
+                millisecondsFromTimerInput = milliseconds,
+                time = DateUtils.formatTimeForTimer(
+                    millis = milliseconds
+                )
+            )
+        }
     }
 
     fun pauseTimer() {

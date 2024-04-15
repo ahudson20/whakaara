@@ -12,6 +12,7 @@ import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.CountDownTimerUtil
 import com.app.whakaara.logic.StopwatchManagerWrapper
@@ -146,8 +147,9 @@ class NotificationModule {
         notificationManager: NotificationManager,
         @Named("timer")
         timerNotificationBuilder: NotificationCompat.Builder,
-        countDownTimerUtil: CountDownTimerUtil
-    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil)
+        countDownTimerUtil: CountDownTimerUtil,
+        preferencesDataStore: PreferencesDataStore
+    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDataStore)
 
     @Provides
     @Singleton

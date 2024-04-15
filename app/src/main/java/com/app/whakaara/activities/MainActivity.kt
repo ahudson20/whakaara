@@ -75,4 +75,14 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.recreateTimer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.saveTimerStateForRecreation()
+    }
 }

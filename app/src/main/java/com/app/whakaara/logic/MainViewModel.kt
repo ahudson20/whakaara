@@ -262,16 +262,16 @@ class MainViewModel @Inject constructor(
                     milliseconds = status.remainingTimeInMillis - difference
                 )
             }
-        }
 
-        preferencesDatastore.saveTimerData(
-            TimerStateDataStore(
-                remainingTimeInMillis = 0L,
-                isActive = false,
-                isPaused = false,
-                timeStamp = 0L
+            preferencesDatastore.saveTimerData(
+                TimerStateDataStore(
+                    remainingTimeInMillis = 0L,
+                    isActive = false,
+                    isPaused = false,
+                    timeStamp = 0L
+                )
             )
-        )
+        }
     }
 
     fun saveTimerStateForRecreation() = viewModelScope.launch(Dispatchers.IO) {
@@ -282,15 +282,6 @@ class MainViewModel @Inject constructor(
                     isActive = timerState.value.isTimerActive,
                     isPaused = timerState.value.isTimerPaused,
                     timeStamp = System.currentTimeMillis()
-                )
-            )
-        } else {
-            preferencesDatastore.saveTimerData(
-                TimerStateDataStore(
-                    remainingTimeInMillis = 0L,
-                    isActive = false,
-                    isPaused = false,
-                    timeStamp = 0L
                 )
             )
         }

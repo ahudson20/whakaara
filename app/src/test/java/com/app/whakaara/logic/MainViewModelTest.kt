@@ -4,6 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.data.preferences.SettingsTime
@@ -52,6 +53,7 @@ class MainViewModelTest {
     private lateinit var stopwatchManagerWrapper: StopwatchManagerWrapper
     private lateinit var stopwatchState: StopwatchState
     private lateinit var timerState: TimerState
+    private lateinit var preferencesDataStore: PreferencesDataStore
 
     @Before
     fun setUp() {
@@ -61,13 +63,14 @@ class MainViewModelTest {
         alarmManagerWrapper = mockk()
         timerManagerWrapper = mockk()
         stopwatchManagerWrapper = mockk()
+        preferencesDataStore = mockk()
         stopwatchState = StopwatchState()
         timerState = TimerState()
 
         every { stopwatchManagerWrapper.stopwatchState } returns MutableStateFlow(stopwatchState)
         every { timerManagerWrapper.timerState } returns MutableStateFlow(timerState)
 
-        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper, timerManagerWrapper, stopwatchManagerWrapper)
+        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper, timerManagerWrapper, stopwatchManagerWrapper, preferencesDataStore)
 
         alarms = listOf(
             Alarm(

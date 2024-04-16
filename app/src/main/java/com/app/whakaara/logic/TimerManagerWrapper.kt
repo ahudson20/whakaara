@@ -6,11 +6,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.receiver.TimerReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.state.TimerState
+import com.app.whakaara.state.TimerStateDataStore
 import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
@@ -30,11 +33,16 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_NOTIFIC
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_PAUSE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_START
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_STOP
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.coroutines.cancellation.CancellationException
 
 class TimerManagerWrapper @Inject constructor(
     private val app: Application,
@@ -42,7 +50,9 @@ class TimerManagerWrapper @Inject constructor(
     private val notificationManager: NotificationManager,
     @Named("timer")
     private val timerNotificationBuilder: NotificationCompat.Builder,
-    private val countDownTimerUtil: CountDownTimerUtil
+    private val countDownTimerUtil: CountDownTimerUtil,
+    private val preferencesDatastore: PreferencesDataStore,
+    private val coroutineScope: CoroutineScope
 ) {
     val timerState = MutableStateFlow(TimerState())
 
@@ -66,6 +76,24 @@ class TimerManagerWrapper @Inject constructor(
         timerState.update {
             it.copy(
                 inputSeconds = newValue
+            )
+        }
+    }
+
+    fun recreateActiveTimer(
+        milliseconds: Long
+    ) {
+        countDownTimerUtil.cancel()
+        startCountDownTimer(timeToCountDown = milliseconds)
+        timerState.update {
+            it.copy(
+                isTimerPaused = false,
+                isStart = false,
+                isTimerActive = true,
+                millisecondsFromTimerInput = milliseconds,
+                inputHours = TimeUnit.MILLISECONDS.toHours(milliseconds).toString(),
+                inputMinutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds).toString(),
+                inputSeconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds).toString()
             )
         }
     }
@@ -137,8 +165,26 @@ class TimerManagerWrapper @Inject constructor(
                         millisecondsFromTimerInput = ZERO_MILLIS
                     )
                 }
+                resetTimerStateDataStore()
             }
         )
+    }
+
+    fun recreatePausedTimer(
+        milliseconds: Long
+    ) {
+        timerState.update {
+            it.copy(
+                isStart = false,
+                isTimerActive = false,
+                isTimerPaused = true,
+                currentTime = milliseconds,
+                millisecondsFromTimerInput = milliseconds,
+                time = DateUtils.formatTimeForTimer(
+                    millis = milliseconds
+                )
+            )
+        }
     }
 
     fun pauseTimer() {
@@ -173,6 +219,7 @@ class TimerManagerWrapper @Inject constructor(
                 millisecondsFromTimerInput = ZERO_MILLIS
             )
         }
+        resetTimerStateDataStore()
     }
 
     fun restartTimer() {
@@ -319,6 +366,24 @@ class TimerManagerWrapper @Inject constructor(
 
     private fun cancelNotification() {
         notificationManager.cancel(TIMER_NOTIFICATION_ID)
+    }
+
+    private fun resetTimerStateDataStore() {
+        try {
+            coroutineScope.launch {
+                preferencesDatastore.saveTimerData(
+                    state = TimerStateDataStore()
+                )
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (t: Throwable) {
+            Log.e("resetTimerStateDataStoreTAG", "resetTimerStateDataStore execution failed", t)
+        } finally {
+            // Nothing can be in the `finally` block after this, as this throws a
+            // `CancellationException`
+            coroutineScope.cancel()
+        }
     }
 
     companion object {

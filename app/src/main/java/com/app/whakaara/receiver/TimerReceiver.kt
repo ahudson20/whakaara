@@ -1,6 +1,5 @@
 package com.app.whakaara.receiver
 
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.app.whakaara.logic.TimerManagerWrapper
@@ -11,11 +10,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TimerReceiver : BroadcastReceiver() {
+class TimerReceiver : HiltBroadcastReceiver() {
 
     @Inject
     lateinit var timerManagerWrapper: TimerManagerWrapper
     override fun onReceive(context: Context, intent: Intent) {
+        super.onReceive(context, intent)
         val actionsList = listOf(TIMER_RECEIVER_ACTION_PAUSE, TIMER_RECEIVER_ACTION_STOP, TIMER_RECEIVER_ACTION_START)
         if (!actionsList.contains(intent.action)) return
 

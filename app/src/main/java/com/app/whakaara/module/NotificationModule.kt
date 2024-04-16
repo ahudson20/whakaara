@@ -12,6 +12,7 @@ import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
+import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.CountDownTimerUtil
 import com.app.whakaara.logic.StopwatchManagerWrapper
@@ -23,6 +24,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineScope
 import javax.inject.Named
 import javax.inject.Singleton
 
@@ -146,8 +148,10 @@ class NotificationModule {
         notificationManager: NotificationManager,
         @Named("timer")
         timerNotificationBuilder: NotificationCompat.Builder,
-        countDownTimerUtil: CountDownTimerUtil
-    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil)
+        countDownTimerUtil: CountDownTimerUtil,
+        preferencesDataStore: PreferencesDataStore,
+        coroutineScope: CoroutineScope
+    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDataStore, coroutineScope)
 
     @Provides
     @Singleton
@@ -155,8 +159,9 @@ class NotificationModule {
         app: Application,
         notificationManager: NotificationManager,
         @Named("stopwatch")
-        stopwatchNotificationBuilder: NotificationCompat.Builder
-    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder)
+        stopwatchNotificationBuilder: NotificationCompat.Builder,
+        coroutineScope: CoroutineScope
+    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, coroutineScope)
 
     @Provides
     @Singleton

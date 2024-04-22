@@ -78,11 +78,19 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.recreateTimer()
+        with(viewModel) {
+            recreateTimer()
+            recreateStopwatch()
+            cancelStopwatchNotification()
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        viewModel.saveTimerStateForRecreation()
+        with(viewModel) {
+            saveTimerStateForRecreation()
+            saveStopwatchStateForRecreation()
+            startStopwatchNotification()
+        }
     }
 }

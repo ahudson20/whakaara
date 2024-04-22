@@ -16,4 +16,6 @@ object GeneralConstants {
     const val ONBOARDING_ROUTE = "onboarding"
 
     val DAYS_OF_WEEK = listOf("M", "T", "W", "T", "F", "S", "S")
+
+    const val MAX_NUMBER_OF_LAPS = 100
 }

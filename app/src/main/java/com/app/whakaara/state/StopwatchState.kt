@@ -9,6 +9,7 @@ data class StopwatchState(
     val formattedTime: String = STOPWATCH_STARTING_TIME,
     val isActive: Boolean = false,
     val isStart: Boolean = true,
+    val isPaused: Boolean = false,
     val lapList: MutableList<Lap> = mutableListOf()
 )
 

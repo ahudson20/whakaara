@@ -31,9 +31,11 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.lightBlueAnimation
 
 @Composable
-fun WelcomeOnboarding() {
+fun WelcomeOnboarding(
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(all = spaceMedium),
         horizontalAlignment = Alignment.CenterHorizontally

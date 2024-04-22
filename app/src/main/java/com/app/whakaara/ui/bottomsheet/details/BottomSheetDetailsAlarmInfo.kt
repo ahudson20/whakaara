@@ -28,9 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import com.app.whakaara.R
-import com.app.whakaara.state.BooleanStateEvent
-import com.app.whakaara.state.ListStateEvent
-import com.app.whakaara.state.StringStateEvent
+import com.app.whakaara.state.UpdateBottomSheetDetailsAlarmInfo
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.space20
@@ -45,18 +43,15 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_TITLE_M
 @Composable
 fun BottomSheetDetailsAlarmInfo(
     modifier: Modifier = Modifier,
-    updateIsVibrationEnabled: BooleanStateEvent,
-    updateIsSnoozeEnabled: BooleanStateEvent,
-    updateDeleteAfterGoesOff: BooleanStateEvent,
-    updateTitle: StringStateEvent,
-    updateRepeatDaily: BooleanStateEvent,
-    updateCheckedList: ListStateEvent
+    updateBottomSheetDetailsAlarmInfo: UpdateBottomSheetDetailsAlarmInfo
 ) {
     val focusManager = LocalFocusManager.current
 
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .padding(start = space10, end = space10, top = space20)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -73,16 +68,16 @@ fun BottomSheetDetailsAlarmInfo(
                 )
             }
             Switch(
-                modifier = modifier.testTag("vibrate switch"),
-                checked = updateIsVibrationEnabled.value,
+                modifier = Modifier.testTag("vibrate switch"),
+                checked = updateBottomSheetDetailsAlarmInfo.updateIsVibrationEnabled.value,
                 onCheckedChange = {
-                    updateIsVibrationEnabled.onValueChange(it)
+                    updateBottomSheetDetailsAlarmInfo.updateIsVibrationEnabled.onValueChange(it)
                 }
             )
         }
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -99,16 +94,16 @@ fun BottomSheetDetailsAlarmInfo(
                 )
             }
             Switch(
-                modifier = modifier.testTag("snooze switch"),
-                checked = updateIsSnoozeEnabled.value,
+                modifier = Modifier.testTag("snooze switch"),
+                checked = updateBottomSheetDetailsAlarmInfo.updateIsSnoozeEnabled.value,
                 onCheckedChange = {
-                    updateIsSnoozeEnabled.onValueChange(it)
+                    updateBottomSheetDetailsAlarmInfo.updateIsSnoozeEnabled.onValueChange(it)
                 }
             )
         }
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,17 +120,17 @@ fun BottomSheetDetailsAlarmInfo(
                 )
             }
             Switch(
-                modifier = modifier.testTag("delete switch"),
-                checked = updateDeleteAfterGoesOff.value,
-                enabled = !updateRepeatDaily.value && updateCheckedList.value.isEmpty(),
+                modifier = Modifier.testTag("delete switch"),
+                checked = updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.value,
+                enabled = !updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.value && updateBottomSheetDetailsAlarmInfo.updateCheckedList.value.isEmpty(),
                 onCheckedChange = {
-                    updateDeleteAfterGoesOff.onValueChange(it)
+                    updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.onValueChange(it)
                 }
             )
         }
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .padding(all = space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -152,17 +147,17 @@ fun BottomSheetDetailsAlarmInfo(
                 )
             }
             Switch(
-                modifier = modifier.testTag("repeat alarm switch"),
-                checked = updateRepeatDaily.value,
-                enabled = !updateDeleteAfterGoesOff.value && updateCheckedList.value.isEmpty(),
+                modifier = Modifier.testTag("repeat alarm switch"),
+                checked = updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.value,
+                enabled = !updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.value && updateBottomSheetDetailsAlarmInfo.updateCheckedList.value.isEmpty(),
                 onCheckedChange = {
-                    updateRepeatDaily.onValueChange(it)
+                    updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.onValueChange(it)
                 }
             )
         }
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -182,10 +177,10 @@ fun BottomSheetDetailsAlarmInfo(
                         SegmentedButton(
                             shape = SegmentedButtonDefaults.itemShape(index = index, count = DAYS_OF_WEEK.size),
                             onCheckedChange = {
-                                updateCheckedList.onValueChange(index)
+                                updateBottomSheetDetailsAlarmInfo.updateCheckedList.onValueChange(index)
                             },
-                            checked = index in updateCheckedList.value,
-                            enabled = !updateDeleteAfterGoesOff.value && !updateRepeatDaily.value,
+                            checked = index in updateBottomSheetDetailsAlarmInfo.updateCheckedList.value,
+                            enabled = !updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.value && !updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.value,
                             colors = SegmentedButtonDefaults.colors().copy(
                                 disabledInactiveContainerColor = MaterialTheme.colorScheme.surface,
                                 disabledInactiveContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
@@ -200,7 +195,7 @@ fun BottomSheetDetailsAlarmInfo(
         }
 
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .padding(space10)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -209,9 +204,9 @@ fun BottomSheetDetailsAlarmInfo(
             Text(text = stringResource(id = R.string.bottom_sheet_content_alarm_title))
             Column {
                 TextField(
-                    modifier = modifier.width(space250),
-                    value = updateTitle.value,
-                    onValueChange = { if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) updateTitle.onValueChange(it) },
+                    modifier = Modifier.width(space250),
+                    value = updateBottomSheetDetailsAlarmInfo.updateTitle.value,
+                    onValueChange = { if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) updateBottomSheetDetailsAlarmInfo.updateTitle.onValueChange(it) },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Transparent,
                         unfocusedContainerColor = Transparent,
@@ -227,10 +222,10 @@ fun BottomSheetDetailsAlarmInfo(
                     )
                 )
                 Text(
-                    text = stringResource(id = R.string.bottom_sheet_title_characters, updateTitle.value.length, ALARM_TITLE_MAX_CHARS),
+                    text = stringResource(id = R.string.bottom_sheet_title_characters, updateBottomSheetDetailsAlarmInfo.updateTitle.value.length, ALARM_TITLE_MAX_CHARS),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier = modifier
+                    modifier = Modifier
                         .align(Alignment.End)
                         .padding(top = spaceXxSmall)
                 )
@@ -245,22 +240,7 @@ fun BottomSheetDetailsAlarmInfo(
 private fun BottomSheetAlarmDetailsPreview() {
     WhakaaraTheme {
         BottomSheetDetailsAlarmInfo(
-            updateIsVibrationEnabled = BooleanStateEvent(
-                value = true
-            ),
-            updateIsSnoozeEnabled = BooleanStateEvent(
-                value = true
-            ),
-            updateDeleteAfterGoesOff = BooleanStateEvent(
-                value = false
-            ),
-            updateRepeatDaily = BooleanStateEvent(
-                value = false
-            ),
-            updateCheckedList = ListStateEvent(),
-            updateTitle = StringStateEvent(
-                value = "title"
-            )
+            updateBottomSheetDetailsAlarmInfo = UpdateBottomSheetDetailsAlarmInfo()
         )
     }
 }

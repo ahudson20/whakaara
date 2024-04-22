@@ -31,6 +31,7 @@ import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.HoursUpdateEvent
 import com.app.whakaara.state.ListStateEvent
 import com.app.whakaara.state.StringStateEvent
+import com.app.whakaara.state.UpdateBottomSheetDetailsAlarmInfo
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
@@ -105,45 +106,47 @@ fun BottomSheetDetailsContent(
         )
 
         BottomSheetDetailsAlarmInfo(
-            updateIsVibrationEnabled = BooleanStateEvent(
-                value = isVibrationEnabled,
-                onValueChange = { newValue ->
-                    isVibrationEnabled = newValue
-                }
-            ),
-            updateIsSnoozeEnabled = BooleanStateEvent(
-                value = isSnoozeEnabled,
-                onValueChange = { newValue ->
-                    isSnoozeEnabled = newValue
-                }
-            ),
-            updateDeleteAfterGoesOff = BooleanStateEvent(
-                value = deleteAfterGoesOff,
-                onValueChange = { newValue ->
-                    deleteAfterGoesOff = newValue
-                }
-            ),
-            updateRepeatDaily = BooleanStateEvent(
-                value = isRepeatDaily,
-                onValueChange = { newValue ->
-                    isRepeatDaily = newValue
-                }
-            ),
-            updateCheckedList = ListStateEvent(
-                value = checkedList,
-                onValueChange = { newValue ->
-                    if (newValue in checkedList) {
-                        checkedList.remove(newValue)
-                    } else {
-                        checkedList.add(newValue)
+            updateBottomSheetDetailsAlarmInfo = UpdateBottomSheetDetailsAlarmInfo(
+                updateIsVibrationEnabled = BooleanStateEvent(
+                    value = isVibrationEnabled,
+                    onValueChange = { newValue ->
+                        isVibrationEnabled = newValue
                     }
-                }
-            ),
-            updateTitle = StringStateEvent(
-                value = title,
-                onValueChange = { newValue ->
-                    title = newValue
-                }
+                ),
+                updateIsSnoozeEnabled = BooleanStateEvent(
+                    value = isSnoozeEnabled,
+                    onValueChange = { newValue ->
+                        isSnoozeEnabled = newValue
+                    }
+                ),
+                updateDeleteAfterGoesOff = BooleanStateEvent(
+                    value = deleteAfterGoesOff,
+                    onValueChange = { newValue ->
+                        deleteAfterGoesOff = newValue
+                    }
+                ),
+                updateRepeatDaily = BooleanStateEvent(
+                    value = isRepeatDaily,
+                    onValueChange = { newValue ->
+                        isRepeatDaily = newValue
+                    }
+                ),
+                updateCheckedList = ListStateEvent(
+                    value = checkedList,
+                    onValueChange = { newValue ->
+                        if (newValue in checkedList) {
+                            checkedList.remove(newValue)
+                        } else {
+                            checkedList.add(newValue)
+                        }
+                    }
+                ),
+                updateTitle = StringStateEvent(
+                    value = title,
+                    onValueChange = { newValue ->
+                        title = newValue
+                    }
+                )
             )
         )
 

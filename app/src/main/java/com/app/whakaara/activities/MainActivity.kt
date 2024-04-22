@@ -82,6 +82,7 @@ class MainActivity : ComponentActivity() {
             recreateTimer()
             recreateStopwatch()
             cancelStopwatchNotification()
+            cancelTimerNotification()
         }
     }
 
@@ -91,6 +92,7 @@ class MainActivity : ComponentActivity() {
             saveTimerStateForRecreation()
             saveStopwatchStateForRecreation()
             startStopwatchNotification()
+            startTimerNotification()
         }
     }
 }

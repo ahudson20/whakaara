@@ -319,5 +319,17 @@ class MainViewModel @Inject constructor(
             )
         }
     }
+
+    fun startTimerNotification() {
+        if (timerState.value.isTimerPaused) {
+            timerManagerWrapper.pauseTimerNotificationCountdown()
+        } else if (timerState.value.isTimerActive) {
+            timerManagerWrapper.startTimerNotificationCountdown(milliseconds = timerState.value.currentTime + Calendar.getInstance().timeInMillis)
+        }
+    }
+
+    fun cancelTimerNotification() {
+        timerManagerWrapper.cancelNotification()
+    }
     // endregion
 }

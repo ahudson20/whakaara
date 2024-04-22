@@ -34,6 +34,7 @@ object NotificationUtilsConstants {
     const val TIMER_RECEIVER_ACTION_START = "start_timer"
     const val TIMER_RECEIVER_ACTION_PAUSE = "pause_timer"
     const val TIMER_RECEIVER_ACTION_STOP = "stop_timer"
+    const val TIMER_RECEIVER_CURRENT_TIME_EXTRA = "current_time"
 
     const val STOPWATCH_RECEIVER_ACTION_START = "start_stopwatch"
     const val STOPWATCH_RECEIVER_ACTION_PAUSE = "pause_stopwatch"

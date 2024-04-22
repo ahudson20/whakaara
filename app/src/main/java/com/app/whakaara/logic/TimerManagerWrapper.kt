@@ -33,6 +33,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_NOTIFIC
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_PAUSE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_START
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_STOP
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_CURRENT_TIME_EXTRA
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -190,7 +191,7 @@ class TimerManagerWrapper @Inject constructor(
     fun pauseTimer() {
         if (!timerState.value.isTimerPaused) {
             cancelTimerAlarm()
-            pauseTimerNotificationCountdown()
+//            pauseTimerNotificationCountdown()
             countDownTimerUtil.cancel()
             timerState.update {
                 it.copy(
@@ -261,7 +262,7 @@ class TimerManagerWrapper @Inject constructor(
             milliseconds,
             pendingIntent
         )
-        startTimerNotificationCountdown(milliseconds = milliseconds)
+//        startTimerNotificationCountdown(milliseconds = milliseconds)
     }
 
     private fun getStartReceiverIntent(
@@ -278,7 +279,7 @@ class TimerManagerWrapper @Inject constructor(
             putExtra(INTENT_ALARM_ID, alarmId)
         }
 
-    private fun startTimerNotificationCountdown(
+    fun startTimerNotificationCountdown(
         milliseconds: Long
     ) {
         val pauseReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = TIMER_RECEIVER_ACTION_PAUSE)
@@ -315,8 +316,8 @@ class TimerManagerWrapper @Inject constructor(
         )
     }
 
-    private fun pauseTimerNotificationCountdown() {
-        val startTimerReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = TIMER_RECEIVER_ACTION_START)
+    fun pauseTimerNotificationCountdown() {
+        val startTimerReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = TIMER_RECEIVER_ACTION_START).apply { putExtra(TIMER_RECEIVER_CURRENT_TIME_EXTRA, timerState.value.currentTime) }
         val stopTimerReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = TIMER_RECEIVER_ACTION_STOP)
 
         val playTimerReceiverPendingIntent = PendingIntentUtils.getBroadcast(
@@ -364,7 +365,7 @@ class TimerManagerWrapper @Inject constructor(
         alarmManager.cancel(pendingIntent)
     }
 
-    private fun cancelNotification() {
+    fun cancelNotification() {
         notificationManager.cancel(TIMER_NOTIFICATION_ID)
     }
 

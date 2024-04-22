@@ -204,12 +204,46 @@ class MainViewModel @Inject constructor(
         stopwatchManagerWrapper.pauseStopwatch()
     }
 
-    fun resetStopwatch() {
+    fun resetStopwatch() = viewModelScope.launch(Dispatchers.IO) {
         stopwatchManagerWrapper.resetStopwatch()
+        preferencesDatastore.clearStopwatchState()
     }
 
     fun lapStopwatch() {
         stopwatchManagerWrapper.lapStopwatch()
+    }
+
+    fun saveStopwatchStateForRecreation() = viewModelScope.launch(Dispatchers.IO) {
+        if (stopwatchState.value.isActive || stopwatchState.value.isPaused) {
+            preferencesDatastore.saveStopwatchState(
+                state = stopwatchState.value
+            )
+        }
+    }
+
+    fun recreateStopwatch() = viewModelScope.launch(Dispatchers.Main) {
+        if (stopwatchState.value == StopwatchState()) {
+            val state = preferencesDatastore.readStopwatchState.first()
+            if (state.isActive) {
+                stopwatchManagerWrapper.recreateStopwatchActive(state = state)
+                preferencesDatastore.clearStopwatchState()
+            } else if (state.isPaused) {
+                stopwatchManagerWrapper.recreateStopwatchPaused(state = state)
+                preferencesDatastore.clearStopwatchState()
+            }
+        }
+    }
+
+    fun startStopwatchNotification() {
+        if (stopwatchState.value.isActive) {
+            stopwatchManagerWrapper.createStopwatchNotification()
+        } else if (stopwatchState.value.isPaused) {
+            stopwatchManagerWrapper.pauseStopwatchNotification()
+        }
+    }
+
+    fun cancelStopwatchNotification() {
+        stopwatchManagerWrapper.cancelNotification()
     }
     //endregion
 
@@ -250,22 +284,26 @@ class MainViewModel @Inject constructor(
     }
 
     fun recreateTimer() = viewModelScope.launch(Dispatchers.Main) {
-        val status = preferencesDatastore.readTimerStatus.first()
-        val difference = System.currentTimeMillis() - status.timeStamp
-        if (status.remainingTimeInMillis > 0 && timerState.value.isStart && (status.remainingTimeInMillis > difference)) {
-            if (status.isActive) {
-                timerManagerWrapper.recreateActiveTimer(
-                    milliseconds = status.remainingTimeInMillis - difference
-                )
-            } else if (status.isPaused) {
-                timerManagerWrapper.recreatePausedTimer(
-                    milliseconds = status.remainingTimeInMillis - difference
-                )
-            }
+        if (!timerState.value.isStart) {
+            val status = preferencesDatastore.readTimerStatus.first()
+            with(status) {
+                val difference = System.currentTimeMillis() - timeStamp
+                if (remainingTimeInMillis > 0 && timerState.value.isStart && (remainingTimeInMillis > difference)) {
+                    if (isActive) {
+                        timerManagerWrapper.recreateActiveTimer(
+                            milliseconds = remainingTimeInMillis - difference
+                        )
+                    } else if (isPaused) {
+                        timerManagerWrapper.recreatePausedTimer(
+                            milliseconds = remainingTimeInMillis - difference
+                        )
+                    }
 
-            preferencesDatastore.saveTimerData(
-                state = TimerStateDataStore()
-            )
+                    preferencesDatastore.saveTimerData(
+                        state = TimerStateDataStore()
+                    )
+                }
+            }
         }
     }
 
@@ -280,6 +318,18 @@ class MainViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun startTimerNotification() {
+        if (timerState.value.isTimerPaused) {
+            timerManagerWrapper.pauseTimerNotificationCountdown()
+        } else if (timerState.value.isTimerActive) {
+            timerManagerWrapper.startTimerNotificationCountdown(milliseconds = timerState.value.currentTime + Calendar.getInstance().timeInMillis)
+        }
+    }
+
+    fun cancelTimerNotification() {
+        timerManagerWrapper.cancelNotification()
     }
     // endregion
 }

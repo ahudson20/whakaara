@@ -104,7 +104,6 @@ class NotificationModule {
             setAutoCancel(false)
             setOngoing(true)
             setSubText(context.getString(R.string.stopwatch_notification_sub_text))
-            setContentTitle(context.getString(R.string.shortcut_stopwatch_short_label))
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
         }
     }
@@ -160,8 +159,9 @@ class NotificationModule {
         notificationManager: NotificationManager,
         @Named("stopwatch")
         stopwatchNotificationBuilder: NotificationCompat.Builder,
-        coroutineScope: CoroutineScope
-    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, coroutineScope)
+        coroutineScope: CoroutineScope,
+        preferencesDataStore: PreferencesDataStore
+    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, coroutineScope, preferencesDataStore)
 
     @Provides
     @Singleton

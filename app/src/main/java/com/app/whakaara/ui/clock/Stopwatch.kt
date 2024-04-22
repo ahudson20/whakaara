@@ -10,7 +10,8 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.app.whakaara.state.StopwatchState
@@ -20,7 +21,6 @@ import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.Spacings.spaceNone
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import kotlinx.coroutines.launch
 
 @Composable
 fun Stopwatch(
@@ -31,7 +31,15 @@ fun Stopwatch(
     onLap: () -> Unit = {}
 ) {
     val listState = rememberLazyListState()
-    val scope = rememberCoroutineScope()
+    LaunchedEffect(key1 = stopwatchState.lapList) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .collect {
+                if (stopwatchState.lapList.lastIndex >= 0) {
+                    listState.animateScrollToItem(stopwatchState.lapList.lastIndex, 0)
+                }
+            }
+    }
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButtonRow(
@@ -41,11 +49,6 @@ fun Stopwatch(
                 onPlayPause = if (stopwatchState.isActive) onPause else onStart,
                 onExtraButtonClicked = {
                     onLap()
-                    scope.launch {
-                        if (stopwatchState.lapList.lastIndex >= 0) {
-                            listState.animateScrollToItem(stopwatchState.lapList.lastIndex, 0)
-                        }
-                    }
                 }
             )
         },

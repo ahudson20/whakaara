@@ -6,7 +6,10 @@ import com.app.whakaara.logic.TimerManagerWrapper
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_PAUSE
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_START
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_STOP
+import com.app.whakaara.utils.constants.NotificationUtilsConstants.TIMER_RECEIVER_CURRENT_TIME_EXTRA
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import java.util.Calendar
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -19,10 +22,16 @@ class TimerReceiver : HiltBroadcastReceiver() {
         val actionsList = listOf(TIMER_RECEIVER_ACTION_PAUSE, TIMER_RECEIVER_ACTION_STOP, TIMER_RECEIVER_ACTION_START)
         if (!actionsList.contains(intent.action)) return
 
-        goAsync {
+        val currentTime = intent.getLongExtra(TIMER_RECEIVER_CURRENT_TIME_EXTRA, 0L)
+
+        goAsync(
+            coroutineContext = Dispatchers.Main
+        ) {
             when (intent.action) {
                 TIMER_RECEIVER_ACTION_START -> {
-                    startTimer()
+                    startTimer(
+                        currentTime = currentTime
+                    )
                 }
                 TIMER_RECEIVER_ACTION_PAUSE -> {
                     pauseTimer()
@@ -34,12 +43,16 @@ class TimerReceiver : HiltBroadcastReceiver() {
         }
     }
 
-    private fun startTimer() {
+    private fun startTimer(
+        currentTime: Long
+    ) {
         timerManagerWrapper.startTimer()
+        timerManagerWrapper.startTimerNotificationCountdown(milliseconds = currentTime + Calendar.getInstance().timeInMillis)
     }
 
     private fun pauseTimer() {
         timerManagerWrapper.pauseTimer()
+        timerManagerWrapper.pauseTimerNotificationCountdown()
     }
 
     private fun stopTimer() {

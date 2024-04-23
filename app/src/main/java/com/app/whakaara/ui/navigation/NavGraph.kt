@@ -5,12 +5,14 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
+import com.app.whakaara.state.events.AlarmEventCallbacks
+import com.app.whakaara.state.events.StopwatchEventCallbacks
+import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.loading.Loading
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.OnboardingScreen
@@ -28,26 +30,9 @@ fun NavGraph(
     alarmState: AlarmState,
     stopwatchState: StopwatchState,
     timerState: TimerState,
-
-    delete: (alarm: Alarm) -> Unit,
-    disable: (alarm: Alarm) -> Unit,
-    enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit,
-    create: (alarm: Alarm) -> Unit,
-
-    updateHours: (newValue: String) -> Unit,
-    updateMinutes: (newValue: String) -> Unit,
-    updateSeconds: (newValue: String) -> Unit,
-    startTimer: () -> Unit,
-    stopTimer: () -> Unit,
-    pauseTimer: () -> Unit,
-    restartTimer: () -> Unit,
-
-    onStart: () -> Unit,
-    onPause: () -> Unit,
-    onStop: () -> Unit,
-    onLap: () -> Unit,
-
+    alarmEventCallbacks: AlarmEventCallbacks,
+    timerEventCallbacks: TimerEventCallbacks,
+    stopwatchEventCallbacks: StopwatchEventCallbacks,
     updatePreferences: (preferences: Preferences) -> Unit
 ) {
     NavHost(
@@ -97,11 +82,11 @@ fun NavGraph(
                         alarmState.alarms
                     },
                     preferencesState = preferencesState,
-                    delete = delete,
-                    disable = disable,
-                    enable = enable,
-                    reset = reset,
-                    create = create
+                    delete = alarmEventCallbacks::delete,
+                    disable = alarmEventCallbacks::disable,
+                    enable = alarmEventCallbacks::enable,
+                    reset = alarmEventCallbacks::reset,
+                    create = alarmEventCallbacks::create
                 )
             }
         }
@@ -116,13 +101,13 @@ fun NavGraph(
         ) {
             TimerScreen(
                 timerState = timerState,
-                updateHours = updateHours,
-                updateMinutes = updateMinutes,
-                updateSeconds = updateSeconds,
-                startTimer = startTimer,
-                stopTimer = stopTimer,
-                pauseTimer = pauseTimer,
-                restartTimer = restartTimer,
+                updateHours = timerEventCallbacks::updateHours,
+                updateMinutes = timerEventCallbacks::updateMinutes,
+                updateSeconds = timerEventCallbacks::updateSeconds,
+                startTimer = timerEventCallbacks::startTimer,
+                stopTimer = timerEventCallbacks::stopTimer,
+                pauseTimer = timerEventCallbacks::pauseTimer,
+                restartTimer = timerEventCallbacks::restartTimer,
                 is24HourFormat = preferencesState.preferences.is24HourFormat
             )
         }
@@ -137,10 +122,10 @@ fun NavGraph(
         ) {
             StopwatchScreen(
                 stopwatchState = stopwatchState,
-                onStart = onStart,
-                onPause = onPause,
-                onStop = onStop,
-                onLap = onLap
+                onStart = stopwatchEventCallbacks::startStopwatch,
+                onPause = stopwatchEventCallbacks::pauseStopwatch,
+                onStop = stopwatchEventCallbacks::stopStopwatch,
+                onLap = stopwatchEventCallbacks::lapStopwatch
             )
         }
     }

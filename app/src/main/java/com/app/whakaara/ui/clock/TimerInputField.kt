@@ -27,12 +27,15 @@ import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_V
 
 @Composable
 fun TimerInputField(
+    modifier: Modifier = Modifier,
     label: String,
     regex: String,
     updateStringEvent: StringStateEvent
 ) {
     val focusManager = LocalFocusManager.current
-    Column {
+    Column(
+        modifier = modifier
+    ) {
         OutlinedTextField(
             modifier = Modifier.width(Spacings.space100),
             value = updateStringEvent.value,

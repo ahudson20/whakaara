@@ -12,9 +12,11 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.data.preferences.AppTheme
+import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.events.AlarmEventCallbacks
+import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.state.events.StopwatchEventCallbacks
 import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
@@ -27,7 +29,8 @@ class MainActivity :
     ComponentActivity(),
     AlarmEventCallbacks,
     TimerEventCallbacks,
-    StopwatchEventCallbacks {
+    StopwatchEventCallbacks,
+    PreferencesEventCallbacks {
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -63,9 +66,7 @@ class MainActivity :
                     alarmEventCallbacks = this@MainActivity,
                     timerEventCallbacks = this@MainActivity,
                     stopwatchEventCallbacks = this@MainActivity,
-                    updatePreferences = viewModel::updatePreferences,
-                    updateAllAlarmSubtitles = viewModel::updateAllAlarmSubtitles,
-                    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = viewModel::updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
+                    preferencesEventCallbacks = this@MainActivity
                 )
             }
         }
@@ -158,6 +159,24 @@ class MainActivity :
 
     override fun lapStopwatch() {
         viewModel.lapStopwatch()
+    }
+    //endregion
+
+    //region preferences
+    override fun updatePreferences(preferences: Preferences) {
+        viewModel.updatePreferences(preferences = preferences)
+    }
+
+    override fun updateAllAlarmSubtitles(format: Boolean) {
+        viewModel.updateAllAlarmSubtitles(format = format)
+    }
+
+    override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
+        shouldEnableUpcomingAlarmNotification: Boolean
+    ) {
+        viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
+            shouldEnableUpcomingAlarmNotification = shouldEnableUpcomingAlarmNotification
+        )
     }
     //endregion
 }

@@ -15,6 +15,7 @@ import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.events.AlarmEventCallbacks
+import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.state.events.StopwatchEventCallbacks
 import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.navigation.BottomNavigation
@@ -33,9 +34,7 @@ fun MainScreen(
     alarmEventCallbacks: AlarmEventCallbacks,
     timerEventCallbacks: TimerEventCallbacks,
     stopwatchEventCallbacks: StopwatchEventCallbacks,
-    updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
-    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
+    preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -46,9 +45,7 @@ fun MainScreen(
                 TopBar(
                     route = navBackStackEntry?.destination?.route.toString(),
                     preferencesState = preferencesState,
-                    updatePreferences = updatePreferences,
-                    updateAllAlarmSubtitles = updateAllAlarmSubtitles,
-                    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
+                    preferencesEventCallbacks = preferencesEventCallbacks
                 )
             }
         },
@@ -68,7 +65,7 @@ fun MainScreen(
                 alarmEventCallbacks = alarmEventCallbacks,
                 timerEventCallbacks = timerEventCallbacks,
                 stopwatchEventCallbacks = stopwatchEventCallbacks,
-                updatePreferences = updatePreferences
+                updatePreferences = preferencesEventCallbacks::updatePreferences
             )
         }
     }
@@ -106,9 +103,13 @@ fun MainPreview() {
                 override fun stopStopwatch() {}
                 override fun lapStopwatch() {}
             },
-            updatePreferences = {},
-            updateAllAlarmSubtitles = {},
-            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
+            preferencesEventCallbacks = object : PreferencesEventCallbacks {
+                override fun updatePreferences(preferences: Preferences) {}
+                override fun updateAllAlarmSubtitles(format: Boolean) {}
+                override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
+                    shouldEnableUpcomingAlarmNotification: Boolean
+                ) {}
+            }
         )
     }
 }

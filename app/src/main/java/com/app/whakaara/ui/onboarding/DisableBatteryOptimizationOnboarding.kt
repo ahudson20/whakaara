@@ -28,10 +28,12 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
-fun DisableBatteryOptimizationOnboarding() {
+fun DisableBatteryOptimizationOnboarding(
+    modifier: Modifier = Modifier
+) {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(all = spaceMedium),
         horizontalAlignment = Alignment.CenterHorizontally

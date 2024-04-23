@@ -50,6 +50,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun NotificationsOnboarding(
+    modifier: Modifier = Modifier,
     snackbarHostState: SnackbarHostState
 ) {
     val context = LocalContext.current
@@ -58,7 +59,7 @@ fun NotificationsOnboarding(
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission(), onResult = {})
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(all = spaceMedium),
         horizontalAlignment = Alignment.CenterHorizontally

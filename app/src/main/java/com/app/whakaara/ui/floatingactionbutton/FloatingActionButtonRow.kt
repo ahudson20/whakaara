@@ -34,6 +34,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
 fun FloatingActionButtonRow(
+    modifier: Modifier = Modifier,
     isPlaying: Boolean,
     isStart: Boolean,
     isPlayButtonVisible: Boolean = true,
@@ -42,7 +43,7 @@ fun FloatingActionButtonRow(
     onExtraButtonClicked: () -> Unit
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
             modifier = Modifier

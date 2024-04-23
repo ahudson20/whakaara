@@ -14,6 +14,10 @@ import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
+import com.app.whakaara.state.events.AlarmEventCallbacks
+import com.app.whakaara.state.events.PreferencesEventCallbacks
+import com.app.whakaara.state.events.StopwatchEventCallbacks
+import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
@@ -27,25 +31,10 @@ fun MainScreen(
     alarmState: AlarmState,
     stopwatchState: StopwatchState,
     timerState: TimerState,
-    create: (alarm: Alarm) -> Unit,
-    delete: (alarm: Alarm) -> Unit,
-    disable: (alarm: Alarm) -> Unit,
-    enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit,
-    updateHours: (newValue: String) -> Unit,
-    updateMinutes: (newValue: String) -> Unit,
-    updateSeconds: (newValue: String) -> Unit,
-    startTimer: () -> Unit,
-    stopTimer: () -> Unit,
-    pauseTimer: () -> Unit,
-    restartTimer: () -> Unit,
-    onStart: () -> Unit,
-    onPause: () -> Unit,
-    onStop: () -> Unit,
-    onLap: () -> Unit,
-    updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
-    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
+    alarmEventCallbacks: AlarmEventCallbacks,
+    timerEventCallbacks: TimerEventCallbacks,
+    stopwatchEventCallbacks: StopwatchEventCallbacks,
+    preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -56,9 +45,7 @@ fun MainScreen(
                 TopBar(
                     route = navBackStackEntry?.destination?.route.toString(),
                     preferencesState = preferencesState,
-                    updatePreferences = updatePreferences,
-                    updateAllAlarmSubtitles = updateAllAlarmSubtitles,
-                    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
+                    preferencesEventCallbacks = preferencesEventCallbacks
                 )
             }
         },
@@ -75,27 +62,10 @@ fun MainScreen(
                 alarmState = alarmState,
                 stopwatchState = stopwatchState,
                 timerState = timerState,
-
-                delete = delete,
-                disable = disable,
-                enable = enable,
-                reset = reset,
-                create = create,
-
-                updateHours = updateHours,
-                updateMinutes = updateMinutes,
-                updateSeconds = updateSeconds,
-                startTimer = startTimer,
-                stopTimer = stopTimer,
-                pauseTimer = pauseTimer,
-                restartTimer = restartTimer,
-
-                onStart = onStart,
-                onPause = onPause,
-                onStop = onStop,
-                onLap = onLap,
-
-                updatePreferences = updatePreferences
+                alarmEventCallbacks = alarmEventCallbacks,
+                timerEventCallbacks = timerEventCallbacks,
+                stopwatchEventCallbacks = stopwatchEventCallbacks,
+                updatePreferences = preferencesEventCallbacks::updatePreferences
             )
         }
     }
@@ -111,25 +81,35 @@ fun MainPreview() {
             alarmState = AlarmState.Success(),
             stopwatchState = StopwatchState(),
             timerState = TimerState(),
-            create = {},
-            delete = {},
-            disable = {},
-            enable = {},
-            reset = {},
-            updateHours = {},
-            updateMinutes = {},
-            updateSeconds = {},
-            startTimer = {},
-            stopTimer = {},
-            pauseTimer = {},
-            restartTimer = {},
-            onStart = {},
-            onPause = {},
-            onStop = {},
-            onLap = {},
-            updatePreferences = {},
-            updateAllAlarmSubtitles = {},
-            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
+            alarmEventCallbacks = object : AlarmEventCallbacks {
+                override fun create(alarm: Alarm) {}
+                override fun delete(alarm: Alarm) {}
+                override fun disable(alarm: Alarm) {}
+                override fun enable(alarm: Alarm) {}
+                override fun reset(alarm: Alarm) {}
+            },
+            timerEventCallbacks = object : TimerEventCallbacks {
+                override fun updateHours(newValue: String) {}
+                override fun updateMinutes(newValue: String) {}
+                override fun updateSeconds(newValue: String) {}
+                override fun startTimer() {}
+                override fun stopTimer() {}
+                override fun pauseTimer() {}
+                override fun restartTimer() {}
+            },
+            stopwatchEventCallbacks = object : StopwatchEventCallbacks {
+                override fun startStopwatch() {}
+                override fun pauseStopwatch() {}
+                override fun stopStopwatch() {}
+                override fun lapStopwatch() {}
+            },
+            preferencesEventCallbacks = object : PreferencesEventCallbacks {
+                override fun updatePreferences(preferences: Preferences) {}
+                override fun updateAllAlarmSubtitles(format: Boolean) {}
+                override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
+                    shouldEnableUpcomingAlarmNotification: Boolean
+                ) {}
+            }
         )
     }
 }

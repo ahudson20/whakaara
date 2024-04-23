@@ -47,6 +47,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingContent(
+    modifier: Modifier = Modifier,
     pagerState: PagerState,
     pages: Array<OnboardingItems>,
     snackbarHostState: SnackbarHostState,
@@ -55,7 +56,7 @@ fun OnboardingContent(
     updatePreferences: (preferences: Preferences) -> Unit
 ) {
     val scope = rememberCoroutineScope()
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         HorizontalPager(
             modifier = Modifier
                 .fillMaxWidth()

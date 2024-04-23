@@ -33,6 +33,7 @@ import com.app.whakaara.ui.theme.primaryGreen
 
 @Composable
 fun TimerCountdownDisplay(
+    modifier: Modifier = Modifier,
     progress: Float,
     time: String,
     finishTime: String
@@ -48,6 +49,7 @@ fun TimerCountdownDisplay(
     )
 
     Column(
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(

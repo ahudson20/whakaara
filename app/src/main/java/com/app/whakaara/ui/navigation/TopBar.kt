@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -28,9 +29,7 @@ import java.util.Locale
 fun TopBar(
     route: String,
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
-    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
+    preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
@@ -67,9 +66,9 @@ fun TopBar(
     ) {
         SettingsScreen(
             preferencesState = preferencesState,
-            updatePreferences = updatePreferences,
-            updateAllAlarmSubtitles = updateAllAlarmSubtitles,
-            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
+            updatePreferences = preferencesEventCallbacks::updatePreferences,
+            updateAllAlarmSubtitles = preferencesEventCallbacks::updateAllAlarmSubtitles,
+            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = preferencesEventCallbacks::updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
         )
     }
 }
@@ -82,9 +81,13 @@ fun TopBarPreview() {
         TopBar(
             route = "alarm",
             preferencesState = PreferencesState(),
-            updatePreferences = {},
-            updateAllAlarmSubtitles = {},
-            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
+            preferencesEventCallbacks = object : PreferencesEventCallbacks {
+                override fun updatePreferences(preferences: Preferences) {}
+                override fun updateAllAlarmSubtitles(format: Boolean) {}
+                override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
+                    shouldEnableUpcomingAlarmNotification: Boolean
+                ) {}
+            }
         )
     }
 }

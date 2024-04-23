@@ -72,7 +72,7 @@ fun CardContainerSwipeToDismiss(
                     state = dismissState,
                     enableDismissFromStartToEnd = false,
                     backgroundContent = {
-                        DismissBackground(dismissState)
+                        DismissBackground(dismissState = dismissState)
                     },
                     content = {
                         Card(

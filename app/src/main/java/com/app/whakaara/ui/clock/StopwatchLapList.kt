@@ -44,11 +44,12 @@ import com.app.whakaara.utils.DateUtils
 
 @Composable
 fun StopwatchLapList(
+    modifier: Modifier = Modifier,
     stopwatchState: StopwatchState,
     listState: LazyListState
 ) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = if (stopwatchState.lapList.isNotEmpty()) spaceNone else spaceMedium)
             .animateContentSize()
             .height(height = if (stopwatchState.lapList.isNotEmpty()) 350.dp else spaceNone)

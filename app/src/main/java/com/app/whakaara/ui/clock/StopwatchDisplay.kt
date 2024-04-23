@@ -30,10 +30,11 @@ import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_V
 
 @Composable
 fun StopwatchDisplay(
+    modifier: Modifier = Modifier,
     formattedTime: String
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .wrapContentSize(Alignment.Center)
     ) {

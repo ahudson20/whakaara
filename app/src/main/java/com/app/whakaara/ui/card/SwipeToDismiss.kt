@@ -33,7 +33,10 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DismissBackground(dismissState: SwipeToDismissBoxState) {
+fun DismissBackground(
+    modifier: Modifier = Modifier,
+    dismissState: SwipeToDismissBoxState
+) {
     val isSwiping by remember(dismissState) {
         derivedStateOf { dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart && dismissState.progress > 0.1f }
     }
@@ -52,7 +55,7 @@ fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     )
 
     Box(
-        Modifier
+        modifier
             .clip(shape = RoundedCornerShape(Spacings.space100))
             .fillMaxSize()
             .background(color),

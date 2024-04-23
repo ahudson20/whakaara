@@ -22,3 +22,12 @@ data class ListStateEvent(
     val value: MutableList<Int> = mutableListOf(),
     val onValueChange: (Int) -> Unit = {}
 )
+
+data class UpdateBottomSheetDetailsAlarmInfo(
+    val updateIsVibrationEnabled: BooleanStateEvent = BooleanStateEvent(),
+    val updateIsSnoozeEnabled: BooleanStateEvent = BooleanStateEvent(),
+    val updateDeleteAfterGoesOff: BooleanStateEvent = BooleanStateEvent(),
+    val updateTitle: StringStateEvent = StringStateEvent(),
+    val updateRepeatDaily: BooleanStateEvent = BooleanStateEvent(),
+    val updateCheckedList: ListStateEvent = ListStateEvent()
+)

@@ -16,3 +16,7 @@ annotation class FontScalePreviews
 class BooleanPreviewProvider : PreviewParameterProvider<Boolean> {
     override val values = sequenceOf(true, false)
 }
+
+class RoutePreviewProvider : PreviewParameterProvider<String> {
+    override val values = sequenceOf("alarm", "timer")
+}

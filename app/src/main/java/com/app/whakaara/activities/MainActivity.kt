@@ -139,8 +139,8 @@ class MainActivity :
         viewModel.pauseTimer()
     }
 
-    override fun restartTimer() {
-        viewModel.restartTimer()
+    override fun restartTimer(autoRestartTimer: Boolean) {
+        viewModel.restartTimer(autoRestartTimer = autoRestartTimer)
     }
     //endregion
 

@@ -23,7 +23,8 @@ data class Preferences(
     var filteredAlarmList: Boolean = false,
     var upcomingAlarmNotification: Boolean = true,
     var upcomingAlarmNotificationTime: SettingsTime = SettingsTime.TEN,
-    val dynamicTheme: Boolean = false
+    val dynamicTheme: Boolean = false,
+    val autoRestartTimer: Boolean = true
 )
 
 enum class VibrationPattern(val value: Int, val label: String) {

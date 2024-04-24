@@ -23,8 +23,8 @@ class WelcomeOnboardingTest {
         }
 
         // Then
-        onNodeWithText("Widget").assertIsDisplayed()
-        onNodeWithText("This screen will guide you through the most important setup steps").assertIsDisplayed()
         onNodeWithContentDescription("whakaara app icon").assertIsDisplayed()
+        onNodeWithText("Welcome to whakaara").assertIsDisplayed()
+        onNodeWithText("This screen will guide you through the most important setup steps").assertIsDisplayed()
     }
 }

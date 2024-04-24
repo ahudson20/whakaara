@@ -139,6 +139,7 @@
     <string name="onboarding_sub_text">This app requires permission to send you notifications!</string>
     <string name="onboarding_welcome_title">Welcome to whakaara</string>
     <string name="onboarding_welcome_sub_text">This screen will guide you through the most important setup steps</string>
+    <string name="onboarding_welcome_icon_description">whakaara app icon</string>
 
     <string name="notification_timer_play_action_label">Resume</string>
     <string name="notification_timer_pause_action_label">Pause</string>

@@ -7,5 +7,5 @@ interface TimerEventCallbacks {
     fun startTimer()
     fun stopTimer()
     fun pauseTimer()
-    fun restartTimer()
+    fun restartTimer(autoRestartTimer: Boolean)
 }

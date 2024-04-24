@@ -11,12 +11,14 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.RoutePreviewProvider
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.dokar.sheets.BottomSheet
@@ -43,7 +45,7 @@ fun TopBar(
         },
         actions = {
             when (route) {
-                BottomNavItem.Alarm.route -> {
+                BottomNavItem.Alarm.route, BottomNavItem.Timer.route -> {
                     IconButton(
                         onClick = {
                             scope.launch { sheetState.expand() }
@@ -65,6 +67,7 @@ fun TopBar(
         skipPeeked = true
     ) {
         SettingsScreen(
+            route = route,
             preferencesState = preferencesState,
             updatePreferences = preferencesEventCallbacks::updatePreferences,
             updateAllAlarmSubtitles = preferencesEventCallbacks::updateAllAlarmSubtitles,
@@ -76,10 +79,12 @@ fun TopBar(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun TopBarPreview() {
+fun TopBarPreview(
+    @PreviewParameter(RoutePreviewProvider::class) route: String
+) {
     WhakaaraTheme {
         TopBar(
-            route = "alarm",
+            route = route,
             preferencesState = PreferencesState(),
             preferencesEventCallbacks = object : PreferencesEventCallbacks {
                 override fun updatePreferences(preferences: Preferences) {}

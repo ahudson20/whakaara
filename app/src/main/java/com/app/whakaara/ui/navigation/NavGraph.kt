@@ -108,7 +108,8 @@ fun NavGraph(
                 stopTimer = timerEventCallbacks::stopTimer,
                 pauseTimer = timerEventCallbacks::pauseTimer,
                 restartTimer = timerEventCallbacks::restartTimer,
-                is24HourFormat = preferencesState.preferences.is24HourFormat
+                is24HourFormat = preferencesState.preferences.is24HourFormat,
+                autoRestartTimer = preferencesState.preferences.autoRestartTimer
             )
         }
 

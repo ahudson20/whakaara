@@ -20,13 +20,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.ui.navigation.BottomNavItem
 import com.app.whakaara.ui.settings.AlarmSettings
 import com.app.whakaara.ui.settings.GeneralSettings
 import com.app.whakaara.ui.settings.TimerSettings
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.RoutePreviewProvider
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -36,6 +39,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
+    route: String,
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
     updateAllAlarmSubtitles: (format: Boolean) -> Unit,
@@ -72,18 +76,21 @@ fun SettingsScreen(
             HorizontalDivider(
                 modifier = Modifier.padding(top = spaceMedium)
             )
-            AlarmSettings(
-                preferencesState = preferencesState,
-                updatePreferences = updatePreferences,
-                updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
-            )
-            HorizontalDivider(
-                modifier = Modifier.padding(top = spaceMedium)
-            )
-            TimerSettings(
-                preferencesState = preferencesState,
-                updatePreferences = updatePreferences
-            )
+            when (route) {
+                BottomNavItem.Alarm.route -> {
+                    AlarmSettings(
+                        preferencesState = preferencesState,
+                        updatePreferences = updatePreferences,
+                        updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
+                    )
+                }
+                BottomNavItem.Timer.route -> {
+                    TimerSettings(
+                        preferencesState = preferencesState,
+                        updatePreferences = updatePreferences
+                    )
+                }
+            }
         }
     }
 }
@@ -91,9 +98,12 @@ fun SettingsScreen(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun SettingsScreenPreview() {
+fun SettingsScreenPreview(
+    @PreviewParameter(RoutePreviewProvider::class) route: String
+) {
     WhakaaraTheme {
         SettingsScreen(
+            route = route,
             preferencesState = PreferencesState(),
             updatePreferences = {},
             updateAllAlarmSubtitles = {},

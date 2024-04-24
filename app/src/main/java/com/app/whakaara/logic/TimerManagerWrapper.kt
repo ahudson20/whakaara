@@ -191,7 +191,6 @@ class TimerManagerWrapper @Inject constructor(
     fun pauseTimer() {
         if (!timerState.value.isTimerPaused) {
             cancelTimerAlarm()
-//            pauseTimerNotificationCountdown()
             countDownTimerUtil.cancel()
             timerState.update {
                 it.copy(
@@ -223,22 +222,40 @@ class TimerManagerWrapper @Inject constructor(
         resetTimerStateDataStore()
     }
 
-    fun restartTimer() {
-        cancelNotification()
-        cancelTimerAlarm()
-        countDownTimerUtil.cancel()
-        timerState.update {
-            it.copy(
-                isTimerPaused = false,
-                isTimerActive = false,
-                currentTime = ZERO_MILLIS,
-                isStart = true,
-                progress = STARTING_CIRCULAR_PROGRESS,
-                time = TIMER_STARTING_FORMAT,
-                millisecondsFromTimerInput = ZERO_MILLIS
-            )
+    fun restartTimer(
+        autoRestartTimer: Boolean
+    ) {
+        if (autoRestartTimer) {
+            cancelNotification()
+            cancelTimerAlarm()
+            countDownTimerUtil.cancel()
+            timerState.update {
+                it.copy(
+                    isTimerPaused = false,
+                    isTimerActive = false,
+                    currentTime = ZERO_MILLIS,
+                    isStart = true,
+                    progress = STARTING_CIRCULAR_PROGRESS,
+                    time = TIMER_STARTING_FORMAT,
+                    millisecondsFromTimerInput = ZERO_MILLIS
+                )
+            }
+            startTimer()
+        } else {
+            cancelNotification()
+            cancelTimerAlarm()
+            countDownTimerUtil.cancel()
+            timerState.update {
+                it.copy(
+                    isTimerPaused = false,
+                    isTimerActive = false,
+                    isStart = true,
+                    progress = STARTING_CIRCULAR_PROGRESS,
+                    time = TIMER_STARTING_FORMAT,
+                    currentTime = ZERO_MILLIS
+                )
+            }
         }
-        startTimer()
     }
 
     private fun createTimerNotification(
@@ -262,7 +279,6 @@ class TimerManagerWrapper @Inject constructor(
             milliseconds,
             pendingIntent
         )
-//        startTimerNotificationCountdown(milliseconds = milliseconds)
     }
 
     private fun getStartReceiverIntent(

@@ -77,6 +77,20 @@ fun TimerSettings(
             }
         }
     )
+
+    SettingsSwitch(
+        modifier = Modifier.height(space80).testTag("timer autoRestart switch"),
+        state = rememberBooleanSettingState(preferencesState.preferences.autoRestartTimer),
+        title = { Text(text = stringResource(id = R.string.settings_screen_auto_restart_timer_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_restart_timer_subtitle)) },
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    autoRestartTimer = it
+                )
+            )
+        }
+    )
 }
 
 @Composable

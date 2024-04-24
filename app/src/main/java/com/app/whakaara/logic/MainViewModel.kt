@@ -279,8 +279,8 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun restartTimer() {
-        timerManagerWrapper.restartTimer()
+    fun restartTimer(autoRestartTimer: Boolean) {
+        timerManagerWrapper.restartTimer(autoRestartTimer = autoRestartTimer)
     }
 
     fun recreateTimer() = viewModelScope.launch(Dispatchers.Main) {

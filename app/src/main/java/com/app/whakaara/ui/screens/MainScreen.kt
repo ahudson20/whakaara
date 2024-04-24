@@ -95,7 +95,7 @@ fun MainPreview() {
                 override fun startTimer() {}
                 override fun stopTimer() {}
                 override fun pauseTimer() {}
-                override fun restartTimer() {}
+                override fun restartTimer(autoRestartTimer: Boolean) {}
             },
             stopwatchEventCallbacks = object : StopwatchEventCallbacks {
                 override fun startStopwatch() {}

@@ -49,6 +49,7 @@
     <string name="lap_reset_icon_content_description">Extra fab icon button</string>
     <string name="system_time_icon_content_description">System time</string>
     <string name="settings_icon_content_description">Alarm settings icon</string>
+    <string name="timer_countdown_finish_time_icon_content_description">Timer finish time icon</string>
 
     <string name="settings_screen_title">Settings</string>
     <string name="settings_screen_general_title">General settings</string>

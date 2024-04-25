@@ -63,7 +63,7 @@ fun Stopwatch(
         ) {
             StopwatchDisplay(formattedTime = stopwatchState.formattedTime)
             Spacer(modifier = Modifier.height(if (stopwatchState.lapList.isNotEmpty()) spaceMedium else spaceNone))
-            StopwatchLapList(stopwatchState = stopwatchState, listState = listState)
+            StopwatchLapList(lapList = stopwatchState.lapList, listState = listState)
         }
     }
 }

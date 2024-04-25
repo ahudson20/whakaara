@@ -30,7 +30,6 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.state.Lap
-import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space40
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
@@ -45,14 +44,14 @@ import com.app.whakaara.utils.DateUtils
 @Composable
 fun StopwatchLapList(
     modifier: Modifier = Modifier,
-    stopwatchState: StopwatchState,
+    lapList: MutableList<Lap>,
     listState: LazyListState
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(top = if (stopwatchState.lapList.isNotEmpty()) spaceNone else spaceMedium)
+            .padding(top = if (lapList.isNotEmpty()) spaceNone else spaceMedium)
             .animateContentSize()
-            .height(height = if (stopwatchState.lapList.isNotEmpty()) 350.dp else spaceNone)
+            .height(height = if (lapList.isNotEmpty()) 350.dp else spaceNone)
             .verticalFadingEdge(
                 lazyListState = listState,
                 length = 100.dp
@@ -61,7 +60,7 @@ fun StopwatchLapList(
         state = listState,
         reverseLayout = true
     ) {
-        itemsIndexed(stopwatchState.lapList) { index, item ->
+        itemsIndexed(lapList) { index, item ->
             if (index == 0) Spacer(modifier = Modifier.fillMaxWidth().height(spaceXxLarge))
             LapCell(index = index, lap = item)
             Spacer(modifier = Modifier.fillMaxWidth().height(spaceXSmall))
@@ -152,20 +151,18 @@ fun Modifier.verticalFadingEdge(
 fun StopwatchLapListPreview() {
     WhakaaraTheme {
         StopwatchLapList(
-            stopwatchState = StopwatchState(
-                lapList = mutableListOf(
-                    Lap(
-                        time = 1000L,
-                        diff = 250L
-                    ),
-                    Lap(
-                        time = 1000L,
-                        diff = 250L
-                    ),
-                    Lap(
-                        time = 1000L,
-                        diff = 250L
-                    )
+            lapList = mutableListOf(
+                Lap(
+                    time = 1000L,
+                    diff = 250L
+                ),
+                Lap(
+                    time = 1000L,
+                    diff = 250L
+                ),
+                Lap(
+                    time = 1000L,
+                    diff = 250L
                 )
             ),
             listState = rememberLazyListState()

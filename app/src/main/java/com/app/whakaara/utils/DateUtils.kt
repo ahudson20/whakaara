@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 
 class DateUtils {
@@ -21,7 +22,9 @@ class DateUtils {
             val currentTime = Calendar.getInstance()
 
             if (checkIfSameDay(alarmDate, currentTime)) {
-                alarmDate.add(Calendar.DATE, 1)
+                val duration = abs(currentTime.timeInMillis - alarmDate.timeInMillis)
+                val days = TimeUnit.MILLISECONDS.toDays(duration).toInt()
+                alarmDate.add(Calendar.DATE, days + 1)
             }
 
             return alarmDate

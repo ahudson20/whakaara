@@ -17,6 +17,7 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
@@ -107,6 +108,14 @@ class MainViewModelTest {
         coEvery { alarmManagerWrapper.setUpcomingAlarm(any(), any(), any(), any(), any(), any()) } returns Unit
         coEvery { alarmManagerWrapper.updateWidget() } returns Unit
         coEvery { alarmManagerWrapper.cancelUpcomingAlarm(any(), any()) } returns Unit
+
+        coEvery { stopwatchManagerWrapper.startStopwatch() } returns Unit
+        coEvery { stopwatchManagerWrapper.pauseStopwatch() } returns Unit
+        coEvery { stopwatchManagerWrapper.resetStopwatch() } returns Unit
+        coEvery { stopwatchManagerWrapper.lapStopwatch() } returns Unit
+        coEvery { stopwatchManagerWrapper.createStopwatchNotification() } returns Unit
+        coEvery { stopwatchManagerWrapper.pauseStopwatchNotification() } returns Unit
+        coEvery { stopwatchManagerWrapper.cancelNotification() } returns Unit
 
         viewModel = MainViewModel(
             repository,
@@ -397,5 +406,42 @@ class MainViewModelTest {
         assertEquals(2, alarmIdSlots.size)
         assertEquals(alarms.first().alarmId.toString(), alarmIdSlots.first())
         assertEquals(alarms.last().alarmId.toString(), alarmIdSlots.last())
+    }
+
+    @Test
+    fun `start stopwatch`() = runTest {
+        // Given + When
+        viewModel.startStopwatch()
+
+        // Then
+        verify(exactly = 1) { stopwatchManagerWrapper.startStopwatch() }
+    }
+
+    @Test
+    fun `pause stopwatch`() = runTest {
+        // Given + When
+        viewModel.pauseStopwatch()
+
+        // Then
+        verify(exactly = 1) { stopwatchManagerWrapper.pauseStopwatch() }
+    }
+
+    @Test
+    fun `reset stopwatch`() = runTest {
+        // Given + When
+        viewModel.resetStopwatch()
+
+        // Then
+        verify(exactly = 1) { stopwatchManagerWrapper.resetStopwatch() }
+        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
+    }
+
+    @Test
+    fun `lap stopwatch`() = runTest {
+        // Given + When
+        viewModel.lapStopwatch()
+
+        // Then
+        verify(exactly = 1) { stopwatchManagerWrapper.lapStopwatch() }
     }
 }

@@ -66,8 +66,6 @@ class MainViewModelTest {
         stopwatchState = StopwatchState()
         timerState = TimerState()
 
-//        every { stopwatchManagerWrapper.stopwatchState } returns MutableStateFlow(stopwatchState)
-//        every { timerManagerWrapper.timerState } returns MutableStateFlow(timerState)
         alarms = listOf(
             Alarm(
                 date = Calendar.getInstance().apply {

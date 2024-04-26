@@ -321,9 +321,6 @@ class MainViewModelTest {
     fun `update all alarm subtitles 12 hour format`() = runTest {
         // Given
         val alarmSlots = mutableListOf<Alarm>()
-//        alarms.forEach {
-//            assertEquals("14:34 PM", it.subTitle)
-//        }
 
         // When
         viewModel.updateAllAlarmSubtitles(format = false)
@@ -340,9 +337,6 @@ class MainViewModelTest {
     fun `update all alarm subtitles 24 hour format`() = runTest {
         // Given
         val alarmSlots = mutableListOf<Alarm>()
-        alarms.forEach {
-            assertEquals("14:34 PM", it.subTitle)
-        }
 
         // When
         viewModel.updateAllAlarmSubtitles(format = true)

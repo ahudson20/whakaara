@@ -17,8 +17,10 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.slot
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -30,6 +32,7 @@ import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.Calendar
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(JUnit4::class)
 class MainViewModelTest {
 
@@ -39,6 +42,9 @@ class MainViewModelTest {
 
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
+
+    private var testDispatcher = UnconfinedTestDispatcher()
+    private var testDispatcherMain = UnconfinedTestDispatcher()
 
     private lateinit var viewModel: MainViewModel
     private var repository: AlarmRepository = mockk(relaxed = true)
@@ -102,7 +108,16 @@ class MainViewModelTest {
         coEvery { alarmManagerWrapper.updateWidget() } returns Unit
         coEvery { alarmManagerWrapper.cancelUpcomingAlarm(any(), any()) } returns Unit
 
-        viewModel = MainViewModel(repository, preferencesRepository, alarmManagerWrapper, timerManagerWrapper, stopwatchManagerWrapper, preferencesDataStore)
+        viewModel = MainViewModel(
+            repository,
+            preferencesRepository,
+            alarmManagerWrapper,
+            timerManagerWrapper,
+            stopwatchManagerWrapper,
+            preferencesDataStore,
+            testDispatcher,
+            testDispatcherMain
+        )
     }
 
     @Test

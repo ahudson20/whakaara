@@ -50,11 +50,14 @@
     <string name="system_time_icon_content_description">System time</string>
     <string name="settings_icon_content_description">Alarm settings icon</string>
     <string name="timer_countdown_finish_time_icon_content_description">Timer finish time icon</string>
+    <string name="settings_screen_battery_optimization_icon_content_description">Battery optimization icon</string>
+
 
     <string name="settings_screen_title">Settings</string>
     <string name="settings_screen_general_title">General settings</string>
     <string name="settings_screen_system_time">Edit system time</string>
     <string name="settings_screen_app_settings">App settings</string>
+    <string name="settings_screen_battery_optimization">Battery optimization</string>
     <string name="settings_screen_alarm_settings_title">Alarm Settings</string>
     <string name="settings_screen_vibrate_title">Vibrate</string>
     <string name="settings_screen_vibrate_subtitle">Vibrate when alarms go off</string>

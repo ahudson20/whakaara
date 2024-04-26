@@ -288,24 +288,25 @@ class MainViewModel @Inject constructor(
     }
 
     fun recreateTimer() = viewModelScope.launch(mainDispatcher) {
-        if (!timerState.value.isStart) {
+        if (timerState.value == TimerState()) {
             val status = preferencesDatastore.readTimerStatus.first()
-            with(status) {
-                val difference = System.currentTimeMillis() - timeStamp
-                if (remainingTimeInMillis > 0 && timerState.value.isStart && (remainingTimeInMillis > difference)) {
-                    if (isActive) {
-                        timerManagerWrapper.recreateActiveTimer(
-                            milliseconds = remainingTimeInMillis - difference
-                        )
-                    } else if (isPaused) {
-                        timerManagerWrapper.recreatePausedTimer(
-                            milliseconds = remainingTimeInMillis - difference
+            if (status != TimerStateDataStore()) {
+                with(status) {
+                    val difference = System.currentTimeMillis() - timeStamp
+                    if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
+                        if (isActive) {
+                            timerManagerWrapper.recreateActiveTimer(
+                                milliseconds = remainingTimeInMillis - difference
+                            )
+                        } else if (isPaused) {
+                            timerManagerWrapper.recreatePausedTimer(
+                                milliseconds = remainingTimeInMillis - difference
+                            )
+                        }
+                        preferencesDatastore.saveTimerData(
+                            state = TimerStateDataStore()
                         )
                     }
-
-                    preferencesDatastore.saveTimerData(
-                        state = TimerStateDataStore()
-                    )
                 }
             }
         }

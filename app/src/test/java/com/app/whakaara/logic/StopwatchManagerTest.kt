@@ -16,8 +16,9 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -25,6 +26,7 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class StopwatchManagerTest {
     @Rule
     @JvmField
@@ -39,7 +41,7 @@ class StopwatchManagerTest {
     private lateinit var stopwatchNotificationBuilder: NotificationCompat.Builder
     private lateinit var coroutineScope: CoroutineScope
     private lateinit var preferencesDatastore: PreferencesDataStore
-    private val testDispatcher = StandardTestDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
     private val managedCoroutineScope = TestScope(testDispatcher)
     private val id = 400
 

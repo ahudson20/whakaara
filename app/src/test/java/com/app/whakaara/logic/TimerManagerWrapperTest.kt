@@ -15,8 +15,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Before
@@ -25,6 +26,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import java.util.concurrent.TimeUnit
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class TimerManagerWrapperTest {
     @Rule
     @JvmField
@@ -33,8 +35,6 @@ class TimerManagerWrapperTest {
     @get:Rule
     val mainDispatcherRule = MainDispatcherRule()
 
-    private val testDispatcher = StandardTestDispatcher()
-
     private lateinit var timerManagerWrapper: TimerManagerWrapper
     private lateinit var app: Application
     private lateinit var alarmManager: AlarmManager
@@ -42,6 +42,8 @@ class TimerManagerWrapperTest {
     private lateinit var timerNotificationBuilder: NotificationCompat.Builder
     private lateinit var countDownTimerUtil: CountDownTimerUtil
     private lateinit var preferencesDatastore: PreferencesDataStore
+
+    private val testDispatcher = UnconfinedTestDispatcher()
     private val managedCoroutineScope = TestScope(testDispatcher)
 
     @Before

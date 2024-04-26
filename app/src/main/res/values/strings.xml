@@ -23,7 +23,7 @@
     <string name="bottom_sheet_repeat_switch_sub_title">Alarm will repeat daily</string>
     <string name="bottom_sheet_custom_alarm_days_title">Custom</string>
     <string name="bottom_sheet_custom_alarm_days_sub_title">Select certain days to repeat alarm</string>
-    <string name="bottom_sheet_title_characters">%d / %d</string>
+    <string name="bottom_sheet_title_characters">%1$d / %2$d</string>
 
     <string name="card_alarm_sub_title_off">Off</string>
     <string name="card_repeat_daily_icon_content_description">Repeat alarm daily icon</string>

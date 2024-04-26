@@ -5,6 +5,7 @@ import android.app.NotificationManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.app.NotificationCompat
 import app.cash.turbine.test
+import com.app.whakaara.MainDispatcherRule
 import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.state.Lap
 import com.app.whakaara.state.StopwatchState
@@ -15,27 +16,22 @@ import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class StopwatchManagerTest {
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
 
-    private val testDispatcher = StandardTestDispatcher()
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var stopwatchManagerWrapper: StopwatchManagerWrapper
     private lateinit var app: Application
@@ -43,23 +39,18 @@ class StopwatchManagerTest {
     private lateinit var stopwatchNotificationBuilder: NotificationCompat.Builder
     private lateinit var coroutineScope: CoroutineScope
     private lateinit var preferencesDatastore: PreferencesDataStore
+    private val testDispatcher = StandardTestDispatcher()
     private val managedCoroutineScope = TestScope(testDispatcher)
     private val id = 400
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
         app = mockk()
         notificationManager = mockk()
         stopwatchNotificationBuilder = mockk()
         coroutineScope = mockk()
         preferencesDatastore = mockk()
         stopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, managedCoroutineScope, preferencesDatastore)
-    }
-
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
     }
 
     @Test

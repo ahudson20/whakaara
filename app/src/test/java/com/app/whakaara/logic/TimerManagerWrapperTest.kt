@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.core.app.NotificationCompat
 import app.cash.turbine.test
+import com.app.whakaara.MainDispatcherRule
 import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.utils.DateUtils
 import io.mockk.Runs
@@ -14,14 +15,9 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -29,11 +25,13 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import java.util.concurrent.TimeUnit
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TimerManagerWrapperTest {
     @Rule
     @JvmField
     var rule: TestRule = InstantTaskExecutorRule()
+
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -48,7 +46,6 @@ class TimerManagerWrapperTest {
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(testDispatcher)
         app = mockk()
         alarmManager = mockk()
         notificationManager = mockk()
@@ -56,15 +53,10 @@ class TimerManagerWrapperTest {
         countDownTimerUtil = mockk()
         preferencesDatastore = mockk()
 
-        timerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDatastore, managedCoroutineScope)
-
         coEvery { countDownTimerUtil.countdown(any(), any(), any(), any()) } just Runs
         coEvery { countDownTimerUtil.cancel() } just Runs
-    }
 
-    @After
-    fun tearDown() {
-        Dispatchers.resetMain()
+        timerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDatastore, managedCoroutineScope)
     }
 
     @Test

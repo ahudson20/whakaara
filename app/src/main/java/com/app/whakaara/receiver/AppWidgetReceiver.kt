@@ -10,11 +10,12 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.data.alarm.AlarmRepository
+import com.app.whakaara.module.IoDispatcher
 import com.app.whakaara.widget.AppWidget
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -25,6 +26,10 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
 
     @Inject
     lateinit var alarmRepository: AlarmRepository
+
+    @Inject
+    @IoDispatcher
+    lateinit var iODispatcher: CoroutineDispatcher
 
     override fun onUpdate(
         context: Context,
@@ -47,7 +52,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
         // https://issuetracker.google.com/issues/257513022
         // goAsync is still the best way to run suspend functions from broadcast receivers
         // but it throws exception when initially creating the widget. Works fine once widget created + updated.
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(iODispatcher) {
             val alarms = alarmRepository.getAllAlarms()
             val serializedList = Gson().toJson(alarms)
             val glanceIds = GlanceAppWidgetManager(context).getGlanceIds(glanceAppWidget.javaClass)

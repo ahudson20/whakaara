@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -36,6 +35,7 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.whakaara.R
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.space200
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
@@ -70,7 +70,7 @@ fun NotificationsOnboarding(
                 modifier = Modifier
                     .size(space200)
                     .align(Alignment.Center)
-                    .clip(RoundedCornerShape(25.dp))
+                    .clip(Shapes.medium)
                     .background(color = lightBlueAnimation),
                 isCompleted = notificationPermissionState.status.isGranted
             )

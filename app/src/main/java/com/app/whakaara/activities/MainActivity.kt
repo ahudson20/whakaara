@@ -39,7 +39,7 @@ class MainActivity :
         super.onCreate(savedInstanceState)
 
         installSplashScreen().setKeepOnScreenCondition {
-            viewModel.alarmState.value is AlarmState.Loading && !viewModel.isReady.value
+            viewModel.alarmState.value is AlarmState.Loading && !viewModel.preferencesUiState.value.isReady
         }
 
         setContent {

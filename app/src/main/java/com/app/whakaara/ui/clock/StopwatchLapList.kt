@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.state.Lap
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space40
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.Spacings.spaceNone
@@ -75,7 +75,7 @@ private fun LapCell(index: Int, lap: Lap) {
             .fillMaxWidth()
             .padding(start = space40, end = space40)
     ) {
-        Card(shape = RoundedCornerShape(spaceMedium)) {
+        Card(shape = Shapes.small) {
             Box(
                 modifier = Modifier.padding(all = spaceMedium)
             ) {

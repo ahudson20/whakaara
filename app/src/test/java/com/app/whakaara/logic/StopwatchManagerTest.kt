@@ -17,7 +17,6 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
 import io.mockk.verify
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -41,7 +40,6 @@ class StopwatchManagerTest {
     private lateinit var app: Application
     private lateinit var notificationManager: NotificationManager
     private lateinit var stopwatchNotificationBuilder: NotificationCompat.Builder
-    private lateinit var coroutineScope: CoroutineScope
     private lateinit var preferencesDatastore: PreferencesDataStore
     private val testDispatcher = UnconfinedTestDispatcher()
     private val managedCoroutineScope = TestScope(testDispatcher)
@@ -52,7 +50,6 @@ class StopwatchManagerTest {
         app = mockk()
         notificationManager = mockk()
         stopwatchNotificationBuilder = mockk()
-        coroutineScope = mockk()
         preferencesDatastore = mockk()
 
         every { notificationManager.cancel(any()) } just Runs

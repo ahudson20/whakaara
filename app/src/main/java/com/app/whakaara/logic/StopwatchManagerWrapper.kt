@@ -258,7 +258,7 @@ class StopwatchManagerWrapper @Inject constructor(
             stopwatchNotificationBuilder.apply {
                 clearActions()
                 setUsesChronometer(false)
-                setSubText(app.applicationContext.getString(R.string.notification_sub_text_pasused))
+                setSubText(app.applicationContext.getString(R.string.notification_sub_text_paused))
                 setWhen(System.currentTimeMillis())
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_play_action_label), playReceiverPendingIntent)
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_stop_action_label), stopReceiverPendingIntent)

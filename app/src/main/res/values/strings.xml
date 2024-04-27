@@ -111,7 +111,10 @@
     <string name="timer_notification_title_active">Timer active</string>
     <string name="timer_notification_sub_text_active">Time left</string>
     <string name="timer_notification_title_paused">Timer paused</string>
-    <string name="notification_sub_text_pasused">Paused</string>
+    <string name="notification_sub_text_paused">Paused</string>
+    <string name="upcoming_alarm_notification_content_title">Upcoming alarm</string>
+    <string name="upcoming_alarm_notification_sub_text">Time to alarm</string>
+
 
     <string name="widget_next_alarm_description">Shows next active alarm</string>
     <string name="widget_next_alarm_icon_description">Alarm icon</string>

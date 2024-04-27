@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoDelete
 import androidx.compose.material.icons.outlined.Repeat
@@ -39,8 +38,8 @@ import com.app.whakaara.R
 import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.space28
 import com.app.whakaara.ui.theme.Spacings.space80
@@ -100,11 +99,11 @@ fun Card(
     }
 
     ElevatedCard(
-        shape = RoundedCornerShape(space100),
+        shape = Shapes.extraLarge,
         modifier = modifier
             .fillMaxWidth()
             .height(space80)
-            .clip(RoundedCornerShape(space100))
+            .clip(Shapes.extraLarge)
             .clickable {
                 scope.launch { sheetState.expand() }
             }

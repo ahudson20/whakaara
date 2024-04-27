@@ -359,7 +359,7 @@ class TimerManagerWrapper @Inject constructor(
                 setUsesChronometer(false)
                 setChronometerCountDown(false)
                 setContentTitle(app.applicationContext.getString(R.string.timer_notification_title_paused))
-                setSubText(app.applicationContext.getString(R.string.notification_sub_text_pasused))
+                setSubText(app.applicationContext.getString(R.string.notification_sub_text_paused))
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_play_action_label), playTimerReceiverPendingIntent)
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_stop_action_label), stopTimerReceiverPendingIntent)
             }.build()

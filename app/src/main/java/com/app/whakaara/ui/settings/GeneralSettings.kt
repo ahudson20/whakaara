@@ -6,7 +6,6 @@ import android.content.Intent
 import android.media.AudioManager
 import android.media.RingtoneManager
 import android.net.Uri
-import android.os.PowerManager
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -71,7 +70,6 @@ fun GeneralSettings(
     val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
     val originalAlarmVolume = remember { mutableIntStateOf(audioManager.getStreamVolume(AudioManager.STREAM_ALARM)) }
     val maxValue = remember { audioManager.getStreamMaxVolume(AudioManager.STREAM_ALARM) }
-    val powerManager = (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
 
     val ringtonePicker = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),

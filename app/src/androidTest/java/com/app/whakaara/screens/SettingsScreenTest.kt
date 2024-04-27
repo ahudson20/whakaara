@@ -46,6 +46,8 @@ class SettingsScreenTest {
 
         onNodeWithText(text = "App settings").assertIsDisplayed()
 
+        onNodeWithText(text = "Battery optimization").assertIsDisplayed()
+
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
         onNodeWithText(text = "App Theme").performScrollTo().assertIsDisplayed()
@@ -109,6 +111,8 @@ class SettingsScreenTest {
         onNodeWithText(text = "Edit system time").assertIsDisplayed()
 
         onNodeWithText(text = "App settings").assertIsDisplayed()
+
+        onNodeWithText(text = "Battery optimization").assertIsDisplayed()
 
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 

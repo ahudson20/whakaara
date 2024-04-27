@@ -20,7 +20,7 @@ jobs:
         uses: vroy/gha-kotlin-linter@v4
 
   build:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     needs: lint
 
     steps:

@@ -149,6 +149,7 @@ class NotificationModule {
         timerNotificationBuilder: NotificationCompat.Builder,
         countDownTimerUtil: CountDownTimerUtil,
         preferencesDataStore: PreferencesDataStore,
+        @ApplicationScope
         coroutineScope: CoroutineScope
     ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDataStore, coroutineScope)
 
@@ -159,6 +160,7 @@ class NotificationModule {
         notificationManager: NotificationManager,
         @Named("stopwatch")
         stopwatchNotificationBuilder: NotificationCompat.Builder,
+        @ApplicationScope
         coroutineScope: CoroutineScope,
         preferencesDataStore: PreferencesDataStore
     ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, coroutineScope, preferencesDataStore)

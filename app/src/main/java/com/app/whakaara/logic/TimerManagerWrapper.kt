@@ -10,6 +10,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.data.datastore.PreferencesDataStore
+import com.app.whakaara.module.ApplicationScope
 import com.app.whakaara.receiver.TimerReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.state.TimerState
@@ -53,6 +54,7 @@ class TimerManagerWrapper @Inject constructor(
     private val timerNotificationBuilder: NotificationCompat.Builder,
     private val countDownTimerUtil: CountDownTimerUtil,
     private val preferencesDatastore: PreferencesDataStore,
+    @ApplicationScope
     private val coroutineScope: CoroutineScope
 ) {
     val timerState = MutableStateFlow(TimerState())

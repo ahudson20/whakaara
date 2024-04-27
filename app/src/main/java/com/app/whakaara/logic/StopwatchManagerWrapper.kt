@@ -8,6 +8,7 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.data.datastore.PreferencesDataStore
+import com.app.whakaara.module.ApplicationScope
 import com.app.whakaara.receiver.StopwatchReceiver
 import com.app.whakaara.state.Lap
 import com.app.whakaara.state.StopwatchState
@@ -37,6 +38,7 @@ class StopwatchManagerWrapper @Inject constructor(
     private val notificationManager: NotificationManager,
     @Named("stopwatch")
     private val stopwatchNotificationBuilder: NotificationCompat.Builder,
+    @ApplicationScope
     private val coroutineScope: CoroutineScope,
     private val preferencesDataStore: PreferencesDataStore
 ) {

@@ -165,7 +165,7 @@ class StopwatchManagerWrapper @Inject constructor(
     fun recreateStopwatchPausedFromReceiver(
         state: StopwatchState
     ) {
-        if (stopwatchState.value != StopwatchState() || !state.isActive) {
+        if (stopwatchState.value != StopwatchState()) {
             pauseStopwatch()
         } else {
             val current = System.currentTimeMillis()

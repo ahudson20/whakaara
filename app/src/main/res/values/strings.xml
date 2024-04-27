@@ -23,7 +23,7 @@
     <string name="bottom_sheet_repeat_switch_sub_title">Alarm will repeat daily</string>
     <string name="bottom_sheet_custom_alarm_days_title">Custom</string>
     <string name="bottom_sheet_custom_alarm_days_sub_title">Select certain days to repeat alarm</string>
-    <string name="bottom_sheet_title_characters">%d / %d</string>
+    <string name="bottom_sheet_title_characters">%1$d / %2$d</string>
 
     <string name="card_alarm_sub_title_off">Off</string>
     <string name="card_repeat_daily_icon_content_description">Repeat alarm daily icon</string>
@@ -49,11 +49,15 @@
     <string name="lap_reset_icon_content_description">Extra fab icon button</string>
     <string name="system_time_icon_content_description">System time</string>
     <string name="settings_icon_content_description">Alarm settings icon</string>
+    <string name="timer_countdown_finish_time_icon_content_description">Timer finish time icon</string>
+    <string name="settings_screen_battery_optimization_icon_content_description">Battery optimization icon</string>
+
 
     <string name="settings_screen_title">Settings</string>
     <string name="settings_screen_general_title">General settings</string>
     <string name="settings_screen_system_time">Edit system time</string>
     <string name="settings_screen_app_settings">App settings</string>
+    <string name="settings_screen_battery_optimization">Battery optimization</string>
     <string name="settings_screen_alarm_settings_title">Alarm Settings</string>
     <string name="settings_screen_vibrate_title">Vibrate</string>
     <string name="settings_screen_vibrate_subtitle">Vibrate when alarms go off</string>
@@ -139,6 +143,7 @@
     <string name="onboarding_sub_text">This app requires permission to send you notifications!</string>
     <string name="onboarding_welcome_title">Welcome to whakaara</string>
     <string name="onboarding_welcome_sub_text">This screen will guide you through the most important setup steps</string>
+    <string name="onboarding_welcome_icon_description">whakaara app icon</string>
 
     <string name="notification_timer_play_action_label">Resume</string>
     <string name="notification_timer_pause_action_label">Pause</string>

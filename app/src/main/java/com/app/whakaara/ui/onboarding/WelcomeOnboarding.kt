@@ -50,7 +50,7 @@ fun WelcomeOnboarding(
         ) {
             Image(
                 painterResource(id = R.drawable.translucent),
-                contentDescription = stringResource(id = R.string.delete_icon_content_description)
+                contentDescription = stringResource(id = R.string.onboarding_welcome_icon_description)
             )
         }
         Spacer(modifier = Modifier.height(space20))

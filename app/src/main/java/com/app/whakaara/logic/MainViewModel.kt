@@ -7,6 +7,8 @@ import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
+import com.app.whakaara.module.IoDispatcher
+import com.app.whakaara.module.MainDispatcher
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
@@ -14,7 +16,7 @@ import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.TimerStateDataStore
 import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,7 +33,9 @@ class MainViewModel @Inject constructor(
     private val alarmManagerWrapper: AlarmManagerWrapper,
     private val timerManagerWrapper: TimerManagerWrapper,
     private val stopwatchManagerWrapper: StopwatchManagerWrapper,
-    private val preferencesDatastore: PreferencesDataStore
+    private val preferencesDatastore: PreferencesDataStore,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : ViewModel() {
 
     // alarm
@@ -57,25 +61,25 @@ class MainViewModel @Inject constructor(
 
     //region preferences
     private fun getPreferences() = viewModelScope.launch {
-        preferencesRepository.getPreferencesFlow().flowOn(Dispatchers.IO).collect { preferences ->
+        preferencesRepository.getPreferencesFlow().flowOn(ioDispatcher).collect { preferences ->
             _preferencesState.value = PreferencesState(preferences = preferences)
             _isReady.value = true
         }
     }
 
-    fun updatePreferences(preferences: Preferences) = viewModelScope.launch(Dispatchers.IO) {
+    fun updatePreferences(preferences: Preferences) = viewModelScope.launch(ioDispatcher) {
         preferencesRepository.updatePreferences(preferences = preferences)
     }
     //endregion
 
     //region alarm
     private fun getAllAlarms() = viewModelScope.launch {
-        repository.getAllAlarmsFlow().flowOn(Dispatchers.IO).collect { allAlarms ->
+        repository.getAllAlarmsFlow().flowOn(ioDispatcher).collect { allAlarms ->
             _alarmState.value = AlarmState.Success(alarms = allAlarms)
         }
     }
 
-    fun create(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun create(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
         repository.insert(alarm = alarm)
         alarmManagerWrapper.createAlarm(
             alarmId = alarm.alarmId.toString(),
@@ -88,7 +92,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun delete(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun delete(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
         repository.delete(alarm = alarm)
         with(alarmManagerWrapper) {
             deleteAlarm(alarmId = alarm.alarmId.toString())
@@ -96,7 +100,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun disable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun disable(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         with(alarmManagerWrapper) {
             deleteAlarm(alarmId = alarm.alarmId.toString())
@@ -104,7 +108,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun enable(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun enable(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = true))
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
@@ -117,7 +121,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun reset(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun reset(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
         updateExistingAlarmInDatabase(alarm = alarm)
         alarmManagerWrapper.stopStartUpdateWidget(
             alarmId = alarm.alarmId.toString(),
@@ -130,7 +134,7 @@ class MainViewModel @Inject constructor(
         )
     }
 
-    fun snooze(alarm: Alarm) = viewModelScope.launch(Dispatchers.IO) {
+    fun snooze(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
         val currentTimePlusTenMinutes = Calendar.getInstance().apply {
             add(Calendar.MINUTE, _preferencesState.value.preferences.snoozeTime.value)
         }
@@ -146,11 +150,11 @@ class MainViewModel @Inject constructor(
     }
 
     private fun updateExistingAlarmInDatabase(alarm: Alarm) =
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(ioDispatcher) {
             repository.update(alarm)
         }
 
-    fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(Dispatchers.IO) {
+    fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(ioDispatcher) {
         val state = _alarmState.value
         if (state is AlarmState.Success) {
             state.alarms.forEach {
@@ -204,7 +208,7 @@ class MainViewModel @Inject constructor(
         stopwatchManagerWrapper.pauseStopwatch()
     }
 
-    fun resetStopwatch() = viewModelScope.launch(Dispatchers.IO) {
+    fun resetStopwatch() = viewModelScope.launch(ioDispatcher) {
         stopwatchManagerWrapper.resetStopwatch()
         preferencesDatastore.clearStopwatchState()
     }
@@ -213,7 +217,7 @@ class MainViewModel @Inject constructor(
         stopwatchManagerWrapper.lapStopwatch()
     }
 
-    fun saveStopwatchStateForRecreation() = viewModelScope.launch(Dispatchers.IO) {
+    fun saveStopwatchStateForRecreation() = viewModelScope.launch(ioDispatcher) {
         if (stopwatchState.value.isActive || stopwatchState.value.isPaused) {
             preferencesDatastore.saveStopwatchState(
                 state = stopwatchState.value
@@ -221,7 +225,7 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    fun recreateStopwatch() = viewModelScope.launch(Dispatchers.Main) {
+    fun recreateStopwatch() = viewModelScope.launch(mainDispatcher) {
         if (stopwatchState.value == StopwatchState()) {
             val state = preferencesDatastore.readStopwatchState.first()
             if (state.isActive) {
@@ -283,31 +287,32 @@ class MainViewModel @Inject constructor(
         timerManagerWrapper.restartTimer(autoRestartTimer = autoRestartTimer)
     }
 
-    fun recreateTimer() = viewModelScope.launch(Dispatchers.Main) {
-        if (!timerState.value.isStart) {
+    fun recreateTimer() = viewModelScope.launch(mainDispatcher) {
+        if (timerState.value == TimerState()) {
             val status = preferencesDatastore.readTimerStatus.first()
-            with(status) {
-                val difference = System.currentTimeMillis() - timeStamp
-                if (remainingTimeInMillis > 0 && timerState.value.isStart && (remainingTimeInMillis > difference)) {
-                    if (isActive) {
-                        timerManagerWrapper.recreateActiveTimer(
-                            milliseconds = remainingTimeInMillis - difference
-                        )
-                    } else if (isPaused) {
-                        timerManagerWrapper.recreatePausedTimer(
-                            milliseconds = remainingTimeInMillis - difference
+            if (status != TimerStateDataStore()) {
+                with(status) {
+                    val difference = System.currentTimeMillis() - timeStamp
+                    if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
+                        if (isActive) {
+                            timerManagerWrapper.recreateActiveTimer(
+                                milliseconds = remainingTimeInMillis - difference
+                            )
+                        } else if (isPaused) {
+                            timerManagerWrapper.recreatePausedTimer(
+                                milliseconds = remainingTimeInMillis - difference
+                            )
+                        }
+                        preferencesDatastore.saveTimerData(
+                            state = TimerStateDataStore()
                         )
                     }
-
-                    preferencesDatastore.saveTimerData(
-                        state = TimerStateDataStore()
-                    )
                 }
             }
         }
     }
 
-    fun saveTimerStateForRecreation() = viewModelScope.launch(Dispatchers.IO) {
+    fun saveTimerStateForRecreation() = viewModelScope.launch(ioDispatcher) {
         if (!timerState.value.isStart) {
             preferencesDatastore.saveTimerData(
                 TimerStateDataStore(

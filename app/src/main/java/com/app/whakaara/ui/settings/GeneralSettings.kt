@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
+import androidx.compose.material.icons.filled.BatterySaver
 import androidx.compose.material.icons.filled.NotificationsActive
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
@@ -121,6 +122,27 @@ fun GeneralSettings(
             context.startActivity(
                 intentAppSettings.apply {
                     data = Uri.fromParts(NotificationUtilsConstants.INTENT_PACKAGE, context.packageName, null)
+                }
+            )
+        }
+    )
+
+    SettingsMenuLink(
+        modifier = Modifier.height(space80),
+        icon = {
+            Icon(
+                imageVector = Icons.Default.BatterySaver,
+                contentDescription = stringResource(id = R.string.settings_screen_battery_optimization_icon_content_description)
+            )
+        },
+        title = { Text(text = stringResource(id = R.string.settings_screen_battery_optimization)) },
+        onClick = {
+            val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+            context.startActivity(
+                intent.apply {
+                    Uri.fromParts(NotificationUtilsConstants.INTENT_PACKAGE, context.packageName, null)
                 }
             )
         }

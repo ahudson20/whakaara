@@ -175,6 +175,7 @@ fun BottomSheetDetailsAlarmInfo(
                 MultiChoiceSegmentedButtonRow {
                     DAYS_OF_WEEK.forEachIndexed { index, label ->
                         SegmentedButton(
+                            modifier = Modifier.testTag("segmentedButton"),
                             shape = SegmentedButtonDefaults.itemShape(index = index, count = DAYS_OF_WEEK.size),
                             onCheckedChange = {
                                 updateBottomSheetDetailsAlarmInfo.updateCheckedList.onValueChange(index)

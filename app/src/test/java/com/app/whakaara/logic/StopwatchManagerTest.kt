@@ -11,6 +11,8 @@ import com.app.whakaara.state.Lap
 import com.app.whakaara.state.StopwatchState
 import io.mockk.Runs
 import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
@@ -52,6 +54,10 @@ class StopwatchManagerTest {
         stopwatchNotificationBuilder = mockk()
         coroutineScope = mockk()
         preferencesDatastore = mockk()
+
+        every { notificationManager.cancel(any()) } just Runs
+        coEvery { preferencesDatastore.saveStopwatchState(any()) } just Runs
+
         stopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, managedCoroutineScope, preferencesDatastore)
     }
 
@@ -59,7 +65,6 @@ class StopwatchManagerTest {
     fun `pause stopwatch`() = runTest {
         // Given
         val notificationId = slot<Int>()
-        coEvery { notificationManager.cancel(any()) } just Runs
 
         // When
         stopwatchManagerWrapper.pauseStopwatch()
@@ -80,7 +85,6 @@ class StopwatchManagerTest {
     fun `reset stopwatch`() = runTest {
         // Given
         val notificationId = slot<Int>()
-        coEvery { notificationManager.cancel(any()) } just Runs
 
         // When
         stopwatchManagerWrapper.resetStopwatch()
@@ -191,6 +195,77 @@ class StopwatchManagerTest {
                 assertEquals(420L, lapList.first().time)
                 assertEquals(420L, lapList.first().diff)
             }
+        }
+    }
+
+    @Test
+    fun `recreate stopwatch paused from receiver - manager state not empty`() = runTest {
+        // Given
+        stopwatchManagerWrapper.stopwatchState.value = StopwatchState(timeMillis = 420L)
+        val stateFromPreferences = StopwatchState()
+        val notificationId = slot<Int>()
+        val stopwatchStateSlot = slot<StopwatchState>()
+
+        // When
+        stopwatchManagerWrapper.recreateStopwatchPausedFromReceiver(state = stateFromPreferences)
+
+        // Then
+        verify(exactly = 1) { notificationManager.cancel(capture(notificationId)) }
+        assertEquals(id, notificationId.captured)
+        stopwatchManagerWrapper.stopwatchState.test {
+            val state = awaitItem()
+            with(state) {
+                assertEquals(false, isActive)
+                assertEquals(true, isPaused)
+            }
+        }
+        coVerify(exactly = 1) { preferencesDatastore.saveStopwatchState(capture(stopwatchStateSlot)) }
+        with(stopwatchStateSlot.captured) {
+            assertEquals(420L, timeMillis)
+            assertEquals(false, isActive)
+            assertEquals(true, isPaused)
+        }
+    }
+
+    @Test
+    fun `recreate stopwatch paused from receiver - manager state empty`() = runTest {
+        // Given
+        stopwatchManagerWrapper.stopwatchState.value = StopwatchState()
+        val stateFromPreferences = StopwatchState(
+            isPaused = false,
+            isActive = true,
+            isStart = false,
+            timeMillis = 112233L,
+            formattedTime = "11:22:33:444",
+            lapList = mutableListOf(
+                Lap(
+                    time = 420L,
+                    diff = 420L
+                )
+            )
+        )
+
+        val stopwatchStateSlot = slot<StopwatchState>()
+
+        // When
+        stopwatchManagerWrapper.recreateStopwatchPausedFromReceiver(state = stateFromPreferences)
+
+        // Then
+        stopwatchManagerWrapper.stopwatchState.test {
+            val state = awaitItem()
+            with(state) {
+                assertEquals(true, isPaused)
+                assertEquals(false, isActive)
+                assertEquals(false, isStart)
+                assertEquals(mutableListOf(Lap(time = 420L, diff = 420L)), lapList)
+            }
+        }
+        coVerify(exactly = 1) { preferencesDatastore.saveStopwatchState(capture(stopwatchStateSlot)) }
+        with(stopwatchStateSlot.captured) {
+            assertEquals(true, isPaused)
+            assertEquals(false, isActive)
+            assertEquals(false, isStart)
+            assertEquals(mutableListOf(Lap(time = 420L, diff = 420L)), lapList)
         }
     }
 

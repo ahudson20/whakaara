@@ -52,13 +52,17 @@ class TimerReceiver : HiltBroadcastReceiver() {
     private fun startTimer(
         currentTime: Long
     ) {
-        timerManagerWrapper.startTimer()
-        timerManagerWrapper.startTimerNotificationCountdown(milliseconds = currentTime + Calendar.getInstance().timeInMillis)
+        with(timerManagerWrapper) {
+            startTimer()
+            startTimerNotificationCountdown(milliseconds = currentTime + Calendar.getInstance().timeInMillis)
+        }
     }
 
     private fun pauseTimer() {
-        timerManagerWrapper.pauseTimer()
-        timerManagerWrapper.pauseTimerNotificationCountdown()
+        with(timerManagerWrapper) {
+            pauseTimer()
+            pauseTimerNotificationCountdown()
+        }
     }
 
     private fun stopTimer() {

@@ -3,7 +3,6 @@ package com.app.whakaara.service
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
@@ -21,6 +20,8 @@ import android.os.Vibrator
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
@@ -30,6 +31,7 @@ import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.data.preferences.PreferencesRepository
 import com.app.whakaara.data.preferences.VibrationPattern
 import com.app.whakaara.data.preferences.VibrationPattern.Companion.REPEAT
+import com.app.whakaara.module.IoDispatcher
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utils.GeneralUtils
 import com.app.whakaara.utils.PendingIntentUtils
@@ -48,8 +50,7 @@ import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTIO
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP
 import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDate
@@ -61,7 +62,7 @@ import javax.inject.Named
 import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
-class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
+class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
     @Inject
     lateinit var mediaPlayer: MediaPlayer
@@ -88,6 +89,10 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
 
     @Inject
     lateinit var powerManager: PowerManager
+
+    @Inject
+    @IoDispatcher
+    lateinit var iODispatcher: CoroutineDispatcher
 
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
@@ -181,13 +186,13 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
     }
 
     private fun deleteAlarmById(alarmId: UUID) {
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(iODispatcher) {
             alarmRepository.deleteAlarmById(id = alarmId)
         }
     }
 
     private fun setIsEnabledToFalse(alarmId: UUID) {
-        CoroutineScope(Dispatchers.IO).launch {
+        lifecycleScope.launch(iODispatcher) {
             alarmRepository.isEnabled(id = alarmId, isEnabled = false)
         }
     }
@@ -346,14 +351,17 @@ class MediaPlayerService : Service(), MediaPlayer.OnPreparedListener {
             serviceHandler?.sendMessage(msg)
         }
 
-        return START_STICKY
+        return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
         mediaPlayer.start()
     }
 
-    override fun onBind(intent: Intent): IBinder? = null
+    override fun onBind(intent: Intent): IBinder? {
+        super.onBind(intent)
+        return null
+    }
 
     override fun onDestroy() {
         super.onDestroy()

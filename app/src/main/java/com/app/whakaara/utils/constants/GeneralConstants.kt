@@ -18,4 +18,7 @@ object GeneralConstants {
     val DAYS_OF_WEEK = listOf("M", "T", "W", "T", "F", "S", "S")
 
     const val MAX_NUMBER_OF_LAPS = 100
+
+    const val RESET_TIMER_DATASTORE_TAG = "resetTimerStateDataStoreTAG"
+    const val GO_ASYNC_TAG = "goAsyncTAG"
 }

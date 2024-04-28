@@ -2,6 +2,7 @@ package com.app.whakaara.receiver
 
 import android.content.BroadcastReceiver
 import android.util.Log
+import com.app.whakaara.utils.constants.GeneralConstants.GO_ASYNC_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -25,7 +26,7 @@ fun BroadcastReceiver.goAsync(
             } catch (e: CancellationException) {
                 throw e
             } catch (t: Throwable) {
-                Log.e("goAsyncTAG", "BroadcastReceiver execution failed", t)
+                Log.e(GO_ASYNC_TAG, "BroadcastReceiver execution failed", t)
             } finally {
                 // Nothing can be in the `finally` block after this, as this throws a
                 // `CancellationException`
@@ -38,7 +39,7 @@ fun BroadcastReceiver.goAsync(
             } catch (e: IllegalStateException) {
                 // On some OEM devices, this may throw an error about "Broadcast already finished".
                 // See b/257513022.
-                Log.e("goAsyncTAG", "Error thrown when trying to finish broadcast", e)
+                Log.e(GO_ASYNC_TAG, "Error thrown when trying to finish broadcast", e)
             }
         }
     }

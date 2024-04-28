@@ -1,6 +1,5 @@
 package com.app.whakaara.activities
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
@@ -148,7 +147,7 @@ class WidgetConfig : ComponentActivity() {
                                     val resultValue = Intent().apply {
                                         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                                     }
-                                    setResult(Activity.RESULT_OK, resultValue)
+                                    setResult(RESULT_OK, resultValue)
                                     finish()
                                 }
                             ) {
@@ -172,7 +171,7 @@ class WidgetConfig : ComponentActivity() {
                                         glanceAppWidget.update(this@WidgetConfig, glanceId)
                                     }
                                     setResult(
-                                        Activity.RESULT_OK,
+                                        RESULT_OK,
                                         Intent().apply {
                                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                                         }

@@ -19,6 +19,7 @@ import com.app.whakaara.utils.DateUtils
 import com.app.whakaara.utils.PendingIntentUtils
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
+import com.app.whakaara.utils.constants.GeneralConstants.RESET_TIMER_DATASTORE_TAG
 import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
 import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
 import com.app.whakaara.utils.constants.NotificationUtilsConstants
@@ -397,7 +398,7 @@ class TimerManagerWrapper @Inject constructor(
         } catch (e: CancellationException) {
             throw e
         } catch (t: Throwable) {
-            Log.e("resetTimerStateDataStoreTAG", "resetTimerStateDataStore execution failed", t)
+            Log.e(RESET_TIMER_DATASTORE_TAG, "resetTimerStateDataStore execution failed", t)
         } finally {
             // Nothing can be in the `finally` block after this, as this throws a
             // `CancellationException`

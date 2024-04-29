@@ -143,6 +143,8 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
                 }
             }
 
+            setupMediaPlayer(soundPath = preferences.alarmSoundPath)
+
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createAlarmNotification(alarm = alarm),
@@ -151,6 +153,8 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
             if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
         } else {
+            setupMediaPlayer(soundPath = preferences.timerSoundPath)
+
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createTimerNotification(),
@@ -168,11 +172,18 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             }
         }
 
+        // set timeout on service
+        handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+    }
+
+    private fun setupMediaPlayer(
+        soundPath: String
+    ) {
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,
-                if (preferences.alarmSoundPath.isNotEmpty()) {
-                    Uri.parse(preferences.alarmSoundPath)
+                if (soundPath.isNotEmpty()) {
+                    Uri.parse(soundPath)
                 } else {
                     Settings.System.DEFAULT_ALARM_ALERT_URI
                 }
@@ -180,9 +191,6 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             setOnPreparedListener(this@MediaPlayerService)
             prepareAsync()
         }
-
-        // set timeout on service
-        handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
     }
 
     private fun deleteAlarmById(alarmId: UUID) {

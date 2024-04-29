@@ -73,7 +73,8 @@
     <string name="settings_screen_24_hour_format_title">24 hour format</string>
     <string name="settings_screen_24_hour_format_subtitle">If enabled, display using 24 hour format</string>
     <string name="settings_screen_ringtone_selection_icon">Select ringtone</string>
-    <string name="settings_screen_ringtone_title">Select ringtone</string>
+    <string name="settings_screen_ringtone_alarm_title">Select alarm sound</string>
+    <string name="settings_screen_ringtone_timer_title">Select timer sound</string>
     <string name="settings_screen_ringtone_subtitle">Current:</string>
     <string name="settings_screen_app_theme_title">App Theme</string>
     <string name="settings_screen_add_widget_title">Create widget</string>

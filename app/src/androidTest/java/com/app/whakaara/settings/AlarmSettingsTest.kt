@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.settings.AlarmSettings
+import com.app.whakaara.ui.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
 
@@ -17,18 +18,24 @@ class AlarmSettingsTest {
     fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
         // Given + When
         setContent {
-            AlarmSettings(
-                preferencesState = PreferencesState(),
-                updatePreferences = {},
-                updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
-            )
+            WhakaaraTheme {
+                AlarmSettings(
+                    preferencesState = PreferencesState(),
+                    updatePreferences = {},
+                    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
+                )
+            }
         }
 
         // Then
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
+        onNodeWithText(text = "Select ringtone").assertIsDisplayed()
+
         onNodeWithText(text = "Vibrate").assertIsDisplayed()
         onNodeWithText(text = "Vibrate when alarms go off").assertIsDisplayed()
+
+        onNodeWithText(text = "Vibration pattern").assertIsDisplayed()
 
         onNodeWithText(text = "Snooze").assertIsDisplayed()
         onNodeWithText(text = "Allow alarms to be snoozed").assertIsDisplayed()

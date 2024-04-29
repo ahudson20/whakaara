@@ -30,7 +30,7 @@ class AlarmSettingsTest {
         // Then
         onNodeWithText(text = "Alarm Settings").assertIsDisplayed()
 
-        onNodeWithText(text = "Select ringtone").assertIsDisplayed()
+        onNodeWithText(text = "Select alarm sound").assertIsDisplayed()
 
         onNodeWithText(text = "Vibrate").assertIsDisplayed()
         onNodeWithText(text = "Vibrate when alarms go off").assertIsDisplayed()

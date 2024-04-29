@@ -32,7 +32,7 @@ class TimerSettingsTest {
         // Then
         onNodeWithText(text = "Timer settings").assertIsDisplayed()
 
-        onNodeWithText(text = "Select ringtone")
+        onNodeWithText(text = "Select timer sound")
 
         onNodeWithText(text = "Vibrate").assertIsDisplayed()
         onNodeWithText(text = "Vibrate when timer goes off").assertIsDisplayed()

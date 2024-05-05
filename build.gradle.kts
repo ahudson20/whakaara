@@ -24,6 +24,8 @@ tasks.register("installGitHook", Copy::class) {
         from(File(rootProject.rootDir, "scripts/pre-commit"))
         into(gitHooksDir)
     }
-    fileMode = "0777".toInt()
+    eachFile {
+        fileMode = 0b111101101
+    }
 }
 tasks.getByPath(":app:preBuild").dependsOn(tasks.getByName("installGitHook"))

@@ -10,36 +10,36 @@ import org.junit.Rule
 import org.junit.Test
 
 class TimerSettingsTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given
-        val state = PreferencesState()
+    fun shouldDisplayCorrectData(): Unit =
+        with(composeTestRule) {
+            // Given
+            val state = PreferencesState()
 
-        // When
-        setContent {
-            WhakaaraTheme {
-                TimerSettings(
-                    preferencesState = state,
-                    updatePreferences = {}
-                )
+            // When
+            setContent {
+                WhakaaraTheme {
+                    TimerSettings(
+                        preferencesState = state,
+                        updatePreferences = {},
+                    )
+                }
             }
+
+            // Then
+            onNodeWithText(text = "Timer settings").assertIsDisplayed()
+
+            onNodeWithText(text = "Select timer sound")
+
+            onNodeWithText(text = "Vibrate").assertIsDisplayed()
+            onNodeWithText(text = "Vibrate when timer goes off").assertIsDisplayed()
+
+            onNodeWithText(text = "Vibration pattern").assertIsDisplayed()
+
+            onNodeWithText(text = "Auto-restart").assertIsDisplayed()
+            onNodeWithText(text = "Timer automatically restarts on click").assertIsDisplayed()
         }
-
-        // Then
-        onNodeWithText(text = "Timer settings").assertIsDisplayed()
-
-        onNodeWithText(text = "Select timer sound")
-
-        onNodeWithText(text = "Vibrate").assertIsDisplayed()
-        onNodeWithText(text = "Vibrate when timer goes off").assertIsDisplayed()
-
-        onNodeWithText(text = "Vibration pattern").assertIsDisplayed()
-
-        onNodeWithText(text = "Auto-restart").assertIsDisplayed()
-        onNodeWithText(text = "Timer automatically restarts on click").assertIsDisplayed()
-    }
 }

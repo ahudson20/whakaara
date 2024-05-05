@@ -27,20 +27,21 @@ fun GlanceText(
     fontSize: TextUnit,
     modifier: GlanceModifier = GlanceModifier,
     color: Color = Color.Black,
-    letterSpacing: TextUnit = 0.1.sp
+    letterSpacing: TextUnit = 0.1.sp,
 ) {
     Image(
         modifier = modifier,
-        provider = ImageProvider(
-            LocalContext.current.textAsBitmap(
-                text = text,
-                fontSize = fontSize,
-                color = color,
-                font = font,
-                letterSpacing = letterSpacing.value
-            )
-        ),
-        contentDescription = null
+        provider =
+            ImageProvider(
+                LocalContext.current.textAsBitmap(
+                    text = text,
+                    fontSize = fontSize,
+                    color = color,
+                    font = font,
+                    letterSpacing = letterSpacing.value,
+                ),
+            ),
+        contentDescription = null,
     )
 }
 
@@ -49,7 +50,7 @@ private fun Context.textAsBitmap(
     fontSize: TextUnit,
     color: Color = Color.Black,
     letterSpacing: Float = 0.1f,
-    font: Int
+    font: Int,
 ): Bitmap {
     val paint = TextPaint(Paint.ANTI_ALIAS_FLAG)
     paint.textSize = spToPx(fontSize.value, this)
@@ -67,10 +68,13 @@ private fun Context.textAsBitmap(
     return image
 }
 
-private fun spToPx(sp: Float, context: Context): Float {
+private fun spToPx(
+    sp: Float,
+    context: Context,
+): Float {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         sp,
-        context.resources.displayMetrics
+        context.resources.displayMetrics,
     )
 }

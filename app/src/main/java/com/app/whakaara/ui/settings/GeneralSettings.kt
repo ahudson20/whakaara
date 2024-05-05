@@ -30,22 +30,22 @@ import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.alorma.compose.settings.ui.SettingsSlider
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
-import com.app.whakaara.data.preferences.AppTheme
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.NotificationUtilsConstants
+import com.whakaara.core.constants.NotificationUtilsConstants
+import com.whakaara.model.preferences.AppTheme
+import com.whakaara.model.preferences.Preferences
 import kotlin.math.roundToInt
 
 @Composable
 fun GeneralSettings(
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val intentAppSettings = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
@@ -56,7 +56,7 @@ fun GeneralSettings(
     Text(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
-        text = stringResource(id = R.string.settings_screen_general_title)
+        text = stringResource(id = R.string.settings_screen_general_title),
     )
 
     SettingsMenuLink(
@@ -64,9 +64,10 @@ fun GeneralSettings(
         icon = {
             Icon(
                 painter = painterResource(id = R.drawable.outline_chronic_24),
-                contentDescription = stringResource(
-                    id = R.string.system_time_icon_content_description
-                )
+                contentDescription =
+                    stringResource(
+                        id = R.string.system_time_icon_content_description,
+                    ),
             )
         },
         title = {
@@ -74,7 +75,7 @@ fun GeneralSettings(
         },
         onClick = {
             context.startActivity(Intent(Settings.ACTION_DATE_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) })
-        }
+        },
     )
 
     SettingsMenuLink(
@@ -82,7 +83,7 @@ fun GeneralSettings(
         icon = {
             Icon(
                 imageVector = Icons.Default.Settings,
-                contentDescription = stringResource(id = R.string.settings_screen_app_settings)
+                contentDescription = stringResource(id = R.string.settings_screen_app_settings),
             )
         },
         title = { Text(text = stringResource(id = R.string.settings_screen_app_settings)) },
@@ -90,9 +91,9 @@ fun GeneralSettings(
             context.startActivity(
                 intentAppSettings.apply {
                     data = Uri.fromParts(NotificationUtilsConstants.INTENT_PACKAGE, context.packageName, null)
-                }
+                },
             )
-        }
+        },
     )
 
     SettingsMenuLink(
@@ -100,20 +101,21 @@ fun GeneralSettings(
         icon = {
             Icon(
                 imageVector = Icons.Default.BatterySaver,
-                contentDescription = stringResource(id = R.string.settings_screen_battery_optimization_icon_content_description)
+                contentDescription = stringResource(id = R.string.settings_screen_battery_optimization_icon_content_description),
             )
         },
         title = { Text(text = stringResource(id = R.string.settings_screen_battery_optimization)) },
         onClick = {
-            val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
+            val intent =
+                Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                }
             context.startActivity(
                 intent.apply {
                     Uri.fromParts(NotificationUtilsConstants.INTENT_PACKAGE, context.packageName, null)
-                }
+                },
             )
-        }
+        },
     )
 
     SettingsSlider(
@@ -121,7 +123,7 @@ fun GeneralSettings(
         icon = {
             Icon(
                 imageVector = Icons.AutoMirrored.Default.VolumeUp,
-                contentDescription = stringResource(id = R.string.settings_screen_alarm_volume_icon)
+                contentDescription = stringResource(id = R.string.settings_screen_alarm_volume_icon),
             )
         },
         state = rememberFloatSettingState(originalAlarmVolume.intValue.toFloat()),
@@ -130,24 +132,24 @@ fun GeneralSettings(
         onValueChange = { value ->
             originalAlarmVolume.intValue = value.roundToInt()
             audioManager.setStreamVolume(AudioManager.STREAM_ALARM, originalAlarmVolume.intValue, 0)
-        }
+        },
     )
 
     SettingsListDropdown(
         modifier = Modifier.height(space80),
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.appTheme.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_app_theme_title)) },
-        items = AppTheme.values().map { it.label },
+        items = AppTheme.entries.map { it.label },
         onItemSelected = { int, _ ->
             val selection = AppTheme.fromOrdinalInt(value = int)
             if (selection != preferencesState.preferences.appTheme) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        appTheme = selection
-                    )
+                        appTheme = selection,
+                    ),
                 )
             }
-        }
+        },
     )
 
     SettingsSwitch(
@@ -158,10 +160,10 @@ fun GeneralSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    dynamicTheme = it
-                )
+                    dynamicTheme = it,
+                ),
             )
-        }
+        },
     )
 
     SettingsSwitch(
@@ -172,11 +174,11 @@ fun GeneralSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    is24HourFormat = it
-                )
+                    is24HourFormat = it,
+                ),
             )
             updateAllAlarmSubtitles(it)
-        }
+        },
     )
 }
 
@@ -189,7 +191,7 @@ fun GeneralSettingsPreview() {
             GeneralSettings(
                 preferencesState = PreferencesState(),
                 updatePreferences = {},
-                updateAllAlarmSubtitles = {}
+                updateAllAlarmSubtitles = {},
             )
         }
     }

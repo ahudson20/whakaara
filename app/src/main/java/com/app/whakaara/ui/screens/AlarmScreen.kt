@@ -25,24 +25,26 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
+import com.app.whakaara.ui.theme.AlarmPreviewProvider
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
-import com.app.whakaara.utils.NotificationUtils
+import com.app.whakaara.utility.DateUtils
+import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.shouldShowRationale
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
+import com.whakaara.model.alarm.Alarm
 import java.time.LocalTime
 import java.util.Calendar
 
@@ -55,7 +57,7 @@ fun AlarmScreen(
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit,
-    create: (alarm: Alarm) -> Unit
+    create: (alarm: Alarm) -> Unit,
 ) {
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
@@ -76,10 +78,11 @@ fun AlarmScreen(
         floatingActionButton = {
             FloatingActionButton(
                 shape = CircleShape,
-                elevation = FloatingActionButtonDefaults.elevation(
-                    defaultElevation = 0.dp,
-                    pressedElevation = 0.dp
-                ),
+                elevation =
+                    FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 0.dp,
+                        pressedElevation = 0.dp,
+                    ),
                 onClick = {
                     /**PERMISSION GRANTED**/
                     when (notificationPermissionState.status) {
@@ -92,7 +95,7 @@ fun AlarmScreen(
                                 NotificationUtils.snackBarPromptPermission(
                                     scope = scope,
                                     snackBarHostState = snackbarHostState,
-                                    context = context
+                                    context = context,
                                 )
                             } else {
                                 /**FIRST TIME ACCESSING**/
@@ -101,15 +104,15 @@ fun AlarmScreen(
                             }
                         }
                     }
-                }
+                },
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.floating_action_button_icon_description)
+                    contentDescription = stringResource(id = R.string.floating_action_button_icon_description),
                 )
             }
         },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
         CardContainerSwipeToDismiss(
             modifier = Modifier.padding(innerPadding),
@@ -118,7 +121,7 @@ fun AlarmScreen(
             delete = delete,
             disable = disable,
             enable = enable,
-            reset = reset
+            reset = reset,
         )
 
         AnimatedVisibility(isDialogShown.value) {
@@ -126,30 +129,32 @@ fun AlarmScreen(
                 onDismissRequest = { isDialogShown.value = false },
                 initialTime = LocalTime.now().plusMinutes(1).noSeconds(),
                 onTimeChange = {
-                    val date = Calendar.getInstance().apply {
-                        set(Calendar.HOUR_OF_DAY, it.hour)
-                        set(Calendar.MINUTE, it.minute)
-                        set(Calendar.SECOND, 0)
-                    }
+                    val date =
+                        Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, it.hour)
+                            set(Calendar.MINUTE, it.minute)
+                            set(Calendar.SECOND, 0)
+                        }
                     create(
                         Alarm(
                             date = date,
-                            subTitle = DateUtils.getAlarmTimeFormatted(
-                                date = date,
-                                is24HourFormatEnabled = preferencesState.preferences.is24HourFormat
-                            ),
+                            subTitle =
+                                DateUtils.getAlarmTimeFormatted(
+                                    date = date,
+                                    is24HourFormatEnabled = preferencesState.preferences.is24HourFormat,
+                                ),
                             vibration = preferencesState.preferences.isVibrateEnabled,
                             isSnoozeEnabled = preferencesState.preferences.isSnoozeEnabled,
-                            deleteAfterGoesOff = preferencesState.preferences.deleteAfterGoesOff
-                        )
+                            deleteAfterGoesOff = preferencesState.preferences.deleteAfterGoesOff,
+                        ),
                     )
                     isDialogShown.value = false
                     context.showToast(
-                        message = context.getTimeUntilAlarmFormatted(date = date)
+                        message = context.getTimeUntilAlarmFormatted(date = date),
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
-                is24HourFormat = preferencesState.preferences.is24HourFormat
+                is24HourFormat = preferencesState.preferences.is24HourFormat,
             )
         }
     }
@@ -158,29 +163,18 @@ fun AlarmScreen(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun AlarmScreenPreview() {
+fun AlarmScreenPreview(
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+) {
     WhakaaraTheme {
         AlarmScreen(
-            alarms = listOf(
-                Alarm(
-                    date = Calendar.getInstance().apply {
-                        set(Calendar.YEAR, 2023)
-                        set(Calendar.DAY_OF_MONTH, 13)
-                        set(Calendar.MONTH, 6)
-                        set(Calendar.HOUR_OF_DAY, 14)
-                        set(Calendar.MINUTE, 34)
-                        set(Calendar.SECOND, 0)
-                    },
-                    title = "First Alarm Title",
-                    subTitle = "14:34 PM"
-                )
-            ),
+            alarms = listOf(alarm),
             preferencesState = PreferencesState(),
             delete = {},
             disable = {},
             enable = {},
             reset = {},
-            create = {}
+            create = {},
         )
     }
 }

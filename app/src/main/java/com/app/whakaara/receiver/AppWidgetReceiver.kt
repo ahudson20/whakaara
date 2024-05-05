@@ -9,10 +9,10 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
-import com.app.whakaara.data.alarm.AlarmRepository
-import com.app.whakaara.module.IoDispatcher
 import com.app.whakaara.widget.AppWidget
 import com.google.gson.Gson
+import com.whakaara.core.di.IoDispatcher
+import com.whakaara.data.alarm.AlarmRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -34,13 +34,16 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
+        appWidgetIds: IntArray,
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         observeData(context)
     }
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         super.onReceive(context, intent)
         if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
             observeData(context = context)
@@ -60,7 +63,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
                 updateAppWidgetState(
                     context = context,
                     definition = PreferencesGlanceStateDefinition,
-                    glanceId = glanceId
+                    glanceId = glanceId,
                 ) { prefs ->
                     prefs.toMutablePreferences().apply {
                         this[allAlarmsKey] = serializedList

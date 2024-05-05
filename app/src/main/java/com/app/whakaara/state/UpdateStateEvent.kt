@@ -5,22 +5,22 @@ import com.chargemap.compose.numberpicker.Hours
 
 data class StringStateEvent(
     val value: String = "",
-    val onValueChange: (String) -> Unit = {}
+    val onValueChange: (String) -> Unit = {},
 )
 
 data class BooleanStateEvent(
     val value: Boolean = false,
-    val onValueChange: (Boolean) -> Unit = {}
+    val onValueChange: (Boolean) -> Unit = {},
 )
 
 data class HoursUpdateEvent(
     val value: Hours = FullHours(0, 0),
-    val onValueChange: (Hours) -> Unit = {}
+    val onValueChange: (Hours) -> Unit = {},
 )
 
 data class ListStateEvent(
     val value: MutableList<Int> = mutableListOf(),
-    val onValueChange: (Int) -> Unit = {}
+    val onValueChange: (Int) -> Unit = {},
 )
 
 data class UpdateBottomSheetDetailsAlarmInfo(
@@ -29,5 +29,5 @@ data class UpdateBottomSheetDetailsAlarmInfo(
     val updateDeleteAfterGoesOff: BooleanStateEvent = BooleanStateEvent(),
     val updateTitle: StringStateEvent = StringStateEvent(),
     val updateRepeatDaily: BooleanStateEvent = BooleanStateEvent(),
-    val updateCheckedList: ListStateEvent = ListStateEvent()
+    val updateCheckedList: ListStateEvent = ListStateEvent(),
 )

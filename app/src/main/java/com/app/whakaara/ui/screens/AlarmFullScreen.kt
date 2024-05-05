@@ -14,15 +14,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.clock.TextClock
+import com.app.whakaara.ui.theme.AlarmPreviewProvider
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
-import java.util.Calendar
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.model.alarm.Alarm
 
 @Composable
 fun AlarmFullScreen(
@@ -30,7 +31,7 @@ fun AlarmFullScreen(
     alarm: Alarm,
     snooze: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
-    is24HourFormat: Boolean
+    is24HourFormat: Boolean,
 ) {
     val context = LocalContext.current
     val activity = (context as? Activity)
@@ -38,13 +39,14 @@ fun AlarmFullScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            modifier =
+                modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Row {
                 TextClock(
-                    is24HourFormat = is24HourFormat
+                    is24HourFormat = is24HourFormat,
                 )
             }
 
@@ -55,10 +57,10 @@ fun AlarmFullScreen(
                         onClick = {
                             snooze(alarm)
                             context.showToast(
-                                message = context.getString(R.string.notification_action_snoozed, alarm.title)
+                                message = context.getString(R.string.notification_action_snoozed, alarm.title),
                             )
                             activity?.finish()
-                        }
+                        },
                     ) {
                         Text(text = stringResource(id = R.string.notification_action_button_snooze))
                     }
@@ -69,7 +71,7 @@ fun AlarmFullScreen(
                         disable(alarm)
                         context.showToast(message = context.getString(R.string.notification_action_cancelled, alarm.title))
                         activity?.finish()
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.notification_action_button_dismiss))
                 }
@@ -81,17 +83,15 @@ fun AlarmFullScreen(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun NotificationFullScreenPreview() {
+fun NotificationFullScreenPreview(
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+) {
     WhakaaraTheme {
         AlarmFullScreen(
-            alarm = Alarm(
-                date = Calendar.getInstance(),
-                isEnabled = false,
-                subTitle = "10:03 AM"
-            ),
+            alarm = alarm,
             snooze = {},
             disable = {},
-            is24HourFormat = true
+            is24HourFormat = true,
         )
     }
 }

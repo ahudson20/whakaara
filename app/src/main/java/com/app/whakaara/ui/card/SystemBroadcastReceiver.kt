@@ -11,13 +11,17 @@ import androidx.compose.ui.platform.LocalContext
 @Composable
 fun SystemBroadcastReceiver(
     filter: IntentFilter,
-    onBroadcastReceive: (context: Context?, intent: Intent?) -> Unit
+    onBroadcastReceive: (context: Context?, intent: Intent?) -> Unit,
 ) {
     val context = LocalContext.current
     DisposableEffect(context, filter, onBroadcastReceive) {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) = onBroadcastReceive(context, intent)
-        }
+        val receiver =
+            object : BroadcastReceiver() {
+                override fun onReceive(
+                    context: Context?,
+                    intent: Intent?,
+                ) = onBroadcastReceive(context, intent)
+            }
 
         context.registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED)
 

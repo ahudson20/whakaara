@@ -17,7 +17,7 @@ import com.chargemap.compose.numberpicker.HoursNumberPicker
 @Composable
 fun BottomSheetTimePicker(
     modifier: Modifier = Modifier,
-    updatePickerValue: HoursUpdateEvent
+    updatePickerValue: HoursUpdateEvent,
 ) {
     HoursNumberPicker(
         modifier = modifier.padding(all = spaceLarge),
@@ -27,10 +27,11 @@ fun BottomSheetTimePicker(
         onValueChange = {
             updatePickerValue.onValueChange(it)
         },
-        textStyle = LocalTextStyle.current.copy(
-            color = MaterialTheme.colorScheme.onSurface,
-            fontSize = 24.sp
-        )
+        textStyle =
+            LocalTextStyle.current.copy(
+                color = MaterialTheme.colorScheme.onSurface,
+                fontSize = 24.sp,
+            ),
     )
 }
 
@@ -40,12 +41,14 @@ fun BottomSheetTimePicker(
 fun BottomSheetTimePickerPreview() {
     WhakaaraTheme {
         BottomSheetTimePicker(
-            updatePickerValue = HoursUpdateEvent(
-                value = FullHours(
-                    hours = 12,
-                    minutes = 12
-                )
-            )
+            updatePickerValue =
+                HoursUpdateEvent(
+                    value =
+                        FullHours(
+                            hours = 12,
+                            minutes = 12,
+                        ),
+                ),
         )
     }
 }

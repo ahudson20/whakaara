@@ -16,17 +16,18 @@ class SwipeToDismissTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayDeleteIcon(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                DismissBackground(
-                    dismissState = rememberSwipeToDismissBoxState()
-                )
+    fun shouldDisplayDeleteIcon(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    DismissBackground(
+                        dismissState = rememberSwipeToDismissBoxState(),
+                    )
+                }
             }
-        }
 
-        // Then
-        onNodeWithContentDescription(label = "delete icon", ignoreCase = true).assertIsDisplayed()
-    }
+            // Then
+            onNodeWithContentDescription(label = "delete icon", ignoreCase = true).assertIsDisplayed()
+        }
 }

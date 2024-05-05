@@ -40,59 +40,66 @@ fun FloatingActionButtonRow(
     isPlayButtonVisible: Boolean = true,
     onStop: () -> Unit,
     onPlayPause: () -> Unit,
-    onExtraButtonClicked: () -> Unit
+    onExtraButtonClicked: () -> Unit,
 ) {
     Row(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth(),
     ) {
         Row(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .clip(shape = Shapes.large),
-            horizontalArrangement = Arrangement.End
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .clip(shape = Shapes.large),
+            horizontalArrangement = Arrangement.End,
         ) {
             AnimatedVisibility(
-                enter = fadeIn() + expandHorizontally(
-                    expandFrom = Alignment.Start
-                ),
-                exit = fadeOut() + shrinkHorizontally(
-                    shrinkTowards = Alignment.Start
-                ),
-                visible = !isStart
+                enter =
+                    fadeIn() +
+                        expandHorizontally(
+                            expandFrom = Alignment.Start,
+                        ),
+                exit =
+                    fadeOut() +
+                        shrinkHorizontally(
+                            shrinkTowards = Alignment.Start,
+                        ),
+                visible = !isStart,
             ) {
                 FloatingActionButtonStop(
-                    onStop = onStop
+                    onStop = onStop,
                 )
             }
         }
         Row(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
         ) {
             AnimatedVisibility(
                 visible = isPlayButtonVisible,
                 enter = fadeIn(),
-                exit = fadeOut()
+                exit = fadeOut(),
             ) {
                 FloatingActionButtonPlayPause(
                     isPlaying = isPlaying,
-                    onClick = onPlayPause
+                    onClick = onPlayPause,
                 )
             }
         }
         Row(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .clip(shape = Shapes.large),
-            horizontalArrangement = Arrangement.Start
+            modifier =
+                Modifier
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .clip(shape = Shapes.large),
+            horizontalArrangement = Arrangement.Start,
         ) {
             AnimatedVisibility(isPlaying) {
                 FloatingActionButtonExtraAction(
-                    onExtraButtonClicked = onExtraButtonClicked
+                    onExtraButtonClicked = onExtraButtonClicked,
                 )
             }
         }
@@ -100,22 +107,21 @@ fun FloatingActionButtonRow(
 }
 
 @Composable
-private fun FloatingActionButtonStop(
-    onStop: () -> Unit
-) {
+private fun FloatingActionButtonStop(onStop: () -> Unit) {
     FloatingActionButton(
         modifier = Modifier.testTag("floating action button stop"),
         shape = CircleShape,
-        elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp,
-            pressedElevation = 0.dp
-        ),
+        elevation =
+            FloatingActionButtonDefaults.elevation(
+                defaultElevation = 0.dp,
+                pressedElevation = 0.dp,
+            ),
         containerColor = MaterialTheme.colorScheme.error,
-        onClick = onStop
+        onClick = onStop,
     ) {
         Icon(
             imageVector = Icons.Filled.Stop,
-            contentDescription = stringResource(id = R.string.stop_timer_icon_content_description)
+            contentDescription = stringResource(id = R.string.stop_timer_icon_content_description),
         )
     }
 }
@@ -124,26 +130,27 @@ private fun FloatingActionButtonStop(
 private fun FloatingActionButtonPlayPause(
     modifier: Modifier = Modifier,
     isPlaying: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     FloatingActionButton(
         modifier = modifier.testTag("floating action button play-pause"),
         shape = CircleShape,
-        elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp,
-            pressedElevation = 0.dp
-        ),
-        onClick = onClick
+        elevation =
+            FloatingActionButtonDefaults.elevation(
+                defaultElevation = 0.dp,
+                pressedElevation = 0.dp,
+            ),
+        onClick = onClick,
     ) {
         if (isPlaying) {
             Icon(
                 imageVector = Icons.Filled.Pause,
-                contentDescription = stringResource(id = R.string.pause_timer_icon_content_description)
+                contentDescription = stringResource(id = R.string.pause_timer_icon_content_description),
             )
         } else {
             Icon(
                 imageVector = Icons.Filled.PlayArrow,
-                contentDescription = stringResource(id = R.string.start_timer_icon_content_description)
+                contentDescription = stringResource(id = R.string.start_timer_icon_content_description),
             )
         }
     }
@@ -153,18 +160,19 @@ private fun FloatingActionButtonPlayPause(
 private fun FloatingActionButtonExtraAction(onExtraButtonClicked: () -> Unit) {
     FloatingActionButton(
         shape = CircleShape,
-        elevation = FloatingActionButtonDefaults.elevation(
-            defaultElevation = 0.dp,
-            pressedElevation = 0.dp
-        ),
+        elevation =
+            FloatingActionButtonDefaults.elevation(
+                defaultElevation = 0.dp,
+                pressedElevation = 0.dp,
+            ),
         containerColor = MaterialTheme.colorScheme.error,
         onClick = {
             onExtraButtonClicked()
-        }
+        },
     ) {
         Icon(
             imageVector = Icons.Filled.Refresh,
-            contentDescription = stringResource(id = R.string.lap_reset_icon_content_description)
+            contentDescription = stringResource(id = R.string.lap_reset_icon_content_description),
         )
     }
 }
@@ -174,7 +182,7 @@ private fun FloatingActionButtonExtraAction(onExtraButtonClicked: () -> Unit) {
 fun FloatingActionButtonStopPreview() {
     WhakaaraTheme {
         FloatingActionButtonStop(
-            onStop = {}
+            onStop = {},
         )
     }
 }
@@ -182,12 +190,12 @@ fun FloatingActionButtonStopPreview() {
 @Preview
 @Composable
 fun FloatingActionButtonPlayPausePreview(
-    @PreviewParameter(BooleanPreviewProvider::class) isPlaying: Boolean
+    @PreviewParameter(BooleanPreviewProvider::class) isPlaying: Boolean,
 ) {
     WhakaaraTheme {
         FloatingActionButtonPlayPause(
             isPlaying = isPlaying,
-            onClick = {}
+            onClick = {},
         )
     }
 }
@@ -197,7 +205,7 @@ fun FloatingActionButtonPlayPausePreview(
 fun FloatingActionButtonExtraActionPreview() {
     WhakaaraTheme {
         FloatingActionButtonExtraAction(
-            onExtraButtonClicked = {}
+            onExtraButtonClicked = {},
         )
     }
 }

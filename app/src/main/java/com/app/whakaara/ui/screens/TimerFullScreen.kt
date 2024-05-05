@@ -21,12 +21,12 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 
 @Composable
 fun TimerFullScreen(
     resetTimer: () -> Unit,
-    is24HourFormat: Boolean
+    is24HourFormat: Boolean,
 ) {
     val context = LocalContext.current
     val activity = (context as? Activity)
@@ -34,18 +34,19 @@ fun TimerFullScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
         ) {
             Text(
                 text = stringResource(id = R.string.timer_notification_content_title),
-                style = MaterialTheme.typography.titleLarge
+                style = MaterialTheme.typography.titleLarge,
             )
 
             Row {
                 TextClock(
-                    is24HourFormat = is24HourFormat
+                    is24HourFormat = is24HourFormat,
                 )
             }
 
@@ -56,7 +57,7 @@ fun TimerFullScreen(
                         resetTimer()
                         context.showToast(message = context.getString(R.string.timer_full_screen_cancelled))
                         activity?.finish()
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.notification_action_button_dismiss))
                 }
@@ -72,7 +73,7 @@ fun TimerFullScreenPreview() {
     WhakaaraTheme {
         TimerFullScreen(
             resetTimer = {},
-            is24HourFormat = true
+            is24HourFormat = true,
         )
     }
 }

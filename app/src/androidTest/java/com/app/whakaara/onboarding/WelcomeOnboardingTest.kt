@@ -14,17 +14,18 @@ class WelcomeOnboardingTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                WelcomeOnboarding()
+    fun shouldDisplayCorrectData(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    WelcomeOnboarding()
+                }
             }
-        }
 
-        // Then
-        onNodeWithContentDescription("whakaara app icon").assertIsDisplayed()
-        onNodeWithText("Welcome to whakaara").assertIsDisplayed()
-        onNodeWithText("This screen will guide you through the most important setup steps").assertIsDisplayed()
-    }
+            // Then
+            onNodeWithContentDescription("whakaara app icon").assertIsDisplayed()
+            onNodeWithText("Welcome to whakaara").assertIsDisplayed()
+            onNodeWithText("This screen will guide you through the most important setup steps").assertIsDisplayed()
+        }
 }

@@ -13,61 +13,63 @@ import org.junit.Rule
 import org.junit.Test
 
 class StopwatchScreenTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectDataDefaultState(): Unit = with(composeTestRule) {
-        // Given
-        val state = StopwatchState()
+    fun shouldDisplayCorrectDataDefaultState(): Unit =
+        with(composeTestRule) {
+            // Given
+            val state = StopwatchState()
 
-        // When
-        setContent {
-            WhakaaraTheme {
-                StopwatchScreen(
-                    stopwatchState = state,
-                    onStart = {},
-                    onPause = {},
-                    onStop = {},
-                    onLap = {}
-                )
+            // When
+            setContent {
+                WhakaaraTheme {
+                    StopwatchScreen(
+                        stopwatchState = state,
+                        onStart = {},
+                        onPause = {},
+                        onStop = {},
+                        onLap = {},
+                    )
+                }
             }
+
+            // Then
+            onNodeWithText(text = "00:00").assertIsDisplayed()
+            onNodeWithText(text = "000").assertIsDisplayed()
+
+            onNodeWithTag("floating action button stop").assertIsNotDisplayed()
+            onNodeWithTag("floating action button play-pause").assertIsDisplayed().assertHasClickAction()
         }
-
-        // Then
-        onNodeWithText(text = "00:00").assertIsDisplayed()
-        onNodeWithText(text = "000").assertIsDisplayed()
-
-        onNodeWithTag("floating action button stop").assertIsNotDisplayed()
-        onNodeWithTag("floating action button play-pause").assertIsDisplayed().assertHasClickAction()
-    }
 
     @Test
-    fun shouldDisplayStopButtonIfNotStart(): Unit = with(composeTestRule) {
-        // Given
-        val state = StopwatchState(
-            isStart = false
-        )
-
-        // When
-        setContent {
-            WhakaaraTheme {
-                StopwatchScreen(
-                    stopwatchState = state,
-                    onStart = {},
-                    onPause = {},
-                    onStop = {},
-                    onLap = {}
+    fun shouldDisplayStopButtonIfNotStart(): Unit =
+        with(composeTestRule) {
+            // Given
+            val state =
+                StopwatchState(
+                    isStart = false,
                 )
+
+            // When
+            setContent {
+                WhakaaraTheme {
+                    StopwatchScreen(
+                        stopwatchState = state,
+                        onStart = {},
+                        onPause = {},
+                        onStop = {},
+                        onLap = {},
+                    )
+                }
             }
+
+            // Then
+            onNodeWithText(text = "00:00").assertIsDisplayed()
+            onNodeWithText(text = "000").assertIsDisplayed()
+
+            onNodeWithTag("floating action button stop").assertIsDisplayed().assertHasClickAction()
+            onNodeWithTag("floating action button play-pause").assertIsDisplayed().assertHasClickAction()
         }
-
-        // Then
-        onNodeWithText(text = "00:00").assertIsDisplayed()
-        onNodeWithText(text = "000").assertIsDisplayed()
-
-        onNodeWithTag("floating action button stop").assertIsDisplayed().assertHasClickAction()
-        onNodeWithTag("floating action button play-pause").assertIsDisplayed().assertHasClickAction()
-    }
 }

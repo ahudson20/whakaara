@@ -18,31 +18,32 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space5
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.toColorInt
+import com.app.whakaara.utility.GeneralUtils.Companion.toColorInt
 
 @Composable
 fun ColourSlider(
     label: String,
     valueState: MutableState<Float>,
-    color: Color
+    color: Color,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(space5)
+        horizontalArrangement = Arrangement.spacedBy(space5),
     ) {
         Text(text = label)
         Slider(
             value = valueState.value,
             onValueChange = valueState.component2(),
-            colors = SliderDefaults.colors(
-                activeTrackColor = color
-            ),
-            modifier = Modifier.weight(1f)
+            colors =
+                SliderDefaults.colors(
+                    activeTrackColor = color,
+                ),
+            modifier = Modifier.weight(1f),
         )
         Text(
             text = valueState.value.toColorInt().toString(),
             textAlign = TextAlign.End,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
     }
 }

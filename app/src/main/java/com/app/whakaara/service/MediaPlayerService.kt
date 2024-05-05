@@ -1,7 +1,6 @@
 package com.app.whakaara.service
 
 import android.app.Notification
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.ServiceInfo
@@ -25,30 +24,30 @@ import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
-import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.data.alarm.AlarmRepository
-import com.app.whakaara.data.preferences.Preferences
-import com.app.whakaara.data.preferences.PreferencesRepository
-import com.app.whakaara.data.preferences.VibrationPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.REPEAT
-import com.app.whakaara.module.IoDispatcher
 import com.app.whakaara.receiver.MediaServiceReceiver
-import com.app.whakaara.utils.GeneralUtils
-import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.GeneralConstants
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.FOREGROUND_SERVICE_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.MEDIA_SERVICE_EXCEPTION_TAG
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.PLAY
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTION
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
+import com.app.whakaara.utility.GeneralUtils
+import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.constants.GeneralConstants
+import com.whakaara.core.constants.NotificationUtilsConstants.FOREGROUND_SERVICE_ID
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
+import com.whakaara.core.constants.NotificationUtilsConstants.MEDIA_SERVICE_EXCEPTION_TAG
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
+import com.whakaara.core.constants.NotificationUtilsConstants.PLAY
+import com.whakaara.core.constants.NotificationUtilsConstants.SERVICE_ACTION
+import com.whakaara.core.constants.NotificationUtilsConstants.STOP
+import com.whakaara.core.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
+import com.whakaara.core.di.IoDispatcher
+import com.whakaara.data.alarm.AlarmRepository
+import com.whakaara.data.preferences.PreferencesRepository
+import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.VibrationPattern
+import com.whakaara.model.preferences.VibrationPattern.Companion.REPEAT
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
@@ -63,12 +62,8 @@ import kotlin.concurrent.timerTask
 
 @AndroidEntryPoint
 class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
-
     @Inject
     lateinit var mediaPlayer: MediaPlayer
-
-    @Inject
-    lateinit var notificationManager: NotificationManager
 
     @Inject
     lateinit var alarmRepository: AlarmRepository
@@ -148,7 +143,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createAlarmNotification(alarm = alarm),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST,
             )
 
             if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
@@ -158,7 +153,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createTimerNotification(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST,
             )
 
             if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
@@ -176,9 +171,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
     }
 
-    private fun setupMediaPlayer(
-        soundPath: String
-    ) {
+    private fun setupMediaPlayer(soundPath: String) {
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,
@@ -186,7 +179,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
                     Uri.parse(soundPath)
                 } else {
                     Settings.System.DEFAULT_ALARM_ALERT_URI
-                }
+                },
             )
             setOnPreparedListener(this@MediaPlayerService)
             prepareAsync()

@@ -34,7 +34,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 @Composable
 fun DismissBackground(
     modifier: Modifier = Modifier,
-    dismissState: SwipeToDismissBoxState
+    dismissState: SwipeToDismissBoxState,
 ) {
     val isSwiping by remember(dismissState) {
         derivedStateOf { dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart && dismissState.progress > 0.1f }
@@ -45,12 +45,12 @@ fun DismissBackground(
             isSwiping -> MaterialTheme.colorScheme.error
             else -> MaterialTheme.colorScheme.background
         },
-        label = "color"
+        label = "color",
     )
 
     val scale by animateFloatAsState(
         if (isSwiping) 1f else 0.001f,
-        label = "scale"
+        label = "scale",
     )
 
     Box(
@@ -58,14 +58,15 @@ fun DismissBackground(
             .clip(shape = Shapes.extraLarge)
             .fillMaxSize()
             .background(color),
-        contentAlignment = Alignment.CenterEnd
+        contentAlignment = Alignment.CenterEnd,
     ) {
         Icon(
             Icons.Default.Delete,
             contentDescription = stringResource(id = R.string.delete_icon_content_description),
-            modifier = Modifier
-                .scale(scale)
-                .padding(horizontal = space20)
+            modifier =
+                Modifier
+                    .scale(scale)
+                    .padding(horizontal = space20),
         )
     }
 }
@@ -77,7 +78,7 @@ fun DismissBackground(
 fun DismissBackgroundPreview() {
     WhakaaraTheme {
         DismissBackground(
-            dismissState = rememberSwipeToDismissBoxState()
+            dismissState = rememberSwipeToDismissBoxState(),
         )
     }
 }

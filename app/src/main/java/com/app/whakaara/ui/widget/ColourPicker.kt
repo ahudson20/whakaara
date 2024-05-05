@@ -31,21 +31,23 @@ fun ColourPicker(
     red: MutableState<Float>,
     green: MutableState<Float>,
     blue: MutableState<Float>,
-    color: Color
+    color: Color,
 ) {
     Column {
         Row {
             Box(
-                modifier = Modifier
-                    .padding(15.dp)
-                    .width(50.dp)
-                    .height(space200)
-                    .background(color, shape = MaterialTheme.shapes.large)
+                modifier =
+                    Modifier
+                        .padding(15.dp)
+                        .width(50.dp)
+                        .height(space200)
+                        .background(color, shape = MaterialTheme.shapes.large),
             )
             Column(
-                modifier = Modifier
-                    .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(space5)
+                modifier =
+                    Modifier
+                        .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(space5),
             ) {
                 ColourSlider("A", alpha, color.copy(1f))
                 ColourSlider("R", red, Color.Red)
@@ -76,7 +78,7 @@ fun PreviewColourPicker() {
             red = redBackground,
             green = greenBackground,
             blue = blueBackground,
-            color = colorBackground
+            color = colorBackground,
         )
     }
 }

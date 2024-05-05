@@ -33,14 +33,14 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.R
-import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.widget.ColourPicker
-import com.app.whakaara.utils.GeneralUtils.Companion.convertStringToColour
+import com.app.whakaara.utility.GeneralUtils.Companion.convertStringToColour
 import com.app.whakaara.widget.AppWidget
 import com.google.gson.Gson
+import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -48,11 +48,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class WidgetConfig : ComponentActivity() {
-
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     @Inject
-    lateinit var dataStore: PreferencesDataStore
+    lateinit var test: PreferencesDataStoreRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +61,7 @@ class WidgetConfig : ComponentActivity() {
         // Find the widget id from the intent.
         appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
+            AppWidgetManager.INVALID_APPWIDGET_ID,
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -72,12 +71,14 @@ class WidgetConfig : ComponentActivity() {
         }
 
         setContent {
-            val textColourString = runBlocking {
-                dataStore.readTextColour.first()
-            }
-            val backgroundColourString = runBlocking {
-                dataStore.readBackgroundColour.first()
-            }
+            val textColourString =
+                runBlocking {
+                    test.readTextColour().first()
+                }
+            val backgroundColourString =
+                runBlocking {
+                    test.readBackgroundColour().first()
+                }
             val textColor = remember { convertStringToColour(textColourString) }
             val backgroundColor = remember { convertStringToColour(backgroundColourString) }
 
@@ -104,52 +105,55 @@ class WidgetConfig : ComponentActivity() {
             WhakaaraTheme {
                 Scaffold { innerPadding ->
                     Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding),
+                        modifier =
+                            Modifier
+                                .fillMaxSize()
+                                .padding(innerPadding),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
+                        verticalArrangement = Arrangement.Center,
                     ) {
                         Text(
                             modifier = Modifier.padding(spaceMedium),
                             text = stringResource(id = R.string.widget_config_background_colour),
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
                         )
                         ColourPicker(
                             alpha = alphaBackground,
                             red = redBackground,
                             green = greenBackground,
                             blue = blueBackground,
-                            color = colorBackground
+                            color = colorBackground,
                         )
 
                         Text(
                             modifier = Modifier.padding(spaceMedium),
                             text = stringResource(id = R.string.widget_config_text_colour),
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
                         )
                         ColourPicker(
                             alpha = alphaText,
                             red = redText,
                             green = greenText,
                             blue = blueText,
-                            color = colorText
+                            color = colorText,
                         )
 
                         Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(spaceMedium),
-                            horizontalArrangement = Arrangement.End
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(spaceMedium),
+                            horizontalArrangement = Arrangement.End,
                         ) {
                             OutlinedButton(
                                 onClick = {
-                                    val resultValue = Intent().apply {
-                                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                                    }
+                                    val resultValue =
+                                        Intent().apply {
+                                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                        }
                                     setResult(RESULT_OK, resultValue)
                                     finish()
-                                }
+                                },
                             ) {
                                 Text(text = stringResource(id = R.string.bottom_sheet_close_button))
                             }
@@ -161,7 +165,7 @@ class WidgetConfig : ComponentActivity() {
                                         val serializedBackground = Gson().toJson(colorBackground)
                                         val serializedText = Gson().toJson(colorText)
                                         val glanceId = GlanceAppWidgetManager(this@WidgetConfig).getGlanceIdBy(appWidgetId)
-                                        dataStore.saveColour(serializedBackground, serializedText)
+                                        test.saveColour(serializedBackground, serializedText)
                                         updateAppWidgetState(this@WidgetConfig, PreferencesGlanceStateDefinition, glanceId) { prefs ->
                                             prefs.toMutablePreferences().apply {
                                                 this[backgroundKey] = serializedBackground
@@ -174,10 +178,10 @@ class WidgetConfig : ComponentActivity() {
                                         RESULT_OK,
                                         Intent().apply {
                                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                                        }
+                                        },
                                     )
                                     finish()
-                                }
+                                },
                             ) {
                                 Text(text = stringResource(id = R.string.bottom_sheet_save_button))
                             }

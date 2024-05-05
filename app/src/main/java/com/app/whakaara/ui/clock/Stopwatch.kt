@@ -28,7 +28,7 @@ fun Stopwatch(
     onStart: () -> Unit = {},
     onPause: () -> Unit = {},
     onStop: () -> Unit = {},
-    onLap: () -> Unit = {}
+    onLap: () -> Unit = {},
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(key1 = stopwatchState.lapList) {
@@ -49,17 +49,18 @@ fun Stopwatch(
                 onPlayPause = if (stopwatchState.isActive) onPause else onStart,
                 onExtraButtonClicked = {
                     onLap()
-                }
+                },
             )
         },
-        floatingActionButtonPosition = FabPosition.Center
+        floatingActionButtonPosition = FabPosition.Center,
     ) { innerPadding ->
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             StopwatchDisplay(formattedTime = stopwatchState.formattedTime)
             Spacer(modifier = Modifier.height(if (stopwatchState.lapList.isNotEmpty()) spaceMedium else spaceNone))
@@ -74,7 +75,7 @@ fun Stopwatch(
 fun StopwatchPreview() {
     WhakaaraTheme {
         Stopwatch(
-            stopwatchState = StopwatchState()
+            stopwatchState = StopwatchState(),
         )
     }
 }

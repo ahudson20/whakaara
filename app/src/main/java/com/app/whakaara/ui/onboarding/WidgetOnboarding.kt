@@ -29,45 +29,44 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun WidgetOnboarding(
-    modifier: Modifier = Modifier
-) {
+fun WidgetOnboarding(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(spaceMedium),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(spaceMedium),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(space200))
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_widget_title),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
         )
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_widget_sub_text),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_widget_sub_text_second),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
         Spacer(modifier = Modifier.height(Spacings.space20))
         Button(
             onClick = {
                 scope.launch {
                     GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
-                        receiver = AppWidgetReceiver::class.java
+                        receiver = AppWidgetReceiver::class.java,
                     )
                 }
-            }
+            },
         ) {
             Text(text = stringResource(id = R.string.onboarding_widget_button))
         }

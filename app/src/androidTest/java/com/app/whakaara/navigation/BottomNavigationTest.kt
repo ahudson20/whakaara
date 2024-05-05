@@ -15,19 +15,20 @@ class BottomNavigationTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectBottomNavigationItems(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                BottomNavigation(
-                    navController = rememberNavController()
-                )
+    fun shouldDisplayCorrectBottomNavigationItems(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    BottomNavigation(
+                        navController = rememberNavController(),
+                    )
+                }
             }
-        }
 
-        // Then
-        onNodeWithText("Alarm").assertIsDisplayed().assertIsSelectable()
-        onNodeWithText("Timer").assertIsDisplayed().assertIsSelectable()
-        onNodeWithText("Stopwatch").assertIsDisplayed().assertIsSelectable()
-    }
+            // Then
+            onNodeWithText("Alarm").assertIsDisplayed().assertIsSelectable()
+            onNodeWithText("Timer").assertIsDisplayed().assertIsSelectable()
+            onNodeWithText("Stopwatch").assertIsDisplayed().assertIsSelectable()
+        }
 }

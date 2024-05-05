@@ -2,7 +2,7 @@ package com.app.whakaara.receiver
 
 import android.content.BroadcastReceiver
 import android.util.Log
-import com.app.whakaara.utils.constants.GeneralConstants.GO_ASYNC_TAG
+import com.whakaara.core.constants.GeneralConstants.GO_ASYNC_TAG
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -14,7 +14,7 @@ import kotlin.coroutines.cancellation.CancellationException
 // https://github.com/androidx/androidx/blob/a00488668925d695a6ae0d6168d33fdd619c0b31/glance/glance-appwidget/src/main/java/androidx/glance/appwidget/CoroutineBroadcastReceiver.kt#L35
 fun BroadcastReceiver.goAsync(
     coroutineContext: CoroutineContext = Dispatchers.Default,
-    block: suspend CoroutineScope.() -> Unit
+    block: suspend CoroutineScope.() -> Unit,
 ) {
     val coroutineScope = CoroutineScope(SupervisorJob() + coroutineContext)
     val pendingResult = goAsync()

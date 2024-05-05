@@ -22,70 +22,77 @@ class BottomSheetAlarmDetailsTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                BottomSheetDetailsAlarmInfo(
-                    updateBottomSheetDetailsAlarmInfo = UpdateBottomSheetDetailsAlarmInfo(
-                        updateIsVibrationEnabled = BooleanStateEvent(
-                            value = false
-                        ),
-                        updateIsSnoozeEnabled = BooleanStateEvent(
-                            value = true
-                        ),
-                        updateDeleteAfterGoesOff = BooleanStateEvent(
-                            value = false
-                        ),
-                        updateRepeatDaily = BooleanStateEvent(
-                            value = false
-                        ),
-                        updateCheckedList = ListStateEvent(),
-                        updateTitle = StringStateEvent(
-                            value = "Alarm"
-                        )
+    fun shouldDisplayCorrectData(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    BottomSheetDetailsAlarmInfo(
+                        updateBottomSheetDetailsAlarmInfo =
+                            UpdateBottomSheetDetailsAlarmInfo(
+                                updateIsVibrationEnabled =
+                                    BooleanStateEvent(
+                                        value = false,
+                                    ),
+                                updateIsSnoozeEnabled =
+                                    BooleanStateEvent(
+                                        value = true,
+                                    ),
+                                updateDeleteAfterGoesOff =
+                                    BooleanStateEvent(
+                                        value = false,
+                                    ),
+                                updateRepeatDaily =
+                                    BooleanStateEvent(
+                                        value = false,
+                                    ),
+                                updateCheckedList = ListStateEvent(),
+                                updateTitle =
+                                    StringStateEvent(
+                                        value = "Alarm",
+                                    ),
+                            ),
                     )
-                )
-            }
-        }
-
-        // Then
-        onNodeWithText(text = "Vibrate").assertIsDisplayed()
-        onNodeWithText(text = "Vibrate on alarm").assertIsDisplayed()
-        onNodeWithTag(testTag = "vibrate switch")
-            .assertIsDisplayed()
-            .assertIsToggleable()
-            .assertIsOff()
-
-        onNodeWithText(text = "Snooze").assertIsDisplayed()
-        onNodeWithText(text = "Snooze on alarm").assertIsDisplayed()
-        onNodeWithTag(testTag = "snooze switch")
-            .assertIsDisplayed()
-            .assertIsToggleable()
-            .assertIsOn()
-
-        onNodeWithText(text = "Single-use").assertIsDisplayed()
-        onNodeWithText(text = "Alarm will delete after going off").assertIsDisplayed()
-        onNodeWithTag(testTag = "delete switch")
-            .assertIsDisplayed()
-            .assertIsToggleable()
-            .assertIsOff()
-
-        onNodeWithText("Repeating").assertIsDisplayed()
-        onNodeWithText("Alarm will repeat daily").assertIsDisplayed()
-
-        onNodeWithText("Custom").assertIsDisplayed()
-        onNodeWithText("Select certain days to repeat alarm").assertIsDisplayed()
-
-        onAllNodesWithTag(testTag = "segmentedButton", useUnmergedTree = true)
-            .apply {
-                fetchSemanticsNodes().forEachIndexed { i, _ ->
-                    get(i).assertIsDisplayed().assertIsToggleable().assertIsOff()
                 }
             }
 
-        onNodeWithText(text = "Title").assertIsDisplayed()
-        onNodeWithText(text = "Alarm").assertIsDisplayed()
-        onNodeWithText(text = "5 / 20").assertIsDisplayed()
-    }
+            // Then
+            onNodeWithText(text = "Vibrate").assertIsDisplayed()
+            onNodeWithText(text = "Vibrate on alarm").assertIsDisplayed()
+            onNodeWithTag(testTag = "vibrate switch")
+                .assertIsDisplayed()
+                .assertIsToggleable()
+                .assertIsOff()
+
+            onNodeWithText(text = "Snooze").assertIsDisplayed()
+            onNodeWithText(text = "Snooze on alarm").assertIsDisplayed()
+            onNodeWithTag(testTag = "snooze switch")
+                .assertIsDisplayed()
+                .assertIsToggleable()
+                .assertIsOn()
+
+            onNodeWithText(text = "Single-use").assertIsDisplayed()
+            onNodeWithText(text = "Alarm will delete after going off").assertIsDisplayed()
+            onNodeWithTag(testTag = "delete switch")
+                .assertIsDisplayed()
+                .assertIsToggleable()
+                .assertIsOff()
+
+            onNodeWithText("Repeating").assertIsDisplayed()
+            onNodeWithText("Alarm will repeat daily").assertIsDisplayed()
+
+            onNodeWithText("Custom").assertIsDisplayed()
+            onNodeWithText("Select certain days to repeat alarm").assertIsDisplayed()
+
+            onAllNodesWithTag(testTag = "segmentedButton", useUnmergedTree = true)
+                .apply {
+                    fetchSemanticsNodes().forEachIndexed { i, _ ->
+                        get(i).assertIsDisplayed().assertIsToggleable().assertIsOff()
+                    }
+                }
+
+            onNodeWithText(text = "Title").assertIsDisplayed()
+            onNodeWithText(text = "Alarm").assertIsDisplayed()
+            onNodeWithText(text = "5 / 20").assertIsDisplayed()
+        }
 }

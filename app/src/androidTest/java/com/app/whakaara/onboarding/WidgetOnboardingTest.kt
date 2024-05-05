@@ -14,18 +14,19 @@ class WidgetOnboardingTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                WidgetOnboarding()
+    fun shouldDisplayCorrectData(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    WidgetOnboarding()
+                }
             }
-        }
 
-        // Then
-        onNodeWithText("Widget").assertIsDisplayed()
-        onNodeWithText("This app supports displaying your next scheduled alarm in a widget").assertIsDisplayed()
-        onNodeWithText("Try adding it to the home screen and using it!").assertIsDisplayed()
-        onNodeWithText("Create widget").assertIsDisplayed().assertHasClickAction()
-    }
+            // Then
+            onNodeWithText("Widget").assertIsDisplayed()
+            onNodeWithText("This app supports displaying your next scheduled alarm in a widget").assertIsDisplayed()
+            onNodeWithText("Try adding it to the home screen and using it!").assertIsDisplayed()
+            onNodeWithText("Create widget").assertIsDisplayed().assertHasClickAction()
+        }
 }

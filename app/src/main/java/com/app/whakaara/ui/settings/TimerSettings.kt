@@ -28,55 +28,58 @@ import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
-import com.app.whakaara.data.preferences.Preferences
-import com.app.whakaara.data.preferences.VibrationPattern
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.SINGLE
-import com.app.whakaara.data.preferences.VibrationPattern.Companion.createWaveForm
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.getNameFromUri
+import com.app.whakaara.utility.GeneralUtils.Companion.getNameFromUri
+import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.VibrationPattern
+import com.whakaara.model.preferences.VibrationPattern.Companion.SINGLE
+import com.whakaara.model.preferences.VibrationPattern.Companion.createWaveForm
 
 @Composable
 fun TimerSettings(
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
 ) {
     val context = LocalContext.current
     val vibrator = (context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
-    val currentRingtoneUri: Uri = if (preferencesState.preferences.timerSoundPath.isNotEmpty()) {
-        Uri.parse(preferencesState.preferences.timerSoundPath)
-    } else {
-        Settings.System.DEFAULT_ALARM_ALERT_URI
-    }
-    val ringtoneSelectionIntent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
-        putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
-        putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-        putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, context.getString(R.string.ringtone_selection_activity_title))
-        putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtoneUri)
-        putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
-    }
-    val ringtonePicker = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { uri ->
-            if (uri.resultCode == Activity.RESULT_OK && uri.data != null) {
-                val selectedRingtone = uri.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java) ?: Settings.System.DEFAULT_ALARM_ALERT_URI
-                updatePreferences(
-                    preferencesState.preferences.copy(
-                        timerSoundPath = selectedRingtone.toString()
-                    )
-                )
-            }
+    val currentRingtoneUri: Uri =
+        if (preferencesState.preferences.timerSoundPath.isNotEmpty()) {
+            Uri.parse(preferencesState.preferences.timerSoundPath)
+        } else {
+            Settings.System.DEFAULT_ALARM_ALERT_URI
         }
-    )
+    val ringtoneSelectionIntent =
+        Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+            putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+            putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, context.getString(R.string.ringtone_selection_activity_title))
+            putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtoneUri)
+            putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
+        }
+    val ringtonePicker =
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+            onResult = { uri ->
+                if (uri.resultCode == Activity.RESULT_OK && uri.data != null) {
+                    val selectedRingtone = uri.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java) ?: Settings.System.DEFAULT_ALARM_ALERT_URI
+                    updatePreferences(
+                        preferencesState.preferences.copy(
+                            timerSoundPath = selectedRingtone.toString(),
+                        ),
+                    )
+                }
+            },
+        )
 
     Text(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
-        text = stringResource(id = R.string.settings_screen_timer_settings_title)
+        text = stringResource(id = R.string.settings_screen_timer_settings_title),
     )
 
     SettingsMenuLink(
@@ -84,7 +87,7 @@ fun TimerSettings(
         icon = {
             Icon(
                 imageVector = Icons.Default.NotificationsActive,
-                contentDescription = stringResource(id = R.string.settings_screen_ringtone_selection_icon)
+                contentDescription = stringResource(id = R.string.settings_screen_ringtone_selection_icon),
             )
         },
         title = {
@@ -95,7 +98,7 @@ fun TimerSettings(
         },
         onClick = {
             ringtonePicker.launch(ringtoneSelectionIntent)
-        }
+        },
     )
 
     SettingsSwitch(
@@ -106,10 +109,10 @@ fun TimerSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    isVibrationTimerEnabled = it
-                )
+                    isVibrationTimerEnabled = it,
+                ),
             )
-        }
+        },
     )
 
     SettingsListDropdown(
@@ -117,22 +120,23 @@ fun TimerSettings(
         enabled = preferencesState.preferences.isVibrationTimerEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.timerVibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },
-        items = VibrationPattern.values().map { it.label },
+        items = VibrationPattern.entries.map { it.label },
         onItemSelected = { int, _ ->
             val selection = VibrationPattern.fromOrdinalInt(value = int)
             val vibrationEffect = createWaveForm(selection = selection, repeat = SINGLE)
-            val attributes = VibrationAttributes.Builder().apply {
-                setUsage(VibrationAttributes.USAGE_NOTIFICATION)
-            }.build()
+            val attributes =
+                VibrationAttributes.Builder().apply {
+                    setUsage(VibrationAttributes.USAGE_NOTIFICATION)
+                }.build()
             vibrator.vibrate(vibrationEffect, attributes)
             if (selection != preferencesState.preferences.timerVibrationPattern) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        timerVibrationPattern = selection
-                    )
+                        timerVibrationPattern = selection,
+                    ),
                 )
             }
-        }
+        },
     )
 
     SettingsSwitch(
@@ -143,10 +147,10 @@ fun TimerSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    autoRestartTimer = it
-                )
+                    autoRestartTimer = it,
+                ),
             )
-        }
+        },
     )
 }
 
@@ -157,7 +161,7 @@ fun TimerSettingsPreview() {
     WhakaaraTheme {
         TimerSettings(
             preferencesState = PreferencesState(),
-            updatePreferences = {}
+            updatePreferences = {},
         )
     }
 }

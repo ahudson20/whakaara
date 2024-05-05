@@ -31,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
@@ -42,6 +41,7 @@ import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.darkGreen
+import com.whakaara.model.preferences.Preferences
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -53,16 +53,17 @@ fun OnboardingContent(
     snackbarHostState: SnackbarHostState,
     navigateToHome: () -> Unit,
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: (preferences: Preferences) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     Column(modifier = modifier.fillMaxSize()) {
         HorizontalPager(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
             state = pagerState,
-            verticalAlignment = Alignment.Top
+            verticalAlignment = Alignment.Top,
         ) { index ->
             when (pages[index]) {
                 OnboardingItems.WELCOME -> WelcomeOnboarding()
@@ -74,20 +75,20 @@ fun OnboardingContent(
 
         BottomSection(
             pagesSize = pages.size,
-            pagerState = pagerState
+            pagerState = pagerState,
         ) {
             if (pagerState.currentPage == pages.size - 1) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        shouldShowOnboarding = false
-                    )
+                        shouldShowOnboarding = false,
+                    ),
                 )
                 navigateToHome()
             } else {
                 scope.launch {
                     pagerState.animateScrollToPage(
                         page = pagerState.currentPage + 1,
-                        animationSpec = tween()
+                        animationSpec = tween(),
                     )
                 }
             }
@@ -100,32 +101,34 @@ fun OnboardingContent(
 fun BottomSection(
     pagesSize: Int,
     pagerState: PagerState,
-    onButtonClick: () -> Unit = {}
+    onButtonClick: () -> Unit = {},
 ) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(space80)
-            .padding(
-                vertical = spaceMedium,
-                horizontal = spaceXLarge
-            )
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .height(space80)
+                .padding(
+                    vertical = spaceMedium,
+                    horizontal = spaceXLarge,
+                ),
     ) {
         PageIndicators(
             pagesSize = pagesSize,
-            pagerState = pagerState
+            pagerState = pagerState,
         )
 
         Button(
             modifier = Modifier.align(Alignment.CenterEnd),
-            onClick = onButtonClick
+            onClick = onButtonClick,
         ) {
             Text(
-                text = if (pagerState.currentPage == pagesSize - 1) {
-                    stringResource(id = R.string.onboarding_button_complete)
-                } else {
-                    stringResource(id = R.string.onboarding_button_next)
-                }
+                text =
+                    if (pagerState.currentPage == pagesSize - 1) {
+                        stringResource(id = R.string.onboarding_button_complete)
+                    } else {
+                        stringResource(id = R.string.onboarding_button_next)
+                    },
             )
         }
     }
@@ -135,12 +138,12 @@ fun BottomSection(
 @Composable
 fun BoxScope.PageIndicators(
     pagesSize: Int,
-    pagerState: PagerState
+    pagerState: PagerState,
 ) {
     Row(
         modifier = Modifier.align(Alignment.CenterStart),
         horizontalArrangement = Arrangement.spacedBy(spaceSmall),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         repeat(pagesSize) { iteration ->
             Indicator(isSelected = pagerState.currentPage == iteration)
@@ -149,22 +152,22 @@ fun BoxScope.PageIndicators(
 }
 
 @Composable
-private fun Indicator(
-    isSelected: Boolean
-) {
-    val size = animateDpAsState(
-        targetValue = if (isSelected) spaceMedium else spaceSmall,
-        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
-        label = "indicator size"
-    )
+private fun Indicator(isSelected: Boolean) {
+    val size =
+        animateDpAsState(
+            targetValue = if (isSelected) spaceMedium else spaceSmall,
+            animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
+            label = "indicator size",
+        )
     val color = if (isSelected) darkGreen else darkGreen.copy(alpha = 0.5f)
 
     Box(
-        modifier = Modifier
-            .padding(spaceXxSmall)
-            .clip(CircleShape)
-            .background(color)
-            .size(size.value)
+        modifier =
+            Modifier
+                .padding(spaceXxSmall)
+                .clip(CircleShape)
+                .background(color)
+                .size(size.value),
     )
 }
 
@@ -173,7 +176,7 @@ private fun Indicator(
 @ThemePreviews
 @FontScalePreviews
 fun OnboardingContentPreview() {
-    val pages = OnboardingItems.values()
+    val pages = OnboardingItems.entries.toTypedArray()
     WhakaaraTheme {
         OnboardingContent(
             pages = pages,
@@ -181,7 +184,7 @@ fun OnboardingContentPreview() {
             snackbarHostState = remember { SnackbarHostState() },
             navigateToHome = {},
             preferencesState = PreferencesState(),
-            updatePreferences = {}
+            updatePreferences = {},
         )
     }
 }

@@ -13,14 +13,14 @@ fun StopwatchScreen(
     onStart: () -> Unit,
     onPause: () -> Unit,
     onStop: () -> Unit,
-    onLap: () -> Unit
+    onLap: () -> Unit,
 ) {
     Stopwatch(
         stopwatchState = stopwatchState,
         onStart = onStart,
         onPause = onPause,
         onStop = onStop,
-        onLap = onLap
+        onLap = onLap,
     )
 }
 
@@ -34,7 +34,7 @@ fun StopwatchScreenPreview() {
             onStart = {},
             onPause = {},
             onStop = {},
-            onLap = {}
+            onLap = {},
         )
     }
 }

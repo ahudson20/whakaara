@@ -14,17 +14,20 @@ class DisableBatteryOptimizationOnboardingTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                DisableBatteryOptimizationOnboarding()
+    fun shouldDisplayCorrectData(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    DisableBatteryOptimizationOnboarding()
+                }
             }
-        }
 
-        // Then
-        onNodeWithText("Battery").assertIsDisplayed()
-        onNodeWithText("This app requires unrestricted battery settings, otherwise certain functionality may not work as expected!").assertIsDisplayed()
-        onNodeWithText("Disable battery optimization").assertIsDisplayed().assertHasClickAction()
-    }
+            // Then
+            onNodeWithText("Battery").assertIsDisplayed()
+            onNodeWithText(
+                "This app requires unrestricted battery settings, otherwise certain functionality may not work as expected!",
+            ).assertIsDisplayed()
+            onNodeWithText("Disable battery optimization").assertIsDisplayed().assertHasClickAction()
+        }
 }

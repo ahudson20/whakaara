@@ -7,17 +7,16 @@ import android.util.Log
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.TimerManagerWrapper
 import com.app.whakaara.service.MediaPlayerService
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID
+import com.whakaara.core.constants.NotificationUtilsConstants.MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class MediaServiceReceiver : HiltBroadcastReceiver() {
-
     @Inject
     lateinit var notificationManager: NotificationManager
 
@@ -27,7 +26,10 @@ class MediaServiceReceiver : HiltBroadcastReceiver() {
     @Inject
     lateinit var timerManagerWrapper: TimerManagerWrapper
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         super.onReceive(context, intent)
         val alarmId = intent.getStringExtra(INTENT_ALARM_ID) ?: ""
         val alarmType = intent.getIntExtra(NOTIFICATION_TYPE, -1)

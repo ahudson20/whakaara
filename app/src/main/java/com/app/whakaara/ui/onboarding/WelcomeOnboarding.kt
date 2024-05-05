@@ -31,14 +31,13 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.lightBlueAnimation
 
 @Composable
-fun WelcomeOnboarding(
-    modifier: Modifier = Modifier
-) {
+fun WelcomeOnboarding(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(all = spaceMedium),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(all = spaceMedium),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(space200))
         Box(
@@ -46,11 +45,11 @@ fun WelcomeOnboarding(
                 .size(space200)
                 .clip(Shapes.medium)
                 .background(color = lightBlueAnimation),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Image(
                 painterResource(id = R.drawable.translucent),
-                contentDescription = stringResource(id = R.string.onboarding_welcome_icon_description)
+                contentDescription = stringResource(id = R.string.onboarding_welcome_icon_description),
             )
         }
         Spacer(modifier = Modifier.height(space20))
@@ -58,13 +57,13 @@ fun WelcomeOnboarding(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_welcome_title),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
         )
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_welcome_sub_text),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
     }
 }

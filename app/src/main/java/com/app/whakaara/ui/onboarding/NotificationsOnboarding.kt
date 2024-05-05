@@ -42,7 +42,7 @@ import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.lightBlueAnimation
-import com.app.whakaara.utils.NotificationUtils
+import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.shouldShowRationale
@@ -51,7 +51,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 @Composable
 fun NotificationsOnboarding(
     modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState
+    snackbarHostState: SnackbarHostState,
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -59,20 +59,22 @@ fun NotificationsOnboarding(
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission(), onResult = {})
 
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(all = spaceMedium),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            modifier
+                .fillMaxSize()
+                .padding(all = spaceMedium),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(space200))
         Box {
             AnimatedNotification(
-                modifier = Modifier
-                    .size(space200)
-                    .align(Alignment.Center)
-                    .clip(Shapes.medium)
-                    .background(color = lightBlueAnimation),
-                isCompleted = notificationPermissionState.status.isGranted
+                modifier =
+                    Modifier
+                        .size(space200)
+                        .align(Alignment.Center)
+                        .clip(Shapes.medium)
+                        .background(color = lightBlueAnimation),
+                isCompleted = notificationPermissionState.status.isGranted,
             )
         }
         Spacer(modifier = Modifier.height(space20))
@@ -80,13 +82,13 @@ fun NotificationsOnboarding(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_notification_title),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
         )
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_sub_text),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
         Spacer(modifier = Modifier.height(space20))
         Button(
@@ -96,19 +98,20 @@ fun NotificationsOnboarding(
                     NotificationUtils.snackBarPromptPermission(
                         scope = scope,
                         snackBarHostState = snackbarHostState,
-                        context = context
+                        context = context,
                     )
                 } else {
                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
-            }
+            },
         ) {
             Text(
-                text = if (notificationPermissionState.status.isGranted) {
-                    stringResource(id = R.string.onboarding_notification_button_enabled)
-                } else {
-                    stringResource(id = R.string.onboarding_notification_button_not_enabled)
-                }
+                text =
+                    if (notificationPermissionState.status.isGranted) {
+                        stringResource(id = R.string.onboarding_notification_button_enabled)
+                    } else {
+                        stringResource(id = R.string.onboarding_notification_button_not_enabled)
+                    },
             )
         }
     }
@@ -117,17 +120,18 @@ fun NotificationsOnboarding(
 @Composable
 fun AnimatedNotification(
     modifier: Modifier = Modifier,
-    isCompleted: Boolean
+    isCompleted: Boolean,
 ) {
-    val clipSpecs = LottieClipSpec.Progress(
-        min = 0.0f,
-        max = if (isCompleted) 0.975f else 0.45f
-    )
+    val clipSpecs =
+        LottieClipSpec.Progress(
+            min = 0.0f,
+            max = if (isCompleted) 0.975f else 0.45f,
+        )
 
     val preloaderLottieComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(
-            R.raw.notification
-        )
+            R.raw.notification,
+        ),
     )
 
     LottieAnimation(
@@ -137,7 +141,7 @@ fun AnimatedNotification(
         clipSpec = clipSpecs,
         restartOnPlay = !isCompleted,
         speed = if (isCompleted) 0.5f else 0.4f,
-        reverseOnRepeat = !isCompleted
+        reverseOnRepeat = !isCompleted,
     )
 }
 
@@ -147,7 +151,7 @@ fun AnimatedNotification(
 fun NotificationsOnboardingPreview() {
     WhakaaraTheme {
         NotificationsOnboarding(
-            snackbarHostState = remember { SnackbarHostState() }
+            snackbarHostState = remember { SnackbarHostState() },
         )
     }
 }

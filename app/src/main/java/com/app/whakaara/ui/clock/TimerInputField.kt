@@ -23,18 +23,18 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.darkGreen
 import com.app.whakaara.ui.theme.primaryGreen
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 
 @Composable
 fun TimerInputField(
     modifier: Modifier = Modifier,
     label: String,
     regex: String,
-    updateStringEvent: StringStateEvent
+    updateStringEvent: StringStateEvent,
 ) {
     val focusManager = LocalFocusManager.current
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         OutlinedTextField(
             modifier = Modifier.width(Spacings.space100),
@@ -44,29 +44,33 @@ fun TimerInputField(
                     updateStringEvent.onValueChange(it)
                 }
             },
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Number,
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    focusManager.clearFocus()
-                    if (updateStringEvent.value.isBlank()) updateStringEvent.onValueChange(TIMER_INPUT_INITIAL_VALUE)
-                }
-            ),
-            textStyle = LocalTextStyle.current.copy(
-                textAlign = TextAlign.Center,
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Black
-            ),
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = darkGreen,
-                unfocusedBorderColor = primaryGreen,
-                focusedTextColor = darkGreen,
-                unfocusedTextColor = darkGreen,
-                focusedContainerColor = primaryGreen,
-                unfocusedContainerColor = primaryGreen
-            )
+            keyboardOptions =
+                KeyboardOptions(
+                    keyboardType = KeyboardType.Number,
+                    imeAction = ImeAction.Done,
+                ),
+            keyboardActions =
+                KeyboardActions(
+                    onDone = {
+                        focusManager.clearFocus()
+                        if (updateStringEvent.value.isBlank()) updateStringEvent.onValueChange(TIMER_INPUT_INITIAL_VALUE)
+                    },
+                ),
+            textStyle =
+                LocalTextStyle.current.copy(
+                    textAlign = TextAlign.Center,
+                    fontSize = 48.sp,
+                    fontWeight = FontWeight.Black,
+                ),
+            colors =
+                OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = darkGreen,
+                    unfocusedBorderColor = primaryGreen,
+                    focusedTextColor = darkGreen,
+                    unfocusedTextColor = darkGreen,
+                    focusedContainerColor = primaryGreen,
+                    unfocusedContainerColor = primaryGreen,
+                ),
         )
         Text(text = label)
     }
@@ -80,9 +84,10 @@ fun TimerInputFieldPreview() {
         TimerInputField(
             label = "Hours",
             regex = "",
-            updateStringEvent = StringStateEvent(
-                value = "00"
-            )
+            updateStringEvent =
+                StringStateEvent(
+                    value = "00",
+                ),
         )
     }
 }

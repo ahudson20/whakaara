@@ -15,19 +15,20 @@ class NotificationsOnboardingTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
-        // Given + When
-        setContent {
-            WhakaaraTheme {
-                NotificationsOnboarding(
-                    snackbarHostState = SnackbarHostState()
-                )
+    fun shouldDisplayCorrectData(): Unit =
+        with(composeTestRule) {
+            // Given + When
+            setContent {
+                WhakaaraTheme {
+                    NotificationsOnboarding(
+                        snackbarHostState = SnackbarHostState(),
+                    )
+                }
             }
-        }
 
-        // Then
-        onNodeWithText("Notifications").assertIsDisplayed()
-        onNodeWithText("This app requires permission to send you notifications!").assertIsDisplayed()
-        onNodeWithText("Enable notifications").assertIsDisplayed().assertHasClickAction()
-    }
+            // Then
+            onNodeWithText("Notifications").assertIsDisplayed()
+            onNodeWithText("This app requires permission to send you notifications!").assertIsDisplayed()
+            onNodeWithText("Enable notifications").assertIsDisplayed().assertHasClickAction()
+        }
 }

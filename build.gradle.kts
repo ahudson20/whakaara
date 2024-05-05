@@ -20,10 +20,8 @@ plugins {
 
 val gitHooksDir = File(rootProject.rootDir, ".git/hooks")
 tasks.register("installGitHook", Copy::class) {
-    if (gitHooksDir.exists()) {
-        from(File(rootProject.rootDir, "scripts/pre-commit"))
-        into(gitHooksDir)
-    }
+    from(File(rootProject.rootDir, "scripts/pre-commit"))
+    into(File(rootProject.rootDir, ".git/hooks"))
     eachFile {
         fileMode = 0b111101101
     }

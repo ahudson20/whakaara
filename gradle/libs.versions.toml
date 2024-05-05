@@ -20,6 +20,7 @@ junit = "4.13.2"
 accompanistPermissions = "0.34.0"
 chargemap = "1.0.3"
 dokar3 = "0.5.7"
+ktlintGradle = "11.6.0"
 material3 = "1.2.1"
 materialIconsExtended = "1.6.6"
 materialVersion = "1.6.7"
@@ -102,6 +103,7 @@ compose-settings-m3 = { group = "com.github.alorma", name = "compose-settings-ui
 compose-material3-datetime-pickers = { group = "com.marosseleng.android", name = "compose-material3-datetime-pickers", version.ref = "timePickerVersion" }
 dokar3-bottomsheet = { group = "io.github.dokar3", name = "sheets", version.ref = "dokar3" }
 chargemap-numberpicker = { group = "com.chargemap.compose", name = "numberpicker", version.ref = "chargemap" }
+ktlint-gradle = { module = "org.jlleitschuh.gradle:ktlint-gradle", version.ref = "ktlintGradle" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }

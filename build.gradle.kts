@@ -26,4 +26,10 @@ tasks.register("installGitHook", Copy::class) {
         fileMode = 0b111101101
     }
 }
-tasks.getByPath(":app:preBuild").dependsOn(tasks.getByName("installGitHook"))
+tasks.create(name = "gitExecutableHooks") {
+    doLast {
+        Runtime.getRuntime().exec("chmod -R +x .git/hooks/")
+    }
+}
+tasks.getByPath("gitExecutableHooks").dependsOn(tasks.named("installGitHook"))
+tasks.getByPath(":app:preBuild").dependsOn(tasks.named("gitExecutableHooks"))

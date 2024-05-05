@@ -37,7 +37,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var alarm: Alarm
 
-    private val broadCastReceiverFinishActivity = object : BroadcastReceiver() {
+    private val           broadCastReceiverFinishActivity = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             when (intent.action) {
                 STOP_FULL_SCREEN_ACTIVITY -> finishAndRemoveTask()

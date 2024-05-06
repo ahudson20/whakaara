@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.whakaara.database"
+    namespace = "com.whakaara.core.database"
 
     buildTypes {
         release {

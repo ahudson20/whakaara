@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.whakaara.core"
+    namespace = "com.whakaara.core.common"
 
     buildTypes {
         release {

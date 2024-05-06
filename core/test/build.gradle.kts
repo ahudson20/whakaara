@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.whakaara.test"
+    namespace = "com.whakaara.core.test"
 }
 
 dependencies {

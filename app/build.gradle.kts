@@ -57,7 +57,7 @@ android {
 
 dependencies {
     modules(Modules.coreCommon, Modules.coreData)
-    testImplementation(project(":core-test"))
+    testImplementation(project(Modules.coreTest))
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)

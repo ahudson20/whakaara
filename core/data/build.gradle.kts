@@ -8,7 +8,7 @@ plugins {
 }
 
 android {
-    namespace = "com.whakaara.data"
+    namespace = "com.whakaara.core.data"
 
     buildTypes {
         release {
@@ -23,7 +23,7 @@ android {
 
 dependencies {
     modules(Modules.coreDatabase)
-    api(project(":core-model"))
+    api(project(Modules.coreModel))
 
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.junit)

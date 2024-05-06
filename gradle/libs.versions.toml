@@ -1,8 +1,8 @@
 [versions]
 androidxNavigationCompose = "2.7.7"
-androidxCore = "1.13.0"
+androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.1.0-rc01"
-androidxComposeUi = "1.6.6"
+androidxComposeUi = "1.6.7"
 androidxLifecycle = "2.7.0"
 androidxActivityCompose = "1.9.0"
 androidxRoom = "2.6.1"
@@ -21,7 +21,7 @@ accompanistPermissions = "0.34.0"
 chargemap = "1.0.3"
 dokar3 = "0.5.7"
 material3 = "1.2.1"
-materialIconsExtended = "1.6.6"
+materialIconsExtended = "1.6.7"
 materialVersion = "1.6.7"
 timePickerVersion = "0.7.2"
 composeSettingsM3 = "1.0.3"
@@ -39,11 +39,8 @@ material = "1.11.0"
 kotlinGradlePlugin = "1.9.23"
 kotlinCompilerExtensionVersion = "1.5.13"
 androidxComposeBom = "2024.02.02"
-uiGraphicsAndroid = "1.6.6"
-uiTestManifest = "1.6.6"
-uiTooling = "1.6.6"
-uiToolingPreview = "1.6.6"
-ui = "1.6.6"
+uiGraphicsAndroid = "1.6.7"
+ui = "1.6.7"
 
 [libraries]
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -75,9 +72,9 @@ androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = 
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "androidxRoom" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
 androidx-ui-graphics-android = { group = "androidx.compose.ui", name = "ui-graphics-android", version.ref = "uiGraphicsAndroid" }
-androidx-ui-test-manifest = { group = "androidx.compose.ui", name ="ui-test-manifest", version.ref = "uiTestManifest" }
-androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "uiToolingPreview" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name ="ui-test-manifest" }
+androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "androidxWork" }
 androidx-arch-core-common = { group = "androidx.arch.core", name = "core-common", version.ref = "androidxArchCore" }

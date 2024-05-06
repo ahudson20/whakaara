@@ -41,8 +41,7 @@ fun BottomSheetTimePickerPreview() {
     WhakaaraTheme {
         BottomSheetTimePicker(
             updatePickerValue = HoursUpdateEvent(
-                value =
-                FullHours(
+                value = FullHours(
                     hours = 12,
                     minutes = 12
                 )

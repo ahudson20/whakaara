@@ -69,8 +69,7 @@ class StopwatchManagerWrapper @Inject constructor(
                     it.copy(
                         timeMillis = time,
                         lastTimeStamp = System.currentTimeMillis(),
-                        formattedTime =
-                        DateUtils.formatTimeForStopwatch(
+                        formattedTime = DateUtils.formatTimeForStopwatch(
                             millis = time
                         )
                     )
@@ -135,8 +134,7 @@ class StopwatchManagerWrapper @Inject constructor(
             it.copy(
                 lastTimeStamp = current,
                 timeMillis = time,
-                formattedTime =
-                DateUtils.formatTimeForStopwatch(
+                formattedTime = DateUtils.formatTimeForStopwatch(
                     millis = time
                 ),
                 lapList = state.lapList
@@ -171,12 +169,10 @@ class StopwatchManagerWrapper @Inject constructor(
             val difference = current - state.lastTimeStamp
             val time = difference + state.timeMillis
             recreateStopwatchPaused(
-                state =
-                state.copy(
+                state = state.copy(
                     lastTimeStamp = current,
                     timeMillis = time,
-                    formattedTime =
-                    DateUtils.formatTimeForStopwatch(
+                    formattedTime = DateUtils.formatTimeForStopwatch(
                         millis = time
                     ),
                     isPaused = true,

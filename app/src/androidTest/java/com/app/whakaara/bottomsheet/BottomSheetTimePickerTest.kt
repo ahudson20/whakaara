@@ -20,8 +20,7 @@ class BottomSheetTimePickerTest {
         setContent {
             WhakaaraTheme {
                 BottomSheetTimePicker(
-                    updatePickerValue =
-                    HoursUpdateEvent(
+                    updatePickerValue = HoursUpdateEvent(
                         value = FullHours(
                             hours = 12,
                             minutes = 30

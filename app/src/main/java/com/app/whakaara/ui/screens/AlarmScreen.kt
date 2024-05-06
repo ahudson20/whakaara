@@ -64,12 +64,11 @@ fun AlarmScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
-            if (wasGranted) {
-                isDialogShown.value = !isDialogShown.value
-            }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
+        if (wasGranted) {
+            isDialogShown.value = !isDialogShown.value
         }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -83,14 +82,12 @@ fun AlarmScreen(
                     pressedElevation = 0.dp
                 ),
                 onClick = {
-                    /**PERMISSION GRANTED**/
                     when (notificationPermissionState.status) {
                         PermissionStatus.Granted -> {
                             isDialogShown.value = !isDialogShown.value
                         }
 
                         else -> {
-                            /**PERMISSION DENIED - SHOW PROMPT**/
                             if (notificationPermissionState.status.shouldShowRationale) {
                                 NotificationUtils.snackBarPromptPermission(
                                     scope = scope,
@@ -98,8 +95,6 @@ fun AlarmScreen(
                                     context = context
                                 )
                             } else {
-                                /**FIRST TIME ACCESSING**/
-                                /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
                                 launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                             }
                         }
@@ -129,12 +124,11 @@ fun AlarmScreen(
                 onDismissRequest = { isDialogShown.value = false },
                 initialTime = LocalTime.now().plusMinutes(1).noSeconds(),
                 onTimeChange = {
-                    val date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, it.hour)
-                            set(Calendar.MINUTE, it.minute)
-                            set(Calendar.SECOND, 0)
-                        }
+                    val date = Calendar.getInstance().apply {
+                        set(Calendar.HOUR_OF_DAY, it.hour)
+                        set(Calendar.MINUTE, it.minute)
+                        set(Calendar.SECOND, 0)
+                    }
                     create(
                         Alarm(
                             date = date,

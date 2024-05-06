@@ -34,8 +34,7 @@ fun ColourSlider(
         Slider(
             value = valueState.value,
             onValueChange = valueState.component2(),
-            colors =
-            SliderDefaults.colors(
+            colors = SliderDefaults.colors(
                 activeTrackColor = color
             ),
             modifier = Modifier.weight(1f)

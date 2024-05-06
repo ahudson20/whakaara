@@ -104,8 +104,6 @@ fun TimerScreen(
                                         context = context
                                     )
                                 } else {
-                                    /**FIRST TIME ACCESSING**/
-                                    /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
                                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                                 }
                             }
@@ -146,8 +144,7 @@ fun TimerScreen(
             ) { targetState ->
                 if (targetState) {
                     Row(
-                        modifier =
-                        Modifier
+                        modifier = Modifier
                             .fillMaxWidth()
                             .padding(start = spaceMedium, end = spaceMedium),
                         horizontalArrangement = Arrangement.SpaceBetween
@@ -155,8 +152,7 @@ fun TimerScreen(
                         TimerInputField(
                             label = stringResource(id = R.string.timer_screen_hour_label),
                             regex = TIMER_HOURS_INPUT_REGEX,
-                            updateStringEvent =
-                            StringStateEvent(
+                            updateStringEvent = StringStateEvent(
                                 value = timerState.inputHours,
                                 onValueChange = { newValue ->
                                     updateHours(newValue)
@@ -167,8 +163,7 @@ fun TimerScreen(
                         TimerInputField(
                             label = stringResource(id = R.string.timer_screen_minutes_label),
                             regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
-                            updateStringEvent =
-                            StringStateEvent(
+                            updateStringEvent = StringStateEvent(
                                 value = timerState.inputMinutes,
                                 onValueChange = { newValue ->
                                     updateMinutes(newValue)
@@ -179,8 +174,7 @@ fun TimerScreen(
                         TimerInputField(
                             label = stringResource(id = R.string.timer_screen_seconds_label),
                             regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
-                            updateStringEvent =
-                            StringStateEvent(
+                            updateStringEvent = StringStateEvent(
                                 value = timerState.inputSeconds,
                                 onValueChange = { newValue ->
                                     updateSeconds(newValue)
@@ -192,13 +186,11 @@ fun TimerScreen(
                     TimerCountdownDisplay(
                         progress = timerState.progress,
                         time = timerState.time,
-                        finishTime =
-                        if (timerState.isTimerPaused) {
+                        finishTime = if (timerState.isTimerPaused) {
                             context.getString(R.string.timer_screen_paused)
                         } else {
                             DateUtils.getAlarmTimeFormatted(
-                                date =
-                                Calendar.getInstance().apply {
+                                date = Calendar.getInstance().apply {
                                     add(
                                         Calendar.MILLISECOND,
                                         timerState.millisecondsFromTimerInput.toInt()

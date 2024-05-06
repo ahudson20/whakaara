@@ -38,8 +38,7 @@ class DateUtils {
                 context.getString(R.string.card_alarm_sub_title_off)
             } else {
                 convertSecondsToHMm(
-                    seconds =
-                    TimeUnit.MILLISECONDS.toSeconds(
+                    seconds = TimeUnit.MILLISECONDS.toSeconds(
                         getDifferenceFromCurrentTimeInMillis(
                             time = time
                         )
@@ -59,8 +58,7 @@ class DateUtils {
 
         fun Context.getTimeUntilAlarmFormatted(date: Calendar): String {
             return convertSecondsToHMm(
-                seconds =
-                TimeUnit.MILLISECONDS.toSeconds(
+                seconds = TimeUnit.MILLISECONDS.toSeconds(
                     getDifferenceFromCurrentTimeInMillis(
                         time = date
                     )
@@ -79,21 +77,25 @@ class DateUtils {
             val hoursString =
                 when {
                     hours.toInt() == 0 -> ""
-                    else -> context.resources.getQuantityString(
-                        R.plurals.hours,
-                        hours.toInt(),
-                        hours.toInt()
-                    )
+                    else -> {
+                        context.resources.getQuantityString(
+                            R.plurals.hours,
+                            hours.toInt(),
+                            hours.toInt()
+                        )
+                    }
                 }
             val minutesString =
                 when {
                     minutes.toInt() == 0 && hours.toInt() != 0 -> ""
                     minutes.toInt() == 0 && hours.toInt() == 0 -> context.getString(R.string.alarm_less_than_one_minute)
-                    else -> context.resources.getQuantityString(
-                        R.plurals.minutes,
-                        minutes.toInt(),
-                        minutes.toInt()
-                    )
+                    else -> {
+                        context.resources.getQuantityString(
+                            R.plurals.minutes,
+                            minutes.toInt(),
+                            minutes.toInt()
+                        )
+                    }
                 }
 
             formattedString.append(context.resources.getString(R.string.time_until_alarm_formatted_prefix) + " ")

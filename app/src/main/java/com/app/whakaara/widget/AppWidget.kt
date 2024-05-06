@@ -135,8 +135,7 @@ class AppWidget : GlanceAppWidget() {
     ) {
         val size = LocalSize.current
         Row(
-            modifier =
-            GlanceModifier
+            modifier = GlanceModifier
                 .padding(all = spaceXSmall)
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -147,8 +146,7 @@ class AppWidget : GlanceAppWidget() {
         ) {
             if (size.width <= ONE_BY_ONE.width) {
                 Image(
-                    modifier =
-                    GlanceModifier
+                    modifier = GlanceModifier
                         .fillMaxWidth()
                         .size(space40),
                     contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),

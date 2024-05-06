@@ -3,10 +3,6 @@ buildscript {
         google()
         mavenCentral()
     }
-
-    dependencies {
-        classpath(libs.ktlint.gradle)
-    }
 }
 
 plugins {

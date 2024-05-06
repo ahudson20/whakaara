@@ -31,8 +31,7 @@ fun GlanceText(
 ) {
     Image(
         modifier = modifier,
-        provider =
-        ImageProvider(
+        provider = ImageProvider(
             LocalContext.current.textAsBitmap(
                 text = text,
                 fontSize = fontSize,

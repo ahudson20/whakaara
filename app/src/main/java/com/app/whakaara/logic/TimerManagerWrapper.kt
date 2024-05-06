@@ -177,8 +177,7 @@ class TimerManagerWrapper @Inject constructor(
                 isTimerPaused = true,
                 currentTime = milliseconds,
                 millisecondsFromTimerInput = milliseconds,
-                time =
-                DateUtils.formatTimeForTimer(
+                time = DateUtils.formatTimeForTimer(
                     millis = milliseconds
                 )
             )

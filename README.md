@@ -15,9 +15,18 @@ This README provides an overview of the project, its features, and how to get st
 
 ## Technologies Used
 
-* **Room**: Room is used for local data persistence, providing a seamless storage solution for alarms and their configurations.
-* **Jetpack Compose**: Jetpack Compose is utilized to create a modern and responsive user interface, simplifying UI development.
-* **Hilt**: Hilt is employed for dependency injection, facilitating modularization and improving code maintainability.
+* **Jetpack Libraries**:
+  * Jetpack Compose: Jetpack Compose is utilized to create a modern and responsive user interface, simplifying UI development.
+  * ViewModel: Manages UI-related data and is lifecycle-aware, ensuring data survival through configuration changes.
+  * Navigation: Facilitates screen navigation, complemented by Hilt Navigation Compose
+  * Room: Constructs a database with an SQLite abstraction layer, providing a seamless storage solution for alarms and their configurations.
+  * **[Hilt](https://dagger.dev/hilt/)**: Hilt is employed for dependency injection, facilitating modularization and improving code maintainability.
+* **Architecture**:
+  * MVVM Architecture (View - ViewModel - Model): Facilitates separation of concerns and promotes maintainability.
+  * Repository Pattern: Acts as a mediator between different data sources and the application's business logic.
+* **[ksp](https://github.com/google/ksp)**: Kotlin Symbol Processing API for code generation and analysis.
+* **[Turbine](https://github.com/cashapp/turbine)**: A small testing library for kotlinx.coroutines Flow.
+* **[gson](https://github.com/google/gson)**: used to convert Java Objects into their JSON representation.
 
 ## UI
 The app was designed using [Material 3 guidelines](https://m3.material.io/).

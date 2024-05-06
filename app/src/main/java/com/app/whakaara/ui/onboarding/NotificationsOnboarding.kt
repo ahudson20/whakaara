@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
@@ -36,13 +35,14 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.whakaara.R
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.space200
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.theme.lightBlueAnimation
-import com.app.whakaara.utils.NotificationUtils
+import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.shouldShowRationale
@@ -70,7 +70,7 @@ fun NotificationsOnboarding(
                 modifier = Modifier
                     .size(space200)
                     .align(Alignment.Center)
-                    .clip(RoundedCornerShape(25.dp))
+                    .clip(Shapes.medium)
                     .background(color = lightBlueAnimation),
                 isCompleted = notificationPermissionState.status.isGranted
             )
@@ -119,10 +119,11 @@ fun AnimatedNotification(
     modifier: Modifier = Modifier,
     isCompleted: Boolean
 ) {
-    val clipSpecs = LottieClipSpec.Progress(
-        min = 0.0f,
-        max = if (isCompleted) 0.975f else 0.45f
-    )
+    val clipSpecs =
+        LottieClipSpec.Progress(
+            min = 0.0f,
+            max = if (isCompleted) 0.975f else 0.45f
+        )
 
     val preloaderLottieComposition by rememberLottieComposition(
         LottieCompositionSpec.RawRes(

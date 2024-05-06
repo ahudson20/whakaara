@@ -23,11 +23,15 @@ import com.app.whakaara.ui.theme.WidgetTheme
 
 class AppShortcutWidget : GlanceAppWidget() {
     @OptIn(ExperimentalLayoutApi::class)
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
+    override suspend fun provideGlance(
+        context: Context,
+        id: GlanceId
+    ) {
         provideContent {
             GlanceTheme(colors = WidgetTheme.colors) {
                 Image(
-                    modifier = GlanceModifier.size(spaceXxLarge).clickable(actionStartActivity<MainActivity>()),
+                    modifier = GlanceModifier.size(spaceXxLarge)
+                        .clickable(actionStartActivity<MainActivity>()),
                     contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
                     provider = ImageProvider(R.drawable.outline_alarm_24),
                     contentScale = ContentScale.FillBounds,

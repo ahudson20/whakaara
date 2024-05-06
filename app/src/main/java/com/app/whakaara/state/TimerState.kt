@@ -1,9 +1,9 @@
 package com.app.whakaara.state
 
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
-import com.app.whakaara.utils.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
-import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
+import com.whakaara.core.constants.GeneralConstants.STARTING_CIRCULAR_PROGRESS
+import com.whakaara.core.constants.GeneralConstants.ZERO_MILLIS
 
 data class TimerState(
     val currentTime: Long = ZERO_MILLIS,
@@ -16,11 +16,4 @@ data class TimerState(
     val progress: Float = STARTING_CIRCULAR_PROGRESS,
     val time: String = TIMER_STARTING_FORMAT,
     val millisecondsFromTimerInput: Long = ZERO_MILLIS
-)
-
-data class TimerStateDataStore(
-    val remainingTimeInMillis: Long = 0L,
-    val isActive: Boolean = false,
-    val isPaused: Boolean = false,
-    val timeStamp: Long = 0L
 )

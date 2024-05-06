@@ -29,9 +29,7 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import kotlinx.coroutines.launch
 
 @Composable
-fun WidgetOnboarding(
-    modifier: Modifier = Modifier
-) {
+fun WidgetOnboarding(modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     Column(

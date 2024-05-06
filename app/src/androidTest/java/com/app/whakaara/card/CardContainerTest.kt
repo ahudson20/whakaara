@@ -6,9 +6,9 @@ import androidx.compose.ui.test.assertIsToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.model.alarm.Alarm
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test

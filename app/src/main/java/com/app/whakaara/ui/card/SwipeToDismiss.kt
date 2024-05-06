@@ -6,7 +6,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -26,7 +25,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -55,8 +54,8 @@ fun DismissBackground(
     )
 
     Box(
-        modifier
-            .clip(shape = RoundedCornerShape(Spacings.space100))
+        modifier = modifier
+            .clip(shape = Shapes.extraLarge)
             .fillMaxSize()
             .background(color),
         contentAlignment = Alignment.CenterEnd

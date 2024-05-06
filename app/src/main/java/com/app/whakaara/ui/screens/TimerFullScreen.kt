@@ -21,7 +21,7 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 
 @Composable
 fun TimerFullScreen(

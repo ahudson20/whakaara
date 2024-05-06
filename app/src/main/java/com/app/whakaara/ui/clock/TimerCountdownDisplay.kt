@@ -74,9 +74,7 @@ fun TimerCountdownDisplay(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.NotificationsActive,
-                        contentDescription = stringResource(
-                            id = R.string.timer_countdown_finish_time_icon_content_description
-                        )
+                        contentDescription = stringResource(id = R.string.timer_countdown_finish_time_icon_content_description)
                     )
                     Text(
                         modifier = Modifier.padding(start = spaceXxSmall),

@@ -15,9 +15,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
-fun Loading(
-    modifier: Modifier = Modifier
-) {
+fun Loading(modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -25,7 +23,7 @@ fun Loading(
             .fillMaxSize()
     ) {
         CircularProgressIndicator(
-            Modifier
+            modifier = Modifier
                 .width(spaceXxLarge)
                 .height(spaceXxLarge)
         )

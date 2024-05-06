@@ -7,5 +7,8 @@ import androidx.annotation.CallSuper
 
 abstract class HiltBroadcastReceiver : BroadcastReceiver() {
     @CallSuper
-    override fun onReceive(context: Context, intent: Intent) {}
+    override fun onReceive(
+        context: Context,
+        intent: Intent
+    ) {}
 }

@@ -36,8 +36,8 @@ import com.app.whakaara.ui.theme.Spacings.space250
 import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.GeneralConstants.DAYS_OF_WEEK
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
+import com.whakaara.core.constants.GeneralConstants.DAYS_OF_WEEK
+import com.whakaara.core.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -207,7 +207,13 @@ fun BottomSheetDetailsAlarmInfo(
                 TextField(
                     modifier = Modifier.width(space250),
                     value = updateBottomSheetDetailsAlarmInfo.updateTitle.value,
-                    onValueChange = { if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) updateBottomSheetDetailsAlarmInfo.updateTitle.onValueChange(it) },
+                    onValueChange = {
+                        if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) {
+                            updateBottomSheetDetailsAlarmInfo.updateTitle.onValueChange(
+                                it
+                            )
+                        }
+                    },
                     colors = TextFieldDefaults.colors(
                         focusedContainerColor = Transparent,
                         unfocusedContainerColor = Transparent,
@@ -223,7 +229,11 @@ fun BottomSheetDetailsAlarmInfo(
                     )
                 )
                 Text(
-                    text = stringResource(id = R.string.bottom_sheet_title_characters, updateBottomSheetDetailsAlarmInfo.updateTitle.value.length, ALARM_TITLE_MAX_CHARS),
+                    text = stringResource(
+                        id = R.string.bottom_sheet_title_characters,
+                        updateBottomSheetDetailsAlarmInfo.updateTitle.value.length,
+                        ALARM_TITLE_MAX_CHARS
+                    ),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier

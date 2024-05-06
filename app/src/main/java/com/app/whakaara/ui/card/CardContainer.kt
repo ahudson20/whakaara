@@ -16,15 +16,16 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.Alarm
+import com.app.whakaara.ui.theme.AlarmPreviewProvider
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
-import java.util.Calendar
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.model.alarm.Alarm
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -92,19 +93,19 @@ fun CardContainerSwipeToDismiss(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun CardContainerSwipeToDismissPreview() {
+fun CardContainerSwipeToDismissPreview(
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
+) {
     WhakaaraTheme {
         CardContainerSwipeToDismiss(
             alarms = listOf(
-                Alarm(
-                    date = Calendar.getInstance(),
-                    subTitle = "12:13 AM"
-                )
+                alarm
             ),
             is24HourFormat = true,
             delete = {},
             disable = {},
-            enable = {}
-        ) {}
+            enable = {},
+            reset = {}
+        )
     }
 }

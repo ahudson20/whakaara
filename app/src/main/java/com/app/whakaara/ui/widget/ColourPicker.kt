@@ -43,8 +43,7 @@ fun ColourPicker(
                     .background(color, shape = MaterialTheme.shapes.large)
             )
             Column(
-                modifier = Modifier
-                    .padding(12.dp),
+                modifier = Modifier.padding(12.dp),
                 verticalArrangement = Arrangement.spacedBy(space5)
             ) {
                 ColourSlider("A", alpha, color.copy(1f))
@@ -66,7 +65,12 @@ fun PreviewColourPicker() {
     val blueBackground = rememberSaveable { mutableFloatStateOf(0f) }
     val colorBackground by remember {
         derivedStateOf {
-            Color(redBackground.floatValue, greenBackground.floatValue, blueBackground.floatValue, alphaBackground.floatValue)
+            Color(
+                redBackground.floatValue,
+                greenBackground.floatValue,
+                blueBackground.floatValue,
+                alphaBackground.floatValue
+            )
         }
     }
 

@@ -26,7 +26,7 @@ import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.darkGreen
 import com.app.whakaara.ui.theme.lightGreen
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 
 @Composable
 fun StopwatchDisplay(
@@ -65,8 +65,7 @@ fun StopwatchDisplay(
                         fontSize = 54.sp,
                         color = Color.White
                     ),
-                    text =
-                    if (formattedTime.substring(0, 2) == TIMER_INPUT_INITIAL_VALUE) {
+                    text = if (formattedTime.substring(0, 2) == TIMER_INPUT_INITIAL_VALUE) {
                         formattedTime.substring(3, 8)
                     } else {
                         formattedTime.substring(0, 8)

@@ -6,15 +6,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.logic.AlarmManagerWrapper
-import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.NotificationUtilsConstants
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
+import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.constants.NotificationUtilsConstants
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
+import com.whakaara.data.alarm.AlarmRepository
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
 import javax.inject.Inject
@@ -22,7 +22,6 @@ import javax.inject.Named
 
 @AndroidEntryPoint
 class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
-
     @Inject
     lateinit var notificationManager: NotificationManager
 
@@ -36,20 +35,25 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
     @Inject
     lateinit var alarmManagerWrapper: AlarmManagerWrapper
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent
+    ) {
         super.onReceive(context, intent)
-        val actionsList = listOf(
-            UPCOMING_ALARM_RECEIVER_ACTION_START,
-            UPCOMING_ALARM_RECEIVER_ACTION_STOP,
-            UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
-        )
+        val actionsList =
+            listOf(
+                UPCOMING_ALARM_RECEIVER_ACTION_START,
+                UPCOMING_ALARM_RECEIVER_ACTION_STOP,
+                UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
+            )
         val intentAction = intent.getStringExtra(UPCOMING_ALARM_INTENT_ACTION)
         if (!actionsList.contains(intentAction)) return
 
-        val millis = intent.getLongExtra(
-            UPCOMING_ALARM_INTENT_TRIGGER_TIME,
-            0L
-        )
+        val millis =
+            intent.getLongExtra(
+                UPCOMING_ALARM_INTENT_TRIGGER_TIME,
+                0L
+            )
 
         goAsync {
             when (intentAction) {
@@ -71,17 +75,19 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
         millis: Long,
         context: Context
     ) {
-        val intent = Intent(context, UpcomingAlarmReceiver::class.java).apply {
-            action = alarmId
-            putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_CANCEL)
-            putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, millis)
-        }
-        val pendingIntent = PendingIntentUtils.getBroadcast(
-            context = context,
-            id = NotificationUtilsConstants.INTENT_REQUEST_CODE,
-            intent = intent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val intent =
+            Intent(context, UpcomingAlarmReceiver::class.java).apply {
+                action = alarmId
+                putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_CANCEL)
+                putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, millis)
+            }
+        val pendingIntent =
+            PendingIntentUtils.getBroadcast(
+                context = context,
+                id = NotificationUtilsConstants.INTENT_REQUEST_CODE,
+                intent = intent,
+                flag = PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         notificationManager.notify(
             millis.toInt(),

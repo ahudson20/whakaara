@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoDelete
 import androidx.compose.material.icons.outlined.Repeat
@@ -35,25 +34,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
+import com.app.whakaara.ui.theme.AlarmPreviewProvider
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space20
 import com.app.whakaara.ui.theme.Spacings.space28
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils.Companion.getInitialTimeToAlarm
-import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
+import com.app.whakaara.utility.DateUtils.Companion.getInitialTimeToAlarm
+import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
+import com.whakaara.model.alarm.Alarm
 import kotlinx.coroutines.launch
-import java.util.Calendar
 
 @Composable
 fun Card(
@@ -92,19 +92,20 @@ fun Card(
             addAction(Intent.ACTION_TIME_TICK)
         }
     ) { _, _ ->
-        timeToAlarm = getInitialTimeToAlarm(
-            isEnabled = valueSlider,
-            time = alarm.date,
-            context = context
-        )
+        timeToAlarm =
+            getInitialTimeToAlarm(
+                isEnabled = valueSlider,
+                time = alarm.date,
+                context = context
+            )
     }
 
     ElevatedCard(
-        shape = RoundedCornerShape(space100),
+        shape = Shapes.extraLarge,
         modifier = modifier
             .fillMaxWidth()
             .height(space80)
-            .clip(RoundedCornerShape(space100))
+            .clip(Shapes.extraLarge)
             .clickable {
                 scope.launch { sheetState.expand() }
             }
@@ -188,16 +189,16 @@ fun Card(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun CardPreview() {
+fun CardPreview(
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
+) {
     WhakaaraTheme {
         Card(
-            alarm = Alarm(
-                date = Calendar.getInstance(),
-                subTitle = "12:13 AM"
-            ),
+            alarm = alarm,
             is24HourFormat = true,
             disable = {},
-            enable = {}
-        ) {}
+            enable = {},
+            reset = {}
+        )
     }
 }

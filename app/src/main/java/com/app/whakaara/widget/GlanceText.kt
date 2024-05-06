@@ -67,7 +67,10 @@ private fun Context.textAsBitmap(
     return image
 }
 
-private fun spToPx(sp: Float, context: Context): Float {
+private fun spToPx(
+    sp: Float,
+    context: Context
+): Float {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_SP,
         sp,

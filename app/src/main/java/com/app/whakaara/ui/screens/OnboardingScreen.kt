@@ -13,19 +13,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.onboarding.OnboardingContent
 import com.app.whakaara.ui.onboarding.OnboardingItems
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.model.preferences.Preferences
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
     navigateToHome: () -> Unit,
-    pages: Array<OnboardingItems> = OnboardingItems.values(),
+    pages: Array<OnboardingItems> = OnboardingItems.entries.toTypedArray(),
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit
 ) {

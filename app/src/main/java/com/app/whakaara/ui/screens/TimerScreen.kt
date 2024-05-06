@@ -39,14 +39,14 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.NotificationUtils
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_HOURS_INPUT_REGEX
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
-import com.app.whakaara.utils.constants.DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX
+import com.app.whakaara.utility.DateUtils
+import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.shouldShowRationale
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_HOURS_INPUT_REGEX
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX
 import java.util.Calendar
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -104,8 +104,6 @@ fun TimerScreen(
                                         context = context
                                     )
                                 } else {
-                                    /**FIRST TIME ACCESSING**/
-                                    /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
                                     launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                                 }
                             }

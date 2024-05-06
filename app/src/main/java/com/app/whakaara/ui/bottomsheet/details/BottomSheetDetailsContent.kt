@@ -25,24 +25,26 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.BooleanStateEvent
 import com.app.whakaara.state.HoursUpdateEvent
 import com.app.whakaara.state.ListStateEvent
 import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.state.UpdateBottomSheetDetailsAlarmInfo
+import com.app.whakaara.ui.theme.AlarmPreviewProvider
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils.Companion.getAlarmTimeFormatted
-import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
+import com.app.whakaara.utility.DateUtils.Companion.getAlarmTimeFormatted
+import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
+import com.whakaara.model.alarm.Alarm
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -57,7 +59,11 @@ fun BottomSheetDetailsContent(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
-    var timePickerValue by remember { mutableStateOf<Hours>(FullHours(alarm.date.get(Calendar.HOUR_OF_DAY), alarm.date.get(Calendar.MINUTE))) }
+    var timePickerValue by remember {
+        mutableStateOf<Hours>(
+            FullHours(alarm.date.get(Calendar.HOUR_OF_DAY), alarm.date.get(Calendar.MINUTE))
+        )
+    }
     var isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
     var isSnoozeEnabled by remember(alarm.isSnoozeEnabled) { mutableStateOf(alarm.isSnoozeEnabled) }
     var deleteAfterGoesOff by remember(alarm.deleteAfterGoesOff) { mutableStateOf(alarm.deleteAfterGoesOff) }
@@ -202,14 +208,12 @@ fun BottomSheetDetailsContent(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun BottomSheetContentPreview() {
+fun BottomSheetContentPreview(
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
+) {
     WhakaaraTheme {
         BottomSheetDetailsContent(
-            alarm = Alarm(
-                date = Calendar.getInstance(),
-                isEnabled = false,
-                subTitle = "10:03 AM"
-            ),
+            alarm = alarm,
             timeToAlarm = "timeToAlarm",
             is24HourFormat = true,
             sheetState = BottomSheetState(),

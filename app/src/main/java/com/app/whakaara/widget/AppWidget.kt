@@ -37,8 +37,6 @@ import androidx.glance.unit.ColorProvider
 import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.activities.WidgetConfig
-import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.data.alarm.AlarmRepository
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.space40
@@ -46,6 +44,8 @@ import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.WidgetTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.whakaara.data.alarm.AlarmRepository
+import com.whakaara.model.alarm.Alarm
 import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.EntryPointAccessors
@@ -60,23 +60,29 @@ class AppWidget : GlanceAppWidget() {
         fun alarmRepository(): AlarmRepository
     }
 
-    override val sizeMode = SizeMode.Responsive(
-        setOf(
-            ONE_BY_ONE,
-            TWO_BY_ONE,
-            SMALL_SQUARE,
-            HORIZONTAL_RECTANGLE,
-            BIG_SQUARE
+    override val sizeMode =
+        SizeMode.Responsive(
+            setOf(
+                ONE_BY_ONE,
+                TWO_BY_ONE,
+                SMALL_SQUARE,
+                HORIZONTAL_RECTANGLE,
+                BIG_SQUARE
+            )
         )
-    )
 
     override var stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
-    override suspend fun provideGlance(context: Context, id: GlanceId) {
+
+    override suspend fun provideGlance(
+        context: Context,
+        id: GlanceId
+    ) {
         val appContext = context.applicationContext ?: throw IllegalStateException()
-        val alarmEntryPoint = EntryPointAccessors.fromApplication(
-            appContext,
-            AlarmRepositoryEntryPoint::class.java
-        )
+        val alarmEntryPoint =
+            EntryPointAccessors.fromApplication(
+                appContext,
+                AlarmRepositoryEntryPoint::class.java
+            )
         val repository = alarmEntryPoint.alarmRepository()
         var listOfAlarms: List<Alarm>
 
@@ -90,22 +96,25 @@ class AppWidget : GlanceAppWidget() {
             val deserializedBackgroundColour = prefs[WidgetConfig.backgroundKey] ?: ""
             val deserializedTextColour = prefs[WidgetConfig.textKey] ?: ""
 
-            val backgroundColour: Color = if (deserializedBackgroundColour.isNotBlank()) {
-                Gson().fromJson(deserializedBackgroundColour, Color::class.java)
-            } else {
-                Color(appContext.getColor(R.color.dark_green))
-            }
-            val textColour = if (deserializedTextColour.isNotBlank()) {
-                Gson().fromJson(deserializedTextColour, Color::class.java)
-            } else {
-                Color.White
-            }
+            val backgroundColour: Color =
+                if (deserializedBackgroundColour.isNotBlank()) {
+                    Gson().fromJson(deserializedBackgroundColour, Color::class.java)
+                } else {
+                    Color(appContext.getColor(R.color.dark_green))
+                }
+            val textColour =
+                if (deserializedTextColour.isNotBlank()) {
+                    Gson().fromJson(deserializedTextColour, Color::class.java)
+                } else {
+                    Color.White
+                }
 
-            val nextAlarm = if (deserializedList.isNotBlank()) {
-                Gson().fromJson(deserializedList, object : TypeToken<List<Alarm>>() {}.type)
-            } else {
-                listOfAlarms
-            }.filter { it.isEnabled }.minByOrNull { it.date.timeInMillis }
+            val nextAlarm =
+                if (deserializedList.isNotBlank()) {
+                    Gson().fromJson(deserializedList, object : TypeToken<List<Alarm>>() {}.type)
+                } else {
+                    listOfAlarms
+                }.filter { it.isEnabled }.minByOrNull { it.date.timeInMillis }
 
             GlanceTheme(colors = WidgetTheme.colors) {
                 NextAlarm(

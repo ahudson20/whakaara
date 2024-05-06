@@ -18,7 +18,7 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space5
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.GeneralUtils.Companion.toColorInt
+import com.app.whakaara.utility.GeneralUtils.Companion.toColorInt
 
 @Composable
 fun ColourSlider(

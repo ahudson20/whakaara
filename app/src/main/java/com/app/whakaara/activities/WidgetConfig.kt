@@ -1,6 +1,5 @@
 package com.app.whakaara.activities
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.os.Bundle
@@ -34,14 +33,14 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.R
-import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.ui.theme.Spacings.space10
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.ui.widget.ColourPicker
-import com.app.whakaara.utils.GeneralUtils.Companion.convertStringToColour
+import com.app.whakaara.utility.GeneralUtils.Companion.convertStringToColour
 import com.app.whakaara.widget.AppWidget
 import com.google.gson.Gson
+import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -49,11 +48,10 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class WidgetConfig : ComponentActivity() {
-
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     @Inject
-    lateinit var dataStore: PreferencesDataStore
+    lateinit var test: PreferencesDataStoreRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,12 +71,14 @@ class WidgetConfig : ComponentActivity() {
         }
 
         setContent {
-            val textColourString = runBlocking {
-                dataStore.readTextColour.first()
-            }
-            val backgroundColourString = runBlocking {
-                dataStore.readBackgroundColour.first()
-            }
+            val textColourString =
+                runBlocking {
+                    test.readTextColour().first()
+                }
+            val backgroundColourString =
+                runBlocking {
+                    test.readBackgroundColour().first()
+                }
             val textColor = remember { convertStringToColour(textColourString) }
             val backgroundColor = remember { convertStringToColour(backgroundColourString) }
 
@@ -145,10 +145,11 @@ class WidgetConfig : ComponentActivity() {
                         ) {
                             OutlinedButton(
                                 onClick = {
-                                    val resultValue = Intent().apply {
-                                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                                    }
-                                    setResult(Activity.RESULT_OK, resultValue)
+                                    val resultValue =
+                                        Intent().apply {
+                                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                        }
+                                    setResult(RESULT_OK, resultValue)
                                     finish()
                                 }
                             ) {
@@ -162,7 +163,7 @@ class WidgetConfig : ComponentActivity() {
                                         val serializedBackground = Gson().toJson(colorBackground)
                                         val serializedText = Gson().toJson(colorText)
                                         val glanceId = GlanceAppWidgetManager(this@WidgetConfig).getGlanceIdBy(appWidgetId)
-                                        dataStore.saveColour(serializedBackground, serializedText)
+                                        test.saveColour(serializedBackground, serializedText)
                                         updateAppWidgetState(this@WidgetConfig, PreferencesGlanceStateDefinition, glanceId) { prefs ->
                                             prefs.toMutablePreferences().apply {
                                                 this[backgroundKey] = serializedBackground
@@ -172,7 +173,7 @@ class WidgetConfig : ComponentActivity() {
                                         glanceAppWidget.update(this@WidgetConfig, glanceId)
                                     }
                                     setResult(
-                                        Activity.RESULT_OK,
+                                        RESULT_OK,
                                         Intent().apply {
                                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                                         }

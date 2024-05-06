@@ -10,7 +10,6 @@ import org.junit.Rule
 import org.junit.Test
 
 class GeneralSettingsTest {
-
     @get:Rule
     val composeTestRule = createComposeRule()
 
@@ -35,7 +34,6 @@ class GeneralSettingsTest {
         onNodeWithText(text = "Edit system time").assertIsDisplayed()
         onNodeWithText(text = "App settings").assertIsDisplayed()
         onNodeWithText(text = "Battery optimization").assertIsDisplayed()
-        onNodeWithText(text = "Select ringtone").assertIsDisplayed()
         onNodeWithText(text = "App Theme").assertIsDisplayed()
         onNodeWithText(text = "System preference").assertIsDisplayed()
         onNodeWithText(text = "24 hour format").assertIsDisplayed()

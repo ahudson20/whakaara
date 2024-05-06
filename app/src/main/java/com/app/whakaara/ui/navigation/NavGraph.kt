@@ -5,23 +5,23 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.events.AlarmEventCallbacks
-import com.app.whakaara.state.events.StopwatchEventCallbacks
-import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.loading.Loading
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.OnboardingScreen
 import com.app.whakaara.ui.screens.StopwatchScreen
 import com.app.whakaara.ui.screens.TimerScreen
-import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_ALARM
-import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_STOPWATCH
-import com.app.whakaara.utils.constants.GeneralConstants.DEEPLINK_TIMER
-import com.app.whakaara.utils.constants.GeneralConstants.ONBOARDING_ROUTE
+import com.whakaara.core.constants.GeneralConstants.DEEPLINK_ALARM
+import com.whakaara.core.constants.GeneralConstants.DEEPLINK_STOPWATCH
+import com.whakaara.core.constants.GeneralConstants.DEEPLINK_TIMER
+import com.whakaara.core.constants.GeneralConstants.ONBOARDING_ROUTE
+import com.whakaara.model.events.StopwatchEventCallbacks
+import com.whakaara.model.events.TimerEventCallbacks
+import com.whakaara.model.preferences.Preferences
 
 @Composable
 fun NavGraph(
@@ -69,25 +69,26 @@ fun NavGraph(
         ) {
             when (alarmState) {
                 is AlarmState.Loading -> Loading()
-                is AlarmState.Success -> AlarmScreen(
-                    alarms = if (preferencesState.preferences.filteredAlarmList) {
-                        val (enabled, disabled) = alarmState.alarms.partition { it.isEnabled }
+                is AlarmState.Success ->
+                    AlarmScreen(
+                        alarms = if (preferencesState.preferences.filteredAlarmList) {
+                            val (enabled, disabled) = alarmState.alarms.partition { it.isEnabled }
 
-                        val sortedEnabledList = with(enabled) {
-                            this.sortedBy { it.date.timeInMillis }
-                        }.toMutableList()
+                            val sortedEnabledList = with(enabled) {
+                                this.sortedBy { it.date.timeInMillis }
+                            }.toMutableList()
 
-                        (sortedEnabledList + disabled).toList()
-                    } else {
-                        alarmState.alarms
-                    },
-                    preferencesState = preferencesState,
-                    delete = alarmEventCallbacks::delete,
-                    disable = alarmEventCallbacks::disable,
-                    enable = alarmEventCallbacks::enable,
-                    reset = alarmEventCallbacks::reset,
-                    create = alarmEventCallbacks::create
-                )
+                            (sortedEnabledList + disabled).toList()
+                        } else {
+                            alarmState.alarms
+                        },
+                        preferencesState = preferencesState,
+                        delete = alarmEventCallbacks::delete,
+                        disable = alarmEventCallbacks::disable,
+                        enable = alarmEventCallbacks::enable,
+                        reset = alarmEventCallbacks::reset,
+                        create = alarmEventCallbacks::create
+                    )
             }
         }
 

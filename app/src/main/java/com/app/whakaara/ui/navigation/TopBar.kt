@@ -13,9 +13,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.RoutePreviewProvider
@@ -23,6 +21,8 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
+import com.whakaara.model.events.PreferencesEventCallbacks
+import com.whakaara.model.preferences.Preferences
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -39,8 +39,7 @@ fun TopBar(
     TopAppBar(
         title = {
             Text(
-                text = route
-                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                text = route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             )
         },
         actions = {
@@ -88,10 +87,10 @@ fun TopBarPreview(
             preferencesState = PreferencesState(),
             preferencesEventCallbacks = object : PreferencesEventCallbacks {
                 override fun updatePreferences(preferences: Preferences) {}
+
                 override fun updateAllAlarmSubtitles(format: Boolean) {}
-                override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
-                    shouldEnableUpcomingAlarmNotification: Boolean
-                ) {}
+
+                override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {}
             }
         )
     }

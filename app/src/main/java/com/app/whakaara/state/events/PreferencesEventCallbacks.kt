@@ -1,6 +1,6 @@
-package com.app.whakaara.state.events
+package com.whakaara.model.events
 
-import com.app.whakaara.data.preferences.Preferences
+import com.whakaara.model.preferences.Preferences
 
 interface PreferencesEventCallbacks {
     fun updatePreferences(preferences: Preferences)

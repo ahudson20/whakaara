@@ -11,10 +11,10 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.dokar.sheets.rememberBottomSheetState
+import com.whakaara.model.alarm.Alarm
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test

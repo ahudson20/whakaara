@@ -11,19 +11,19 @@ import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.receiver.UpcomingAlarmReceiver
 import com.app.whakaara.service.MediaPlayerService
-import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_ALARM_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.PLAY
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.SERVICE_ACTION
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
+import com.app.whakaara.utility.DateUtils
+import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
+import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
+import com.whakaara.core.constants.NotificationUtilsConstants.PLAY
+import com.whakaara.core.constants.NotificationUtilsConstants.SERVICE_ACTION
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
+import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
 import java.util.Calendar
 import javax.inject.Inject
 
@@ -31,7 +31,6 @@ class AlarmManagerWrapper @Inject constructor(
     private val app: Application,
     private val alarmManager: AlarmManager
 ) {
-
     fun createAlarm(
         alarmId: String,
         date: Calendar,
@@ -53,9 +52,7 @@ class AlarmManagerWrapper @Inject constructor(
         updateWidget()
     }
 
-    fun deleteAlarm(
-        alarmId: String
-    ) {
+    fun deleteAlarm(alarmId: String) {
         stopAlarm(alarmId = alarmId)
         updateWidget()
     }
@@ -118,8 +115,8 @@ class AlarmManagerWrapper @Inject constructor(
             app.applicationContext.startActivity(it)
         }
     }
-    private fun userHasNotGrantedAlarmPermission() =
-        alarmManager.canScheduleExactAlarms()
+
+    private fun userHasNotGrantedAlarmPermission() = alarmManager.canScheduleExactAlarms()
 
     @OptIn(ExperimentalLayoutApi::class)
     private fun setAlarm(
@@ -215,18 +212,15 @@ class AlarmManagerWrapper @Inject constructor(
         action: Int = PLAY,
         type: Int,
         alarmId: String? = null
-    ) =
-        Intent(app, MediaPlayerService::class.java).apply {
-            this.action = alarmId
-            putExtra(INTENT_AUTO_SILENCE, autoSilenceTime)
-            putExtra(SERVICE_ACTION, action)
-            putExtra(NOTIFICATION_TYPE, type)
-            putExtra(INTENT_ALARM_ID, alarmId)
-        }
+    ) = Intent(app, MediaPlayerService::class.java).apply {
+        this.action = alarmId
+        putExtra(INTENT_AUTO_SILENCE, autoSilenceTime)
+        putExtra(SERVICE_ACTION, action)
+        putExtra(NOTIFICATION_TYPE, type)
+        putExtra(INTENT_ALARM_ID, alarmId)
+    }
 
-    private fun stopAlarm(
-        alarmId: String
-    ) {
+    private fun stopAlarm(alarmId: String) {
         val intent = Intent(app, MediaPlayerService::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarmId

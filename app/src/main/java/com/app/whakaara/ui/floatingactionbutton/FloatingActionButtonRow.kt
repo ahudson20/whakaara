@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
@@ -30,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.ui.theme.BooleanPreviewProvider
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
@@ -49,16 +49,12 @@ fun FloatingActionButtonRow(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(50)),
+                .clip(shape = Shapes.large),
             horizontalArrangement = Arrangement.End
         ) {
             AnimatedVisibility(
-                enter = fadeIn() + expandHorizontally(
-                    expandFrom = Alignment.Start
-                ),
-                exit = fadeOut() + shrinkHorizontally(
-                    shrinkTowards = Alignment.Start
-                ),
+                enter = fadeIn() + expandHorizontally(expandFrom = Alignment.Start),
+                exit = fadeOut() + shrinkHorizontally(shrinkTowards = Alignment.Start),
                 visible = !isStart
             ) {
                 FloatingActionButtonStop(
@@ -87,7 +83,7 @@ fun FloatingActionButtonRow(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(50)),
+                .clip(shape = Shapes.large),
             horizontalArrangement = Arrangement.Start
         ) {
             AnimatedVisibility(isPlaying) {
@@ -100,9 +96,7 @@ fun FloatingActionButtonRow(
 }
 
 @Composable
-private fun FloatingActionButtonStop(
-    onStop: () -> Unit
-) {
+private fun FloatingActionButtonStop(onStop: () -> Unit) {
     FloatingActionButton(
         modifier = Modifier.testTag("floating action button stop"),
         shape = CircleShape,

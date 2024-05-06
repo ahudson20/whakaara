@@ -1,8 +1,11 @@
-package com.app.whakaara.state.events
+package com.whakaara.model.events
 
 interface StopwatchEventCallbacks {
     fun startStopwatch()
+
     fun pauseStopwatch()
+
     fun stopStopwatch()
+
     fun lapStopwatch()
 }

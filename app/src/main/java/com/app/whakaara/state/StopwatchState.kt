@@ -1,7 +1,9 @@
 package com.app.whakaara.state
 
-import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
-import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
+import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
+import com.whakaara.core.constants.GeneralConstants.ZERO_MILLIS
+import com.whakaara.model.datastore.StopwatchDataStore
+import com.whakaara.model.stopwatch.Lap
 
 data class StopwatchState(
     val timeMillis: Long = ZERO_MILLIS,
@@ -13,7 +15,24 @@ data class StopwatchState(
     val lapList: MutableList<Lap> = mutableListOf()
 )
 
-data class Lap(
-    val time: Long,
-    val diff: Long
-)
+fun StopwatchDataStore.asExternalModel() =
+    StopwatchState(
+        timeMillis = timeMillis,
+        lastTimeStamp = lastTimeStamp,
+        formattedTime = formattedTime,
+        isActive = isActive,
+        isStart = isStart,
+        isPaused = isPaused,
+        lapList = lapList
+    )
+
+fun StopwatchState.asInternalModel() =
+    StopwatchDataStore(
+        timeMillis = timeMillis,
+        lastTimeStamp = lastTimeStamp,
+        formattedTime = formattedTime,
+        isActive = isActive,
+        isStart = isStart,
+        isPaused = isPaused,
+        lapList = lapList
+    )

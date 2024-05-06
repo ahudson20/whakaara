@@ -25,24 +25,26 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
-import com.app.whakaara.data.alarm.Alarm
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
+import com.app.whakaara.ui.theme.AlarmPreviewProvider
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.DateUtils.Companion.getTimeUntilAlarmFormatted
-import com.app.whakaara.utils.GeneralUtils.Companion.showToast
-import com.app.whakaara.utils.NotificationUtils
+import com.app.whakaara.utility.DateUtils
+import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
+import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.shouldShowRationale
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
+import com.whakaara.model.alarm.Alarm
 import java.time.LocalTime
 import java.util.Calendar
 
@@ -62,12 +64,11 @@ fun AlarmScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
-            if (wasGranted) {
-                isDialogShown.value = !isDialogShown.value
-            }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
+        if (wasGranted) {
+            isDialogShown.value = !isDialogShown.value
         }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -81,13 +82,12 @@ fun AlarmScreen(
                     pressedElevation = 0.dp
                 ),
                 onClick = {
-                    /**PERMISSION GRANTED**/
                     when (notificationPermissionState.status) {
                         PermissionStatus.Granted -> {
                             isDialogShown.value = !isDialogShown.value
                         }
+
                         else -> {
-                            /**PERMISSION DENIED - SHOW PROMPT**/
                             if (notificationPermissionState.status.shouldShowRationale) {
                                 NotificationUtils.snackBarPromptPermission(
                                     scope = scope,
@@ -95,8 +95,6 @@ fun AlarmScreen(
                                     context = context
                                 )
                             } else {
-                                /**FIRST TIME ACCESSING**/
-                                /**OR USER DOESN'T WANT TO BE ASKED AGAIN**/
                                 launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
                             }
                         }
@@ -158,23 +156,12 @@ fun AlarmScreen(
 @Composable
 @ThemePreviews
 @FontScalePreviews
-fun AlarmScreenPreview() {
+fun AlarmScreenPreview(
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
+) {
     WhakaaraTheme {
         AlarmScreen(
-            alarms = listOf(
-                Alarm(
-                    date = Calendar.getInstance().apply {
-                        set(Calendar.YEAR, 2023)
-                        set(Calendar.DAY_OF_MONTH, 13)
-                        set(Calendar.MONTH, 6)
-                        set(Calendar.HOUR_OF_DAY, 14)
-                        set(Calendar.MINUTE, 34)
-                        set(Calendar.SECOND, 0)
-                    },
-                    title = "First Alarm Title",
-                    subTitle = "14:34 PM"
-                )
-            ),
+            alarms = listOf(alarm),
             preferencesState = PreferencesState(),
             delete = {},
             disable = {},

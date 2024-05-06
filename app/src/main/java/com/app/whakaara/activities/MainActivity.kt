@@ -10,17 +10,17 @@ import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.app.whakaara.data.alarm.Alarm
-import com.app.whakaara.data.preferences.AppTheme
-import com.app.whakaara.data.preferences.Preferences
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.state.AlarmState
 import com.app.whakaara.state.events.AlarmEventCallbacks
-import com.app.whakaara.state.events.PreferencesEventCallbacks
-import com.app.whakaara.state.events.StopwatchEventCallbacks
-import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.events.PreferencesEventCallbacks
+import com.whakaara.model.events.StopwatchEventCallbacks
+import com.whakaara.model.events.TimerEventCallbacks
+import com.whakaara.model.preferences.AppTheme
+import com.whakaara.model.preferences.Preferences
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -31,7 +31,6 @@ class MainActivity :
     TimerEventCallbacks,
     StopwatchEventCallbacks,
     PreferencesEventCallbacks {
-
     private val viewModel: MainViewModel by viewModels()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -39,7 +38,7 @@ class MainActivity :
         super.onCreate(savedInstanceState)
 
         installSplashScreen().setKeepOnScreenCondition {
-            viewModel.alarmState.value is AlarmState.Loading && !viewModel.isReady.value
+            viewModel.alarmState.value is AlarmState.Loading && !viewModel.preferencesUiState.value.isReady
         }
 
         setContent {
@@ -48,11 +47,12 @@ class MainActivity :
             val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
             val timerState by viewModel.timerState.collectAsStateWithLifecycle()
 
-            val useDarkColours = when (preferencesState.preferences.appTheme) {
-                AppTheme.MODE_DAY -> false
-                AppTheme.MODE_NIGHT -> true
-                AppTheme.MODE_AUTO -> isSystemInDarkTheme()
-            }
+            val useDarkColours =
+                when (preferencesState.preferences.appTheme) {
+                    AppTheme.MODE_DAY -> false
+                    AppTheme.MODE_NIGHT -> true
+                    AppTheme.MODE_AUTO -> isSystemInDarkTheme()
+                }
 
             WhakaaraTheme(
                 darkTheme = useDarkColours,
@@ -171,9 +171,7 @@ class MainActivity :
         viewModel.updateAllAlarmSubtitles(format = format)
     }
 
-    override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
-        shouldEnableUpcomingAlarmNotification: Boolean
-    ) {
+    override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {
         viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
             shouldEnableUpcomingAlarmNotification = shouldEnableUpcomingAlarmNotification
         )

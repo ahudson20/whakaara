@@ -10,13 +10,18 @@ import com.google.accompanist.permissions.rememberPermissionState
 
 @ExperimentalPermissionsApi
 @Composable
-fun rememberPermissionStateSafe(permission: String, onPermissionResult: (Boolean) -> Unit = {}) = when {
-    LocalInspectionMode.current -> remember {
-        object : PermissionState {
-            override val permission = permission
-            override val status = PermissionStatus.Granted
-            override fun launchPermissionRequest() = Unit
+fun rememberPermissionStateSafe(
+    permission: String,
+    onPermissionResult: (Boolean) -> Unit = {}
+) = when {
+    LocalInspectionMode.current ->
+        remember {
+            object : PermissionState {
+                override val permission = permission
+                override val status = PermissionStatus.Granted
+
+                override fun launchPermissionRequest() = Unit
+            }
         }
-    }
     else -> rememberPermissionState(permission, onPermissionResult)
 }

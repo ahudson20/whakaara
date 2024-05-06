@@ -28,9 +28,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
-fun DisableBatteryOptimizationOnboarding(
-    modifier: Modifier = Modifier
-) {
+fun DisableBatteryOptimizationOnboarding(modifier: Modifier = Modifier) {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
     Column(
         modifier = modifier

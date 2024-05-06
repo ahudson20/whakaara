@@ -12,13 +12,14 @@ import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
-import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.CountDownTimerUtil
 import com.app.whakaara.logic.StopwatchManagerWrapper
 import com.app.whakaara.logic.TimerManagerWrapper
-import com.app.whakaara.utils.constants.NotificationUtilsConstants
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.CHANNEL_ID
+import com.whakaara.core.constants.NotificationUtilsConstants
+import com.whakaara.core.constants.NotificationUtilsConstants.CHANNEL_ID
+import com.whakaara.core.di.ApplicationScope
+import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,20 +32,20 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NotificationModule {
-
     @Provides
     @Singleton
-    fun provideNotificationChannel() = NotificationChannel(
-        CHANNEL_ID,
-        NotificationUtilsConstants.CHANNEL_NAME,
-        NotificationManager.IMPORTANCE_HIGH
-    ).apply {
-        enableLights(true)
-        setBypassDnd(true)
-        lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-        setShowBadge(true)
-        setSound(null, null)
-    }
+    fun provideNotificationChannel() =
+        NotificationChannel(
+            CHANNEL_ID,
+            NotificationUtilsConstants.CHANNEL_NAME,
+            NotificationManager.IMPORTANCE_HIGH
+        ).apply {
+            enableLights(true)
+            setBypassDnd(true)
+            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            setShowBadge(true)
+            setSound(null, null)
+        }
 
     @Provides
     @Singleton
@@ -119,8 +120,8 @@ class NotificationModule {
             setSmallIcon(R.drawable.outline_timer_24)
             setCategory(CATEGORY_ALARM)
             setAutoCancel(true)
-            setContentTitle("Upcoming alarm")
-            setSubText("Time to alarm")
+            setContentTitle(context.getString(R.string.upcoming_alarm_notification_content_title))
+            setSubText(context.getString(R.string.upcoming_alarm_notification_sub_text))
             setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             setUsesChronometer(true)
             setChronometerCountDown(true)
@@ -129,8 +130,7 @@ class NotificationModule {
 
     @Provides
     @Singleton
-    fun provideAlarmManager(app: Application): AlarmManager =
-        app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
+    fun provideAlarmManager(app: Application): AlarmManager = app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
 
     @Provides
     @Singleton
@@ -148,9 +148,18 @@ class NotificationModule {
         @Named("timer")
         timerNotificationBuilder: NotificationCompat.Builder,
         countDownTimerUtil: CountDownTimerUtil,
-        preferencesDataStore: PreferencesDataStore,
+        preferencesDataStore: PreferencesDataStoreRepository,
+        @ApplicationScope
         coroutineScope: CoroutineScope
-    ): TimerManagerWrapper = TimerManagerWrapper(app, alarmManager, notificationManager, timerNotificationBuilder, countDownTimerUtil, preferencesDataStore, coroutineScope)
+    ): TimerManagerWrapper = TimerManagerWrapper(
+        app,
+        alarmManager,
+        notificationManager,
+        timerNotificationBuilder,
+        countDownTimerUtil,
+        preferencesDataStore,
+        coroutineScope
+    )
 
     @Provides
     @Singleton
@@ -159,9 +168,16 @@ class NotificationModule {
         notificationManager: NotificationManager,
         @Named("stopwatch")
         stopwatchNotificationBuilder: NotificationCompat.Builder,
+        @ApplicationScope
         coroutineScope: CoroutineScope,
-        preferencesDataStore: PreferencesDataStore
-    ): StopwatchManagerWrapper = StopwatchManagerWrapper(app, notificationManager, stopwatchNotificationBuilder, coroutineScope, preferencesDataStore)
+        preferencesDataStore: PreferencesDataStoreRepository
+    ): StopwatchManagerWrapper = StopwatchManagerWrapper(
+        app,
+        notificationManager,
+        stopwatchNotificationBuilder,
+        coroutineScope,
+        preferencesDataStore
+    )
 
     @Provides
     @Singleton

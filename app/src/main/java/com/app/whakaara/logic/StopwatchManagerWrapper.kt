@@ -7,21 +7,23 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
-import com.app.whakaara.data.datastore.PreferencesDataStore
 import com.app.whakaara.receiver.StopwatchReceiver
-import com.app.whakaara.state.Lap
 import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.utils.DateUtils
-import com.app.whakaara.utils.PendingIntentUtils
-import com.app.whakaara.utils.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
-import com.app.whakaara.utils.constants.GeneralConstants.MAX_NUMBER_OF_LAPS
-import com.app.whakaara.utils.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
-import com.app.whakaara.utils.constants.GeneralConstants.ZERO_MILLIS
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_NOTIFICATION_ID
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_PAUSE
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_START
-import com.app.whakaara.utils.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_STOP
+import com.app.whakaara.state.asInternalModel
+import com.app.whakaara.utility.DateUtils
+import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
+import com.whakaara.core.constants.GeneralConstants.MAX_NUMBER_OF_LAPS
+import com.whakaara.core.constants.GeneralConstants.TIMER_START_DELAY_MILLIS
+import com.whakaara.core.constants.GeneralConstants.ZERO_MILLIS
+import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE
+import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_NOTIFICATION_ID
+import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_PAUSE
+import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_START
+import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_STOP
+import com.whakaara.core.di.ApplicationScope
+import com.whakaara.data.datastore.PreferencesDataStoreRepository
+import com.whakaara.model.stopwatch.Lap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.delay
@@ -37,8 +39,9 @@ class StopwatchManagerWrapper @Inject constructor(
     private val notificationManager: NotificationManager,
     @Named("stopwatch")
     private val stopwatchNotificationBuilder: NotificationCompat.Builder,
+    @ApplicationScope
     private val coroutineScope: CoroutineScope,
-    private val preferencesDataStore: PreferencesDataStore
+    private val preferencesDataStore: PreferencesDataStoreRepository
 ) {
     val stopwatchState = MutableStateFlow(StopwatchState())
 
@@ -123,9 +126,7 @@ class StopwatchManagerWrapper @Inject constructor(
         }
     }
 
-    fun recreateStopwatchActive(
-        state: StopwatchState
-    ) {
+    fun recreateStopwatchActive(state: StopwatchState) {
         val current = System.currentTimeMillis()
         val difference = current - state.lastTimeStamp
         val time = difference + state.timeMillis
@@ -142,9 +143,7 @@ class StopwatchManagerWrapper @Inject constructor(
         startStopwatch()
     }
 
-    fun recreateStopwatchActiveFromReceiver(
-        state: StopwatchState
-    ) {
+    fun recreateStopwatchActiveFromReceiver(state: StopwatchState) {
         if (stopwatchState.value != StopwatchState()) {
             startStopwatch()
         } else {
@@ -158,13 +157,11 @@ class StopwatchManagerWrapper @Inject constructor(
             startStopwatch()
         }
         runBlocking {
-            preferencesDataStore.saveStopwatchState(stopwatchState.value)
+            preferencesDataStore.saveStopwatchState(stopwatchState.value.asInternalModel())
         }
     }
 
-    fun recreateStopwatchPausedFromReceiver(
-        state: StopwatchState
-    ) {
+    fun recreateStopwatchPausedFromReceiver(state: StopwatchState) {
         if (stopwatchState.value != StopwatchState()) {
             pauseStopwatch()
         } else {
@@ -186,13 +183,11 @@ class StopwatchManagerWrapper @Inject constructor(
         }
 
         runBlocking {
-            preferencesDataStore.saveStopwatchState(stopwatchState.value)
+            preferencesDataStore.saveStopwatchState(stopwatchState.value.asInternalModel())
         }
     }
 
-    fun recreateStopwatchPaused(
-        state: StopwatchState
-    ) {
+    fun recreateStopwatchPaused(state: StopwatchState) {
         stopwatchState.update {
             state
         }
@@ -200,27 +195,30 @@ class StopwatchManagerWrapper @Inject constructor(
 
     fun createStopwatchNotification() {
         val lastTimeStamp = System.currentTimeMillis()
-        val setWhen = if (stopwatchState.value.isStart) {
-            lastTimeStamp
-        } else {
-            lastTimeStamp - stopwatchState.value.timeMillis
-        }
+        val setWhen =
+            if (stopwatchState.value.isStart) {
+                lastTimeStamp
+            } else {
+                lastTimeStamp - stopwatchState.value.timeMillis
+            }
 
         val pauseReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = STOPWATCH_RECEIVER_ACTION_PAUSE)
         val stopReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = STOPWATCH_RECEIVER_ACTION_STOP)
 
-        val pauseReceiverPendingIntent = PendingIntentUtils.getBroadcast(
-            context = app.applicationContext,
-            id = INTENT_REQUEST_CODE,
-            intent = pauseReceiverIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val stopReceiverPendingIntent = PendingIntentUtils.getBroadcast(
-            context = app.applicationContext,
-            id = INTENT_REQUEST_CODE,
-            intent = stopReceiverIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val pauseReceiverPendingIntent =
+            PendingIntentUtils.getBroadcast(
+                context = app.applicationContext,
+                id = INTENT_REQUEST_CODE,
+                intent = pauseReceiverIntent,
+                flag = PendingIntent.FLAG_UPDATE_CURRENT
+            )
+        val stopReceiverPendingIntent =
+            PendingIntentUtils.getBroadcast(
+                context = app.applicationContext,
+                id = INTENT_REQUEST_CODE,
+                intent = stopReceiverIntent,
+                flag = PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         notificationManager.notify(
             STOPWATCH_NOTIFICATION_ID,
@@ -229,7 +227,11 @@ class StopwatchManagerWrapper @Inject constructor(
                 setWhen(setWhen)
                 setUsesChronometer(true)
                 setSubText(app.applicationContext.getString(R.string.stopwatch_notification_sub_text))
-                addAction(0, app.applicationContext.getString(R.string.notification_timer_pause_action_label), pauseReceiverPendingIntent)
+                addAction(
+                    0,
+                    app.applicationContext.getString(R.string.notification_timer_pause_action_label),
+                    pauseReceiverPendingIntent
+                )
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_stop_action_label), stopReceiverPendingIntent)
             }.build()
         )
@@ -239,26 +241,28 @@ class StopwatchManagerWrapper @Inject constructor(
         val startReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = STOPWATCH_RECEIVER_ACTION_START)
         val stopReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = STOPWATCH_RECEIVER_ACTION_STOP)
 
-        val playReceiverPendingIntent = PendingIntentUtils.getBroadcast(
-            context = app.applicationContext,
-            id = INTENT_REQUEST_CODE,
-            intent = startReceiverIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val playReceiverPendingIntent =
+            PendingIntentUtils.getBroadcast(
+                context = app.applicationContext,
+                id = INTENT_REQUEST_CODE,
+                intent = startReceiverIntent,
+                flag = PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
-        val stopReceiverPendingIntent = PendingIntentUtils.getBroadcast(
-            context = app.applicationContext,
-            id = INTENT_REQUEST_CODE,
-            intent = stopReceiverIntent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
+        val stopReceiverPendingIntent =
+            PendingIntentUtils.getBroadcast(
+                context = app.applicationContext,
+                id = INTENT_REQUEST_CODE,
+                intent = stopReceiverIntent,
+                flag = PendingIntent.FLAG_UPDATE_CURRENT
+            )
 
         notificationManager.notify(
             STOPWATCH_NOTIFICATION_ID,
             stopwatchNotificationBuilder.apply {
                 clearActions()
                 setUsesChronometer(false)
-                setSubText(app.applicationContext.getString(R.string.notification_sub_text_pasused))
+                setSubText(app.applicationContext.getString(R.string.notification_sub_text_paused))
                 setWhen(System.currentTimeMillis())
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_play_action_label), playReceiverPendingIntent)
                 addAction(0, app.applicationContext.getString(R.string.notification_timer_stop_action_label), stopReceiverPendingIntent)

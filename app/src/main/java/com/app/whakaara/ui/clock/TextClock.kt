@@ -9,12 +9,10 @@ import com.app.whakaara.R
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.constants.DateUtilsConstants
+import com.whakaara.core.constants.DateUtilsConstants
 
 @Composable
-fun TextClock(
-    is24HourFormat: Boolean
-) {
+fun TextClock(is24HourFormat: Boolean) {
     val textColor = MaterialTheme.colorScheme.onBackground.toArgb()
     AndroidView(
         factory = { context ->

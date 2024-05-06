@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -29,8 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.app.whakaara.state.Lap
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Shapes
 import com.app.whakaara.ui.theme.Spacings.space40
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.Spacings.spaceNone
@@ -39,7 +38,8 @@ import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utils.DateUtils
+import com.app.whakaara.utility.DateUtils
+import com.whakaara.model.stopwatch.Lap
 
 @Composable
 fun StopwatchLapList(
@@ -69,13 +69,16 @@ fun StopwatchLapList(
 }
 
 @Composable
-private fun LapCell(index: Int, lap: Lap) {
+private fun LapCell(
+    index: Int,
+    lap: Lap
+) {
     Box(
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(start = space40, end = space40)
     ) {
-        Card(shape = RoundedCornerShape(spaceMedium)) {
+        Card(shape = Shapes.small) {
             Box(
                 modifier = Modifier.padding(all = spaceMedium)
             ) {
@@ -120,9 +123,10 @@ fun Modifier.verticalFadingEdge(
                         visibleItemsInfo.size in 0..1 -> 0f
                         lastItem.index < totalItemsCount - 1 -> 1f
                         lastItem.offset + lastItem.size <= viewportEndOffset -> 1f
-                        lastItem.offset + lastItem.size > viewportEndOffset -> lastItem.run {
-                            (size - (viewportEndOffset - offset)) / size.toFloat()
-                        }
+                        lastItem.offset + lastItem.size > viewportEndOffset ->
+                            lastItem.run {
+                                (size - (viewportEndOffset - offset)) / size.toFloat()
+                            }
                         else -> 1f
                     }
                 }

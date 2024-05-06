@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.whakaara.model"
+    namespace = "com.whakaara.core.model"
 
     buildTypes {
         release {

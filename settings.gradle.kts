@@ -24,9 +24,9 @@ gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:structure:te
 rootProject.name = "whakaara"
 include(
     ":app",
-    ":core",
-    ":core-database",
-    ":core-data",
-    ":core-model",
-    ":core-test"
+    ":core:common",
+    ":core:database",
+    ":core:data",
+    ":core:model",
+    ":core:test"
 )

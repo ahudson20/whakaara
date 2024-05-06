@@ -3,7 +3,7 @@
 This README provides an overview of the project, its features, and how to get started with the application.
 
 ## Screenshots
-<p align="center"> 
+<p align="center">
   <img src="https://github.com/ahudson20/whakaara/assets/29796379/4ae970f3-4927-48d4-bc25-e17ceef557aa" width="200" height="450"/>
   <img src="https://github.com/ahudson20/whakaara/assets/29796379/e4f2a876-6fb1-4887-ad9a-77b822ca7683" width="200" height="450"/>
   <img src="https://github.com/ahudson20/whakaara/assets/29796379/f2a43920-a17a-417e-9aee-3605179feddc" width="200" height="450"/>
@@ -17,6 +17,22 @@ This README provides an overview of the project, its features, and how to get st
 * **Room**: Room is used for local data persistence, providing a seamless storage solution for alarms and their configurations.
 * **Jetpack Compose**: Jetpack Compose is utilized to create a modern and responsive user interface, simplifying UI development.
 * **Hilt**: Hilt is employed for dependency injection, facilitating modularization and improving code maintainability.
+
+## UI
+The app was designed using [Material 3 guidelines](https://m3.material.io/).
+
+The Screens and UI elements are built entirely using [Jetpack Compose](https://developer.android.com/jetpack/compose).
+
+The app has two themes:
+
+- Dynamic color - uses colors based on the [user's current color theme](https://material.io/blog/announcing-material-you)
+- Default theme - uses predefined colors when dynamic color is not supported
+
+Each theme also supports dark mode, as well as high and medium contrast.
+
+## Modularization
+
+The **Whakaara** app has been modularized.
 
 ## Feedback and Support
 

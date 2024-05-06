@@ -21,10 +21,11 @@ class AndroidLibraryPlugin : Plugin<Project> {
             }
             extensions.configure<LibraryAndroidComponentsExtension> {
                 beforeVariants {
-                    it.enableAndroidTest = it.enableAndroidTest
-                            && project.projectDir.resolve("src/androidTest").exists()
+                    it.enableAndroidTest = it.enableAndroidTest &&
+                        project.projectDir.resolve("src/androidTest").exists()
                 }
             }
         }
     }
 }
+

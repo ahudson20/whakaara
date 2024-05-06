@@ -18,3 +18,4 @@ class AndroidHiltPlugin : Plugin<Project> {
         }
     }
 }
+

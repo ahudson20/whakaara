@@ -4,12 +4,13 @@ This README provides an overview of the project, its features, and how to get st
 
 ## Screenshots
 <p align="center">
-  <img src="https://github.com/ahudson20/whakaara/assets/29796379/4ae970f3-4927-48d4-bc25-e17ceef557aa" width="200" height="450"/>
-  <img src="https://github.com/ahudson20/whakaara/assets/29796379/e4f2a876-6fb1-4887-ad9a-77b822ca7683" width="200" height="450"/>
-  <img src="https://github.com/ahudson20/whakaara/assets/29796379/f2a43920-a17a-417e-9aee-3605179feddc" width="200" height="450"/>
-  <img src="https://github.com/ahudson20/whakaara/assets/29796379/078aef76-c883-4a98-a596-ac3dfb44dae3" width="200" height="450"/>
-  <img src="https://github.com/ahudson20/whakaara/assets/29796379/44c054df-95a5-4fae-89bf-84ebedc972f0" width="200" height="450"/>
-  <img src="https://github.com/ahudson20/whakaara/assets/29796379/b017f690-fd3e-48f9-afd7-5832e44718dd" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/4ae970f3-4927-48d4-bc25-e17ceef557aa" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/3cf00a23-7daa-4051-a1c0-116e3b36c22b" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/e64eabd7-c8b3-40ff-ba52-7077f585edc5" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/d1970b7c-62c0-46f9-81ba-9412157cfa90" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/b8cc053f-55dc-4fbf-8d96-925b0e20bc8e" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/e5aa302e-d668-438d-887d-15e9806a04bd" width="200" height="450"/>
+    <img src="https://github.com/ahudson20/whakaara/assets/29796379/18670eaa-1267-428b-8e17-c25fd5e06e26" width="200" height="450"/>
 </p>
 
 ## Technologies Used
@@ -33,6 +34,10 @@ Each theme also supports dark mode, as well as high and medium contrast.
 ## Modularization
 
 The **Whakaara** app has been modularized.
+
+<p align="center">
+    <img width="769" alt="modularization" src="https://github.com/ahudson20/whakaara/assets/29796379/5d41f669-047f-43ac-a1b6-53ca691cea47">
+</p>
 
 ## Feedback and Support
 

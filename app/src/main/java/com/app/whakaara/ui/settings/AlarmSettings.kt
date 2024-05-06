@@ -51,7 +51,7 @@ import kotlinx.coroutines.launch
 fun AlarmSettings(
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit,
+    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
@@ -81,17 +81,17 @@ fun AlarmSettings(
                     val selectedRingtone = uri.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java) ?: Settings.System.DEFAULT_ALARM_ALERT_URI
                     updatePreferences(
                         preferencesState.preferences.copy(
-                            alarmSoundPath = selectedRingtone.toString(),
-                        ),
+                            alarmSoundPath = selectedRingtone.toString()
+                        )
                     )
                 }
-            },
+            }
         )
 
     Text(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
         style = MaterialTheme.typography.titleMedium,
-        text = stringResource(id = R.string.settings_screen_alarm_settings_title),
+        text = stringResource(id = R.string.settings_screen_alarm_settings_title)
     )
 
     SettingsMenuLink(
@@ -99,7 +99,7 @@ fun AlarmSettings(
         icon = {
             Icon(
                 imageVector = Icons.Default.NotificationsActive,
-                contentDescription = stringResource(id = R.string.settings_screen_ringtone_selection_icon),
+                contentDescription = stringResource(id = R.string.settings_screen_ringtone_selection_icon)
             )
         },
         title = {
@@ -110,7 +110,7 @@ fun AlarmSettings(
         },
         onClick = {
             ringtonePicker.launch(ringtoneSelectionIntent)
-        },
+        }
     )
 
     SettingsSwitch(
@@ -121,10 +121,10 @@ fun AlarmSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    filteredAlarmList = it,
-                ),
+                    filteredAlarmList = it
+                )
             )
-        },
+        }
     )
 
     SettingsSwitch(
@@ -135,17 +135,16 @@ fun AlarmSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    isVibrateEnabled = it,
-                ),
+                    isVibrateEnabled = it
+                )
             )
-        },
+        }
     )
 
     SettingsListDropdown(
-        modifier =
-            Modifier
-                .height(space80)
-                .testTag(tag = "alarm vibrate drop down"),
+        modifier = Modifier
+            .height(space80)
+            .testTag(tag = "alarm vibrate drop down"),
         enabled = preferencesState.preferences.isVibrateEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.vibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },
@@ -161,11 +160,11 @@ fun AlarmSettings(
             if (selection != preferencesState.preferences.vibrationPattern) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        vibrationPattern = selection,
-                    ),
+                        vibrationPattern = selection
+                    )
                 )
             }
-        },
+        }
     )
 
     SettingsSwitch(
@@ -176,10 +175,10 @@ fun AlarmSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    isSnoozeEnabled = it,
-                ),
+                    isSnoozeEnabled = it
+                )
             )
-        },
+        }
     )
 
     SettingsListDropdown(
@@ -193,11 +192,11 @@ fun AlarmSettings(
             if (selection != preferencesState.preferences.snoozeTime) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        snoozeTime = selection,
-                    ),
+                        snoozeTime = selection
+                    )
                 )
             }
-        },
+        }
     )
 
     SettingsSwitch(
@@ -208,11 +207,11 @@ fun AlarmSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    upcomingAlarmNotification = it,
-                ),
+                    upcomingAlarmNotification = it
+                )
             )
             updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(it)
-        },
+        }
     )
 
     SettingsListDropdown(
@@ -227,11 +226,11 @@ fun AlarmSettings(
             if (selection != preferencesState.preferences.upcomingAlarmNotificationTime) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        upcomingAlarmNotificationTime = selection,
-                    ),
+                        upcomingAlarmNotificationTime = selection
+                    )
                 )
             }
-        },
+        }
     )
 
     SettingsSwitch(
@@ -242,10 +241,10 @@ fun AlarmSettings(
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    deleteAfterGoesOff = it,
-                ),
+                    deleteAfterGoesOff = it
+                )
             )
-        },
+        }
     )
 
     SettingsListDropdown(
@@ -259,11 +258,11 @@ fun AlarmSettings(
             if (selection != preferencesState.preferences.autoSilenceTime) {
                 updatePreferences(
                     preferencesState.preferences.copy(
-                        autoSilenceTime = selection,
-                    ),
+                        autoSilenceTime = selection
+                    )
                 )
             }
-        },
+        }
     )
 
     SettingsMenuLink(
@@ -271,7 +270,7 @@ fun AlarmSettings(
         icon = {
             Icon(
                 imageVector = Icons.Default.Widgets,
-                contentDescription = stringResource(id = R.string.settings_screen_add_widget_icon),
+                contentDescription = stringResource(id = R.string.settings_screen_add_widget_icon)
             )
         },
         title = { Text(text = stringResource(id = R.string.settings_screen_add_widget_title)) },
@@ -279,10 +278,10 @@ fun AlarmSettings(
         onClick = {
             scope.launch {
                 GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
-                    receiver = AppWidgetReceiver::class.java,
+                    receiver = AppWidgetReceiver::class.java
                 )
             }
-        },
+        }
     )
 }
 
@@ -295,7 +294,7 @@ fun AlarmSettingsPreview() {
             AlarmSettings(
                 preferencesState = PreferencesState(),
                 updatePreferences = {},
-                updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {},
+                updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
             )
         }
     }

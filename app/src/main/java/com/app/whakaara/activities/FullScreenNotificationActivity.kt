@@ -37,14 +37,18 @@ class FullScreenNotificationActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private lateinit var alarm: Alarm
 
-    private val broadCastReceiverFinishActivity = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            when (intent.action) {
-                STOP_FULL_SCREEN_ACTIVITY -> finishAndRemoveTask()
-                else -> return
+    private val broadCastReceiverFinishActivity =
+        object : BroadcastReceiver() {
+            override fun onReceive(
+                context: Context,
+                intent: Intent
+            ) {
+                when (intent.action) {
+                    STOP_FULL_SCREEN_ACTIVITY -> finishAndRemoveTask()
+                    else -> return
+                }
             }
         }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,12 +74,12 @@ class FullScreenNotificationActivity : ComponentActivity() {
                         alarm = alarm,
                         snooze = viewModel::snooze,
                         disable = viewModel::disable,
-                        is24HourFormat = preferencesState.preferences.is24HourFormat,
+                        is24HourFormat = preferencesState.preferences.is24HourFormat
                     )
                 } else {
                     TimerFullScreen(
                         resetTimer = viewModel::resetTimer,
-                        is24HourFormat = preferencesState.preferences.is24HourFormat,
+                        is24HourFormat = preferencesState.preferences.is24HourFormat
                     )
                 }
             }
@@ -87,9 +91,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
         viewModel.disable(alarm = alarm)
-        this@FullScreenNotificationActivity.showToast(
-            message = this@FullScreenNotificationActivity.getString(R.string.notification_action_cancelled, alarm.title),
-        )
+        this@FullScreenNotificationActivity.showToast(message = this@FullScreenNotificationActivity.getString(R.string.notification_action_cancelled, alarm.title))
         finishAndRemoveTask()
     }
 

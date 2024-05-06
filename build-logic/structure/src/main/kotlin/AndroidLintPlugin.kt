@@ -15,11 +15,15 @@ class AndroidLintPlugin : Plugin<Project> {
                 android.set(true)
                 ignoreFailures.set(true)
                 debug.set(true)
+                outputToConsole.set(true)
                 reporters {
                     reporter(ReporterType.HTML)
+                    reporter(ReporterType.PLAIN)
+                    reporter(ReporterType.CHECKSTYLE)
                 }
                 filter {
                     exclude("**/generated/**")
+                    include("**/kotlin/**")
                 }
             }
         }

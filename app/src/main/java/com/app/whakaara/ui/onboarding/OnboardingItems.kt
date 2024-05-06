@@ -4,5 +4,5 @@ enum class OnboardingItems {
     WELCOME,
     NOTIFICATIONS,
     BATTERY_OPTIMIZATION,
-    WIDGET,
+    WIDGET
 }

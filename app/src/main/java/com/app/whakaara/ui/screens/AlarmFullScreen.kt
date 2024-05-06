@@ -31,7 +31,7 @@ fun AlarmFullScreen(
     alarm: Alarm,
     snooze: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
-    is24HourFormat: Boolean,
+    is24HourFormat: Boolean
 ) {
     val context = LocalContext.current
     val activity = (context as? Activity)
@@ -39,14 +39,13 @@ fun AlarmFullScreen(
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier =
-                modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            modifier = modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
             Row {
                 TextClock(
-                    is24HourFormat = is24HourFormat,
+                    is24HourFormat = is24HourFormat
                 )
             }
 
@@ -57,10 +56,10 @@ fun AlarmFullScreen(
                         onClick = {
                             snooze(alarm)
                             context.showToast(
-                                message = context.getString(R.string.notification_action_snoozed, alarm.title),
+                                message = context.getString(R.string.notification_action_snoozed, alarm.title)
                             )
                             activity?.finish()
-                        },
+                        }
                     ) {
                         Text(text = stringResource(id = R.string.notification_action_button_snooze))
                     }
@@ -71,7 +70,7 @@ fun AlarmFullScreen(
                         disable(alarm)
                         context.showToast(message = context.getString(R.string.notification_action_cancelled, alarm.title))
                         activity?.finish()
-                    },
+                    }
                 ) {
                     Text(text = stringResource(id = R.string.notification_action_button_dismiss))
                 }
@@ -84,14 +83,14 @@ fun AlarmFullScreen(
 @ThemePreviews
 @FontScalePreviews
 fun NotificationFullScreenPreview(
-    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {
     WhakaaraTheme {
         AlarmFullScreen(
             alarm = alarm,
             snooze = {},
             disable = {},
-            is24HourFormat = true,
+            is24HourFormat = true
         )
     }
 }

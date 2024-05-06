@@ -18,38 +18,35 @@ class CardTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit =
-        with(composeTestRule) {
-            // Given
-            val date =
-                Calendar.getInstance().apply {
-                    set(Calendar.HOUR_OF_DAY, 12)
-                    set(Calendar.MINUTE, 13)
-                }
-            val alarm =
-                Alarm(
-                    date = date,
-                    subTitle = "12:13 AM",
-                )
-
-            // When
-            setContent {
-                WhakaaraTheme {
-                    Card(
-                        alarm = alarm,
-                        is24HourFormat = true,
-                        disable = {},
-                        enable = {},
-                        reset = {},
-                    )
-                }
-            }
-
-            // Then
-            onNodeWithText(text = "12:13AM").assertIsDisplayed()
-            onNodeWithTag(testTag = "alarm switch")
-                .assertIsDisplayed()
-                .assertIsToggleable()
-                .assertIsOn()
+    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
+        // Given
+        val date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 12)
+            set(Calendar.MINUTE, 13)
         }
+        val alarm = Alarm(
+            date = date,
+            subTitle = "12:13 AM"
+        )
+
+        // When
+        setContent {
+            WhakaaraTheme {
+                Card(
+                    alarm = alarm,
+                    is24HourFormat = true,
+                    disable = {},
+                    enable = {},
+                    reset = {}
+                )
+            }
+        }
+
+        // Then
+        onNodeWithText(text = "12:13AM").assertIsDisplayed()
+        onNodeWithTag(testTag = "alarm switch")
+            .assertIsDisplayed()
+            .assertIsToggleable()
+            .assertIsOn()
+    }
 }

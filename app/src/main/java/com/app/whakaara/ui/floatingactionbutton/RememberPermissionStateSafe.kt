@@ -12,7 +12,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 @Composable
 fun rememberPermissionStateSafe(
     permission: String,
-    onPermissionResult: (Boolean) -> Unit = {},
+    onPermissionResult: (Boolean) -> Unit = {}
 ) = when {
     LocalInspectionMode.current ->
         remember {

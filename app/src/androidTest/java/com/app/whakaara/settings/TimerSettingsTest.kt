@@ -24,7 +24,7 @@ class TimerSettingsTest {
                 WhakaaraTheme {
                     TimerSettings(
                         preferencesState = state,
-                        updatePreferences = {},
+                        updatePreferences = {}
                     )
                 }
             }

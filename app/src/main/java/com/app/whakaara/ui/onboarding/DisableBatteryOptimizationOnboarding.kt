@@ -31,31 +31,30 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 fun DisableBatteryOptimizationOnboarding(modifier: Modifier = Modifier) {
     val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
     Column(
-        modifier =
-            modifier
-                .fillMaxSize()
-                .padding(all = spaceMedium),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+            .fillMaxSize()
+            .padding(all = spaceMedium),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(space200))
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_battery_title),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineMedium
         )
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_battery_sub_text),
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.bodySmall,
+            style = MaterialTheme.typography.bodySmall
         )
         Spacer(modifier = Modifier.height(space20))
         Button(
             onClick = {
                 val intent = Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS)
                 launcher.launch(intent)
-            },
+            }
         ) {
             Text(text = stringResource(id = R.string.onboarding_battery_button))
         }

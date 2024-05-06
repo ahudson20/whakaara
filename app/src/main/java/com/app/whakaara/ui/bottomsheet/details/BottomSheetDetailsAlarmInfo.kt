@@ -43,29 +43,28 @@ import com.whakaara.core.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CH
 @Composable
 fun BottomSheetDetailsAlarmInfo(
     modifier: Modifier = Modifier,
-    updateBottomSheetDetailsAlarmInfo: UpdateBottomSheetDetailsAlarmInfo,
+    updateBottomSheetDetailsAlarmInfo: UpdateBottomSheetDetailsAlarmInfo
 ) {
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = modifier,
+        modifier = modifier
     ) {
         Row(
-            modifier =
-                Modifier
-                    .padding(start = space10, end = space10, top = space20)
-                    .fillMaxWidth(),
+            modifier = Modifier
+                .padding(start = space10, end = space10, top = space20)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = stringResource(id = R.string.bottom_sheet_vibration_switch),
+                    text = stringResource(id = R.string.bottom_sheet_vibration_switch)
                 )
                 Text(
                     style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(id = R.string.bottom_sheet_vibration_switch_sub_title),
+                    text = stringResource(id = R.string.bottom_sheet_vibration_switch_sub_title)
                 )
             }
             Switch(
@@ -73,26 +72,25 @@ fun BottomSheetDetailsAlarmInfo(
                 checked = updateBottomSheetDetailsAlarmInfo.updateIsVibrationEnabled.value,
                 onCheckedChange = {
                     updateBottomSheetDetailsAlarmInfo.updateIsVibrationEnabled.onValueChange(it)
-                },
+                }
             )
         }
 
         Row(
-            modifier =
-                Modifier
-                    .padding(space10)
-                    .fillMaxWidth(),
+            modifier = Modifier
+                .padding(space10)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = stringResource(id = R.string.bottom_sheet_snooze_switch),
+                    text = stringResource(id = R.string.bottom_sheet_snooze_switch)
                 )
                 Text(
                     style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(id = R.string.bottom_sheet_snooze_switch_sub_title),
+                    text = stringResource(id = R.string.bottom_sheet_snooze_switch_sub_title)
                 )
             }
             Switch(
@@ -100,26 +98,25 @@ fun BottomSheetDetailsAlarmInfo(
                 checked = updateBottomSheetDetailsAlarmInfo.updateIsSnoozeEnabled.value,
                 onCheckedChange = {
                     updateBottomSheetDetailsAlarmInfo.updateIsSnoozeEnabled.onValueChange(it)
-                },
+                }
             )
         }
 
         Row(
-            modifier =
-                Modifier
-                    .padding(space10)
-                    .fillMaxWidth(),
+            modifier = Modifier
+                .padding(space10)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = stringResource(id = R.string.bottom_sheet_delete_switch),
+                    text = stringResource(id = R.string.bottom_sheet_delete_switch)
                 )
                 Text(
                     style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(id = R.string.bottom_sheet_delete_switch_sub_title),
+                    text = stringResource(id = R.string.bottom_sheet_delete_switch_sub_title)
                 )
             }
             Switch(
@@ -128,26 +125,25 @@ fun BottomSheetDetailsAlarmInfo(
                 enabled = !updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.value && updateBottomSheetDetailsAlarmInfo.updateCheckedList.value.isEmpty(),
                 onCheckedChange = {
                     updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.onValueChange(it)
-                },
+                }
             )
         }
 
         Row(
-            modifier =
-                Modifier
-                    .padding(all = space10)
-                    .fillMaxWidth(),
+            modifier = Modifier
+                .padding(all = space10)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = stringResource(id = R.string.bottom_sheet_repeat_switch_title),
+                    text = stringResource(id = R.string.bottom_sheet_repeat_switch_title)
                 )
                 Text(
                     style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(id = R.string.bottom_sheet_repeat_switch_sub_title),
+                    text = stringResource(id = R.string.bottom_sheet_repeat_switch_sub_title)
                 )
             }
             Switch(
@@ -156,26 +152,25 @@ fun BottomSheetDetailsAlarmInfo(
                 enabled = !updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.value && updateBottomSheetDetailsAlarmInfo.updateCheckedList.value.isEmpty(),
                 onCheckedChange = {
                     updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.onValueChange(it)
-                },
+                }
             )
         }
 
         Row(
-            modifier =
-                Modifier
-                    .padding(space10)
-                    .fillMaxWidth(),
+            modifier = Modifier
+                .padding(space10)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
                     style = MaterialTheme.typography.bodyLarge,
-                    text = stringResource(id = R.string.bottom_sheet_custom_alarm_days_title),
+                    text = stringResource(id = R.string.bottom_sheet_custom_alarm_days_title)
                 )
                 Text(
                     style = MaterialTheme.typography.bodySmall,
-                    text = stringResource(id = R.string.bottom_sheet_custom_alarm_days_sub_title),
+                    text = stringResource(id = R.string.bottom_sheet_custom_alarm_days_sub_title)
                 )
                 MultiChoiceSegmentedButtonRow {
                     DAYS_OF_WEEK.forEachIndexed { index, label ->
@@ -187,12 +182,11 @@ fun BottomSheetDetailsAlarmInfo(
                             },
                             checked = index in updateBottomSheetDetailsAlarmInfo.updateCheckedList.value,
                             enabled = !updateBottomSheetDetailsAlarmInfo.updateDeleteAfterGoesOff.value && !updateBottomSheetDetailsAlarmInfo.updateRepeatDaily.value,
-                            colors =
-                                SegmentedButtonDefaults.colors().copy(
-                                    disabledInactiveContainerColor = MaterialTheme.colorScheme.surface,
-                                    disabledInactiveContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
-                                    disabledInactiveBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
-                                ),
+                            colors = SegmentedButtonDefaults.colors().copy(
+                                disabledInactiveContainerColor = MaterialTheme.colorScheme.surface,
+                                disabledInactiveContentColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.38f),
+                                disabledInactiveBorderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
+                            )
                         ) {
                             Text(label)
                         }
@@ -202,12 +196,11 @@ fun BottomSheetDetailsAlarmInfo(
         }
 
         Row(
-            modifier =
-                Modifier
-                    .padding(space10)
-                    .fillMaxWidth(),
+            modifier = Modifier
+                .padding(space10)
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = stringResource(id = R.string.bottom_sheet_content_alarm_title))
             Column {
@@ -217,39 +210,35 @@ fun BottomSheetDetailsAlarmInfo(
                     onValueChange = {
                         if ((it.length <= ALARM_TITLE_MAX_CHARS) && (!it.contains("\n"))) {
                             updateBottomSheetDetailsAlarmInfo.updateTitle.onValueChange(
-                                it,
+                                it
                             )
                         }
                     },
-                    colors =
-                        TextFieldDefaults.colors(
-                            focusedContainerColor = Transparent,
-                            unfocusedContainerColor = Transparent,
-                            focusedIndicatorColor = MaterialTheme.colorScheme.onSurface,
-                            unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                        ),
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = Transparent,
+                        unfocusedContainerColor = Transparent,
+                        focusedIndicatorColor = MaterialTheme.colorScheme.onSurface,
+                        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    ),
                     textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.End),
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions =
-                        KeyboardActions(
-                            onDone = {
-                                focusManager.clearFocus()
-                            },
-                        ),
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            focusManager.clearFocus()
+                        }
+                    )
                 )
                 Text(
-                    text =
-                        stringResource(
-                            id = R.string.bottom_sheet_title_characters,
-                            updateBottomSheetDetailsAlarmInfo.updateTitle.value.length,
-                            ALARM_TITLE_MAX_CHARS,
-                        ),
+                    text = stringResource(
+                        id = R.string.bottom_sheet_title_characters,
+                        updateBottomSheetDetailsAlarmInfo.updateTitle.value.length,
+                        ALARM_TITLE_MAX_CHARS
+                    ),
                     textAlign = TextAlign.End,
                     style = MaterialTheme.typography.labelSmall,
-                    modifier =
-                        Modifier
-                            .align(Alignment.End)
-                            .padding(top = spaceXxSmall),
+                    modifier = Modifier
+                        .align(Alignment.End)
+                        .padding(top = spaceXxSmall)
                 )
             }
         }
@@ -262,7 +251,7 @@ fun BottomSheetDetailsAlarmInfo(
 private fun BottomSheetAlarmDetailsPreview() {
     WhakaaraTheme {
         BottomSheetDetailsAlarmInfo(
-            updateBottomSheetDetailsAlarmInfo = UpdateBottomSheetDetailsAlarmInfo(),
+            updateBottomSheetDetailsAlarmInfo = UpdateBottomSheetDetailsAlarmInfo()
         )
     }
 }

@@ -17,14 +17,14 @@ class NotificationUtils {
         fun snackBarPromptPermission(
             scope: CoroutineScope,
             snackBarHostState: SnackbarHostState,
-            context: Context,
+            context: Context
         ) {
             scope.launch {
                 val result =
                     snackBarHostState.showSnackbar(
                         message = context.getString(R.string.permission_prompt_message),
                         actionLabel = context.getString(R.string.permission_prompt_action_label),
-                        duration = SnackbarDuration.Long,
+                        duration = SnackbarDuration.Long
                     )
                 /**SNACKBAR PROMPT ACCEPTED**/
                 if (snackBarHasBeenClicked(result)) {
@@ -36,7 +36,7 @@ class NotificationUtils {
         private fun openDeviceApplicationSettings(context: Context) {
             val intent =
                 Intent(
-                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                    Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                 ).apply {
                     addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     data = Uri.fromParts(INTENT_PACKAGE, context.packageName, null)

@@ -147,10 +147,9 @@ class TimerManagerWrapperTest {
         runTest {
             // Given
             val millis = 123123L
-            val millisFormatted =
-                DateUtils.formatTimeForTimer(
-                    millis = millis,
-                )
+            val millisFormatted = DateUtils.formatTimeForTimer(
+                millis = millis
+            )
 
             // When
             timerManagerWrapper.recreatePausedTimer(milliseconds = millis)

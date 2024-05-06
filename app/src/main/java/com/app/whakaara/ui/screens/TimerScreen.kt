@@ -61,19 +61,18 @@ fun TimerScreen(
     restartTimer: (autoRestartTimer: Boolean) -> Unit,
     pauseTimer: () -> Unit,
     is24HourFormat: Boolean,
-    autoRestartTimer: Boolean,
+    autoRestartTimer: Boolean
 ) {
     val focusManager = LocalFocusManager.current
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
-            if (wasGranted) {
-                startTimer()
-            }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) { wasGranted ->
+        if (wasGranted) {
+            startTimer()
         }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -83,10 +82,9 @@ fun TimerScreen(
             FloatingActionButtonRow(
                 isPlaying = timerState.isTimerActive,
                 isStart = timerState.isStart,
-                isPlayButtonVisible =
-                    timerState.inputHours != TIMER_INPUT_INITIAL_VALUE ||
-                        timerState.inputMinutes != TIMER_INPUT_INITIAL_VALUE ||
-                        timerState.inputSeconds != TIMER_INPUT_INITIAL_VALUE,
+                isPlayButtonVisible = timerState.inputHours != TIMER_INPUT_INITIAL_VALUE ||
+                    timerState.inputMinutes != TIMER_INPUT_INITIAL_VALUE ||
+                    timerState.inputSeconds != TIMER_INPUT_INITIAL_VALUE,
                 onStop = stopTimer,
                 onPlayPause = {
                     if (timerState.isTimerActive) {
@@ -103,7 +101,7 @@ fun TimerScreen(
                                     NotificationUtils.snackBarPromptPermission(
                                         scope = scope,
                                         snackBarHostState = snackbarHostState,
-                                        context = context,
+                                        context = context
                                     )
                                 } else {
                                     /**FIRST TIME ACCESSING**/
@@ -116,28 +114,27 @@ fun TimerScreen(
                 },
                 onExtraButtonClicked = {
                     restartTimer(autoRestartTimer)
-                },
+                }
             )
         },
-        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .pointerInput(key1 = timerState, Unit) {
-                        detectTapGestures(
-                            onTap = {
-                                focusManager.clearFocus()
-                                if (timerState.inputHours.isBlank()) updateHours(TIMER_INPUT_INITIAL_VALUE)
-                                if (timerState.inputMinutes.isBlank()) updateMinutes(TIMER_INPUT_INITIAL_VALUE)
-                                if (timerState.inputSeconds.isBlank()) updateSeconds(TIMER_INPUT_INITIAL_VALUE)
-                            },
-                        )
-                    },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+                .pointerInput(key1 = timerState, Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            focusManager.clearFocus()
+                            if (timerState.inputHours.isBlank()) updateHours(TIMER_INPUT_INITIAL_VALUE)
+                            if (timerState.inputMinutes.isBlank()) updateMinutes(TIMER_INPUT_INITIAL_VALUE)
+                            if (timerState.inputSeconds.isBlank()) updateSeconds(TIMER_INPUT_INITIAL_VALUE)
+                        }
+                    )
+                },
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AnimatedContent(
                 targetState = (!timerState.isTimerActive && !timerState.isTimerPaused),
@@ -145,50 +142,50 @@ fun TimerScreen(
                     (scaleIn(animationSpec = tween(1000, delayMillis = 90)))
                         .togetherWith(scaleOut(animationSpec = tween(600)))
                 },
-                label = "",
+                label = ""
             ) { targetState ->
                 if (targetState) {
                     Row(
                         modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(start = spaceMedium, end = spaceMedium),
-                        horizontalArrangement = Arrangement.SpaceBetween,
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(start = spaceMedium, end = spaceMedium),
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         TimerInputField(
                             label = stringResource(id = R.string.timer_screen_hour_label),
                             regex = TIMER_HOURS_INPUT_REGEX,
                             updateStringEvent =
-                                StringStateEvent(
-                                    value = timerState.inputHours,
-                                    onValueChange = { newValue ->
-                                        updateHours(newValue)
-                                    },
-                                ),
+                            StringStateEvent(
+                                value = timerState.inputHours,
+                                onValueChange = { newValue ->
+                                    updateHours(newValue)
+                                }
+                            )
                         )
 
                         TimerInputField(
                             label = stringResource(id = R.string.timer_screen_minutes_label),
                             regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
                             updateStringEvent =
-                                StringStateEvent(
-                                    value = timerState.inputMinutes,
-                                    onValueChange = { newValue ->
-                                        updateMinutes(newValue)
-                                    },
-                                ),
+                            StringStateEvent(
+                                value = timerState.inputMinutes,
+                                onValueChange = { newValue ->
+                                    updateMinutes(newValue)
+                                }
+                            )
                         )
 
                         TimerInputField(
                             label = stringResource(id = R.string.timer_screen_seconds_label),
                             regex = TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
                             updateStringEvent =
-                                StringStateEvent(
-                                    value = timerState.inputSeconds,
-                                    onValueChange = { newValue ->
-                                        updateSeconds(newValue)
-                                    },
-                                ),
+                            StringStateEvent(
+                                value = timerState.inputSeconds,
+                                onValueChange = { newValue ->
+                                    updateSeconds(newValue)
+                                }
+                            )
                         )
                     }
                 } else {
@@ -196,20 +193,20 @@ fun TimerScreen(
                         progress = timerState.progress,
                         time = timerState.time,
                         finishTime =
-                            if (timerState.isTimerPaused) {
-                                context.getString(R.string.timer_screen_paused)
-                            } else {
-                                DateUtils.getAlarmTimeFormatted(
-                                    date =
-                                        Calendar.getInstance().apply {
-                                            add(
-                                                Calendar.MILLISECOND,
-                                                timerState.millisecondsFromTimerInput.toInt(),
-                                            )
-                                        },
-                                    is24HourFormatEnabled = is24HourFormat,
-                                )
-                            },
+                        if (timerState.isTimerPaused) {
+                            context.getString(R.string.timer_screen_paused)
+                        } else {
+                            DateUtils.getAlarmTimeFormatted(
+                                date =
+                                Calendar.getInstance().apply {
+                                    add(
+                                        Calendar.MILLISECOND,
+                                        timerState.millisecondsFromTimerInput.toInt()
+                                    )
+                                },
+                                is24HourFormatEnabled = is24HourFormat
+                            )
+                        }
                     )
                 }
             }
@@ -232,7 +229,7 @@ fun TimerPreview() {
             stopTimer = {},
             restartTimer = {},
             is24HourFormat = false,
-            autoRestartTimer = true,
+            autoRestartTimer = true
         )
     }
 }

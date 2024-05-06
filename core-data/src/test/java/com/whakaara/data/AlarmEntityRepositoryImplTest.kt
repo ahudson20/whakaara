@@ -42,20 +42,18 @@ class AlarmEntityRepositoryImplTest {
     fun `get all alarms flow`() =
         runTest {
             // Given
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                    subTitle = "subTitle",
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                )
+            val alarmEntity = AlarmEntity(
+                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+                subTitle = "subTitle",
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                }
+            )
 
             // When
             coEvery { alarmDao.getAllAlarmsFlow() } returns flowOf(listOf(alarmEntity))
@@ -72,20 +70,18 @@ class AlarmEntityRepositoryImplTest {
     fun `get all alarms`() =
         runTest {
             // Given
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                    subTitle = "subTitle",
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                )
+            val alarmEntity = AlarmEntity(
+                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+                subTitle = "subTitle",
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                }
+            )
             coEvery { alarmDao.getAllAlarms() } returns listOf(alarmEntity)
 
             // When
@@ -100,27 +96,24 @@ class AlarmEntityRepositoryImplTest {
         runTest {
             // Given
             val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = alarmId,
-                    subTitle = "subTitle",
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                )
+            val alarmEntity = AlarmEntity(
+                alarmId = alarmId,
+                subTitle = "subTitle",
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                }
+            )
             val alarmIdSlot = slot<UUID>()
 
             coEvery { alarmDao.getAlarmById(any()) } returns alarmEntity
 
             // When
-            val response =
-                repository.getAlarmById(alarmId)
+            val response = repository.getAlarmById(alarmId)
 
             // Then
             coVerify(atLeast = 1) { alarmDao.getAlarmById(capture(alarmIdSlot)) }
@@ -137,20 +130,18 @@ class AlarmEntityRepositoryImplTest {
         runTest {
             // Given
             val alarmEntitySlot = slot<AlarmEntity>()
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                    subTitle = "subTitle",
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                )
+            val alarmEntity = AlarmEntity(
+                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+                subTitle = "subTitle",
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                }
+            )
             coEvery { alarmDao.updateAlarm(any()) } returns mockk()
 
             // When
@@ -171,20 +162,18 @@ class AlarmEntityRepositoryImplTest {
         runTest {
             // Given
             val alarmEntitySlot = slot<AlarmEntity>()
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                    subTitle = "subTitle",
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                )
+            val alarmEntity = AlarmEntity(
+                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+                subTitle = "subTitle",
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                }
+            )
 
             coEvery { alarmDao.insert(any()) } returns mockk()
 
@@ -206,20 +195,18 @@ class AlarmEntityRepositoryImplTest {
         runTest {
             // Given
             val alarmEntitySlot = slot<AlarmEntity>()
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                    subTitle = "subTitle",
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                )
+            val alarmEntity = AlarmEntity(
+                alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+                subTitle = "subTitle",
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                }
+            )
 
             coEvery { alarmDao.deleteAlarm(any()) } returns mockk()
 
@@ -252,7 +239,7 @@ class AlarmEntityRepositoryImplTest {
             coVerify(atLeast = 1) { alarmDao.deleteAlarmById(capture(alarmIdSlot)) }
             assertEquals(
                 UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                alarmIdSlot.captured,
+                alarmIdSlot.captured
             )
         }
 
@@ -273,11 +260,11 @@ class AlarmEntityRepositoryImplTest {
             coVerify(atLeast = 1) { alarmDao.isEnabled(capture(alarmIdSlot), capture(isEnabledSlot)) }
             assertEquals(
                 UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                alarmIdSlot.captured,
+                alarmIdSlot.captured
             )
             assertEquals(
                 true,
-                isEnabledSlot.captured,
+                isEnabledSlot.captured
             )
         }
 }

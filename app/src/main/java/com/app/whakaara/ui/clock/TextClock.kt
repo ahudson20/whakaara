@@ -32,7 +32,7 @@ fun TextClock(is24HourFormat: Boolean) {
                 typeface = ResourcesCompat.getFont(context, R.font.azeret_mono_medium)
                 isAllCaps = true
             }
-        },
+        }
     )
 }
 
@@ -42,7 +42,7 @@ fun TextClock(is24HourFormat: Boolean) {
 fun TextClockPreview() {
     WhakaaraTheme {
         TextClock(
-            is24HourFormat = true,
+            is24HourFormat = true
         )
     }
 }

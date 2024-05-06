@@ -36,31 +36,30 @@ fun CardContainerSwipeToDismiss(
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit
 ) {
     val context = LocalContext.current
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier
     ) {
         if (alarms.isEmpty()) {
             item {
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(top = space10),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Text(
-                        text = stringResource(id = R.string.alarm_screen_empty_list),
+                        text = stringResource(id = R.string.alarm_screen_empty_list)
                     )
                 }
             }
         } else {
             items(alarms, key = { it.alarmId }) { alarm ->
-                val dismissState =
-                    rememberSwipeToDismissBoxState(
-                        positionalThreshold = { distance: Float ->
-                            distance * 0.7f
-                        },
-                    )
+                val dismissState = rememberSwipeToDismissBoxState(
+                    positionalThreshold = { distance: Float ->
+                        distance * 0.7f
+                    }
+                )
 
                 if (dismissState.currentValue != SwipeToDismissBoxValue.Settled) {
                     LaunchedEffect(Unit) {
@@ -82,9 +81,9 @@ fun CardContainerSwipeToDismiss(
                             is24HourFormat = is24HourFormat,
                             disable = disable,
                             enable = enable,
-                            reset = reset,
+                            reset = reset
                         )
-                    },
+                    }
                 )
             }
         }
@@ -95,18 +94,18 @@ fun CardContainerSwipeToDismiss(
 @ThemePreviews
 @FontScalePreviews
 fun CardContainerSwipeToDismissPreview(
-    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {
     WhakaaraTheme {
         CardContainerSwipeToDismiss(
-            alarms =
-                listOf(
-                    alarm,
-                ),
+            alarms = listOf(
+                alarm
+            ),
             is24HourFormat = true,
             delete = {},
             disable = {},
             enable = {},
-        ) {}
+            reset = {}
+        )
     }
 }

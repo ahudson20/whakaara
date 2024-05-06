@@ -6,7 +6,7 @@ enum class VibrationPattern(val value: Int, val label: String) {
     CLICK(0, "Click"),
     DOUBLE(1, "Double click"),
     HEAVY(2, "Heavy click"),
-    TICK(3, "Tick"),
+    TICK(3, "Tick")
     ;
 
     companion object {
@@ -14,7 +14,7 @@ enum class VibrationPattern(val value: Int, val label: String) {
 
         fun createWaveForm(
             selection: VibrationPattern,
-            repeat: Int,
+            repeat: Int
         ): VibrationEffect =
             when (selection) {
                 CLICK -> VibrationEffect.createWaveform(clickPattern, clickPatternAmplitude, repeat)

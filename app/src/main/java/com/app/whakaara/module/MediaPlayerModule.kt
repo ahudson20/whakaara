@@ -25,7 +25,7 @@ class MediaPlayerModule {
                 AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_ALARM)
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .build(),
+                    .build()
             )
             isLooping = true
         }
@@ -38,6 +38,6 @@ class MediaPlayerModule {
     @Provides
     fun providesPowerManager(
         @ApplicationContext
-        context: Context,
+        context: Context
     ): PowerManager = (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
 }

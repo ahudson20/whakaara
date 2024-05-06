@@ -67,21 +67,21 @@ class AppWidget : GlanceAppWidget() {
                 TWO_BY_ONE,
                 SMALL_SQUARE,
                 HORIZONTAL_RECTANGLE,
-                BIG_SQUARE,
-            ),
+                BIG_SQUARE
+            )
         )
 
     override var stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
     override suspend fun provideGlance(
         context: Context,
-        id: GlanceId,
+        id: GlanceId
     ) {
         val appContext = context.applicationContext ?: throw IllegalStateException()
         val alarmEntryPoint =
             EntryPointAccessors.fromApplication(
                 appContext,
-                AlarmRepositoryEntryPoint::class.java,
+                AlarmRepositoryEntryPoint::class.java
             )
         val repository = alarmEntryPoint.alarmRepository()
         var listOfAlarms: List<Alarm>
@@ -120,7 +120,7 @@ class AppWidget : GlanceAppWidget() {
                 NextAlarm(
                     nextAlarm = nextAlarm,
                     textColour = textColour,
-                    backgroundColor = backgroundColour,
+                    backgroundColor = backgroundColour
                 )
             }
         }
@@ -131,38 +131,37 @@ class AppWidget : GlanceAppWidget() {
     private fun NextAlarm(
         nextAlarm: Alarm?,
         textColour: Color,
-        backgroundColor: Color,
+        backgroundColor: Color
     ) {
         val size = LocalSize.current
         Row(
             modifier =
-                GlanceModifier
-                    .padding(all = spaceXSmall)
-                    .fillMaxWidth()
-                    .fillMaxHeight()
-                    .background(backgroundColor)
-                    .clickable(actionStartActivity<MainActivity>()),
+            GlanceModifier
+                .padding(all = spaceXSmall)
+                .fillMaxWidth()
+                .fillMaxHeight()
+                .background(backgroundColor)
+                .clickable(actionStartActivity<MainActivity>()),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             if (size.width <= ONE_BY_ONE.width) {
                 Image(
                     modifier =
-                        GlanceModifier
-                            .fillMaxWidth()
-                            .size(space40),
+                    GlanceModifier
+                        .fillMaxWidth()
+                        .size(space40),
                     contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
                     provider = ImageProvider(R.drawable.outline_alarm_24),
                     contentScale = ContentScale.FillBounds,
-                    colorFilter = ColorFilter.tint(ColorProvider(textColour)),
+                    colorFilter = ColorFilter.tint(ColorProvider(textColour))
                 )
             } else {
                 Column(
-                    modifier =
-                        GlanceModifier
-                            .padding(start = space10, end = space10),
+                    modifier = GlanceModifier
+                        .padding(start = space10, end = space10),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalAlignment = Alignment.CenterHorizontally,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     if (nextAlarm == null) {
                         GlanceText(
@@ -170,7 +169,7 @@ class AppWidget : GlanceAppWidget() {
                             text = LocalContext.current.getString(R.string.widget_next_alarm_none),
                             font = R.font.azeretmono,
                             fontSize = 26.sp,
-                            color = textColour,
+                            color = textColour
                         )
                     } else {
                         GlanceText(
@@ -178,7 +177,7 @@ class AppWidget : GlanceAppWidget() {
                             text = nextAlarm.subTitle.filterNot { it.isWhitespace() },
                             font = R.font.azeret_mono_medium,
                             fontSize = 26.sp,
-                            color = textColour,
+                            color = textColour
                         )
                         if (size.width > TWO_BY_ONE.width) {
                             GlanceText(
@@ -186,7 +185,7 @@ class AppWidget : GlanceAppWidget() {
                                 text = nextAlarm.title,
                                 font = R.font.azeret_mono_medium,
                                 fontSize = 20.sp,
-                                color = textColour,
+                                color = textColour
                             )
                         }
                     }

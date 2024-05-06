@@ -12,7 +12,7 @@ data class StopwatchState(
     val isActive: Boolean = false,
     val isStart: Boolean = true,
     val isPaused: Boolean = false,
-    val lapList: MutableList<Lap> = mutableListOf(),
+    val lapList: MutableList<Lap> = mutableListOf()
 )
 
 fun StopwatchDataStore.asExternalModel() =
@@ -23,7 +23,7 @@ fun StopwatchDataStore.asExternalModel() =
         isActive = isActive,
         isStart = isStart,
         isPaused = isPaused,
-        lapList = lapList,
+        lapList = lapList
     )
 
 fun StopwatchState.asInternalModel() =
@@ -34,5 +34,5 @@ fun StopwatchState.asInternalModel() =
         isActive = isActive,
         isStart = isStart,
         isPaused = isPaused,
-        lapList = lapList,
+        lapList = lapList
     )

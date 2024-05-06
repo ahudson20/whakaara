@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 class PreferencesImpl(
-    private val preferencesDao: PreferencesDao,
+    private val preferencesDao: PreferencesDao
 ) : PreferencesRepository {
     override suspend fun insert(preferences: Preferences) = preferencesDao.insert(preferences.asInternalModel())
 

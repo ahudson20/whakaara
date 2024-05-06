@@ -28,7 +28,7 @@ class MediaServiceReceiver : HiltBroadcastReceiver() {
 
     override fun onReceive(
         context: Context,
-        intent: Intent,
+        intent: Intent
     ) {
         super.onReceive(context, intent)
         val alarmId = intent.getStringExtra(INTENT_ALARM_ID) ?: ""

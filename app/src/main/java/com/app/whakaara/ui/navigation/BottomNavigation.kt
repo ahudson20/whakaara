@@ -16,15 +16,14 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 
 @Composable
 fun BottomNavigation(navController: NavController) {
-    val navItems =
-        listOf(
-            BottomNavItem.Alarm,
-            BottomNavItem.Timer,
-            BottomNavItem.Stopwatch,
-        )
+    val navItems = listOf(
+        BottomNavItem.Alarm,
+        BottomNavItem.Timer,
+        BottomNavItem.Stopwatch
+    )
 
     NavigationBar(
-        containerColor = Color.Transparent,
+        containerColor = Color.Transparent
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -50,7 +49,7 @@ fun BottomNavigation(navController: NavController) {
 //                        launchSingleTop = true
 //                        restoreState = true
 //                    }
-                },
+                }
             )
         }
     }
@@ -62,7 +61,7 @@ fun BottomNavigation(navController: NavController) {
 fun BottomNavigationPreview() {
     WhakaaraTheme {
         BottomNavigation(
-            navController = rememberNavController(),
+            navController = rememberNavController()
         )
     }
 }

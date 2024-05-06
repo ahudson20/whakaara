@@ -38,7 +38,7 @@ class NotificationModule {
         NotificationChannel(
             CHANNEL_ID,
             NotificationUtilsConstants.CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_HIGH,
+            NotificationManager.IMPORTANCE_HIGH
         ).apply {
             enableLights(true)
             setBypassDnd(true)
@@ -52,7 +52,7 @@ class NotificationModule {
     fun provideNotificationManager(
         @ApplicationContext
         context: Context,
-        channel: NotificationChannel,
+        channel: NotificationChannel
     ): NotificationManager {
         return (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
             createNotificationChannel(channel)
@@ -63,7 +63,7 @@ class NotificationModule {
     @Named("alarm")
     fun provideNotificationBuilder(
         @ApplicationContext
-        context: Context,
+        context: Context
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             color = Color.WHITE
@@ -80,7 +80,7 @@ class NotificationModule {
     @Named("timer")
     fun provideNotificationBuilderForTimer(
         @ApplicationContext
-        context: Context,
+        context: Context
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             color = Color.WHITE
@@ -96,7 +96,7 @@ class NotificationModule {
     @Named("stopwatch")
     fun providesNotificationBuilderForStopwatch(
         @ApplicationContext
-        context: Context,
+        context: Context
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             color = Color.WHITE
@@ -113,7 +113,7 @@ class NotificationModule {
     @Named("upcoming")
     fun providesNotificationBuilderForUpcomingAlarm(
         @ApplicationContext
-        context: Context,
+        context: Context
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_ID).apply {
             color = Color.WHITE
@@ -136,7 +136,7 @@ class NotificationModule {
     @Singleton
     fun providesAlarmManagerWrapper(
         app: Application,
-        alarmManager: AlarmManager,
+        alarmManager: AlarmManager
     ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
 
     @Provides
@@ -150,17 +150,16 @@ class NotificationModule {
         countDownTimerUtil: CountDownTimerUtil,
         preferencesDataStore: PreferencesDataStoreRepository,
         @ApplicationScope
-        coroutineScope: CoroutineScope,
-    ): TimerManagerWrapper =
-        TimerManagerWrapper(
-            app,
-            alarmManager,
-            notificationManager,
-            timerNotificationBuilder,
-            countDownTimerUtil,
-            preferencesDataStore,
-            coroutineScope,
-        )
+        coroutineScope: CoroutineScope
+    ): TimerManagerWrapper = TimerManagerWrapper(
+        app,
+        alarmManager,
+        notificationManager,
+        timerNotificationBuilder,
+        countDownTimerUtil,
+        preferencesDataStore,
+        coroutineScope
+    )
 
     @Provides
     @Singleton
@@ -171,15 +170,14 @@ class NotificationModule {
         stopwatchNotificationBuilder: NotificationCompat.Builder,
         @ApplicationScope
         coroutineScope: CoroutineScope,
-        preferencesDataStore: PreferencesDataStoreRepository,
-    ): StopwatchManagerWrapper =
-        StopwatchManagerWrapper(
-            app,
-            notificationManager,
-            stopwatchNotificationBuilder,
-            coroutineScope,
-            preferencesDataStore,
-        )
+        preferencesDataStore: PreferencesDataStoreRepository
+    ): StopwatchManagerWrapper = StopwatchManagerWrapper(
+        app,
+        notificationManager,
+        stopwatchNotificationBuilder,
+        coroutineScope,
+        preferencesDataStore
+    )
 
     @Provides
     @Singleton

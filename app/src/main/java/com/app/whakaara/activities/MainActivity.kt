@@ -12,10 +12,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.state.AlarmState
+import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
-import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.whakaara.model.events.PreferencesEventCallbacks
 import com.whakaara.model.events.StopwatchEventCallbacks
 import com.whakaara.model.events.TimerEventCallbacks
@@ -56,7 +56,7 @@ class MainActivity :
 
             WhakaaraTheme(
                 darkTheme = useDarkColours,
-                dynamicColor = preferencesState.preferences.dynamicTheme,
+                dynamicColor = preferencesState.preferences.dynamicTheme
             ) {
                 MainScreen(
                     preferencesState = preferencesState,
@@ -66,7 +66,7 @@ class MainActivity :
                     alarmEventCallbacks = this@MainActivity,
                     timerEventCallbacks = this@MainActivity,
                     stopwatchEventCallbacks = this@MainActivity,
-                    preferencesEventCallbacks = this@MainActivity,
+                    preferencesEventCallbacks = this@MainActivity
                 )
             }
         }
@@ -173,7 +173,7 @@ class MainActivity :
 
     override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {
         viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
-            shouldEnableUpcomingAlarmNotification = shouldEnableUpcomingAlarmNotification,
+            shouldEnableUpcomingAlarmNotification = shouldEnableUpcomingAlarmNotification
         )
     }
     //endregion

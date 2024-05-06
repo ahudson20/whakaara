@@ -18,7 +18,7 @@ data class AlarmEntity(
     var isSnoozeEnabled: Boolean = true,
     var deleteAfterGoesOff: Boolean = false,
     var repeatDaily: Boolean = false,
-    var daysOfWeek: MutableList<Int> = mutableListOf(),
+    var daysOfWeek: MutableList<Int> = mutableListOf()
 )
 
 fun AlarmEntity.asExternalModel() =
@@ -32,7 +32,7 @@ fun AlarmEntity.asExternalModel() =
         isSnoozeEnabled = isSnoozeEnabled,
         deleteAfterGoesOff = deleteAfterGoesOff,
         repeatDaily = repeatDaily,
-        daysOfWeek = daysOfWeek,
+        daysOfWeek = daysOfWeek
     )
 
 fun Alarm.asInternalModel() =
@@ -46,5 +46,5 @@ fun Alarm.asInternalModel() =
         isSnoozeEnabled = isSnoozeEnabled,
         deleteAfterGoesOff = deleteAfterGoesOff,
         repeatDaily = repeatDaily,
-        daysOfWeek = daysOfWeek,
+        daysOfWeek = daysOfWeek
     )

@@ -45,21 +45,20 @@ import com.whakaara.model.stopwatch.Lap
 fun StopwatchLapList(
     modifier: Modifier = Modifier,
     lapList: MutableList<Lap>,
-    listState: LazyListState,
+    listState: LazyListState
 ) {
     LazyColumn(
-        modifier =
-            modifier
-                .padding(top = if (lapList.isNotEmpty()) spaceNone else spaceMedium)
-                .animateContentSize()
-                .height(height = if (lapList.isNotEmpty()) 350.dp else spaceNone)
-                .verticalFadingEdge(
-                    lazyListState = listState,
-                    length = 100.dp,
-                ),
+        modifier = modifier
+            .padding(top = if (lapList.isNotEmpty()) spaceNone else spaceMedium)
+            .animateContentSize()
+            .height(height = if (lapList.isNotEmpty()) 350.dp else spaceNone)
+            .verticalFadingEdge(
+                lazyListState = listState,
+                length = 100.dp
+            ),
         verticalArrangement = Arrangement.Top,
         state = listState,
-        reverseLayout = true,
+        reverseLayout = true
     ) {
         itemsIndexed(lapList) { index, item ->
             if (index == 0) Spacer(modifier = Modifier.fillMaxWidth().height(spaceXxLarge))
@@ -72,27 +71,26 @@ fun StopwatchLapList(
 @Composable
 private fun LapCell(
     index: Int,
-    lap: Lap,
+    lap: Lap
 ) {
     Box(
-        Modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(start = space40, end = space40),
+            .padding(start = space40, end = space40)
     ) {
         Card(shape = Shapes.small) {
             Box(
-                modifier = Modifier.padding(all = spaceMedium),
+                modifier = Modifier.padding(all = spaceMedium)
             ) {
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Text(text = index.inc().toString())
                     Box(
-                        modifier =
-                            Modifier
-                                .weight(1f)
-                                .padding(start = spaceXLarge, end = spaceMedium),
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = spaceXLarge, end = spaceMedium)
                     ) {
                         Text(
-                            text = DateUtils.formatTimeForStopwatchLap(lap.time),
+                            text = DateUtils.formatTimeForStopwatchLap(lap.time)
                         )
                     }
                     Text(text = DateUtils.formatTimeForStopwatchLap(lap.diff))
@@ -105,12 +103,12 @@ private fun LapCell(
 fun Modifier.verticalFadingEdge(
     lazyListState: LazyListState,
     length: Dp,
-    edgeColor: Color? = null,
+    edgeColor: Color? = null
 ) = composed(
     debugInspectorInfo {
         name = "length"
         value = length
-    },
+    }
 ) {
     val color = edgeColor ?: MaterialTheme.colorScheme.background
 
@@ -138,17 +136,15 @@ fun Modifier.verticalFadingEdge(
         drawContent()
 
         drawRect(
-            brush =
-                Brush.verticalGradient(
-                    colors =
-                        listOf(
-                            Color.Transparent,
-                            color,
-                        ),
-                    startY = size.height - bottomFadingEdgeStrength,
-                    endY = size.height,
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color.Transparent,
+                    color
                 ),
-            topLeft = Offset(x = 0f, y = size.height - bottomFadingEdgeStrength),
+                startY = size.height - bottomFadingEdgeStrength,
+                endY = size.height
+            ),
+            topLeft = Offset(x = 0f, y = size.height - bottomFadingEdgeStrength)
         )
     }
 }
@@ -159,22 +155,21 @@ fun Modifier.verticalFadingEdge(
 fun StopwatchLapListPreview() {
     WhakaaraTheme {
         StopwatchLapList(
-            lapList =
-                mutableListOf(
-                    Lap(
-                        time = 1000L,
-                        diff = 250L,
-                    ),
-                    Lap(
-                        time = 1000L,
-                        diff = 250L,
-                    ),
-                    Lap(
-                        time = 1000L,
-                        diff = 250L,
-                    ),
+            lapList = mutableListOf(
+                Lap(
+                    time = 1000L,
+                    diff = 250L
                 ),
-            listState = rememberLazyListState(),
+                Lap(
+                    time = 1000L,
+                    diff = 250L
+                ),
+                Lap(
+                    time = 1000L,
+                    diff = 250L
+                )
+            ),
+            listState = rememberLazyListState()
         )
     }
 }
@@ -186,11 +181,10 @@ fun LapCellPreview() {
     WhakaaraTheme {
         LapCell(
             index = 1,
-            lap =
-                Lap(
-                    time = 1000L,
-                    diff = 250L,
-                ),
+            lap = Lap(
+                time = 1000L,
+                diff = 250L
+            )
         )
     }
 }

@@ -13,26 +13,25 @@ class TimerCountdownDisplayTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit =
-        with(composeTestRule) {
-            // Given
-            val progress = 1.0F
-            val time = "00:10:00"
-            val finishTime = "2:34 PM"
+    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
+        // Given
+        val progress = 1.0F
+        val time = "00:10:00"
+        val finishTime = "2:34 PM"
 
-            // When
-            setContent {
-                WhakaaraTheme {
-                    TimerCountdownDisplay(
-                        progress = progress,
-                        time = time,
-                        finishTime = finishTime,
-                    )
-                }
+        // When
+        setContent {
+            WhakaaraTheme {
+                TimerCountdownDisplay(
+                    progress = progress,
+                    time = time,
+                    finishTime = finishTime
+                )
             }
-
-            // Then
-            onNodeWithText("00:10:00").assertIsDisplayed()
-            onNodeWithText("2:34 PM").assertIsDisplayed()
         }
+
+        // Then
+        onNodeWithText("00:10:00").assertIsDisplayed()
+        onNodeWithText("2:34 PM").assertIsDisplayed()
+    }
 }

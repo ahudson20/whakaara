@@ -15,46 +15,44 @@ class StopwatchLapListTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit =
-        with(composeTestRule) {
-            // Given
-            val lapList =
-                mutableListOf(
-                    Lap(
-                        time = 1000L,
-                        diff = 250L,
-                    ),
-                    Lap(
-                        time = 2000L,
-                        diff = 500L,
-                    ),
-                    Lap(
-                        time = 3000L,
-                        diff = 750L,
-                    ),
+    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
+        // Given
+        val lapList = mutableListOf(
+            Lap(
+                time = 1000L,
+                diff = 250L
+            ),
+            Lap(
+                time = 2000L,
+                diff = 500L
+            ),
+            Lap(
+                time = 3000L,
+                diff = 750L
+            )
+        )
+
+        // When
+        setContent {
+            WhakaaraTheme {
+                StopwatchLapList(
+                    lapList = lapList,
+                    listState = rememberLazyListState()
                 )
-
-            // When
-            setContent {
-                WhakaaraTheme {
-                    StopwatchLapList(
-                        lapList = lapList,
-                        listState = rememberLazyListState(),
-                    )
-                }
             }
-
-            // Then
-            onNodeWithText("3").assertIsDisplayed()
-            onNodeWithText("00:01:000").assertIsDisplayed()
-            onNodeWithText("00:00:250")
-
-            onNodeWithText("2").assertIsDisplayed()
-            onNodeWithText("00:02:000").assertIsDisplayed()
-            onNodeWithText("00:00:500")
-
-            onNodeWithText("1").assertIsDisplayed()
-            onNodeWithText("00:03:000").assertIsDisplayed()
-            onNodeWithText("00:00:750")
         }
+
+        // Then
+        onNodeWithText("3").assertIsDisplayed()
+        onNodeWithText("00:01:000").assertIsDisplayed()
+        onNodeWithText("00:00:250")
+
+        onNodeWithText("2").assertIsDisplayed()
+        onNodeWithText("00:02:000").assertIsDisplayed()
+        onNodeWithText("00:00:500")
+
+        onNodeWithText("1").assertIsDisplayed()
+        onNodeWithText("00:03:000").assertIsDisplayed()
+        onNodeWithText("00:00:750")
+    }
 }

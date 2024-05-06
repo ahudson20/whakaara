@@ -25,18 +25,17 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 fun BottomSheetDetailsTopBar(
     modifier: Modifier = Modifier,
     bottomText: String,
-    title: String,
+    title: String
 ) {
     Row(
-        modifier =
-            modifier
-                .height(IntrinsicSize.Min)
-                .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
+        modifier = modifier
+            .height(IntrinsicSize.Min)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
     ) {
         BottomSheetTitle(
             title = title,
-            bottomText = bottomText,
+            bottomText = bottomText
         )
     }
 }
@@ -45,27 +44,25 @@ fun BottomSheetDetailsTopBar(
 private fun BottomSheetTitle(
     modifier: Modifier = Modifier,
     title: String?,
-    bottomText: String,
+    bottomText: String
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.fillMaxHeight(),
+        modifier = modifier.fillMaxHeight()
     ) {
         Text(
-            text =
-                if (!title.isNullOrBlank()) {
-                    title.toString()
-                } else {
-                    stringResource(id = R.string.bottom_sheet_title)
-                },
+            text = if (!title.isNullOrBlank()) {
+                title.toString()
+            } else {
+                stringResource(id = R.string.bottom_sheet_title)
+            }
         )
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = bottomText,
-            style =
-                LocalTextStyle.current.copy(
-                    color = MaterialTheme.colorScheme.secondary,
-                ),
+            style = LocalTextStyle.current.copy(
+                color = MaterialTheme.colorScheme.secondary
+            )
         )
     }
 }
@@ -76,7 +73,7 @@ fun BottomSheetTopBarPreview() {
     WhakaaraTheme {
         BottomSheetDetailsTopBar(
             bottomText = "bottomText",
-            title = "title",
+            title = "title"
         )
     }
 }
@@ -87,11 +84,11 @@ fun BottomSheetTopBarPreview() {
 fun BottomSheetTitlePreview() {
     WhakaaraTheme {
         Row(
-            modifier = Modifier.height(IntrinsicSize.Min),
+            modifier = Modifier.height(IntrinsicSize.Min)
         ) {
             BottomSheetTitle(
                 title = "title",
-                bottomText = "Off",
+                bottomText = "Off"
             )
         }
     }

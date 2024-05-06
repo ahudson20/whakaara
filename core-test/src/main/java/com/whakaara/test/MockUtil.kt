@@ -20,7 +20,7 @@ object MockUtil {
             isSnoozeEnabled = true,
             deleteAfterGoesOff = false,
             repeatDaily = false,
-            daysOfWeek = mutableListOf(),
+            daysOfWeek = mutableListOf()
         )
 
     fun mockAlarmList() = listOf(mockAlarm())
@@ -45,6 +45,6 @@ object MockUtil {
             upcomingAlarmNotificationTime = SettingsTime.TEN,
             dynamicTheme = false,
             autoRestartTimer = true,
-            timerSoundPath = "",
+            timerSoundPath = ""
         )
 }

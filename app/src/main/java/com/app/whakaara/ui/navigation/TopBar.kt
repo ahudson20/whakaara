@@ -31,7 +31,7 @@ import java.util.Locale
 fun TopBar(
     route: String,
     preferencesState: PreferencesState,
-    preferencesEventCallbacks: PreferencesEventCallbacks,
+    preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
@@ -39,9 +39,7 @@ fun TopBar(
     TopAppBar(
         title = {
             Text(
-                text =
-                    route
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
+                text = route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
             )
         },
         actions = {
@@ -50,29 +48,29 @@ fun TopBar(
                     IconButton(
                         onClick = {
                             scope.launch { sheetState.expand() }
-                        },
+                        }
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Settings,
-                            contentDescription = stringResource(id = R.string.settings_icon_content_description),
+                            contentDescription = stringResource(id = R.string.settings_icon_content_description)
                         )
                     }
                 }
             }
-        },
+        }
     )
 
     BottomSheet(
         backgroundColor = MaterialTheme.colorScheme.surface,
         state = sheetState,
-        skipPeeked = true,
+        skipPeeked = true
     ) {
         SettingsScreen(
             route = route,
             preferencesState = preferencesState,
             updatePreferences = preferencesEventCallbacks::updatePreferences,
             updateAllAlarmSubtitles = preferencesEventCallbacks::updateAllAlarmSubtitles,
-            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = preferencesEventCallbacks::updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification,
+            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = preferencesEventCallbacks::updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
         )
     }
 }
@@ -81,20 +79,19 @@ fun TopBar(
 @ThemePreviews
 @FontScalePreviews
 fun TopBarPreview(
-    @PreviewParameter(RoutePreviewProvider::class) route: String,
+    @PreviewParameter(RoutePreviewProvider::class) route: String
 ) {
     WhakaaraTheme {
         TopBar(
             route = route,
             preferencesState = PreferencesState(),
-            preferencesEventCallbacks =
-                object : PreferencesEventCallbacks {
-                    override fun updatePreferences(preferences: Preferences) {}
+            preferencesEventCallbacks = object : PreferencesEventCallbacks {
+                override fun updatePreferences(preferences: Preferences) {}
 
-                    override fun updateAllAlarmSubtitles(format: Boolean) {}
+                override fun updateAllAlarmSubtitles(format: Boolean) {}
 
-                    override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {}
-                },
+                override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {}
+            }
         )
     }
 }

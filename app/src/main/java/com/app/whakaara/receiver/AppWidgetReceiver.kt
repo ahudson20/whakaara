@@ -34,7 +34,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray,
+        appWidgetIds: IntArray
     ) {
         super.onUpdate(context, appWidgetManager, appWidgetIds)
         observeData(context)
@@ -42,7 +42,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onReceive(
         context: Context,
-        intent: Intent,
+        intent: Intent
     ) {
         super.onReceive(context, intent)
         if (intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE) {
@@ -63,7 +63,7 @@ class AppWidgetReceiver : GlanceAppWidgetReceiver() {
                 updateAppWidgetState(
                     context = context,
                     definition = PreferencesGlanceStateDefinition,
-                    glanceId = glanceId,
+                    glanceId = glanceId
                 ) { prefs ->
                     prefs.toMutablePreferences().apply {
                         this[allAlarmsKey] = serializedList

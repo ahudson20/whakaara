@@ -44,10 +44,9 @@ class AlarmEntityDatabaseTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         val context = ApplicationProvider.getApplicationContext<Context>()
-        alarmDatabase =
-            Room
-                .inMemoryDatabaseBuilder(context, AlarmDatabase::class.java)
-                .build()
+        alarmDatabase = Room
+            .inMemoryDatabaseBuilder(context, AlarmDatabase::class.java)
+            .build()
         alarmDao = alarmDatabase.alarmDao()
     }
 
@@ -58,148 +57,135 @@ class AlarmEntityDatabaseTest {
     }
 
     @Test
-    fun insert_alarm_should_return_alarm_in_flow() =
-        runTest {
-            // Given
-            val alarmEntity =
-                AlarmEntity(
-                    subTitle = "subTitle",
-                    date = Calendar.getInstance(),
-                )
+    fun insert_alarm_should_return_alarm_in_flow() = runTest {
+        // Given
+        val alarmEntity = AlarmEntity(
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
 
-            // When
-            alarmDao.insert(alarmEntity)
+        // When
+        alarmDao.insert(alarmEntity)
 
-            // Then
-            alarmDao.getAllAlarmsFlow().test {
-                val list = awaitItem()
-                assert(list.contains(alarmEntity))
-                cancel()
-            }
+        // Then
+        alarmDao.getAllAlarmsFlow().test {
+            val list = awaitItem()
+            assert(list.contains(alarmEntity))
+            cancel()
         }
+    }
 
     @Test
-    fun insert_alarm_should_return_alarm_not_in_flow() =
-        runTest {
-            // Given
-            val alarmEntity =
-                AlarmEntity(
-                    title = "title",
-                    subTitle = "subTitle",
-                    date = Calendar.getInstance(),
-                )
+    fun insert_alarm_should_return_alarm_not_in_flow() = runTest {
+        // Given
+        val alarmEntity = AlarmEntity(
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
 
-            // When
-            alarmDao.insert(alarmEntity)
+        // When
+        alarmDao.insert(alarmEntity)
 
-            // Then
-            val alarms = alarmDao.getAllAlarms()
-            assert(alarms.contains(alarmEntity))
-        }
+        // Then
+        val alarms = alarmDao.getAllAlarms()
+        assert(alarms.contains(alarmEntity))
+    }
 
     @Test
-    fun update_alarm_should_return_alarm_get_by_id() =
-        runTest {
-            // Given
-            val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = alarmId,
-                    title = "title",
-                    subTitle = "subTitle",
-                    date = Calendar.getInstance(),
-                )
-            alarmDao.insert(alarmEntity)
+    fun update_alarm_should_return_alarm_get_by_id() = runTest {
+        // Given
+        val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
+        val alarmEntity = AlarmEntity(
+            alarmId = alarmId,
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+        alarmDao.insert(alarmEntity)
 
-            // When
-            alarmDao.updateAlarm(
-                alarmEntity =
-                    alarmEntity.copy(
-                        title = "updatedTitle",
-                        subTitle = "updatedSubTitle",
-                    ),
+        // When
+        alarmDao.updateAlarm(
+            alarmEntity = alarmEntity.copy(
+                title = "updatedTitle",
+                subTitle = "updatedSubTitle"
             )
+        )
 
-            // Then
-            alarmDao.getAlarmById(id = alarmId).apply {
-                assertNotEquals("title", this.title)
-                assertNotEquals("subTitle", this.subTitle)
+        // Then
+        alarmDao.getAlarmById(id = alarmId).apply {
+            assertNotEquals("title", this.title)
+            assertNotEquals("subTitle", this.subTitle)
 
-                assertEquals("updatedTitle", this.title)
-                assertEquals("updatedSubTitle", this.subTitle)
-            }
+            assertEquals("updatedTitle", this.title)
+            assertEquals("updatedSubTitle", this.subTitle)
         }
+    }
 
     @Test
-    fun delete_alarm_should_not_return_alarm() =
-        runTest {
-            // Given
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
-                    title = "title",
-                    subTitle = "subTitle",
-                    date = Calendar.getInstance(),
-                )
-            alarmDao.insert(alarmEntity)
+    fun delete_alarm_should_not_return_alarm() = runTest {
+        // Given
+        val alarmEntity = AlarmEntity(
+            alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d"),
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+        alarmDao.insert(alarmEntity)
 
-            // When
-            alarmDao.deleteAlarm(alarmEntity)
+        // When
+        alarmDao.deleteAlarm(alarmEntity)
 
-            // Then
-            alarmDao.getAllAlarmsFlow().test {
-                val list = awaitItem()
-                assert(!list.contains(alarmEntity))
-                cancel()
-            }
+        // Then
+        alarmDao.getAllAlarmsFlow().test {
+            val list = awaitItem()
+            assert(!list.contains(alarmEntity))
+            cancel()
         }
+    }
 
     @Test
-    fun delete_alarm_by_id_should_not_return_alarm() =
-        runTest {
-            // Given
-            val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = alarmId,
-                    title = "title",
-                    subTitle = "subTitle",
-                    date = Calendar.getInstance(),
-                )
-            alarmDao.insert(alarmEntity)
+    fun delete_alarm_by_id_should_not_return_alarm() = runTest {
+        // Given
+        val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
+        val alarmEntity = AlarmEntity(
+            alarmId = alarmId,
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance()
+        )
+        alarmDao.insert(alarmEntity)
 
-            // When
-            alarmDao.deleteAlarmById(id = alarmId)
+        // When
+        alarmDao.deleteAlarmById(id = alarmId)
 
-            // Then
-            alarmDao.getAllAlarmsFlow().test {
-                val list = awaitItem()
-                assert(!list.contains(alarmEntity))
-                cancel()
-            }
+        // Then
+        alarmDao.getAllAlarmsFlow().test {
+            val list = awaitItem()
+            assert(!list.contains(alarmEntity))
+            cancel()
         }
+    }
 
     @Test
-    fun alarm_is_enabled() =
-        runTest {
-            // Given
-            val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
-            val alarmEntity =
-                AlarmEntity(
-                    alarmId = alarmId,
-                    title = "title",
-                    subTitle = "subTitle",
-                    date = Calendar.getInstance(),
-                    isEnabled = true,
-                )
-            alarmDao.insert(alarmEntity)
+    fun alarm_is_enabled() = runTest {
+        // Given
+        val alarmId = UUID.fromString("19de4fcc-1c68-485c-b817-0290faec649d")
+        val alarmEntity = AlarmEntity(
+            alarmId = alarmId,
+            title = "title",
+            subTitle = "subTitle",
+            date = Calendar.getInstance(),
+            isEnabled = true
+        )
+        alarmDao.insert(alarmEntity)
 
-            // When
-            alarmDao.isEnabled(id = alarmId, isEnabled = false)
+        // When
+        alarmDao.isEnabled(id = alarmId, isEnabled = false)
 
-            // Then
-            alarmDao.getAlarmById(id = alarmId).apply {
-                assertEquals(false, this.isEnabled)
-            }
+        // Then
+        alarmDao.getAlarmById(id = alarmId).apply {
+            assertEquals(false, this.isEnabled)
         }
+    }
 }

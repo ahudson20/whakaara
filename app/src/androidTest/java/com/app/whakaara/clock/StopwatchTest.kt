@@ -16,77 +16,71 @@ class StopwatchTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayPlayButtonOnStart(): Unit =
-        with(composeTestRule) {
-            // Given + When
-            setContent {
-                WhakaaraTheme {
-                    Stopwatch(
-                        stopwatchState =
-                            StopwatchState(
-                                formattedTime = "01:01:01:001",
-                                isActive = false,
-                                isStart = true,
-                            ),
+    fun shouldDisplayPlayButtonOnStart(): Unit = with(composeTestRule) {
+        // Given + When
+        setContent {
+            WhakaaraTheme {
+                Stopwatch(
+                    stopwatchState = StopwatchState(
+                        formattedTime = "01:01:01:001",
+                        isActive = false,
+                        isStart = true
                     )
-                }
+                )
             }
-
-            // Then
-            onNodeWithText("01:01:01").assertIsDisplayed()
-            onNodeWithText("001").assertIsDisplayed()
-
-            onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
         }
+
+        // Then
+        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("001").assertIsDisplayed()
+
+        onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
+    }
 
     @Test
-    fun shouldDisplayPlayStopButtonOnActive(): Unit =
-        with(composeTestRule) {
-            // Given + When
-            setContent {
-                WhakaaraTheme {
-                    Stopwatch(
-                        stopwatchState =
-                            StopwatchState(
-                                formattedTime = "01:01:01:001",
-                                isActive = false,
-                                isStart = false,
-                            ),
+    fun shouldDisplayPlayStopButtonOnActive(): Unit = with(composeTestRule) {
+        // Given + When
+        setContent {
+            WhakaaraTheme {
+                Stopwatch(
+                    stopwatchState = StopwatchState(
+                        formattedTime = "01:01:01:001",
+                        isActive = false,
+                        isStart = false
                     )
-                }
+                )
             }
-
-            // Then
-            onNodeWithText("01:01:01").assertIsDisplayed()
-            onNodeWithText("001").assertIsDisplayed()
-
-            onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
-            onNodeWithContentDescription("Stop timer icon button").assertIsDisplayed().assertHasClickAction()
         }
+
+        // Then
+        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("001").assertIsDisplayed()
+
+        onNodeWithContentDescription("Start timer icon button").assertIsDisplayed().assertHasClickAction()
+        onNodeWithContentDescription("Stop timer icon button").assertIsDisplayed().assertHasClickAction()
+    }
 
     @Test
-    fun shouldDisplayPauseStopButtonOnActive(): Unit =
-        with(composeTestRule) {
-            // Given + When
-            setContent {
-                WhakaaraTheme {
-                    Stopwatch(
-                        stopwatchState =
-                            StopwatchState(
-                                formattedTime = "01:01:01:001",
-                                isActive = true,
-                                isStart = false,
-                            ),
+    fun shouldDisplayPauseStopButtonOnActive(): Unit = with(composeTestRule) {
+        // Given + When
+        setContent {
+            WhakaaraTheme {
+                Stopwatch(
+                    stopwatchState = StopwatchState(
+                        formattedTime = "01:01:01:001",
+                        isActive = true,
+                        isStart = false
                     )
-                }
+                )
             }
-
-            // Then
-            onNodeWithText("01:01:01").assertIsDisplayed()
-            onNodeWithText("001").assertIsDisplayed()
-
-            onNodeWithContentDescription(label = "Pause timer icon button").assertIsDisplayed().assertHasClickAction()
-            onNodeWithContentDescription(label = "Stop timer icon button").assertIsDisplayed().assertHasClickAction()
-            onNodeWithContentDescription(label = "Extra fab icon button").assertIsDisplayed().assertHasClickAction()
         }
+
+        // Then
+        onNodeWithText("01:01:01").assertIsDisplayed()
+        onNodeWithText("001").assertIsDisplayed()
+
+        onNodeWithContentDescription(label = "Pause timer icon button").assertIsDisplayed().assertHasClickAction()
+        onNodeWithContentDescription(label = "Stop timer icon button").assertIsDisplayed().assertHasClickAction()
+        onNodeWithContentDescription(label = "Extra fab icon button").assertIsDisplayed().assertHasClickAction()
+    }
 }

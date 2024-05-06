@@ -32,26 +32,26 @@ class DateUtils {
         fun getInitialTimeToAlarm(
             isEnabled: Boolean,
             time: Calendar,
-            context: Context,
+            context: Context
         ): String {
             return if (!isEnabled) {
                 context.getString(R.string.card_alarm_sub_title_off)
             } else {
                 convertSecondsToHMm(
                     seconds =
-                        TimeUnit.MILLISECONDS.toSeconds(
-                            getDifferenceFromCurrentTimeInMillis(
-                                time = time,
-                            ),
-                        ),
-                    context = context,
+                    TimeUnit.MILLISECONDS.toSeconds(
+                        getDifferenceFromCurrentTimeInMillis(
+                            time = time
+                        )
+                    ),
+                    context = context
                 )
             }
         }
 
         fun getAlarmTimeFormatted(
             date: Calendar,
-            is24HourFormatEnabled: Boolean,
+            is24HourFormatEnabled: Boolean
         ): String {
             val format = if (is24HourFormatEnabled) DATE_FORMAT_24_HOUR else DATE_FORMAT_12_HOUR
             return SimpleDateFormat(format, Locale.getDefault()).format(date.time).uppercase()
@@ -60,18 +60,18 @@ class DateUtils {
         fun Context.getTimeUntilAlarmFormatted(date: Calendar): String {
             return convertSecondsToHMm(
                 seconds =
-                    TimeUnit.MILLISECONDS.toSeconds(
-                        getDifferenceFromCurrentTimeInMillis(
-                            time = date,
-                        ),
-                    ),
-                context = this,
+                TimeUnit.MILLISECONDS.toSeconds(
+                    getDifferenceFromCurrentTimeInMillis(
+                        time = date
+                    )
+                ),
+                context = this
             )
         }
 
         fun convertSecondsToHMm(
             seconds: Long,
-            context: Context,
+            context: Context
         ): String {
             val minutes = seconds / 60 % 60
             val hours = seconds / (60 * 60) % 24
@@ -79,13 +79,21 @@ class DateUtils {
             val hoursString =
                 when {
                     hours.toInt() == 0 -> ""
-                    else -> context.resources.getQuantityString(R.plurals.hours, hours.toInt(), hours.toInt())
+                    else -> context.resources.getQuantityString(
+                        R.plurals.hours,
+                        hours.toInt(),
+                        hours.toInt()
+                    )
                 }
             val minutesString =
                 when {
                     minutes.toInt() == 0 && hours.toInt() != 0 -> ""
                     minutes.toInt() == 0 && hours.toInt() == 0 -> context.getString(R.string.alarm_less_than_one_minute)
-                    else -> context.resources.getQuantityString(R.plurals.minutes, minutes.toInt(), minutes.toInt())
+                    else -> context.resources.getQuantityString(
+                        R.plurals.minutes,
+                        minutes.toInt(),
+                        minutes.toInt()
+                    )
                 }
 
             formattedString.append(context.resources.getString(R.string.time_until_alarm_formatted_prefix) + " ")
@@ -108,7 +116,7 @@ class DateUtils {
 
         private fun checkIfSameDay(
             alarmTime: Calendar,
-            currentTime: Calendar,
+            currentTime: Calendar
         ): Boolean {
             if (alarmTime.before(currentTime)) {
                 return true
@@ -120,7 +128,8 @@ class DateUtils {
         }
 
         fun hoursToMilliseconds(hours: Int): Long {
-            val millisecondsInHour: Long = 3600000 // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
+            val millisecondsInHour: Long =
+                3600000 // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
             return hours * millisecondsInHour
         }
 
@@ -142,7 +151,12 @@ class DateUtils {
 
         fun formatTimeForStopwatch(millis: Long): String {
             return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
-                STOPWATCH_FORMAT.format(hours, minutes, seconds, TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS))
+                STOPWATCH_FORMAT.format(
+                    hours,
+                    minutes,
+                    seconds,
+                    TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
+                )
             }
         }
 
@@ -152,14 +166,14 @@ class DateUtils {
                     STOPWATCH_FORMAT_NO_HOURS.format(
                         minutes,
                         seconds,
-                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS),
+                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
                     )
                 } else {
                     STOPWATCH_FORMAT.format(
                         hours,
                         minutes,
                         seconds,
-                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS),
+                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
                     )
                 }
             }
@@ -168,7 +182,7 @@ class DateUtils {
         fun generateMillisecondsFromTimerInputValues(
             hours: String,
             minutes: String,
-            seconds: String,
+            seconds: String
         ): Long {
             var millis = ZERO_MILLIS
             millis += hoursToMilliseconds(hours = hours.toIntOrNull() ?: 0)

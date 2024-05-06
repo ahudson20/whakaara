@@ -15,26 +15,24 @@ class BottomSheetTimePickerTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit =
-        with(composeTestRule) {
-            // Given + When
-            setContent {
-                WhakaaraTheme {
-                    BottomSheetTimePicker(
-                        updatePickerValue =
-                            HoursUpdateEvent(
-                                value =
-                                    FullHours(
-                                        hours = 12,
-                                        minutes = 30,
-                                    ),
-                            ),
+    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
+        // Given + When
+        setContent {
+            WhakaaraTheme {
+                BottomSheetTimePicker(
+                    updatePickerValue =
+                    HoursUpdateEvent(
+                        value = FullHours(
+                            hours = 12,
+                            minutes = 30
+                        )
                     )
-                }
+                )
             }
-
-            // Then
-            onNodeWithText("12").assertIsDisplayed()
-            onNodeWithText("30").assertIsDisplayed()
         }
+
+        // Then
+        onNodeWithText("12").assertIsDisplayed()
+        onNodeWithText("30").assertIsDisplayed()
+    }
 }

@@ -11,7 +11,7 @@ class PendingIntentUtils {
             context: Context?,
             id: Int,
             intent: Intent?,
-            flag: Int,
+            flag: Int
         ): PendingIntent {
             return PendingIntent.getActivity(context, id, intent, FLAG_MUTABLE or flag)
         }
@@ -20,7 +20,7 @@ class PendingIntentUtils {
             context: Context?,
             id: Int,
             intent: Intent?,
-            flag: Int,
+            flag: Int
         ): PendingIntent {
             return PendingIntent.getBroadcast(context, id, intent!!, FLAG_MUTABLE or flag)
         }
@@ -29,7 +29,7 @@ class PendingIntentUtils {
             context: Context?,
             id: Int,
             intent: Intent,
-            flag: Int,
+            flag: Int
         ): PendingIntent {
             return PendingIntent.getService(context, id, intent, FLAG_MUTABLE or flag)
         }

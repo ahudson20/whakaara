@@ -57,7 +57,7 @@ fun AlarmScreen(
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit,
-    create: (alarm: Alarm) -> Unit,
+    create: (alarm: Alarm) -> Unit
 ) {
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
@@ -78,24 +78,24 @@ fun AlarmScreen(
         floatingActionButton = {
             FloatingActionButton(
                 shape = CircleShape,
-                elevation =
-                    FloatingActionButtonDefaults.elevation(
-                        defaultElevation = 0.dp,
-                        pressedElevation = 0.dp,
-                    ),
+                elevation = FloatingActionButtonDefaults.elevation(
+                    defaultElevation = 0.dp,
+                    pressedElevation = 0.dp
+                ),
                 onClick = {
                     /**PERMISSION GRANTED**/
                     when (notificationPermissionState.status) {
                         PermissionStatus.Granted -> {
                             isDialogShown.value = !isDialogShown.value
                         }
+
                         else -> {
                             /**PERMISSION DENIED - SHOW PROMPT**/
                             if (notificationPermissionState.status.shouldShowRationale) {
                                 NotificationUtils.snackBarPromptPermission(
                                     scope = scope,
                                     snackBarHostState = snackbarHostState,
-                                    context = context,
+                                    context = context
                                 )
                             } else {
                                 /**FIRST TIME ACCESSING**/
@@ -104,15 +104,15 @@ fun AlarmScreen(
                             }
                         }
                     }
-                },
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(id = R.string.floating_action_button_icon_description),
+                    contentDescription = stringResource(id = R.string.floating_action_button_icon_description)
                 )
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         CardContainerSwipeToDismiss(
             modifier = Modifier.padding(innerPadding),
@@ -121,7 +121,7 @@ fun AlarmScreen(
             delete = delete,
             disable = disable,
             enable = enable,
-            reset = reset,
+            reset = reset
         )
 
         AnimatedVisibility(isDialogShown.value) {
@@ -138,23 +138,22 @@ fun AlarmScreen(
                     create(
                         Alarm(
                             date = date,
-                            subTitle =
-                                DateUtils.getAlarmTimeFormatted(
-                                    date = date,
-                                    is24HourFormatEnabled = preferencesState.preferences.is24HourFormat,
-                                ),
+                            subTitle = DateUtils.getAlarmTimeFormatted(
+                                date = date,
+                                is24HourFormatEnabled = preferencesState.preferences.is24HourFormat
+                            ),
                             vibration = preferencesState.preferences.isVibrateEnabled,
                             isSnoozeEnabled = preferencesState.preferences.isSnoozeEnabled,
-                            deleteAfterGoesOff = preferencesState.preferences.deleteAfterGoesOff,
-                        ),
+                            deleteAfterGoesOff = preferencesState.preferences.deleteAfterGoesOff
+                        )
                     )
                     isDialogShown.value = false
                     context.showToast(
-                        message = context.getTimeUntilAlarmFormatted(date = date),
+                        message = context.getTimeUntilAlarmFormatted(date = date)
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
-                is24HourFormat = preferencesState.preferences.is24HourFormat,
+                is24HourFormat = preferencesState.preferences.is24HourFormat
             )
         }
     }
@@ -164,7 +163,7 @@ fun AlarmScreen(
 @ThemePreviews
 @FontScalePreviews
 fun AlarmScreenPreview(
-    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {
     WhakaaraTheme {
         AlarmScreen(
@@ -174,7 +173,7 @@ fun AlarmScreenPreview(
             disable = {},
             enable = {},
             reset = {},
-            create = {},
+            create = {}
         )
     }
 }

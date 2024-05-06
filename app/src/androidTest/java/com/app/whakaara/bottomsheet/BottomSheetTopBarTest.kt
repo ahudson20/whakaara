@@ -13,20 +13,19 @@ class BottomSheetTopBarTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit =
-        with(composeTestRule) {
-            // Given + When
-            setContent {
-                WhakaaraTheme {
-                    BottomSheetDetailsTopBar(
-                        bottomText = "bottomText",
-                        title = "title",
-                    )
-                }
+    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
+        // Given + When
+        setContent {
+            WhakaaraTheme {
+                BottomSheetDetailsTopBar(
+                    bottomText = "bottomText",
+                    title = "title"
+                )
             }
-
-            // Then
-            onNodeWithText(text = "title").assertIsDisplayed()
-            onNodeWithText(text = "bottomText").assertIsDisplayed()
         }
+
+        // Then
+        onNodeWithText(text = "title").assertIsDisplayed()
+        onNodeWithText(text = "bottomText").assertIsDisplayed()
+    }
 }

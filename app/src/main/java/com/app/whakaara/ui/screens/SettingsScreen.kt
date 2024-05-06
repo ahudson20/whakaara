@@ -43,7 +43,7 @@ fun SettingsScreen(
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
     updateAllAlarmSubtitles: (format: Boolean) -> Unit,
-    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit,
+    updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification: (shouldEnableUpcomingAlarmNotification: Boolean) -> Unit
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
@@ -52,44 +52,42 @@ fun SettingsScreen(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        },
+        }
     ) { innerPadding ->
         Column(
-            modifier =
-                Modifier
-                    .verticalScroll(rememberScrollState())
-                    .padding(innerPadding),
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(innerPadding)
         ) {
             Text(
                 text = stringResource(id = R.string.settings_screen_title),
                 textAlign = Center,
-                modifier =
-                    Modifier
-                        .fillMaxSize()
-                        .padding(top = spaceMedium, bottom = space20)
-                        .align(alignment = CenterHorizontally),
-                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(top = spaceMedium, bottom = space20)
+                    .align(alignment = CenterHorizontally),
+                style = MaterialTheme.typography.titleLarge
             )
             GeneralSettings(
                 preferencesState = preferencesState,
                 updatePreferences = updatePreferences,
-                updateAllAlarmSubtitles = updateAllAlarmSubtitles,
+                updateAllAlarmSubtitles = updateAllAlarmSubtitles
             )
             HorizontalDivider(
-                modifier = Modifier.padding(top = spaceMedium),
+                modifier = Modifier.padding(top = spaceMedium)
             )
             when (route) {
                 BottomNavItem.Alarm.route -> {
                     AlarmSettings(
                         preferencesState = preferencesState,
                         updatePreferences = updatePreferences,
-                        updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification,
+                        updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification
                     )
                 }
                 BottomNavItem.Timer.route -> {
                     TimerSettings(
                         preferencesState = preferencesState,
-                        updatePreferences = updatePreferences,
+                        updatePreferences = updatePreferences
                     )
                 }
             }
@@ -101,7 +99,7 @@ fun SettingsScreen(
 @ThemePreviews
 @FontScalePreviews
 fun SettingsScreenPreview(
-    @PreviewParameter(RoutePreviewProvider::class) route: String,
+    @PreviewParameter(RoutePreviewProvider::class) route: String
 ) {
     WhakaaraTheme {
         SettingsScreen(
@@ -109,7 +107,7 @@ fun SettingsScreenPreview(
             preferencesState = PreferencesState(),
             updatePreferences = {},
             updateAllAlarmSubtitles = {},
-            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {},
+            updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification = {}
         )
     }
 }

@@ -27,6 +27,6 @@ data class PreferencesState(
             upcomingAlarmNotificationTime = SettingsTime.TEN,
             dynamicTheme = false,
             autoRestartTimer = true,
-            timerSoundPath = "",
-        ),
+            timerSoundPath = ""
+        )
 )

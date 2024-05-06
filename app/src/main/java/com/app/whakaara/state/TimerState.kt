@@ -15,5 +15,5 @@ data class TimerState(
     val isTimerActive: Boolean = false,
     val progress: Float = STARTING_CIRCULAR_PROGRESS,
     val time: String = TIMER_STARTING_FORMAT,
-    val millisecondsFromTimerInput: Long = ZERO_MILLIS,
+    val millisecondsFromTimerInput: Long = ZERO_MILLIS
 )

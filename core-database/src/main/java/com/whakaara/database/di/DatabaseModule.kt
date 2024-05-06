@@ -18,11 +18,11 @@ class DatabaseModule {
     @Singleton
     fun provideAlarmDatabase(
         @ApplicationContext
-        context: Context,
+        context: Context
     ) = Room.databaseBuilder(
         context,
         AlarmDatabase::class.java,
-        "alarm_database",
+        "alarm_database"
     ).build()
 
     @Provides
@@ -33,11 +33,11 @@ class DatabaseModule {
     @Singleton
     fun providesPreferencesDataBase(
         @ApplicationContext
-        context: Context,
+        context: Context
     ) = Room.databaseBuilder(
         context,
         PreferencesDatabase::class.java,
-        "preferences_database",
+        "preferences_database"
     ).createFromAsset("database/preferences.db").build()
 
     @Provides

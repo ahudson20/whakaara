@@ -64,7 +64,7 @@ class PreferencesEntityImplTest {
                     upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
                     dynamicTheme = false,
                     autoRestartTimer = true,
-                    timerSoundPath = "",
+                    timerSoundPath = ""
                 )
             coEvery { preferencesDao.getPreferencesFlow() } returns flowOf(preferences)
 
@@ -100,7 +100,7 @@ class PreferencesEntityImplTest {
                     upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
                     dynamicTheme = false,
                     autoRestartTimer = true,
-                    timerSoundPath = "",
+                    timerSoundPath = ""
                 )
             val preferencesSlot = slot<PreferencesEntity>()
             coEvery { preferencesDao.insert(any()) } returns mockk()
@@ -140,7 +140,7 @@ class PreferencesEntityImplTest {
                     upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
                     dynamicTheme = false,
                     autoRestartTimer = true,
-                    timerSoundPath = "",
+                    timerSoundPath = ""
                 )
             val preferencesSlot = slot<PreferencesEntity>()
             coEvery { preferencesDao.updatePreferences(any()) } returns mockk()

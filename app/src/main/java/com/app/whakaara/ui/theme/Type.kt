@@ -7,12 +7,12 @@ import com.app.whakaara.R
 
 private val mediumFontFamily =
     FontFamily(
-        Font(R.font.azeret_mono_medium),
+        Font(R.font.azeret_mono_medium)
     )
 
 private val regularFontFamily =
     FontFamily(
-        Font(R.font.azeret_mono_regular),
+        Font(R.font.azeret_mono_regular)
     )
 
 private val defaultTypography = Typography()
@@ -32,5 +32,5 @@ val Typography =
         bodySmall = defaultTypography.bodySmall.copy(fontFamily = regularFontFamily),
         labelLarge = defaultTypography.labelLarge.copy(fontFamily = mediumFontFamily),
         labelMedium = defaultTypography.labelMedium.copy(fontFamily = mediumFontFamily),
-        labelSmall = defaultTypography.labelSmall.copy(fontFamily = mediumFontFamily),
+        labelSmall = defaultTypography.labelSmall.copy(fontFamily = mediumFontFamily)
     )

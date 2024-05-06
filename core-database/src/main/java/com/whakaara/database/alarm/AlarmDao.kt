@@ -33,7 +33,7 @@ interface AlarmDao {
     @Query("UPDATE alarm_table SET isEnabled = :isEnabled WHERE alarmId = :id")
     suspend fun isEnabled(
         id: UUID,
-        isEnabled: Boolean,
+        isEnabled: Boolean
     )
 
     @Query("SELECT * FROM alarm_table WHERE alarmId = :id")

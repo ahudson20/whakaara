@@ -25,19 +25,18 @@ class RoutePreviewProvider : PreviewParameterProvider<String> {
 }
 
 class AlarmPreviewProvider : PreviewParameterProvider<Alarm> {
-    override val values =
-        sequenceOf(
-            Alarm(
-                alarmId = UUID.fromString("alarmId"),
-                date = Calendar.getInstance(),
-                title = "title",
-                subTitle = "10:03 AM",
-                vibration = true,
-                isEnabled = true,
-                isSnoozeEnabled = true,
-                deleteAfterGoesOff = false,
-                repeatDaily = false,
-                daysOfWeek = mutableListOf(),
-            ),
+    override val values = sequenceOf(
+        Alarm(
+            alarmId = UUID.fromString("alarmId"),
+            date = Calendar.getInstance(),
+            title = "title",
+            subTitle = "10:03 AM",
+            vibration = true,
+            isEnabled = true,
+            isSnoozeEnabled = true,
+            deleteAfterGoesOff = false,
+            repeatDaily = false,
+            daysOfWeek = mutableListOf()
         )
+    )
 }

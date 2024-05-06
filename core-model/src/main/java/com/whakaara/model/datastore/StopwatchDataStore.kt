@@ -11,5 +11,5 @@ data class StopwatchDataStore(
     val isActive: Boolean = false,
     val isStart: Boolean = true,
     val isPaused: Boolean = false,
-    val lapList: MutableList<Lap> = mutableListOf(),
+    val lapList: MutableList<Lap> = mutableListOf()
 )

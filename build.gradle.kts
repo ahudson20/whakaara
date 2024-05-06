@@ -18,18 +18,26 @@ plugins {
     alias(libs.plugins.ktlint) apply false
 }
 
-val gitHooksDir = File(rootProject.rootDir, ".git/hooks")
-tasks.register("installGitHook", Copy::class) {
-    from(File(rootProject.rootDir, "scripts/pre-commit"))
-    into(File(rootProject.rootDir, ".git/hooks"))
-    eachFile {
-        fileMode = 0b111101101
+allprojects {
+    tasks.register("copyGitHooks", Copy::class) {
+        description = "Copies the git hooks from /git-hooks to the .git folder."
+        group = "git hooks"
+        from("$rootDir/scripts/pre-commit")
+        into("$rootDir/.git/hooks/")
+//        fileMode = 0b111101101
+    }
+
+    tasks.register("installGitHooks", Exec::class) {
+        description = "Installs the pre-commit git hooks from /git-hooks."
+        group = "git hooks"
+        workingDir = rootDir
+        commandLine("chmod", "-R", "+x", ".git/hooks/")
+        dependsOn("copyGitHooks")
+        doLast {
+            logger.info("Git hook installed successfully.")
+        }
+    }
+    afterEvaluate {
+        tasks.findByName("preBuild")?.dependsOn("installGitHooks")
     }
 }
-tasks.create(name = "gitExecutableHooks") {
-    doLast {
-        Runtime.getRuntime().exec("chmod -R +x .git/hooks/")
-    }
-}
-tasks.getByPath("gitExecutableHooks").dependsOn(tasks.named("installGitHook"))
-tasks.getByPath(":app:preBuild").dependsOn(tasks.named("gitExecutableHooks"))

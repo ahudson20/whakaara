@@ -28,7 +28,7 @@ data class PreferencesEntity(
     var upcomingAlarmNotificationTime: SettingsTime = SettingsTime.TEN,
     val dynamicTheme: Boolean = false,
     val autoRestartTimer: Boolean = true,
-    val timerSoundPath: String = "",
+    val timerSoundPath: String = ""
 )
 
 fun PreferencesEntity.asExternalModel() =
@@ -51,7 +51,7 @@ fun PreferencesEntity.asExternalModel() =
         upcomingAlarmNotificationTime = upcomingAlarmNotificationTime,
         dynamicTheme = dynamicTheme,
         autoRestartTimer = autoRestartTimer,
-        timerSoundPath = timerSoundPath,
+        timerSoundPath = timerSoundPath
     )
 
 fun Preferences.asInternalModel() =
@@ -73,5 +73,5 @@ fun Preferences.asInternalModel() =
         upcomingAlarmNotificationTime = upcomingAlarmNotificationTime,
         dynamicTheme = dynamicTheme,
         autoRestartTimer = autoRestartTimer,
-        timerSoundPath = timerSoundPath,
+        timerSoundPath = timerSoundPath
     )

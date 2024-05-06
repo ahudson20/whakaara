@@ -36,53 +36,49 @@ fun TimerCountdownDisplay(
     modifier: Modifier = Modifier,
     progress: Float,
     time: String,
-    finishTime: String,
+    finishTime: String
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
-        animationSpec =
-            tween(
-                durationMillis = 50,
-                delayMillis = 0,
-                easing = LinearEasing,
-            ),
-        label = "",
+        animationSpec = tween(
+            durationMillis = 50,
+            delayMillis = 0,
+            easing = LinearEasing
+        ),
+        label = ""
     )
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            contentAlignment = Alignment.Center,
+            contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator(
                 modifier = Modifier.size(space275),
                 progress = { animatedProgress },
                 color = primaryGreen,
-                strokeWidth = spaceXSmall,
+                strokeWidth = spaceXSmall
             )
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
                     style = MaterialTheme.typography.headlineLarge,
-                    text = time,
+                    text = time
                 )
                 Row(
                     modifier = Modifier.offset(y = spaceXLarge),
-                    horizontalArrangement = Arrangement.Center,
+                    horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.NotificationsActive,
-                        contentDescription =
-                            stringResource(
-                                id = R.string.timer_countdown_finish_time_icon_content_description,
-                            ),
+                        contentDescription = stringResource(id = R.string.timer_countdown_finish_time_icon_content_description)
                     )
                     Text(
                         modifier = Modifier.padding(start = spaceXxSmall),
-                        text = finishTime,
+                        text = finishTime
                     )
                 }
             }
@@ -98,7 +94,7 @@ fun TimerCountdownDisplayPreview() {
         TimerCountdownDisplay(
             progress = 1.0F,
             time = "00:00:00",
-            finishTime = "10:00 PM",
+            finishTime = "10:00 PM"
         )
     }
 }

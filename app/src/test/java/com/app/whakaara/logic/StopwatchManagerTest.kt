@@ -111,10 +111,7 @@ class StopwatchManagerTest {
         runTest {
             // Given
             val current = 123123L
-            stopwatchManagerWrapper.stopwatchState.value =
-                StopwatchState(
-                    timeMillis = current,
-                )
+            stopwatchManagerWrapper.stopwatchState.value = StopwatchState(timeMillis = current)
 
             // When
             stopwatchManagerWrapper.lapStopwatch()
@@ -136,21 +133,19 @@ class StopwatchManagerTest {
         runTest {
             // Given
             val current = 123123L
-            stopwatchManagerWrapper.stopwatchState.value =
-                StopwatchState(
-                    timeMillis = current,
-                    lapList =
-                        mutableListOf(
-                            Lap(
-                                time = 123L,
-                                diff = 123L,
-                            ),
-                            Lap(
-                                time = 456L,
-                                diff = 456L,
-                            ),
-                        ),
+            stopwatchManagerWrapper.stopwatchState.value = StopwatchState(
+                timeMillis = current,
+                lapList = mutableListOf(
+                    Lap(
+                        time = 123L,
+                        diff = 123L
+                    ),
+                    Lap(
+                        time = 456L,
+                        diff = 456L
+                    )
                 )
+            )
 
             // When
             stopwatchManagerWrapper.lapStopwatch()
@@ -171,21 +166,19 @@ class StopwatchManagerTest {
     fun `recreate stopwatch paused`() =
         runTest {
             // Given
-            val pausedState =
-                StopwatchState(
-                    isPaused = true,
-                    isActive = false,
-                    isStart = false,
-                    timeMillis = 112233L,
-                    formattedTime = "11:22:33:444",
-                    lapList =
-                        mutableListOf(
-                            Lap(
-                                time = 420L,
-                                diff = 420L,
-                            ),
-                        ),
+            val pausedState = StopwatchState(
+                isPaused = true,
+                isActive = false,
+                isStart = false,
+                timeMillis = 112233L,
+                formattedTime = "11:22:33:444",
+                lapList = mutableListOf(
+                    Lap(
+                        time = 420L,
+                        diff = 420L
+                    )
                 )
+            )
 
             // When
             stopwatchManagerWrapper.recreateStopwatchPaused(state = pausedState)
@@ -241,21 +234,19 @@ class StopwatchManagerTest {
         runTest {
             // Given
             stopwatchManagerWrapper.stopwatchState.value = StopwatchState()
-            val stateFromPreferences =
-                StopwatchState(
-                    isPaused = false,
-                    isActive = true,
-                    isStart = false,
-                    timeMillis = 112233L,
-                    formattedTime = "11:22:33:444",
-                    lapList =
-                        mutableListOf(
-                            Lap(
-                                time = 420L,
-                                diff = 420L,
-                            ),
-                        ),
+            val stateFromPreferences = StopwatchState(
+                isPaused = false,
+                isActive = true,
+                isStart = false,
+                timeMillis = 112233L,
+                formattedTime = "11:22:33:444",
+                lapList = mutableListOf(
+                    Lap(
+                        time = 420L,
+                        diff = 420L
+                    )
                 )
+            )
 
             val stopwatchStateSlot = slot<StopwatchDataStore>()
 

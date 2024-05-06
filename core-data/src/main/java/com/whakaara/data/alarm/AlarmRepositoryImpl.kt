@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.map
 import java.util.UUID
 
 class AlarmRepositoryImpl(
-    private val alarmDao: AlarmDao,
+    private val alarmDao: AlarmDao
 ) : AlarmRepository {
     override fun getAllAlarmsFlow() = alarmDao.getAllAlarmsFlow().map { it.map(AlarmEntity::asExternalModel) }
 
@@ -25,7 +25,7 @@ class AlarmRepositoryImpl(
 
     override suspend fun isEnabled(
         id: UUID,
-        isEnabled: Boolean,
+        isEnabled: Boolean
     ) = alarmDao.isEnabled(id, isEnabled)
 
     override suspend fun getAlarmById(id: UUID): Alarm = alarmDao.getAlarmById(id).asExternalModel()

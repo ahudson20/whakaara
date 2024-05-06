@@ -9,6 +9,6 @@ abstract class HiltBroadcastReceiver : BroadcastReceiver() {
     @CallSuper
     override fun onReceive(
         context: Context,
-        intent: Intent,
+        intent: Intent
     ) {}
 }

@@ -21,7 +21,7 @@ class RecreateAlarmsReceiver : HiltBroadcastReceiver() {
 
     override fun onReceive(
         context: Context,
-        intent: Intent,
+        intent: Intent
     ) {
         super.onReceive(context, intent)
         val actionsList =
@@ -33,7 +33,7 @@ class RecreateAlarmsReceiver : HiltBroadcastReceiver() {
                 "android.intent.action.LOCKED_BOOT_COMPLETED",
                 "android.intent.action.QUICKBOOT_POWERON",
                 "android.intent.action.MY_PACKAGE_REPLACED",
-                "android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED",
+                "android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED"
             )
         if (!actionsList.contains(intent.action)) return
 
@@ -47,7 +47,7 @@ class RecreateAlarmsReceiver : HiltBroadcastReceiver() {
                     upcomingAlarmNotificationEnabled = preferences.upcomingAlarmNotification,
                     upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value,
                     repeatAlarmDaily = it.repeatDaily,
-                    daysOfWeek = it.daysOfWeek,
+                    daysOfWeek = it.daysOfWeek
                 )
             }
         }

@@ -111,9 +111,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         }
     }
 
-    private fun play(
-        data: Bundle
-    ) {
+    private fun play(data: Bundle) {
         val preferences: Preferences = runBlocking {
             preferencesRepository.getPreferences()
         }
@@ -143,7 +141,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createAlarmNotification(alarm = alarm),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             )
 
             if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
@@ -153,7 +151,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             startForeground(
                 FOREGROUND_SERVICE_ID,
                 createTimerNotification(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
             )
 
             if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
@@ -179,7 +177,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
                     Uri.parse(soundPath)
                 } else {
                     Settings.System.DEFAULT_ALARM_ALERT_URI
-                },
+                }
             )
             setOnPreparedListener(this@MediaPlayerService)
             prepareAsync()
@@ -198,9 +196,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         }
     }
 
-    private fun vibrate(
-        vibrationPattern: VibrationPattern
-    ) {
+    private fun vibrate(vibrationPattern: VibrationPattern) {
         vibrationTask = timerTask {
             val attributes = VibrationAttributes.Builder().apply {
                 setUsage(VibrationAttributes.USAGE_ALARM)
@@ -247,9 +243,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         LocalBroadcastManager.getInstance(this).sendBroadcast(Intent(STOP_FULL_SCREEN_ACTIVITY))
     }
 
-    private fun createAlarmNotification(
-        alarm: Alarm
-    ): Notification {
+    private fun createAlarmNotification(alarm: Alarm): Notification {
         val fullScreenIntent = Intent().apply {
             setClass(applicationContext, FullScreenNotificationActivity::class.java)
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -337,13 +331,18 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int
+    ): Int {
         val action: Int = intent?.getIntExtra(SERVICE_ACTION, STOP) ?: STOP
-        val bundle = Bundle().apply {
-            putInt(SERVICE_ACTION, intent?.getIntExtra(SERVICE_ACTION, STOP) ?: STOP)
-            putInt(NOTIFICATION_TYPE, intent?.getIntExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM) ?: NOTIFICATION_TYPE_ALARM)
-            putString(INTENT_ALARM_ID, intent?.getStringExtra(INTENT_ALARM_ID))
-        }
+        val bundle =
+            Bundle().apply {
+                putInt(SERVICE_ACTION, intent?.getIntExtra(SERVICE_ACTION, STOP) ?: STOP)
+                putInt(NOTIFICATION_TYPE, intent?.getIntExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM) ?: NOTIFICATION_TYPE_ALARM)
+                putString(INTENT_ALARM_ID, intent?.getStringExtra(INTENT_ALARM_ID))
+            }
 
         serviceHandler?.obtainMessage()?.also { msg ->
             msg.arg1 = startId

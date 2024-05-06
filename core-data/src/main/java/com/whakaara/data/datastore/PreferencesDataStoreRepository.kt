@@ -11,7 +11,7 @@ interface PreferencesDataStoreRepository {
 
     suspend fun saveColour(
         background: String,
-        text: String,
+        text: String
     )
 
     suspend fun readTimerStatus(): Flow<TimerStateDataStore>

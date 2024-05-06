@@ -37,14 +37,14 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
 
     override fun onReceive(
         context: Context,
-        intent: Intent,
+        intent: Intent
     ) {
         super.onReceive(context, intent)
         val actionsList =
             listOf(
                 UPCOMING_ALARM_RECEIVER_ACTION_START,
                 UPCOMING_ALARM_RECEIVER_ACTION_STOP,
-                UPCOMING_ALARM_RECEIVER_ACTION_CANCEL,
+                UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
             )
         val intentAction = intent.getStringExtra(UPCOMING_ALARM_INTENT_ACTION)
         if (!actionsList.contains(intentAction)) return
@@ -52,7 +52,7 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
         val millis =
             intent.getLongExtra(
                 UPCOMING_ALARM_INTENT_TRIGGER_TIME,
-                0L,
+                0L
             )
 
         goAsync {
@@ -73,7 +73,7 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
     private fun startNotification(
         alarmId: String?,
         millis: Long,
-        context: Context,
+        context: Context
     ) {
         val intent =
             Intent(context, UpcomingAlarmReceiver::class.java).apply {
@@ -86,7 +86,7 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
                 context = context,
                 id = NotificationUtilsConstants.INTENT_REQUEST_CODE,
                 intent = intent,
-                flag = PendingIntent.FLAG_UPDATE_CURRENT,
+                flag = PendingIntent.FLAG_UPDATE_CURRENT
             )
 
         notificationManager.notify(
@@ -95,7 +95,7 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
                 setTimeoutAfter(millis - System.currentTimeMillis())
                 setWhen(millis)
                 addAction(0, context.getString(R.string.notification_upcoming_alarm_cancel), pendingIntent)
-            }.build(),
+            }.build()
         )
     }
 
@@ -105,7 +105,7 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
 
     private suspend fun cancelUpcomingAlarm(
         alarmId: String?,
-        millis: Long,
+        millis: Long
     ) {
         if (alarmId != null) {
             alarmRepository.isEnabled(id = UUID.fromString(alarmId), isEnabled = false)

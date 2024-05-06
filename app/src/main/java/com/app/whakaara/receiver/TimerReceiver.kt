@@ -24,7 +24,7 @@ class TimerReceiver : HiltBroadcastReceiver() {
 
     override fun onReceive(
         context: Context,
-        intent: Intent,
+        intent: Intent
     ) {
         super.onReceive(context, intent)
         val actionsList = listOf(TIMER_RECEIVER_ACTION_PAUSE, TIMER_RECEIVER_ACTION_STOP, TIMER_RECEIVER_ACTION_START)
@@ -33,12 +33,12 @@ class TimerReceiver : HiltBroadcastReceiver() {
         val currentTime = intent.getLongExtra(TIMER_RECEIVER_CURRENT_TIME_EXTRA, 0L)
 
         goAsync(
-            coroutineContext = mainDispatcher,
+            coroutineContext = mainDispatcher
         ) {
             when (intent.action) {
                 TIMER_RECEIVER_ACTION_START -> {
                     startTimer(
-                        currentTime = currentTime,
+                        currentTime = currentTime
                     )
                 }
                 TIMER_RECEIVER_ACTION_PAUSE -> {

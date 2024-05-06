@@ -10,7 +10,7 @@ class CountDownTimerUtil {
         period: Long,
         interval: Long = TIMER_INTERVAL,
         onTickAction: (millisUntilFinished: Long) -> Unit,
-        onFinishAction: () -> Unit,
+        onFinishAction: () -> Unit
     ) {
         timer =
             object : CountDownTimer(period, interval) {

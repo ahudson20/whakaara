@@ -61,7 +61,7 @@ class WidgetConfig : ComponentActivity() {
         // Find the widget id from the intent.
         appWidgetId = intent?.extras?.getInt(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
         ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
@@ -105,45 +105,43 @@ class WidgetConfig : ComponentActivity() {
             WhakaaraTheme {
                 Scaffold { innerPadding ->
                     Column(
-                        modifier =
-                            Modifier
-                                .fillMaxSize()
-                                .padding(innerPadding),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPadding),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center,
+                        verticalArrangement = Arrangement.Center
                     ) {
                         Text(
                             modifier = Modifier.padding(spaceMedium),
                             text = stringResource(id = R.string.widget_config_background_colour),
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.titleLarge
                         )
                         ColourPicker(
                             alpha = alphaBackground,
                             red = redBackground,
                             green = greenBackground,
                             blue = blueBackground,
-                            color = colorBackground,
+                            color = colorBackground
                         )
 
                         Text(
                             modifier = Modifier.padding(spaceMedium),
                             text = stringResource(id = R.string.widget_config_text_colour),
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.titleLarge
                         )
                         ColourPicker(
                             alpha = alphaText,
                             red = redText,
                             green = greenText,
                             blue = blueText,
-                            color = colorText,
+                            color = colorText
                         )
 
                         Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(spaceMedium),
-                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(spaceMedium),
+                            horizontalArrangement = Arrangement.End
                         ) {
                             OutlinedButton(
                                 onClick = {
@@ -153,7 +151,7 @@ class WidgetConfig : ComponentActivity() {
                                         }
                                     setResult(RESULT_OK, resultValue)
                                     finish()
-                                },
+                                }
                             ) {
                                 Text(text = stringResource(id = R.string.bottom_sheet_close_button))
                             }
@@ -178,10 +176,10 @@ class WidgetConfig : ComponentActivity() {
                                         RESULT_OK,
                                         Intent().apply {
                                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                                        },
+                                        }
                                     )
                                     finish()
-                                },
+                                }
                             ) {
                                 Text(text = stringResource(id = R.string.bottom_sheet_save_button))
                             }

@@ -66,7 +66,7 @@ class PreferencesEntityDatabaseTest {
                     isSnoozeEnabled = true,
                     deleteAfterGoesOff = false,
                     autoSilenceTime = SettingsTime.TEN,
-                    snoozeTime = SettingsTime.TEN,
+                    snoozeTime = SettingsTime.TEN
                 )
             preferencesDao.insert(preferencesEntity = preferencesEntity)
 
@@ -87,18 +87,17 @@ class PreferencesEntityDatabaseTest {
                     isSnoozeEnabled = true,
                     deleteAfterGoesOff = false,
                     autoSilenceTime = SettingsTime.TEN,
-                    snoozeTime = SettingsTime.TEN,
+                    snoozeTime = SettingsTime.TEN
                 )
             preferencesDao.insert(preferencesEntity = preferencesEntity)
 
             // When
             preferencesDao.updatePreferences(
-                preferencesEntity =
-                    preferencesEntity.copy(
-                        id = 100,
-                        autoSilenceTime = SettingsTime.FIFTEEN,
-                        snoozeTime = SettingsTime.FIFTEEN,
-                    ),
+                preferencesEntity = preferencesEntity.copy(
+                    id = 100,
+                    autoSilenceTime = SettingsTime.FIFTEEN,
+                    snoozeTime = SettingsTime.FIFTEEN
+                )
             )
 
             preferencesDao.getPreferencesFlow().test {

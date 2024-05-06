@@ -6,7 +6,7 @@ import com.whakaara.model.datastore.TimerStateDataStore
 import kotlinx.coroutines.flow.Flow
 
 class PreferencesDataStoreRepositoryImpl(
-    private val preferencesDataStore: PreferencesDataStore,
+    private val preferencesDataStore: PreferencesDataStore
 ) : PreferencesDataStoreRepository {
     override suspend fun readBackgroundColour(): Flow<String> {
         return preferencesDataStore.readBackgroundColour
@@ -18,7 +18,7 @@ class PreferencesDataStoreRepositoryImpl(
 
     override suspend fun saveColour(
         background: String,
-        text: String,
+        text: String
     ) {
         preferencesDataStore.saveColour(background, text)
     }

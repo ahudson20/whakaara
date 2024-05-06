@@ -22,20 +22,20 @@ class DataModule {
     @Singleton
     fun provideAlarmRepository(alarmDao: AlarmDao): AlarmRepository =
         AlarmRepositoryImpl(
-            alarmDao = alarmDao,
+            alarmDao = alarmDao
         )
 
     @Provides
     @Singleton
     fun providePreferencesRepository(preferencesDao: PreferencesDao): PreferencesRepository =
         PreferencesImpl(
-            preferencesDao = preferencesDao,
+            preferencesDao = preferencesDao
         )
 
     @Provides
     @Singleton
     fun providePreferencesDataStoreRepository(preferencesDataStore: PreferencesDataStore): PreferencesDataStoreRepository =
         PreferencesDataStoreRepositoryImpl(
-            preferencesDataStore = preferencesDataStore,
+            preferencesDataStore = preferencesDataStore
         )
 }

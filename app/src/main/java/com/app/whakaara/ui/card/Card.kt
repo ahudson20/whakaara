@@ -62,7 +62,7 @@ fun Card(
     is24HourFormat: Boolean,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -73,92 +73,88 @@ fun Card(
             getInitialTimeToAlarm(
                 isEnabled = valueSlider,
                 time = alarm.date,
-                context = context,
-            ),
+                context = context
+            )
         )
     }
     val alpha = if (valueSlider) 1f else 0.60f
 
     LaunchedEffect(key1 = alarm.date, key2 = valueSlider) {
-        timeToAlarm =
-            getInitialTimeToAlarm(
-                isEnabled = valueSlider,
-                time = alarm.date,
-                context = context,
-            )
+        timeToAlarm = getInitialTimeToAlarm(
+            isEnabled = valueSlider,
+            time = alarm.date,
+            context = context
+        )
     }
 
     SystemBroadcastReceiver(
         IntentFilter().apply {
             addAction(Intent.ACTION_TIME_TICK)
-        },
+        }
     ) { _, _ ->
         timeToAlarm =
             getInitialTimeToAlarm(
                 isEnabled = valueSlider,
                 time = alarm.date,
-                context = context,
+                context = context
             )
     }
 
     ElevatedCard(
         shape = Shapes.extraLarge,
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .height(space80)
-                .clip(Shapes.extraLarge)
-                .clickable {
-                    scope.launch { sheetState.expand() }
-                },
+        modifier = modifier
+            .fillMaxWidth()
+            .height(space80)
+            .clip(Shapes.extraLarge)
+            .clickable {
+                scope.launch { sheetState.expand() }
+            }
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column(
-                modifier =
-                    Modifier
-                        .fillMaxHeight()
-                        .padding(start = space28, end = space28),
-                verticalArrangement = Arrangement.Center,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(start = space28, end = space28),
+                verticalArrangement = Arrangement.Center
             ) {
                 Row(
-                    verticalAlignment = Alignment.CenterVertically,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         modifier = Modifier.alpha(alpha = alpha),
                         text = alarm.subTitle.filterNot { it.isWhitespace() },
-                        style = MaterialTheme.typography.headlineSmall,
+                        style = MaterialTheme.typography.headlineSmall
                     )
 
                     if (alarm.repeatDaily) {
                         Icon(
                             modifier = Modifier.padding(start = space10).size(spaceMedium),
                             imageVector = Icons.Outlined.Repeat,
-                            contentDescription = stringResource(id = R.string.card_repeat_daily_icon_content_description),
+                            contentDescription = stringResource(id = R.string.card_repeat_daily_icon_content_description)
                         )
                     } else if (alarm.deleteAfterGoesOff) {
                         Icon(
                             modifier = Modifier.padding(start = space10).size(spaceMedium),
                             imageVector = Icons.Outlined.AutoDelete,
-                            contentDescription = stringResource(id = R.string.card_alarm_single_shot_content_description),
+                            contentDescription = stringResource(id = R.string.card_alarm_single_shot_content_description)
                         )
                     }
                 }
                 Text(
                     modifier = Modifier.alpha(alpha = alpha),
                     text = timeToAlarm,
-                    style = MaterialTheme.typography.bodySmall,
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
 
             Spacer(Modifier.weight(1f))
 
             Switch(
-                modifier =
-                    Modifier
-                        .padding(end = space20)
-                        .testTag("alarm switch"),
+                modifier = Modifier
+                    .padding(end = space20)
+                    .testTag("alarm switch"),
                 checked = valueSlider,
                 onCheckedChange = {
                     if (!it) {
@@ -167,10 +163,10 @@ fun Card(
                     } else {
                         enable(alarm)
                         context.showToast(
-                            message = context.getTimeUntilAlarmFormatted(date = alarm.date),
+                            message = context.getTimeUntilAlarmFormatted(date = alarm.date)
                         )
                     }
-                },
+                }
             )
         }
     }
@@ -178,14 +174,14 @@ fun Card(
     BottomSheet(
         backgroundColor = MaterialTheme.colorScheme.surface,
         state = sheetState,
-        skipPeeked = true,
+        skipPeeked = true
     ) {
         BottomSheetDetailsContent(
             alarm = alarm,
             timeToAlarm = timeToAlarm,
             is24HourFormat = is24HourFormat,
             sheetState = sheetState,
-            reset = reset,
+            reset = reset
         )
     }
 }
@@ -194,7 +190,7 @@ fun Card(
 @ThemePreviews
 @FontScalePreviews
 fun CardPreview(
-    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {
     WhakaaraTheme {
         Card(
@@ -202,6 +198,7 @@ fun CardPreview(
             is24HourFormat = true,
             disable = {},
             enable = {},
-        ) {}
+            reset = {}
+        )
     }
 }

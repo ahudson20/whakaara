@@ -67,35 +67,32 @@ class MainViewModelTest {
         stopwatchState = StopwatchState()
         timerState = TimerState()
 
-        alarms =
-            listOf(
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 13)
-                            set(Calendar.MONTH, 6)
-                            set(Calendar.HOUR_OF_DAY, 14)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                    title = "First Alarm Title",
-                    subTitle = "14:34 PM",
-                ),
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.YEAR, 2023)
-                            set(Calendar.DAY_OF_MONTH, 14)
-                            set(Calendar.MONTH, 7)
-                            set(Calendar.HOUR_OF_DAY, 14)
-                            set(Calendar.MINUTE, 34)
-                            set(Calendar.SECOND, 0)
-                        },
-                    title = "Second Alarm Title",
-                    subTitle = "14:34 PM",
-                ),
+        alarms = listOf(
+            Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 13)
+                    set(Calendar.MONTH, 6)
+                    set(Calendar.HOUR_OF_DAY, 14)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                },
+                title = "First Alarm Title",
+                subTitle = "14:34 PM"
+            ),
+            Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.YEAR, 2023)
+                    set(Calendar.DAY_OF_MONTH, 14)
+                    set(Calendar.MONTH, 7)
+                    set(Calendar.HOUR_OF_DAY, 14)
+                    set(Calendar.MINUTE, 34)
+                    set(Calendar.SECOND, 0)
+                },
+                title = "Second Alarm Title",
+                subTitle = "14:34 PM"
             )
+        )
         preferences = MockUtil.mockPreferences()
 
         coEvery { repository.getAllAlarmsFlow() } returns flowOf(alarms)
@@ -137,17 +134,16 @@ class MainViewModelTest {
         every { timerManagerWrapper.startTimerNotificationCountdown(any()) } just Runs
         every { timerManagerWrapper.cancelNotification() } just Runs
 
-        viewModel =
-            MainViewModel(
-                repository,
-                preferencesRepository,
-                alarmManagerWrapper,
-                timerManagerWrapper,
-                stopwatchManagerWrapper,
-                preferencesDataStore,
-                testDispatcher,
-                testDispatcherMain,
-            )
+        viewModel = MainViewModel(
+            repository,
+            preferencesRepository,
+            alarmManagerWrapper,
+            timerManagerWrapper,
+            stopwatchManagerWrapper,
+            preferencesDataStore,
+            testDispatcher,
+            testDispatcherMain
+        )
     }
 
     @Test
@@ -199,11 +195,10 @@ class MainViewModelTest {
     fun `update preferences`() =
         runTest {
             // Given
-            val preferences =
-                MockUtil.mockPreferences().apply {
-                    autoSilenceTime = SettingsTime.FIVE
-                    snoozeTime = SettingsTime.ONE
-                }
+            val preferences = MockUtil.mockPreferences().apply {
+                autoSilenceTime = SettingsTime.FIVE
+                snoozeTime = SettingsTime.ONE
+            }
             val preferencesSlot = slot<Preferences>()
 
             // When
@@ -219,15 +214,13 @@ class MainViewModelTest {
     fun `create alarm`() =
         runTest {
             // Given
-            val alarm =
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                        },
-                    subTitle = "10:03PM",
-                )
+            val alarm = Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                subTitle = "10:03PM"
+            )
             val alarmSlot = slot<Alarm>()
 
             // When
@@ -243,7 +236,7 @@ class MainViewModelTest {
                     any(),
                     any(),
                     alarm.repeatDaily,
-                    alarm.daysOfWeek,
+                    alarm.daysOfWeek
                 )
             }
             with(alarmSlot.captured) {
@@ -256,15 +249,13 @@ class MainViewModelTest {
     fun `delete alarm`() =
         runTest {
             // Given
-            val alarm =
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                        },
-                    subTitle = "10:03PM",
-                )
+            val alarm = Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                subTitle = "10:03PM"
+            )
             val alarmSlot = slot<Alarm>()
             val alarmIdSlot = slot<String>()
 
@@ -286,15 +277,13 @@ class MainViewModelTest {
     fun `disable alarm`() =
         runTest {
             // Given
-            val alarm =
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                        },
-                    subTitle = "10:03PM",
-                )
+            val alarm = Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                subTitle = "10:03PM"
+            )
             val alarmSlot = slot<Alarm>()
             val alarmIdSlot = slot<String>()
 
@@ -317,15 +306,13 @@ class MainViewModelTest {
     fun `enable alarm`() =
         runTest {
             // Given
-            val alarm =
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                        },
-                    subTitle = "10:03PM",
-                )
+            val alarm = Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                subTitle = "10:03PM"
+            )
             val alarmSlot = slot<Alarm>()
 
             // When
@@ -341,7 +328,7 @@ class MainViewModelTest {
                     any(),
                     any(),
                     alarm.repeatDaily,
-                    alarm.daysOfWeek,
+                    alarm.daysOfWeek
                 )
             }
             with(alarmSlot.captured) {
@@ -355,15 +342,13 @@ class MainViewModelTest {
     fun `reset alarm`() =
         runTest {
             // Given
-            val alarm =
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                        },
-                    subTitle = "10:03PM",
-                )
+            val alarm = Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                subTitle = "10:03PM"
+            )
             val alarmSlot = slot<Alarm>()
             val alarmIdSlot = slot<String>()
 
@@ -380,7 +365,7 @@ class MainViewModelTest {
                     any(),
                     any(),
                     alarm.repeatDaily,
-                    alarm.daysOfWeek,
+                    alarm.daysOfWeek
                 )
             }
             with(alarmSlot.captured) {
@@ -395,15 +380,13 @@ class MainViewModelTest {
     fun `snooze alarm`() =
         runTest {
             // Given
-            val alarm =
-                Alarm(
-                    date =
-                        Calendar.getInstance().apply {
-                            set(Calendar.HOUR_OF_DAY, 12)
-                            set(Calendar.MINUTE, 34)
-                        },
-                    subTitle = "10:03PM",
-                )
+            val alarm = Alarm(
+                date = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, 12)
+                    set(Calendar.MINUTE, 34)
+                },
+                subTitle = "10:03PM"
+            )
             val alarmIdSlot = slot<String>()
 
             // When
@@ -418,7 +401,7 @@ class MainViewModelTest {
                     any(),
                     any(),
                     alarm.repeatDaily,
-                    alarm.daysOfWeek,
+                    alarm.daysOfWeek
                 )
             }
             assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
@@ -476,7 +459,7 @@ class MainViewModelTest {
                     capture(upcomingAlarmNotificationEnabledSlots),
                     any(),
                     any(),
-                    any(),
+                    any()
                 )
             }
             assertEquals(2, alarmIdSlots.size)
@@ -826,8 +809,8 @@ class MainViewModelTest {
                     TimerStateDataStore(
                         remainingTimeInMillis = 420L,
                         isActive = true,
-                        timeStamp = System.currentTimeMillis(),
-                    ),
+                        timeStamp = System.currentTimeMillis()
+                    )
                 )
 
             // When
@@ -851,8 +834,8 @@ class MainViewModelTest {
                         remainingTimeInMillis = 420L,
                         isActive = false,
                         isPaused = true,
-                        timeStamp = System.currentTimeMillis(),
-                    ),
+                        timeStamp = System.currentTimeMillis()
+                    )
                 )
 
             // When

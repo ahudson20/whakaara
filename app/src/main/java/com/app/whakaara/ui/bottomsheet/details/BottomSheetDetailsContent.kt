@@ -55,13 +55,13 @@ fun BottomSheetDetailsContent(
     timeToAlarm: String,
     is24HourFormat: Boolean,
     sheetState: BottomSheetState,
-    reset: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
     var timePickerValue by remember {
         mutableStateOf<Hours>(
-            FullHours(alarm.date.get(Calendar.HOUR_OF_DAY), alarm.date.get(Calendar.MINUTE)),
+            FullHours(alarm.date.get(Calendar.HOUR_OF_DAY), alarm.date.get(Calendar.MINUTE))
         )
     }
     var isVibrationEnabled by remember(alarm.vibration) { mutableStateOf(alarm.vibration) }
@@ -80,105 +80,94 @@ fun BottomSheetDetailsContent(
     }
 
     Column(
-        modifier =
-            modifier
-                .fillMaxHeight()
-                .padding(spaceMedium)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onTap = {
-                            focusManager.clearFocus()
-                        },
-                    )
-                },
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(spaceMedium)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        focusManager.clearFocus()
+                    }
+                )
+            }
     ) {
         BottomSheetDetailsTopBar(
             bottomText = bottomText,
-            title = title,
+            title = title
         )
 
         BottomSheetTimePicker(
-            updatePickerValue =
-                HoursUpdateEvent(
-                    value = timePickerValue,
-                    onValueChange = { newValue ->
-                        timePickerValue = newValue
-                        bottomText =
-                            context.getTimeUntilAlarmFormatted(
-                                date =
-                                    Calendar.getInstance().apply {
-                                        set(Calendar.HOUR_OF_DAY, newValue.hours)
-                                        set(Calendar.MINUTE, newValue.minutes)
-                                    },
-                            )
-                    },
-                ),
+            updatePickerValue = HoursUpdateEvent(
+                value = timePickerValue,
+                onValueChange = { newValue ->
+                    timePickerValue = newValue
+                    bottomText = context.getTimeUntilAlarmFormatted(
+                        date = Calendar.getInstance().apply {
+                            set(Calendar.HOUR_OF_DAY, newValue.hours)
+                            set(Calendar.MINUTE, newValue.minutes)
+                        }
+                    )
+                }
+            )
         )
 
         BottomSheetDetailsAlarmInfo(
-            updateBottomSheetDetailsAlarmInfo =
-                UpdateBottomSheetDetailsAlarmInfo(
-                    updateIsVibrationEnabled =
-                        BooleanStateEvent(
-                            value = isVibrationEnabled,
-                            onValueChange = { newValue ->
-                                isVibrationEnabled = newValue
-                            },
-                        ),
-                    updateIsSnoozeEnabled =
-                        BooleanStateEvent(
-                            value = isSnoozeEnabled,
-                            onValueChange = { newValue ->
-                                isSnoozeEnabled = newValue
-                            },
-                        ),
-                    updateDeleteAfterGoesOff =
-                        BooleanStateEvent(
-                            value = deleteAfterGoesOff,
-                            onValueChange = { newValue ->
-                                deleteAfterGoesOff = newValue
-                            },
-                        ),
-                    updateRepeatDaily =
-                        BooleanStateEvent(
-                            value = isRepeatDaily,
-                            onValueChange = { newValue ->
-                                isRepeatDaily = newValue
-                            },
-                        ),
-                    updateCheckedList =
-                        ListStateEvent(
-                            value = checkedList,
-                            onValueChange = { newValue ->
-                                if (newValue in checkedList) {
-                                    checkedList.remove(newValue)
-                                } else {
-                                    checkedList.add(newValue)
-                                }
-                            },
-                        ),
-                    updateTitle =
-                        StringStateEvent(
-                            value = title,
-                            onValueChange = { newValue ->
-                                title = newValue
-                            },
-                        ),
+            updateBottomSheetDetailsAlarmInfo = UpdateBottomSheetDetailsAlarmInfo(
+                updateIsVibrationEnabled = BooleanStateEvent(
+                    value = isVibrationEnabled,
+                    onValueChange = { newValue ->
+                        isVibrationEnabled = newValue
+                    }
                 ),
+                updateIsSnoozeEnabled = BooleanStateEvent(
+                    value = isSnoozeEnabled,
+                    onValueChange = { newValue ->
+                        isSnoozeEnabled = newValue
+                    }
+                ),
+                updateDeleteAfterGoesOff = BooleanStateEvent(
+                    value = deleteAfterGoesOff,
+                    onValueChange = { newValue ->
+                        deleteAfterGoesOff = newValue
+                    }
+                ),
+                updateRepeatDaily = BooleanStateEvent(
+                    value = isRepeatDaily,
+                    onValueChange = { newValue ->
+                        isRepeatDaily = newValue
+                    }
+                ),
+                updateCheckedList = ListStateEvent(
+                    value = checkedList,
+                    onValueChange = { newValue ->
+                        if (newValue in checkedList) {
+                            checkedList.remove(newValue)
+                        } else {
+                            checkedList.add(newValue)
+                        }
+                    }
+                ),
+                updateTitle = StringStateEvent(
+                    value = title,
+                    onValueChange = { newValue ->
+                        title = newValue
+                    }
+                )
+            )
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.End
         ) {
             OutlinedButton(
                 onClick = {
                     coroutineScope.launch {
                         sheetState.collapse()
                     }
-                },
+                }
             ) {
                 Text(text = stringResource(id = R.string.bottom_sheet_close_button))
             }
@@ -188,11 +177,10 @@ fun BottomSheetDetailsContent(
                     coroutineScope.launch {
                         reset(
                             alarm.copy(
-                                date =
-                                    alarm.date.apply {
-                                        set(Calendar.HOUR_OF_DAY, timePickerValue.hours)
-                                        set(Calendar.MINUTE, timePickerValue.minutes)
-                                    },
+                                date = alarm.date.apply {
+                                    set(Calendar.HOUR_OF_DAY, timePickerValue.hours)
+                                    set(Calendar.MINUTE, timePickerValue.minutes)
+                                },
                                 isEnabled = true,
                                 vibration = isVibrationEnabled,
                                 isSnoozeEnabled = isSnoozeEnabled,
@@ -200,17 +188,16 @@ fun BottomSheetDetailsContent(
                                 repeatDaily = isRepeatDaily,
                                 daysOfWeek = checkedList,
                                 title = title,
-                                subTitle =
-                                    getAlarmTimeFormatted(
-                                        date = alarm.date,
-                                        is24HourFormatEnabled = is24HourFormat,
-                                    ),
-                            ),
+                                subTitle = getAlarmTimeFormatted(
+                                    date = alarm.date,
+                                    is24HourFormatEnabled = is24HourFormat
+                                )
+                            )
                         )
                         context.showToast(message = context.getString(R.string.bottom_sheet_save_button))
                         sheetState.collapse()
                     }
-                },
+                }
             ) {
                 Text(text = stringResource(id = R.string.bottom_sheet_save_button))
             }
@@ -222,7 +209,7 @@ fun BottomSheetDetailsContent(
 @ThemePreviews
 @FontScalePreviews
 fun BottomSheetContentPreview(
-    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm,
+    @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {
     WhakaaraTheme {
         BottomSheetDetailsContent(
@@ -230,7 +217,7 @@ fun BottomSheetContentPreview(
             timeToAlarm = "timeToAlarm",
             is24HourFormat = true,
             sheetState = BottomSheetState(),
-            reset = {},
+            reset = {}
         )
     }
 }

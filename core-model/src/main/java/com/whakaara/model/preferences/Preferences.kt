@@ -19,5 +19,5 @@ data class Preferences(
     var upcomingAlarmNotificationTime: SettingsTime,
     val dynamicTheme: Boolean,
     val autoRestartTimer: Boolean,
-    val timerSoundPath: String,
+    val timerSoundPath: String
 )

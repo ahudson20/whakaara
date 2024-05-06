@@ -27,22 +27,21 @@ fun OnboardingScreen(
     navigateToHome: () -> Unit,
     pages: Array<OnboardingItems> = OnboardingItems.entries.toTypedArray(),
     preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit,
+    updatePreferences: (preferences: Preferences) -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        },
+        }
     ) { innerPadding ->
         Column(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OnboardingContent(
                 pages = pages,
@@ -50,7 +49,7 @@ fun OnboardingScreen(
                 snackbarHostState = snackbarHostState,
                 navigateToHome = navigateToHome,
                 preferencesState = preferencesState,
-                updatePreferences = updatePreferences,
+                updatePreferences = updatePreferences
             )
         }
     }
@@ -64,7 +63,7 @@ fun OnboardingScreenPreview() {
         OnboardingScreen(
             navigateToHome = {},
             preferencesState = PreferencesState(),
-            updatePreferences = {},
+            updatePreferences = {}
         )
     }
 }

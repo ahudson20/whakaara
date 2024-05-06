@@ -14,30 +14,29 @@ class GeneralSettingsTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayCorrectData(): Unit =
-        with(composeTestRule) {
-            // Given
-            val preferencesState = PreferencesState()
+    fun shouldDisplayCorrectData(): Unit = with(composeTestRule) {
+        // Given
+        val preferencesState = PreferencesState()
 
-            // When
-            setContent {
-                WhakaaraTheme {
-                    GeneralSettings(
-                        preferencesState = preferencesState,
-                        updatePreferences = {},
-                        updateAllAlarmSubtitles = {},
-                    )
-                }
+        // When
+        setContent {
+            WhakaaraTheme {
+                GeneralSettings(
+                    preferencesState = preferencesState,
+                    updatePreferences = {},
+                    updateAllAlarmSubtitles = {}
+                )
             }
-
-            // Then
-            onNodeWithText(text = "General settings").assertIsDisplayed()
-            onNodeWithText(text = "Edit system time").assertIsDisplayed()
-            onNodeWithText(text = "App settings").assertIsDisplayed()
-            onNodeWithText(text = "Battery optimization").assertIsDisplayed()
-            onNodeWithText(text = "App Theme").assertIsDisplayed()
-            onNodeWithText(text = "System preference").assertIsDisplayed()
-            onNodeWithText(text = "24 hour format").assertIsDisplayed()
-            onNodeWithText(text = "If enabled, display using 24 hour format").assertIsDisplayed()
         }
+
+        // Then
+        onNodeWithText(text = "General settings").assertIsDisplayed()
+        onNodeWithText(text = "Edit system time").assertIsDisplayed()
+        onNodeWithText(text = "App settings").assertIsDisplayed()
+        onNodeWithText(text = "Battery optimization").assertIsDisplayed()
+        onNodeWithText(text = "App Theme").assertIsDisplayed()
+        onNodeWithText(text = "System preference").assertIsDisplayed()
+        onNodeWithText(text = "24 hour format").assertIsDisplayed()
+        onNodeWithText(text = "If enabled, display using 24 hour format").assertIsDisplayed()
+    }
 }

@@ -13,42 +13,40 @@ class StopwatchDisplayTest {
     val composeTestRule = createComposeRule()
 
     @Test
-    fun shouldDisplayFullTimeWhenHoursNotEmpty(): Unit =
-        with(composeTestRule) {
-            // Given
-            val time = "09:10:11:123"
+    fun shouldDisplayFullTimeWhenHoursNotEmpty(): Unit = with(composeTestRule) {
+        // Given
+        val time = "09:10:11:123"
 
-            // When
-            setContent {
-                WhakaaraTheme {
-                    StopwatchDisplay(
-                        formattedTime = time,
-                    )
-                }
+        // When
+        setContent {
+            WhakaaraTheme {
+                StopwatchDisplay(
+                    formattedTime = time
+                )
             }
-
-            // Then
-            onNodeWithText("09:10:11").assertIsDisplayed()
-            onNodeWithText("123")
         }
+
+        // Then
+        onNodeWithText("09:10:11").assertIsDisplayed()
+        onNodeWithText("123")
+    }
 
     @Test
-    fun shouldNotDisplayFullTimeWhenHoursEmpty(): Unit =
-        with(composeTestRule) {
-            // Given
-            val time = "00:10:11:123"
+    fun shouldNotDisplayFullTimeWhenHoursEmpty(): Unit = with(composeTestRule) {
+        // Given
+        val time = "00:10:11:123"
 
-            // When
-            setContent {
-                WhakaaraTheme {
-                    StopwatchDisplay(
-                        formattedTime = time,
-                    )
-                }
+        // When
+        setContent {
+            WhakaaraTheme {
+                StopwatchDisplay(
+                    formattedTime = time
+                )
             }
-
-            // Then
-            onNodeWithText("10:11").assertIsDisplayed()
-            onNodeWithText("123")
         }
+
+        // Then
+        onNodeWithText("10:11").assertIsDisplayed()
+        onNodeWithText("123")
+    }
 }

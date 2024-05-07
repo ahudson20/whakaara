@@ -47,13 +47,12 @@ import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utility.DateUtils.Companion.getInitialTimeToAlarm
-import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
 import com.whakaara.model.alarm.Alarm
 import kotlinx.coroutines.launch
+import java.util.Calendar
 
 @Composable
 fun Card(
@@ -62,29 +61,19 @@ fun Card(
     is24HourFormat: Boolean,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit
+    reset: (alarm: Alarm) -> Unit,
+    getInitialTimeToAlarm: (isEnabled: Boolean, time: Calendar) -> String,
+    getTimeUntilAlarmFormatted: (date: Calendar) -> String
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val sheetState = rememberBottomSheetState()
     val valueSlider by remember(alarm.isEnabled) { mutableStateOf(alarm.isEnabled) }
-    var timeToAlarm by remember {
-        mutableStateOf(
-            getInitialTimeToAlarm(
-                isEnabled = valueSlider,
-                time = alarm.date,
-                context = context
-            )
-        )
-    }
+    var timeToAlarm by remember { mutableStateOf(getInitialTimeToAlarm(valueSlider, alarm.date)) }
     val alpha = if (valueSlider) 1f else 0.60f
 
     LaunchedEffect(key1 = alarm.date, key2 = valueSlider) {
-        timeToAlarm = getInitialTimeToAlarm(
-            isEnabled = valueSlider,
-            time = alarm.date,
-            context = context
-        )
+        timeToAlarm = getInitialTimeToAlarm(valueSlider, alarm.date)
     }
 
     SystemBroadcastReceiver(
@@ -92,12 +81,7 @@ fun Card(
             addAction(Intent.ACTION_TIME_TICK)
         }
     ) { _, _ ->
-        timeToAlarm =
-            getInitialTimeToAlarm(
-                isEnabled = valueSlider,
-                time = alarm.date,
-                context = context
-            )
+        timeToAlarm = getInitialTimeToAlarm(valueSlider, alarm.date)
     }
 
     ElevatedCard(
@@ -163,7 +147,7 @@ fun Card(
                     } else {
                         enable(alarm)
                         context.showToast(
-                            message = context.getTimeUntilAlarmFormatted(date = alarm.date)
+                            message = getTimeUntilAlarmFormatted(alarm.date)
                         )
                     }
                 }
@@ -181,7 +165,8 @@ fun Card(
             timeToAlarm = timeToAlarm,
             is24HourFormat = is24HourFormat,
             sheetState = sheetState,
-            reset = reset
+            reset = reset,
+            getTimeUntilAlarmFormatted = getTimeUntilAlarmFormatted
         )
     }
 }
@@ -198,7 +183,9 @@ fun CardPreview(
             is24HourFormat = true,
             disable = {},
             enable = {},
-            reset = {}
+            reset = {},
+            getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
+            getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
         )
     }
 }

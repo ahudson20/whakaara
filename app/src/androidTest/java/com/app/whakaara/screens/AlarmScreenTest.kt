@@ -7,6 +7,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
@@ -45,11 +46,28 @@ class AlarmScreenTest {
                 AlarmScreen(
                     alarms = listOf(firstAlarm, secondAlarm),
                     preferencesState = PreferencesState(),
-                    delete = {},
-                    disable = {},
-                    enable = {},
-                    reset = {},
-                    create = {}
+                    alarmEventCallbacks = object : AlarmEventCallbacks {
+                        override fun create(alarm: Alarm) {}
+
+                        override fun delete(alarm: Alarm) {}
+
+                        override fun disable(alarm: Alarm) {}
+
+                        override fun enable(alarm: Alarm) {}
+
+                        override fun reset(alarm: Alarm) {}
+
+                        override fun getInitialTimeToAlarm(
+                            isEnabled: Boolean,
+                            time: Calendar
+                        ): String {
+                            return ""
+                        }
+
+                        override fun getTimeUntilAlarmFormatted(date: Calendar): String {
+                            return ""
+                        }
+                    }
                 )
             }
         }

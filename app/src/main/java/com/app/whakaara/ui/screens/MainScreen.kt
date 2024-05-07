@@ -24,6 +24,7 @@ import com.whakaara.model.events.PreferencesEventCallbacks
 import com.whakaara.model.events.StopwatchEventCallbacks
 import com.whakaara.model.events.TimerEventCallbacks
 import com.whakaara.model.preferences.Preferences
+import java.util.Calendar
 
 @Composable
 fun MainScreen(
@@ -91,6 +92,17 @@ fun MainPreview() {
                 override fun enable(alarm: Alarm) {}
 
                 override fun reset(alarm: Alarm) {}
+
+                override fun getInitialTimeToAlarm(
+                    isEnabled: Boolean,
+                    time: Calendar
+                ): String {
+                    return ""
+                }
+
+                override fun getTimeUntilAlarmFormatted(date: Calendar): String {
+                    return ""
+                }
             },
             timerEventCallbacks = object : TimerEventCallbacks {
                 override fun updateHours(newValue: String) {}

@@ -26,6 +26,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.whakaara.model.alarm.Alarm
+import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -36,7 +37,9 @@ fun CardContainerSwipeToDismiss(
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit
+    reset: (alarm: Alarm) -> Unit,
+    getInitialTimeToAlarm: (isEnabled: Boolean, time: Calendar) -> String,
+    getTimeUntilAlarmFormatted: (date: Calendar) -> String
 ) {
     val context = LocalContext.current
     LazyColumn(
@@ -81,7 +84,9 @@ fun CardContainerSwipeToDismiss(
                             is24HourFormat = is24HourFormat,
                             disable = disable,
                             enable = enable,
-                            reset = reset
+                            reset = reset,
+                            getInitialTimeToAlarm = getInitialTimeToAlarm,
+                            getTimeUntilAlarmFormatted = getTimeUntilAlarmFormatted
                         )
                     }
                 )
@@ -105,7 +110,9 @@ fun CardContainerSwipeToDismissPreview(
             delete = {},
             disable = {},
             enable = {},
-            reset = {}
+            reset = {},
+            getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
+            getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
         )
     }
 }

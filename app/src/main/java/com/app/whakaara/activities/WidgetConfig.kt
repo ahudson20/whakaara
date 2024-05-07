@@ -51,7 +51,7 @@ class WidgetConfig : ComponentActivity() {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     @Inject
-    lateinit var test: PreferencesDataStoreRepository
+    lateinit var preferencesDataStoreRepository: PreferencesDataStoreRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,14 +71,12 @@ class WidgetConfig : ComponentActivity() {
         }
 
         setContent {
-            val textColourString =
-                runBlocking {
-                    test.readTextColour().first()
-                }
-            val backgroundColourString =
-                runBlocking {
-                    test.readBackgroundColour().first()
-                }
+            val textColourString = runBlocking {
+                preferencesDataStoreRepository.readTextColour().first()
+            }
+            val backgroundColourString = runBlocking {
+                preferencesDataStoreRepository.readBackgroundColour().first()
+            }
             val textColor = remember { convertStringToColour(textColourString) }
             val backgroundColor = remember { convertStringToColour(backgroundColourString) }
 
@@ -163,7 +161,7 @@ class WidgetConfig : ComponentActivity() {
                                         val serializedBackground = Gson().toJson(colorBackground)
                                         val serializedText = Gson().toJson(colorText)
                                         val glanceId = GlanceAppWidgetManager(this@WidgetConfig).getGlanceIdBy(appWidgetId)
-                                        test.saveColour(serializedBackground, serializedText)
+                                        preferencesDataStoreRepository.saveColour(serializedBackground, serializedText)
                                         updateAppWidgetState(this@WidgetConfig, PreferencesGlanceStateDefinition, glanceId) { prefs ->
                                             prefs.toMutablePreferences().apply {
                                                 this[backgroundKey] = serializedBackground

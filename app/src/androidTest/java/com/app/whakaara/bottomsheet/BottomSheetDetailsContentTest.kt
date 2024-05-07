@@ -46,7 +46,8 @@ class BottomSheetDetailsContentTest {
                     timeToAlarm = "Alarm in 1 hour 12 minutes",
                     is24HourFormat = false,
                     sheetState = rememberBottomSheetState(),
-                    reset = {}
+                    reset = {},
+                    getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
                 )
             }
         }

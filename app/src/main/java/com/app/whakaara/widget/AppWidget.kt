@@ -60,16 +60,15 @@ class AppWidget : GlanceAppWidget() {
         fun alarmRepository(): AlarmRepository
     }
 
-    override val sizeMode =
-        SizeMode.Responsive(
-            setOf(
-                ONE_BY_ONE,
-                TWO_BY_ONE,
-                SMALL_SQUARE,
-                HORIZONTAL_RECTANGLE,
-                BIG_SQUARE
-            )
+    override val sizeMode = SizeMode.Responsive(
+        setOf(
+            ONE_BY_ONE,
+            TWO_BY_ONE,
+            SMALL_SQUARE,
+            HORIZONTAL_RECTANGLE,
+            BIG_SQUARE
         )
+    )
 
     override var stateDefinition: GlanceStateDefinition<*> = PreferencesGlanceStateDefinition
 
@@ -78,11 +77,10 @@ class AppWidget : GlanceAppWidget() {
         id: GlanceId
     ) {
         val appContext = context.applicationContext ?: throw IllegalStateException()
-        val alarmEntryPoint =
-            EntryPointAccessors.fromApplication(
-                appContext,
-                AlarmRepositoryEntryPoint::class.java
-            )
+        val alarmEntryPoint = EntryPointAccessors.fromApplication(
+            appContext,
+            AlarmRepositoryEntryPoint::class.java
+        )
         val repository = alarmEntryPoint.alarmRepository()
         var listOfAlarms: List<Alarm>
 

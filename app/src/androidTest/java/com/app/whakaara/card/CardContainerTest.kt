@@ -29,7 +29,9 @@ class CardContainerTest {
                     delete = {},
                     disable = {},
                     enable = {},
-                    reset = {}
+                    reset = {},
+                    getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
+                    getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
                 )
             }
         }
@@ -66,7 +68,9 @@ class CardContainerTest {
                     delete = {},
                     disable = {},
                     enable = {},
-                    reset = {}
+                    reset = {},
+                    getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
+                    getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
                 )
             }
         }

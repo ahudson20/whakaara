@@ -1,7 +1,5 @@
 package com.app.whakaara.utility
 
-import android.content.Context
-import com.app.whakaara.R
 import com.whakaara.core.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.whakaara.core.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
 import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_FORMAT
@@ -29,25 +27,6 @@ class DateUtils {
             return alarmDate
         }
 
-        fun getInitialTimeToAlarm(
-            isEnabled: Boolean,
-            time: Calendar,
-            context: Context
-        ): String {
-            return if (!isEnabled) {
-                context.getString(R.string.card_alarm_sub_title_off)
-            } else {
-                convertSecondsToHMm(
-                    seconds = TimeUnit.MILLISECONDS.toSeconds(
-                        getDifferenceFromCurrentTimeInMillis(
-                            time = time
-                        )
-                    ),
-                    context = context
-                )
-            }
-        }
-
         fun getAlarmTimeFormatted(
             date: Calendar,
             is24HourFormatEnabled: Boolean
@@ -56,55 +35,7 @@ class DateUtils {
             return SimpleDateFormat(format, Locale.getDefault()).format(date.time).uppercase()
         }
 
-        fun Context.getTimeUntilAlarmFormatted(date: Calendar): String {
-            return convertSecondsToHMm(
-                seconds = TimeUnit.MILLISECONDS.toSeconds(
-                    getDifferenceFromCurrentTimeInMillis(
-                        time = date
-                    )
-                ),
-                context = this
-            )
-        }
-
-        fun convertSecondsToHMm(
-            seconds: Long,
-            context: Context
-        ): String {
-            val minutes = seconds / 60 % 60
-            val hours = seconds / (60 * 60) % 24
-            val formattedString = StringBuilder()
-            val hoursString =
-                when {
-                    hours.toInt() == 0 -> ""
-                    else -> {
-                        context.resources.getQuantityString(
-                            R.plurals.hours,
-                            hours.toInt(),
-                            hours.toInt()
-                        )
-                    }
-                }
-            val minutesString =
-                when {
-                    minutes.toInt() == 0 && hours.toInt() != 0 -> ""
-                    minutes.toInt() == 0 && hours.toInt() == 0 -> context.getString(R.string.alarm_less_than_one_minute)
-                    else -> {
-                        context.resources.getQuantityString(
-                            R.plurals.minutes,
-                            minutes.toInt(),
-                            minutes.toInt()
-                        )
-                    }
-                }
-
-            formattedString.append(context.resources.getString(R.string.time_until_alarm_formatted_prefix) + " ")
-            if (hoursString.isNotBlank()) formattedString.append("$hoursString ")
-            if (minutesString.isNotBlank()) formattedString.append("$minutesString ")
-            return formattedString.toString().trim()
-        }
-
-        private fun getDifferenceFromCurrentTimeInMillis(time: Calendar): Long {
+        fun getDifferenceFromCurrentTimeInMillis(time: Calendar): Long {
             val timeNow = Calendar.getInstance()
 
             if (checkIfSameDay(time, timeNow)) {
@@ -130,8 +61,7 @@ class DateUtils {
         }
 
         fun hoursToMilliseconds(hours: Int): Long {
-            val millisecondsInHour: Long =
-                3600000 // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
+            val millisecondsInHour: Long = 3600000 // 1 hour = 3600 seconds = 3600 * 1000 milliseconds
             return hours * millisecondsInHour
         }
 

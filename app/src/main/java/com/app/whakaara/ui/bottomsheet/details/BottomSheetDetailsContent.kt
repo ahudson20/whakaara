@@ -39,7 +39,6 @@ import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.DateUtils.Companion.getAlarmTimeFormatted
-import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
@@ -55,7 +54,8 @@ fun BottomSheetDetailsContent(
     timeToAlarm: String,
     is24HourFormat: Boolean,
     sheetState: BottomSheetState,
-    reset: (alarm: Alarm) -> Unit
+    reset: (alarm: Alarm) -> Unit,
+    getTimeUntilAlarmFormatted: (date: Calendar) -> String
 ) {
     val coroutineScope = rememberCoroutineScope()
     val focusManager = LocalFocusManager.current
@@ -101,8 +101,8 @@ fun BottomSheetDetailsContent(
                 value = timePickerValue,
                 onValueChange = { newValue ->
                     timePickerValue = newValue
-                    bottomText = context.getTimeUntilAlarmFormatted(
-                        date = Calendar.getInstance().apply {
+                    bottomText = getTimeUntilAlarmFormatted(
+                        Calendar.getInstance().apply {
                             set(Calendar.HOUR_OF_DAY, newValue.hours)
                             set(Calendar.MINUTE, newValue.minutes)
                         }
@@ -217,7 +217,8 @@ fun BottomSheetContentPreview(
             timeToAlarm = "timeToAlarm",
             is24HourFormat = true,
             sheetState = BottomSheetState(),
-            reset = {}
+            reset = {},
+            getTimeUntilAlarmFormatted = { "" }
         )
     }
 }

@@ -37,7 +37,9 @@ class CardTest {
                     is24HourFormat = true,
                     disable = {},
                     enable = {},
-                    reset = {}
+                    reset = {},
+                    getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
+                    getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
                 )
             }
         }

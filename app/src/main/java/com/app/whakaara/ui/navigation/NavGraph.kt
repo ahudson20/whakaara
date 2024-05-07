@@ -83,11 +83,7 @@ fun NavGraph(
                             alarmState.alarms
                         },
                         preferencesState = preferencesState,
-                        delete = alarmEventCallbacks::delete,
-                        disable = alarmEventCallbacks::disable,
-                        enable = alarmEventCallbacks::enable,
-                        reset = alarmEventCallbacks::reset,
-                        create = alarmEventCallbacks::create
+                        alarmEventCallbacks = alarmEventCallbacks
                     )
             }
         }

@@ -15,24 +15,22 @@ data class StopwatchState(
     val lapList: MutableList<Lap> = mutableListOf()
 )
 
-fun StopwatchDataStore.asExternalModel() =
-    StopwatchState(
-        timeMillis = timeMillis,
-        lastTimeStamp = lastTimeStamp,
-        formattedTime = formattedTime,
-        isActive = isActive,
-        isStart = isStart,
-        isPaused = isPaused,
-        lapList = lapList
-    )
+fun StopwatchDataStore.asExternalModel() = StopwatchState(
+    timeMillis = timeMillis,
+    lastTimeStamp = lastTimeStamp,
+    formattedTime = formattedTime,
+    isActive = isActive,
+    isStart = isStart,
+    isPaused = isPaused,
+    lapList = lapList
+)
 
-fun StopwatchState.asInternalModel() =
-    StopwatchDataStore(
-        timeMillis = timeMillis,
-        lastTimeStamp = lastTimeStamp,
-        formattedTime = formattedTime,
-        isActive = isActive,
-        isStart = isStart,
-        isPaused = isPaused,
-        lapList = lapList
-    )
+fun StopwatchState.asInternalModel() = StopwatchDataStore(
+    timeMillis = timeMillis,
+    lastTimeStamp = lastTimeStamp,
+    formattedTime = formattedTime,
+    isActive = isActive,
+    isStart = isStart,
+    isPaused = isPaused,
+    lapList = lapList
+)

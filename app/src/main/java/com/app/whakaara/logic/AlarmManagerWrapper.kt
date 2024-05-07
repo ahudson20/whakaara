@@ -7,6 +7,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.receiver.UpcomingAlarmReceiver
@@ -25,6 +26,7 @@ import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INT
 import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
 import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class AlarmManagerWrapper @Inject constructor(
@@ -270,5 +272,64 @@ class AlarmManagerWrapper @Inject constructor(
             intent.putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, triggerTime.timeInMillis)
             app.applicationContext.sendBroadcast(intent)
         }
+    }
+
+    fun getInitialTimeToAlarm(
+        isEnabled: Boolean,
+        time: Calendar
+    ): String {
+        return if (!isEnabled) {
+            app.applicationContext.getString(R.string.card_alarm_sub_title_off)
+        } else {
+            convertSecondsToHMm(
+                seconds = TimeUnit.MILLISECONDS.toSeconds(
+                    DateUtils.getDifferenceFromCurrentTimeInMillis(
+                        time = time
+                    )
+                )
+            )
+        }
+    }
+
+    fun getTimeUntilAlarmFormatted(date: Calendar): String {
+        return convertSecondsToHMm(
+            seconds = TimeUnit.MILLISECONDS.toSeconds(
+                DateUtils.getDifferenceFromCurrentTimeInMillis(
+                    time = date
+                )
+            )
+        )
+    }
+
+    private fun convertSecondsToHMm(seconds: Long): String {
+        val minutes = seconds / 60 % 60
+        val hours = seconds / (60 * 60) % 24
+        val formattedString = StringBuilder()
+        val hoursString = when {
+            hours.toInt() == 0 -> ""
+            else -> {
+                app.applicationContext.resources.getQuantityString(
+                    R.plurals.hours,
+                    hours.toInt(),
+                    hours.toInt()
+                )
+            }
+        }
+        val minutesString = when {
+            minutes.toInt() == 0 && hours.toInt() != 0 -> ""
+            minutes.toInt() == 0 && hours.toInt() == 0 -> app.applicationContext.getString(R.string.alarm_less_than_one_minute)
+            else -> {
+                app.applicationContext.resources.getQuantityString(
+                    R.plurals.minutes,
+                    minutes.toInt(),
+                    minutes.toInt()
+                )
+            }
+        }
+
+        formattedString.append(app.applicationContext.resources.getString(R.string.time_until_alarm_formatted_prefix) + " ")
+        if (hoursString.isNotBlank()) formattedString.append("$hoursString ")
+        if (minutesString.isNotBlank()) formattedString.append("$minutesString ")
+        return formattedString.toString().trim()
     }
 }

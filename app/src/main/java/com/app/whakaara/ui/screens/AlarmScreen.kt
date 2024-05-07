@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.ui.card.CardContainerSwipeToDismiss
 import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
 import com.app.whakaara.ui.theme.AlarmPreviewProvider
@@ -36,7 +37,6 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.DateUtils
-import com.app.whakaara.utility.DateUtils.Companion.getTimeUntilAlarmFormatted
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -53,11 +53,7 @@ import java.util.Calendar
 fun AlarmScreen(
     alarms: List<Alarm>,
     preferencesState: PreferencesState,
-    delete: (alarm: Alarm) -> Unit,
-    disable: (alarm: Alarm) -> Unit,
-    enable: (alarm: Alarm) -> Unit,
-    reset: (alarm: Alarm) -> Unit,
-    create: (alarm: Alarm) -> Unit
+    alarmEventCallbacks: AlarmEventCallbacks
 ) {
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
@@ -113,10 +109,12 @@ fun AlarmScreen(
             modifier = Modifier.padding(innerPadding),
             alarms = alarms,
             is24HourFormat = preferencesState.preferences.is24HourFormat,
-            delete = delete,
-            disable = disable,
-            enable = enable,
-            reset = reset
+            delete = alarmEventCallbacks::delete,
+            disable = alarmEventCallbacks::disable,
+            enable = alarmEventCallbacks::enable,
+            reset = alarmEventCallbacks::reset,
+            getInitialTimeToAlarm = alarmEventCallbacks::getInitialTimeToAlarm,
+            getTimeUntilAlarmFormatted = alarmEventCallbacks::getTimeUntilAlarmFormatted
         )
 
         AnimatedVisibility(isDialogShown.value) {
@@ -129,7 +127,7 @@ fun AlarmScreen(
                         set(Calendar.MINUTE, it.minute)
                         set(Calendar.SECOND, 0)
                     }
-                    create(
+                    alarmEventCallbacks.create(
                         Alarm(
                             date = date,
                             subTitle = DateUtils.getAlarmTimeFormatted(
@@ -143,7 +141,7 @@ fun AlarmScreen(
                     )
                     isDialogShown.value = false
                     context.showToast(
-                        message = context.getTimeUntilAlarmFormatted(date = date)
+                        message = alarmEventCallbacks.getTimeUntilAlarmFormatted(date)
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
@@ -163,11 +161,28 @@ fun AlarmScreenPreview(
         AlarmScreen(
             alarms = listOf(alarm),
             preferencesState = PreferencesState(),
-            delete = {},
-            disable = {},
-            enable = {},
-            reset = {},
-            create = {}
+            alarmEventCallbacks = object : AlarmEventCallbacks {
+                override fun create(alarm: Alarm) {}
+
+                override fun delete(alarm: Alarm) {}
+
+                override fun disable(alarm: Alarm) {}
+
+                override fun enable(alarm: Alarm) {}
+
+                override fun reset(alarm: Alarm) {}
+
+                override fun getInitialTimeToAlarm(
+                    isEnabled: Boolean,
+                    time: Calendar
+                ): String {
+                    return ""
+                }
+
+                override fun getTimeUntilAlarmFormatted(date: Calendar): String {
+                    return ""
+                }
+            }
         )
     }
 }

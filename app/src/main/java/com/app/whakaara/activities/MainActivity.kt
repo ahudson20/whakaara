@@ -22,6 +22,7 @@ import com.whakaara.model.events.TimerEventCallbacks
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Calendar
 
 @AndroidEntryPoint
 @ExperimentalLayoutApi
@@ -112,6 +113,13 @@ class MainActivity :
     override fun reset(alarm: Alarm) {
         viewModel.reset(alarm = alarm)
     }
+
+    override fun getInitialTimeToAlarm(
+        isEnabled: Boolean,
+        time: Calendar
+    ): String = viewModel.getInitialTimeToAlarm(isEnabled = isEnabled, time = time)
+
+    override fun getTimeUntilAlarmFormatted(date: Calendar): String = viewModel.getTimeUntilAlarmFormatted(date = date)
     //endregion
 
     //region timer

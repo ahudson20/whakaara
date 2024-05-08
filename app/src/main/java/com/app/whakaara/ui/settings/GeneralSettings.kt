@@ -39,13 +39,16 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.TimeFormat
+import com.whakaara.model.preferences.TimeFormat.Companion.toBoolean
+import com.whakaara.model.preferences.TimeFormat.Companion.toTimeFormat
 import kotlin.math.roundToInt
 
 @Composable
 fun GeneralSettings(
     preferencesState: PreferencesState,
     updatePreferences: (preferences: Preferences) -> Unit,
-    updateAllAlarmSubtitles: (format: Boolean) -> Unit
+    updateAllAlarmSubtitles: (format: TimeFormat) -> Unit
 ) {
     val context = LocalContext.current
     val intentAppSettings = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply { addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) }
@@ -165,16 +168,16 @@ fun GeneralSettings(
 
     SettingsSwitch(
         modifier = Modifier.height(space80),
-        state = rememberBooleanSettingState(preferencesState.preferences.is24HourFormat),
+        state = rememberBooleanSettingState(preferencesState.preferences.timeFormat.toBoolean()),
         title = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_subtitle)) },
         onCheckedChange = {
             updatePreferences(
                 preferencesState.preferences.copy(
-                    is24HourFormat = it
+                    timeFormat = it.toTimeFormat()
                 )
             )
-            updateAllAlarmSubtitles(it)
+            updateAllAlarmSubtitles(it.toTimeFormat())
         }
     )
 }

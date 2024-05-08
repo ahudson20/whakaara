@@ -10,14 +10,15 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.core.constants.DateUtilsConstants
+import com.whakaara.model.preferences.TimeFormat
 
 @Composable
-fun TextClock(is24HourFormat: Boolean) {
+fun TextClock(timeFormat: TimeFormat) {
     val textColor = MaterialTheme.colorScheme.onBackground.toArgb()
     AndroidView(
         factory = { context ->
             android.widget.TextClock(context).apply {
-                if (is24HourFormat) {
+                if (timeFormat == TimeFormat.TWENTY_FOUR_HOURS) {
                     format24Hour?.let {
                         this.format24Hour = DateUtilsConstants.DATE_FORMAT_24_HOUR_WITH_SECONDS
                     }
@@ -42,7 +43,7 @@ fun TextClock(is24HourFormat: Boolean) {
 fun TextClockPreview() {
     WhakaaraTheme {
         TextClock(
-            is24HourFormat = true
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS
         )
     }
 }

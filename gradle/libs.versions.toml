@@ -12,6 +12,7 @@ androidxJunitTextExt = "1.1.5"
 androidxHiltNavCompose = "1.2.0"
 androidxGlance = "1.0.0"
 androidGradlePlugin = "8.2.2"
+androidxAnnotation = "1.7.1"
 datastorePreferences = "1.1.0"
 javaxInject = "1"
 jetbrainsKotlinxMetadata = "0.9.0"
@@ -84,6 +85,7 @@ androidx-test-junit-ext = { group = "androidx.test.ext", name = "junit", version
 androidx-hilt-nav-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavCompose" }
 androidx-glance-appwidget = { group = "androidx.glance", name = "glance-appwidget", version.ref = "androidxGlance" }
 androidx-glance-material3 = { group = "androidx.glance", name = "glance-material3", version.ref = "androidxGlance" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "androidxAnnotation" }
 dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hiltDaggerAndroid" }
 dagger-hilt-compiler-android = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hiltDaggerAndroid" }
 dagger-hilt-testing-android = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hiltDaggerAndroid" }

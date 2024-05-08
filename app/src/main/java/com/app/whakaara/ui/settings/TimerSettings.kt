@@ -35,6 +35,7 @@ import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.getNameFromUri
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.VibrationPattern
 import com.whakaara.model.preferences.VibrationPattern.Companion.SINGLE
@@ -108,6 +109,26 @@ fun TimerSettings(
         }
     )
 
+    SettingsListDropdown(
+        modifier = Modifier
+            .height(space80)
+            .testTag("timer gradual dropdown"),
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.timerGradualSoundDuration.ordinal),
+        title = { Text(text = stringResource(id = R.string.settings_screen_gradual_volume_increase_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_gradual_volume_increase_subtitle)) },
+        items = GradualSoundDuration.entries.map { context.getString(it.getStringResource(it.ordinal)) },
+        onItemSelected = { int, _ ->
+            val selection = GradualSoundDuration.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.timerGradualSoundDuration) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        timerGradualSoundDuration = selection
+                    )
+                )
+            }
+        }
+    )
+
     SettingsSwitch(
         modifier = Modifier
             .height(space80)
@@ -131,7 +152,7 @@ fun TimerSettings(
         enabled = preferencesState.preferences.isVibrationTimerEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.timerVibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },
-        items = VibrationPattern.entries.map { it.label },
+        items = VibrationPattern.entries.map { context.getString(it.getStringResource(it.ordinal)) },
         onItemSelected = { int, _ ->
             val selection = VibrationPattern.fromOrdinalInt(value = int)
             val vibrationEffect = createWaveForm(selection = selection, repeat = SINGLE)

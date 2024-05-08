@@ -74,12 +74,12 @@ class FullScreenNotificationActivity : ComponentActivity() {
                         alarm = alarm,
                         snooze = viewModel::snooze,
                         disable = viewModel::disable,
-                        is24HourFormat = preferencesState.preferences.is24HourFormat
+                        timeFormat = preferencesState.preferences.timeFormat
                     )
                 } else {
                     TimerFullScreen(
                         resetTimer = viewModel::resetTimer,
-                        is24HourFormat = preferencesState.preferences.is24HourFormat
+                        timeFormat = preferencesState.preferences.timeFormat
                     )
                 }
             }

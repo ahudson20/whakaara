@@ -93,6 +93,8 @@
     <string name="settings_screen_alarm_volume_title">Alarm volume: %1$d</string>
     <string name="settings_screen_auto_restart_timer_title">Auto-restart</string>
     <string name="settings_screen_auto_restart_timer_subtitle">Timer automatically restarts on click</string>
+    <string name="settings_screen_gradual_volume_increase_title">Gentle rise</string>
+    <string name="settings_screen_gradual_volume_increase_subtitle">Gradually increase volume</string>
 
     <string name="timer_screen_hour_label">Hours</string>
     <string name="timer_screen_minutes_label">Minutes</string>

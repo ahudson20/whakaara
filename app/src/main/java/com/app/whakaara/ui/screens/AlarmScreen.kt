@@ -45,6 +45,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.marosseleng.compose.material3.datetimepickers.time.domain.noSeconds
 import com.marosseleng.compose.material3.datetimepickers.time.ui.dialog.TimePickerDialog
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import java.time.LocalTime
 import java.util.Calendar
 
@@ -108,7 +109,7 @@ fun AlarmScreen(
         CardContainerSwipeToDismiss(
             modifier = Modifier.padding(innerPadding),
             alarms = alarms,
-            is24HourFormat = preferencesState.preferences.is24HourFormat,
+            timeFormat = preferencesState.preferences.timeFormat,
             delete = alarmEventCallbacks::delete,
             disable = alarmEventCallbacks::disable,
             enable = alarmEventCallbacks::enable,
@@ -132,7 +133,7 @@ fun AlarmScreen(
                             date = date,
                             subTitle = DateUtils.getAlarmTimeFormatted(
                                 date = date,
-                                is24HourFormatEnabled = preferencesState.preferences.is24HourFormat
+                                timeFormat = preferencesState.preferences.timeFormat
                             ),
                             vibration = preferencesState.preferences.isVibrateEnabled,
                             isSnoozeEnabled = preferencesState.preferences.isSnoozeEnabled,
@@ -145,7 +146,7 @@ fun AlarmScreen(
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
-                is24HourFormat = preferencesState.preferences.is24HourFormat
+                is24HourFormat = preferencesState.preferences.timeFormat == TimeFormat.TWENTY_FOUR_HOURS
             )
         }
     }

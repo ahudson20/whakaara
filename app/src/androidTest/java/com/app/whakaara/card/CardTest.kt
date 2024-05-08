@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.ui.card.Card
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import org.junit.Rule
 import org.junit.Test
 import java.util.Calendar
@@ -34,13 +35,12 @@ class CardTest {
             WhakaaraTheme {
                 Card(
                     alarm = alarm,
-                    is24HourFormat = true,
+                    timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
                     disable = {},
                     enable = {},
                     reset = {},
-                    getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
-                    getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
-                )
+                    getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" }
+                ) { "getTimeUntilAlarmFormatted" }
             }
         }
 

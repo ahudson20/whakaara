@@ -1,15 +1,17 @@
 package com.app.whakaara.state
 
 import com.whakaara.model.preferences.AppTheme
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
+import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.model.preferences.VibrationPattern
 
 data class PreferencesState(
     val isReady: Boolean = false,
     val preferences: Preferences = Preferences(
         id = 0,
-        is24HourFormat = true,
+        timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
         isVibrateEnabled = true,
         isSnoozeEnabled = true,
         deleteAfterGoesOff = false,
@@ -26,6 +28,8 @@ data class PreferencesState(
         upcomingAlarmNotificationTime = SettingsTime.TEN,
         dynamicTheme = false,
         autoRestartTimer = true,
-        timerSoundPath = ""
+        timerSoundPath = "",
+        gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+        timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
     )
 )

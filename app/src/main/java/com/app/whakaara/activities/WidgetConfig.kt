@@ -143,10 +143,9 @@ class WidgetConfig : ComponentActivity() {
                         ) {
                             OutlinedButton(
                                 onClick = {
-                                    val resultValue =
-                                        Intent().apply {
-                                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                                        }
+                                    val resultValue = Intent().apply {
+                                        putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                    }
                                     setResult(RESULT_OK, resultValue)
                                     finish()
                                 }

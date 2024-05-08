@@ -2,7 +2,7 @@ package com.whakaara.model.preferences
 
 data class Preferences(
     var id: Int,
-    var is24HourFormat: Boolean,
+    var timeFormat: TimeFormat,
     var isVibrateEnabled: Boolean,
     var isSnoozeEnabled: Boolean,
     var deleteAfterGoesOff: Boolean,
@@ -19,5 +19,7 @@ data class Preferences(
     var upcomingAlarmNotificationTime: SettingsTime,
     val dynamicTheme: Boolean,
     val autoRestartTimer: Boolean,
-    val timerSoundPath: String
+    val timerSoundPath: String,
+    val gradualSoundDuration: GradualSoundDuration,
+    val timerGradualSoundDuration: GradualSoundDuration
 )

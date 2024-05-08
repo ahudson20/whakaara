@@ -1,13 +1,25 @@
 package com.whakaara.model.preferences
 
 import android.os.VibrationEffect
+import androidx.annotation.StringRes
+import com.whakaara.core.model.R
 
-enum class VibrationPattern(val value: Int, val label: String) {
-    CLICK(0, "Click"),
-    DOUBLE(1, "Double click"),
-    HEAVY(2, "Heavy click"),
-    TICK(3, "Tick")
-    ;
+enum class VibrationPattern(val value: Int) {
+    CLICK(0),
+    DOUBLE(1),
+    HEAVY(2),
+    TICK(3);
+
+    @StringRes
+    fun getStringResource(ordinal: Int): Int {
+        return when (ordinal) {
+            0 -> R.string.settings_screen_vibration_pattern_click
+            1 -> R.string.settings_screen_vibration_pattern_heavy_click
+            2 -> R.string.settings_screen_vibration_pattern_double_click
+            3 -> R.string.settings_screen_vibration_pattern_tick
+            else -> R.string.settings_screen_vibration_pattern_click
+        }
+    }
 
     companion object {
         fun fromOrdinalInt(value: Int) = entries.first { it.ordinal == value }

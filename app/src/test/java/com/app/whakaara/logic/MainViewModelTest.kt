@@ -13,6 +13,7 @@ import com.whakaara.model.datastore.StopwatchDataStore
 import com.whakaara.model.datastore.TimerStateDataStore
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
+import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.test.MainDispatcherRule
 import com.whakaara.test.MockUtil
 import io.mockk.Runs
@@ -405,7 +406,7 @@ class MainViewModelTest {
         val alarmSlots = mutableListOf<Alarm>()
 
         // When
-        viewModel.updateAllAlarmSubtitles(format = false)
+        viewModel.updateAllAlarmSubtitles(format = TimeFormat.TWELVE_HOURS)
 
         // Then
         coVerify(exactly = 2) { repository.update(capture(alarmSlots)) }
@@ -421,7 +422,7 @@ class MainViewModelTest {
         val alarmSlots = mutableListOf<Alarm>()
 
         // When
-        viewModel.updateAllAlarmSubtitles(format = true)
+        viewModel.updateAllAlarmSubtitles(format = TimeFormat.TWENTY_FOUR_HOURS)
 
         // Then
         coVerify(exactly = 2) { repository.update(capture(alarmSlots)) }

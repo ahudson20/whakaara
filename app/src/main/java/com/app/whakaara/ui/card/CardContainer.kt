@@ -26,6 +26,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -33,7 +34,7 @@ import java.util.Calendar
 fun CardContainerSwipeToDismiss(
     modifier: Modifier = Modifier,
     alarms: List<Alarm>,
-    is24HourFormat: Boolean,
+    timeFormat: TimeFormat,
     delete: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
@@ -81,7 +82,7 @@ fun CardContainerSwipeToDismiss(
                     content = {
                         Card(
                             alarm = alarm,
-                            is24HourFormat = is24HourFormat,
+                            timeFormat = timeFormat,
                             disable = disable,
                             enable = enable,
                             reset = reset,
@@ -106,13 +107,12 @@ fun CardContainerSwipeToDismissPreview(
             alarms = listOf(
                 alarm
             ),
-            is24HourFormat = true,
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
             delete = {},
             disable = {},
             enable = {},
             reset = {},
-            getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
-            getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
-        )
+            getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" }
+        ) { "getTimeUntilAlarmFormatted" }
     }
 }

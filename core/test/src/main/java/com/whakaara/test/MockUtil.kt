@@ -28,7 +28,7 @@ object MockUtil {
     fun mockPreferences() =
         Preferences(
             id = 0,
-            is24HourFormat = true,
+            timeFormat = true,
             isVibrateEnabled = true,
             isSnoozeEnabled = true,
             deleteAfterGoesOff = false,

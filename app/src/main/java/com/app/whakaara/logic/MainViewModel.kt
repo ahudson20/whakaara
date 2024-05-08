@@ -17,6 +17,7 @@ import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.datastore.TimerStateDataStore
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.TimeFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -152,7 +153,7 @@ class MainViewModel @Inject constructor(
         repository.update(alarm)
     }
 
-    fun updateAllAlarmSubtitles(format: Boolean) = viewModelScope.launch(ioDispatcher) {
+    fun updateAllAlarmSubtitles(format: TimeFormat) = viewModelScope.launch(ioDispatcher) {
         val state = _alarmState.value
         if (state is AlarmState.Success) {
             state.alarms.forEach {

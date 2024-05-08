@@ -51,6 +51,7 @@ import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -58,7 +59,7 @@ import java.util.Calendar
 fun Card(
     modifier: Modifier = Modifier,
     alarm: Alarm,
-    is24HourFormat: Boolean,
+    timeFormat: TimeFormat,
     disable: (alarm: Alarm) -> Unit,
     enable: (alarm: Alarm) -> Unit,
     reset: (alarm: Alarm) -> Unit,
@@ -163,7 +164,7 @@ fun Card(
         BottomSheetDetailsContent(
             alarm = alarm,
             timeToAlarm = timeToAlarm,
-            is24HourFormat = is24HourFormat,
+            timeFormat = timeFormat,
             sheetState = sheetState,
             reset = reset,
             getTimeUntilAlarmFormatted = getTimeUntilAlarmFormatted
@@ -180,12 +181,11 @@ fun CardPreview(
     WhakaaraTheme {
         Card(
             alarm = alarm,
-            is24HourFormat = true,
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
             disable = {},
             enable = {},
             reset = {},
-            getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" },
-            getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }
-        )
+            getInitialTimeToAlarm = { _, _ -> "getInitialTimeToAlarm" }
+        ) { "getTimeUntilAlarmFormatted" }
     }
 }

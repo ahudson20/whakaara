@@ -10,6 +10,7 @@ import com.whakaara.database.preferences.entity.asExternalModel
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
+import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.model.preferences.VibrationPattern
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -41,118 +42,112 @@ class PreferencesEntityImplTest {
     }
 
     @Test
-    fun `get preferences flow`() =
-        runTest {
-            // Given
-            val preferences =
-                PreferencesEntity(
-                    id = 1,
-                    is24HourFormat = false,
-                    isVibrateEnabled = false,
-                    isSnoozeEnabled = false,
-                    deleteAfterGoesOff = false,
-                    autoSilenceTime = SettingsTime.FIFTEEN,
-                    snoozeTime = SettingsTime.FIFTEEN,
-                    alarmSoundPath = "",
-                    vibrationPattern = VibrationPattern.CLICK,
-                    appTheme = AppTheme.MODE_AUTO,
-                    shouldShowOnboarding = false,
-                    isVibrationTimerEnabled = false,
-                    timerVibrationPattern = VibrationPattern.CLICK,
-                    filteredAlarmList = false,
-                    upcomingAlarmNotification = false,
-                    upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
-                    dynamicTheme = false,
-                    autoRestartTimer = true,
-                    timerSoundPath = ""
-                )
-            coEvery { preferencesDao.getPreferencesFlow() } returns flowOf(preferences)
+    fun `get preferences flow`() = runTest {
+        // Given
+        val preferences = PreferencesEntity(
+            id = 1,
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
+            isVibrateEnabled = false,
+            isSnoozeEnabled = false,
+            deleteAfterGoesOff = false,
+            autoSilenceTime = SettingsTime.FIFTEEN,
+            snoozeTime = SettingsTime.FIFTEEN,
+            alarmSoundPath = "",
+            vibrationPattern = VibrationPattern.CLICK,
+            appTheme = AppTheme.MODE_AUTO,
+            shouldShowOnboarding = false,
+            isVibrationTimerEnabled = false,
+            timerVibrationPattern = VibrationPattern.CLICK,
+            filteredAlarmList = false,
+            upcomingAlarmNotification = false,
+            upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
+            dynamicTheme = false,
+            autoRestartTimer = true,
+            timerSoundPath = ""
+        )
+        coEvery { preferencesDao.getPreferencesFlow() } returns flowOf(preferences)
 
-            // When
-            repository.getPreferencesFlow().test {
-                // Then
-                assertEquals(preferences.asExternalModel(), awaitItem())
-                cancelAndIgnoreRemainingEvents()
-            }
+        // When
+        repository.getPreferencesFlow().test {
+            // Then
+            assertEquals(preferences.asExternalModel(), awaitItem())
+            cancelAndIgnoreRemainingEvents()
         }
+    }
 
     @Test
-    fun `insert preferences`() =
-        runTest {
-            // Given
-            val preferences =
-                Preferences(
-                    id = 1,
-                    is24HourFormat = false,
-                    isVibrateEnabled = false,
-                    isSnoozeEnabled = false,
-                    deleteAfterGoesOff = false,
-                    autoSilenceTime = SettingsTime.FIFTEEN,
-                    snoozeTime = SettingsTime.FIFTEEN,
-                    alarmSoundPath = "",
-                    vibrationPattern = VibrationPattern.CLICK,
-                    appTheme = AppTheme.MODE_AUTO,
-                    shouldShowOnboarding = false,
-                    isVibrationTimerEnabled = false,
-                    timerVibrationPattern = VibrationPattern.CLICK,
-                    filteredAlarmList = false,
-                    upcomingAlarmNotification = false,
-                    upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
-                    dynamicTheme = false,
-                    autoRestartTimer = true,
-                    timerSoundPath = ""
-                )
-            val preferencesSlot = slot<PreferencesEntity>()
-            coEvery { preferencesDao.insert(any()) } returns mockk()
+    fun `insert preferences`() = runTest {
+        // Given
+        val preferences = Preferences(
+            id = 1,
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
+            isVibrateEnabled = false,
+            isSnoozeEnabled = false,
+            deleteAfterGoesOff = false,
+            autoSilenceTime = SettingsTime.FIFTEEN,
+            snoozeTime = SettingsTime.FIFTEEN,
+            alarmSoundPath = "",
+            vibrationPattern = VibrationPattern.CLICK,
+            appTheme = AppTheme.MODE_AUTO,
+            shouldShowOnboarding = false,
+            isVibrationTimerEnabled = false,
+            timerVibrationPattern = VibrationPattern.CLICK,
+            filteredAlarmList = false,
+            upcomingAlarmNotification = false,
+            upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
+            dynamicTheme = false,
+            autoRestartTimer = true,
+            timerSoundPath = ""
+        )
+        val preferencesSlot = slot<PreferencesEntity>()
+        coEvery { preferencesDao.insert(any()) } returns mockk()
 
-            // When
-            repository.insert(preferences = preferences)
+        // When
+        repository.insert(preferences = preferences)
 
-            // Then
-            coVerify(atLeast = 1) { preferencesDao.insert(capture(preferencesSlot)) }
-            with(preferencesSlot.captured) {
-                assertEquals(15, autoSilenceTime.value)
-                assertEquals(15, snoozeTime.value)
-            }
+        // Then
+        coVerify(atLeast = 1) { preferencesDao.insert(capture(preferencesSlot)) }
+        with(preferencesSlot.captured) {
+            assertEquals(15, autoSilenceTime.value)
+            assertEquals(15, snoozeTime.value)
         }
+    }
 
     @Test
-    fun `update preferences`() =
-        runTest {
-            // Given
-            val preferences =
-                Preferences(
-                    id = 1,
-                    is24HourFormat = false,
-                    isVibrateEnabled = false,
-                    isSnoozeEnabled = false,
-                    deleteAfterGoesOff = false,
-                    autoSilenceTime = SettingsTime.FIFTEEN,
-                    snoozeTime = SettingsTime.FIFTEEN,
-                    alarmSoundPath = "",
-                    vibrationPattern = VibrationPattern.CLICK,
-                    appTheme = AppTheme.MODE_AUTO,
-                    shouldShowOnboarding = false,
-                    isVibrationTimerEnabled = false,
-                    timerVibrationPattern = VibrationPattern.CLICK,
-                    filteredAlarmList = false,
-                    upcomingAlarmNotification = false,
-                    upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
-                    dynamicTheme = false,
-                    autoRestartTimer = true,
-                    timerSoundPath = ""
-                )
-            val preferencesSlot = slot<PreferencesEntity>()
-            coEvery { preferencesDao.updatePreferences(any()) } returns mockk()
+    fun `update preferences`() = runTest {
+        // Given
+        val preferences = Preferences(
+            id = 1,
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
+            isVibrateEnabled = false,
+            isSnoozeEnabled = false,
+            deleteAfterGoesOff = false,
+            autoSilenceTime = SettingsTime.FIFTEEN,
+            snoozeTime = SettingsTime.FIFTEEN,
+            alarmSoundPath = "",
+            vibrationPattern = VibrationPattern.CLICK,
+            appTheme = AppTheme.MODE_AUTO,
+            shouldShowOnboarding = false,
+            isVibrationTimerEnabled = false,
+            timerVibrationPattern = VibrationPattern.CLICK,
+            filteredAlarmList = false,
+            upcomingAlarmNotification = false,
+            upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
+            dynamicTheme = false,
+            autoRestartTimer = true,
+            timerSoundPath = ""
+        )
+        val preferencesSlot = slot<PreferencesEntity>()
+        coEvery { preferencesDao.updatePreferences(any()) } returns mockk()
 
-            // When
-            repository.updatePreferences(preferences = preferences)
+        // When
+        repository.updatePreferences(preferences = preferences)
 
-            // Then
-            coVerify(atLeast = 1) { preferencesDao.updatePreferences(capture(preferencesSlot)) }
-            with(preferencesSlot.captured) {
-                assertEquals(15, autoSilenceTime.value)
-                assertEquals(15, snoozeTime.value)
-            }
+        // Then
+        coVerify(atLeast = 1) { preferencesDao.updatePreferences(capture(preferencesSlot)) }
+        with(preferencesSlot.captured) {
+            assertEquals(15, autoSilenceTime.value)
+            assertEquals(15, snoozeTime.value)
         }
+    }
 }

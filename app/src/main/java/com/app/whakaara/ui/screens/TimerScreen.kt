@@ -47,6 +47,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_HOURS_INPUT_REGEX
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX
+import com.whakaara.model.preferences.TimeFormat
 import java.util.Calendar
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -60,7 +61,7 @@ fun TimerScreen(
     stopTimer: () -> Unit,
     restartTimer: (autoRestartTimer: Boolean) -> Unit,
     pauseTimer: () -> Unit,
-    is24HourFormat: Boolean,
+    timeFormat: TimeFormat,
     autoRestartTimer: Boolean
 ) {
     val focusManager = LocalFocusManager.current
@@ -196,7 +197,7 @@ fun TimerScreen(
                                         timerState.millisecondsFromTimerInput.toInt()
                                     )
                                 },
-                                is24HourFormatEnabled = is24HourFormat
+                                timeFormat = timeFormat
                             )
                         }
                     )
@@ -220,7 +221,7 @@ fun TimerPreview() {
             pauseTimer = {},
             stopTimer = {},
             restartTimer = {},
-            is24HourFormat = false,
+            timeFormat = TimeFormat.TWELVE_HOURS,
             autoRestartTimer = true
         )
     }

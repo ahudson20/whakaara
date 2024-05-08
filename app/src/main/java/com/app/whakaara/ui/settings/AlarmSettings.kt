@@ -40,6 +40,7 @@ import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.getNameFromUri
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
 import com.whakaara.model.preferences.VibrationPattern
@@ -57,36 +58,33 @@ fun AlarmSettings(
     val context = LocalContext.current
     val vibrator = (context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
 
-    val currentRingtoneUri: Uri =
-        if (preferencesState.preferences.alarmSoundPath.isNotEmpty()) {
-            Uri.parse(preferencesState.preferences.alarmSoundPath)
-        } else {
-            Settings.System.DEFAULT_ALARM_ALERT_URI
-        }
+    val currentRingtoneUri: Uri = if (preferencesState.preferences.alarmSoundPath.isNotEmpty()) {
+        Uri.parse(preferencesState.preferences.alarmSoundPath)
+    } else {
+        Settings.System.DEFAULT_ALARM_ALERT_URI
+    }
 
-    val ringtoneSelectionIntent =
-        Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
-            putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
-            putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
-            putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, context.getString(R.string.ringtone_selection_activity_title))
-            putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtoneUri)
-            putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
-        }
+    val ringtoneSelectionIntent = Intent(RingtoneManager.ACTION_RINGTONE_PICKER).apply {
+        putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM)
+        putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true)
+        putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, context.getString(R.string.ringtone_selection_activity_title))
+        putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, currentRingtoneUri)
+        putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, Settings.System.DEFAULT_ALARM_ALERT_URI)
+    }
 
-    val ringtonePicker =
-        rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult(),
-            onResult = { uri ->
-                if (uri.resultCode == Activity.RESULT_OK && uri.data != null) {
-                    val selectedRingtone = uri.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java) ?: Settings.System.DEFAULT_ALARM_ALERT_URI
-                    updatePreferences(
-                        preferencesState.preferences.copy(
-                            alarmSoundPath = selectedRingtone.toString()
-                        )
+    val ringtonePicker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = { uri ->
+            if (uri.resultCode == Activity.RESULT_OK && uri.data != null) {
+                val selectedRingtone = uri.data?.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, Uri::class.java) ?: Settings.System.DEFAULT_ALARM_ALERT_URI
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        alarmSoundPath = selectedRingtone.toString()
                     )
-                }
+                )
             }
-        )
+        }
+    )
 
     Text(
         modifier = Modifier.padding(start = spaceMedium, top = spaceMedium, bottom = spaceMedium),
@@ -110,6 +108,26 @@ fun AlarmSettings(
         },
         onClick = {
             ringtonePicker.launch(ringtoneSelectionIntent)
+        }
+    )
+
+    SettingsListDropdown(
+        modifier = Modifier
+            .height(space80)
+            .testTag("alarm gradual dropdown"),
+        state = rememberIntSettingState(defaultValue = preferencesState.preferences.gradualSoundDuration.ordinal),
+        title = { Text(text = stringResource(id = R.string.settings_screen_gradual_volume_increase_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_gradual_volume_increase_subtitle)) },
+        items = GradualSoundDuration.entries.map { context.getString(it.getStringResource(it.ordinal)) },
+        onItemSelected = { int, _ ->
+            val selection = GradualSoundDuration.fromOrdinalInt(value = int)
+            if (selection != preferencesState.preferences.gradualSoundDuration) {
+                updatePreferences(
+                    preferencesState.preferences.copy(
+                        gradualSoundDuration = selection
+                    )
+                )
+            }
         }
     )
 
@@ -148,7 +166,7 @@ fun AlarmSettings(
         enabled = preferencesState.preferences.isVibrateEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.vibrationPattern.value),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_pattern_title)) },
-        items = VibrationPattern.entries.map { it.label },
+        items = VibrationPattern.entries.map { context.getString(it.getStringResource(it.ordinal)) },
         onItemSelected = { int, _ ->
             val selection = VibrationPattern.fromOrdinalInt(value = int)
             val vibrationEffect = createWaveForm(selection = selection, repeat = SINGLE)
@@ -186,7 +204,7 @@ fun AlarmSettings(
         enabled = preferencesState.preferences.isSnoozeEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.snoozeTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
-        items = SettingsTime.entries.map { it.label },
+        items = SettingsTime.entries.map { context.getString(it.getStringResource(it.ordinal)) },
         onItemSelected = { int, _ ->
             val selection = SettingsTime.fromOrdinalInt(value = int)
             if (selection != preferencesState.preferences.snoozeTime) {
@@ -220,7 +238,7 @@ fun AlarmSettings(
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.upcomingAlarmNotificationTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_time_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_time_subtitle)) },
-        items = SettingsTime.entries.map { it.label },
+        items = SettingsTime.entries.map { context.getString(it.getStringResource(it.ordinal)) },
         onItemSelected = { int, _ ->
             val selection = SettingsTime.fromOrdinalInt(value = int)
             if (selection != preferencesState.preferences.upcomingAlarmNotificationTime) {
@@ -252,7 +270,7 @@ fun AlarmSettings(
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.autoSilenceTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
-        items = SettingsTime.entries.map { it.label },
+        items = SettingsTime.entries.map { context.getString(it.getStringResource(it.ordinal)) },
         onItemSelected = { int, _ ->
             val selection = SettingsTime.fromOrdinalInt(value = int)
             if (selection != preferencesState.preferences.autoSilenceTime) {

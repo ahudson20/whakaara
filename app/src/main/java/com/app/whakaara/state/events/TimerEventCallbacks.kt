@@ -1,4 +1,4 @@
-package com.whakaara.model.events
+package com.app.whakaara.state.events
 
 interface TimerEventCallbacks {
     fun updateHours(newValue: String)

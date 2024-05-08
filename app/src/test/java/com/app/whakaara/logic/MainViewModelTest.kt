@@ -94,7 +94,7 @@ class MainViewModelTest {
                 subTitle = "14:34 PM"
             )
         )
-        preferences = MockUtil.mockPreferences()
+        preferences = MockUtil.mockDefaultPreferences()
 
         coEvery { repository.getAllAlarmsFlow() } returns flowOf(alarms)
         coEvery { repository.insert(any()) } just Runs
@@ -193,7 +193,7 @@ class MainViewModelTest {
     @Test
     fun `update preferences`() = runTest {
         // Given
-        val preferences = MockUtil.mockPreferences().apply {
+        val preferences = MockUtil.mockDefaultPreferences().apply {
             autoSilenceTime = SettingsTime.FIVE
             snoozeTime = SettingsTime.ONE
         }

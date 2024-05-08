@@ -13,6 +13,9 @@ import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.events.AlarmEventCallbacks
+import com.app.whakaara.state.events.PreferencesEventCallbacks
+import com.app.whakaara.state.events.StopwatchEventCallbacks
+import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
@@ -20,9 +23,6 @@ import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
-import com.app.whakaara.state.events.PreferencesEventCallbacks
-import com.app.whakaara.state.events.StopwatchEventCallbacks
-import com.app.whakaara.state.events.TimerEventCallbacks
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.TimeFormat
 import java.util.Calendar

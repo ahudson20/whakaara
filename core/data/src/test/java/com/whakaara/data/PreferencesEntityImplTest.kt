@@ -8,6 +8,7 @@ import com.whakaara.database.preferences.PreferencesDao
 import com.whakaara.database.preferences.entity.PreferencesEntity
 import com.whakaara.database.preferences.entity.asExternalModel
 import com.whakaara.model.preferences.AppTheme
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
 import com.whakaara.model.preferences.TimeFormat
@@ -63,7 +64,9 @@ class PreferencesEntityImplTest {
             upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
             dynamicTheme = false,
             autoRestartTimer = true,
-            timerSoundPath = ""
+            timerSoundPath = "",
+            gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
         )
         coEvery { preferencesDao.getPreferencesFlow() } returns flowOf(preferences)
 
@@ -97,7 +100,9 @@ class PreferencesEntityImplTest {
             upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
             dynamicTheme = false,
             autoRestartTimer = true,
-            timerSoundPath = ""
+            timerSoundPath = "",
+            gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
         )
         val preferencesSlot = slot<PreferencesEntity>()
         coEvery { preferencesDao.insert(any()) } returns mockk()
@@ -135,7 +140,9 @@ class PreferencesEntityImplTest {
             upcomingAlarmNotificationTime = SettingsTime.FIFTEEN,
             dynamicTheme = false,
             autoRestartTimer = true,
-            timerSoundPath = ""
+            timerSoundPath = "",
+            gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
         )
         val preferencesSlot = slot<PreferencesEntity>()
         coEvery { preferencesDao.updatePreferences(any()) } returns mockk()

@@ -170,10 +170,9 @@ fun AlarmSettings(
         onItemSelected = { int, _ ->
             val selection = VibrationPattern.fromOrdinalInt(value = int)
             val vibrationEffect = createWaveForm(selection = selection, repeat = SINGLE)
-            val attributes =
-                VibrationAttributes.Builder().apply {
-                    setUsage(VibrationAttributes.USAGE_NOTIFICATION)
-                }.build()
+            val attributes = VibrationAttributes.Builder().apply {
+                setUsage(VibrationAttributes.USAGE_NOTIFICATION)
+            }.build()
             vibrator.vibrate(vibrationEffect, attributes)
             if (selection != preferencesState.preferences.vibrationPattern) {
                 updatePreferences(

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_screen_gradual_volume_increase_never">Never</string>
+    <string name="settings_screen_gradual_volume_ten_seconds">10 seconds</string>
+    <string name="settings_screen_gradual_volume_twenty_seconds">20 seconds</string>
+    <string name="settings_screen_gradual_volume_thirty_seconds">30 seconds</string>
+    <string name="settings_screen_gradual_volume_sixty_seconds">60 seconds</string>
+
+    <string name="settings_screen_time_one_minute">1 minute</string>
+    <string name="settings_screen_time_five_minutes">5 minutes</string>
+    <string name="settings_screen_time_ten_minutes">10 minutes</string>
+    <string name="settings_screen_time_fifteen_minutes">15 minutes</string>
+
+    <string name="settings_screen_vibration_pattern_click">Click</string>
+    <string name="settings_screen_vibration_pattern_heavy_click">Heavy click</string>
+    <string name="settings_screen_vibration_pattern_double_click">Double click</string>
+    <string name="settings_screen_vibration_pattern_tick">Tick</string>
+
+</resources>

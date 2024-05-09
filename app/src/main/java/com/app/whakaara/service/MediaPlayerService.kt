@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
+import android.media.VolumeShaper
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -89,6 +90,9 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
     @IoDispatcher
     lateinit var iODispatcher: CoroutineDispatcher
 
+    @Inject
+    lateinit var volumeShaperConfiguration: VolumeShaper.Configuration.Builder
+
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
 
@@ -136,7 +140,10 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
                 }
             }
 
-            setupMediaPlayer(soundPath = preferences.alarmSoundPath)
+            setupMediaPlayer(
+                soundPath = preferences.alarmSoundPath,
+                duration = preferences.gradualSoundDuration.inMillis()
+            )
 
             startForeground(
                 FOREGROUND_SERVICE_ID,
@@ -146,7 +153,10 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
             if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
         } else {
-            setupMediaPlayer(soundPath = preferences.timerSoundPath)
+            setupMediaPlayer(
+                soundPath = preferences.timerSoundPath,
+                duration = preferences.timerGradualSoundDuration.inMillis()
+            )
 
             startForeground(
                 FOREGROUND_SERVICE_ID,
@@ -169,7 +179,8 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
     }
 
-    private fun setupMediaPlayer(soundPath: String) {
+    private fun setupMediaPlayer(soundPath: String, duration: Long) {
+        volumeShaperConfiguration.apply { setDuration(duration) }
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,
@@ -355,7 +366,9 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
     }
 
     override fun onPrepared(mp: MediaPlayer?) {
+        val volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfiguration.build())
         mediaPlayer.start()
+        volumeShaper.apply(VolumeShaper.Operation.PLAY)
     }
 
     override fun onBind(intent: Intent): IBinder? {

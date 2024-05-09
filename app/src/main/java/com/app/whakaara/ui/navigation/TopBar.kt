@@ -14,6 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.state.PreferencesState
+import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.screens.SettingsScreen
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.RoutePreviewProvider
@@ -21,8 +22,8 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
-import com.whakaara.model.events.PreferencesEventCallbacks
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.TimeFormat
 import kotlinx.coroutines.launch
 import java.util.Locale
 
@@ -88,7 +89,7 @@ fun TopBarPreview(
             preferencesEventCallbacks = object : PreferencesEventCallbacks {
                 override fun updatePreferences(preferences: Preferences) {}
 
-                override fun updateAllAlarmSubtitles(format: Boolean) {}
+                override fun updateAllAlarmSubtitles(format: TimeFormat) {}
 
                 override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {}
             }

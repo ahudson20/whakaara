@@ -24,6 +24,7 @@ import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 
 @Composable
 fun AlarmFullScreen(
@@ -31,7 +32,7 @@ fun AlarmFullScreen(
     alarm: Alarm,
     snooze: (alarm: Alarm) -> Unit,
     disable: (alarm: Alarm) -> Unit,
-    is24HourFormat: Boolean
+    timeFormat: TimeFormat
 ) {
     val context = LocalContext.current
     val activity = (context as? Activity)
@@ -45,7 +46,7 @@ fun AlarmFullScreen(
         ) {
             Row {
                 TextClock(
-                    is24HourFormat = is24HourFormat
+                    timeFormat = timeFormat
                 )
             }
 
@@ -90,7 +91,7 @@ fun NotificationFullScreenPreview(
             alarm = alarm,
             snooze = {},
             disable = {},
-            is24HourFormat = true
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS
         )
     }
 }

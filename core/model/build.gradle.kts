@@ -22,4 +22,6 @@ android {
 
 dependencies {
     modules(Modules.coreCommon)
+
+    implementation(libs.androidx.annotation)
 }

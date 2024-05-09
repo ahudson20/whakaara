@@ -10,6 +10,8 @@ import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.events.AlarmEventCallbacks
+import com.app.whakaara.state.events.StopwatchEventCallbacks
+import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.loading.Loading
 import com.app.whakaara.ui.screens.AlarmScreen
 import com.app.whakaara.ui.screens.OnboardingScreen
@@ -19,8 +21,6 @@ import com.whakaara.core.constants.GeneralConstants.DEEPLINK_ALARM
 import com.whakaara.core.constants.GeneralConstants.DEEPLINK_STOPWATCH
 import com.whakaara.core.constants.GeneralConstants.DEEPLINK_TIMER
 import com.whakaara.core.constants.GeneralConstants.ONBOARDING_ROUTE
-import com.whakaara.model.events.StopwatchEventCallbacks
-import com.whakaara.model.events.TimerEventCallbacks
 import com.whakaara.model.preferences.Preferences
 
 @Composable
@@ -105,7 +105,7 @@ fun NavGraph(
                 stopTimer = timerEventCallbacks::stopTimer,
                 pauseTimer = timerEventCallbacks::pauseTimer,
                 restartTimer = timerEventCallbacks::restartTimer,
-                is24HourFormat = preferencesState.preferences.is24HourFormat,
+                timeFormat = preferencesState.preferences.timeFormat,
                 autoRestartTimer = preferencesState.preferences.autoRestartTimer
             )
         }

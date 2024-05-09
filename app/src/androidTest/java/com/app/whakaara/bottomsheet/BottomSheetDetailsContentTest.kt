@@ -15,6 +15,7 @@ import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.dokar.sheets.rememberBottomSheetState
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
@@ -44,7 +45,7 @@ class BottomSheetDetailsContentTest {
                 BottomSheetDetailsContent(
                     alarm = alarm,
                     timeToAlarm = "Alarm in 1 hour 12 minutes",
-                    is24HourFormat = false,
+                    timeFormat = TimeFormat.TWELVE_HOURS,
                     sheetState = rememberBottomSheetState(),
                     reset = {},
                     getTimeUntilAlarmFormatted = { "getTimeUntilAlarmFormatted" }

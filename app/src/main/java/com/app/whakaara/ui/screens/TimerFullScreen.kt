@@ -22,11 +22,12 @@ import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.model.preferences.TimeFormat
 
 @Composable
 fun TimerFullScreen(
     resetTimer: () -> Unit,
-    is24HourFormat: Boolean
+    timeFormat: TimeFormat
 ) {
     val context = LocalContext.current
     val activity = (context as? Activity)
@@ -45,7 +46,7 @@ fun TimerFullScreen(
 
             Row {
                 TextClock(
-                    is24HourFormat = is24HourFormat
+                    timeFormat = timeFormat
                 )
             }
 
@@ -72,7 +73,7 @@ fun TimerFullScreenPreview() {
     WhakaaraTheme {
         TimerFullScreen(
             resetTimer = {},
-            is24HourFormat = true
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS
         )
     }
 }

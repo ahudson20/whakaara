@@ -6,6 +6,7 @@ import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_FORMAT
 import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_FORMAT_NO_HOURS
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_FORMAT
 import com.whakaara.core.constants.GeneralConstants.ZERO_MILLIS
+import com.whakaara.model.preferences.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -29,9 +30,9 @@ class DateUtils {
 
         fun getAlarmTimeFormatted(
             date: Calendar,
-            is24HourFormatEnabled: Boolean
+            timeFormat: TimeFormat
         ): String {
-            val format = if (is24HourFormatEnabled) DATE_FORMAT_24_HOUR else DATE_FORMAT_12_HOUR
+            val format = if (timeFormat == TimeFormat.TWENTY_FOUR_HOURS) DATE_FORMAT_24_HOUR else DATE_FORMAT_12_HOUR
             return SimpleDateFormat(format, Locale.getDefault()).format(date.time).uppercase()
         }
 

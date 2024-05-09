@@ -5,6 +5,7 @@ import android.app.Service
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
+import android.media.VolumeShaper
 import android.os.PowerManager
 import android.os.Vibrator
 import android.os.VibratorManager
@@ -40,4 +41,13 @@ class MediaPlayerModule {
         @ApplicationContext
         context: Context
     ): PowerManager = (context.getSystemService(Context.POWER_SERVICE) as PowerManager)
+
+    @Provides
+    fun providesVolumeShaperConfiguration(): VolumeShaper.Configuration.Builder {
+        val times = floatArrayOf(0f, 1f)
+        val volumes = floatArrayOf(0f, 1f)
+        return VolumeShaper.Configuration.Builder()
+            .setCurve(times, volumes)
+            .setInterpolatorType(VolumeShaper.Configuration.INTERPOLATOR_TYPE_LINEAR)
+    }
 }

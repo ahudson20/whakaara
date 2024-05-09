@@ -44,6 +44,7 @@ import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.dokar.sheets.BottomSheetState
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -52,7 +53,7 @@ fun BottomSheetDetailsContent(
     modifier: Modifier = Modifier,
     alarm: Alarm,
     timeToAlarm: String,
-    is24HourFormat: Boolean,
+    timeFormat: TimeFormat,
     sheetState: BottomSheetState,
     reset: (alarm: Alarm) -> Unit,
     getTimeUntilAlarmFormatted: (date: Calendar) -> String
@@ -190,7 +191,7 @@ fun BottomSheetDetailsContent(
                                 title = title,
                                 subTitle = getAlarmTimeFormatted(
                                     date = alarm.date,
-                                    is24HourFormatEnabled = is24HourFormat
+                                    timeFormat = timeFormat
                                 )
                             )
                         )
@@ -215,10 +216,9 @@ fun BottomSheetContentPreview(
         BottomSheetDetailsContent(
             alarm = alarm,
             timeToAlarm = "timeToAlarm",
-            is24HourFormat = true,
+            timeFormat = TimeFormat.TWENTY_FOUR_HOURS,
             sheetState = BottomSheetState(),
-            reset = {},
-            getTimeUntilAlarmFormatted = { "" }
-        )
+            reset = {}
+        ) { "" }
     }
 }

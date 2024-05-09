@@ -7,6 +7,7 @@ import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.ui.screens.AlarmFullScreen
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.TimeFormat
 import org.junit.Rule
 import org.junit.Test
 import java.util.Calendar
@@ -34,7 +35,7 @@ class NotificationFullScreenTest {
                     alarm = alarm,
                     snooze = {},
                     disable = {},
-                    is24HourFormat = true
+                    timeFormat = TimeFormat.TWENTY_FOUR_HOURS
                 )
             }
         }
@@ -67,7 +68,7 @@ class NotificationFullScreenTest {
                     alarm = alarm,
                     snooze = {},
                     disable = {},
-                    is24HourFormat = true
+                    timeFormat = TimeFormat.TWENTY_FOUR_HOURS
                 )
             }
         }

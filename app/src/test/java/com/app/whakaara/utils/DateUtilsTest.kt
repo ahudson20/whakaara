@@ -1,6 +1,7 @@
 package com.app.whakaara.utils
 
 import com.app.whakaara.utility.DateUtils
+import com.whakaara.model.preferences.TimeFormat
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.Calendar
@@ -16,7 +17,7 @@ class DateUtilsTest {
         }
 
         // When
-        val time24HourFormat = DateUtils.getAlarmTimeFormatted(date = date, is24HourFormatEnabled = true)
+        val time24HourFormat = DateUtils.getAlarmTimeFormatted(date = date, timeFormat = TimeFormat.TWENTY_FOUR_HOURS)
 
         // Then
         assertEquals("14:34", time24HourFormat)
@@ -32,7 +33,7 @@ class DateUtilsTest {
         }
 
         // When
-        val time24HourFormat = DateUtils.getAlarmTimeFormatted(date = date, is24HourFormatEnabled = false)
+        val time24HourFormat = DateUtils.getAlarmTimeFormatted(date = date, timeFormat = TimeFormat.TWELVE_HOURS)
 
         // Then
         assertEquals("2:34 PM", time24HourFormat)

@@ -27,6 +27,7 @@ This README provides an overview of the project, its features, and how to get st
 * **[ksp](https://github.com/google/ksp)**: Kotlin Symbol Processing API for code generation and analysis.
 * **[Turbine](https://github.com/cashapp/turbine)**: A small testing library for kotlinx.coroutines Flow.
 * **[gson](https://github.com/google/gson)**: used to convert Java Objects into their JSON representation.
+* **[kover](https://github.com/Kotlin/kotlinx-kover)**: provides test coverage of Kotlin code compiled for JVM and Android platforms.
 
 ## UI
 The app was designed using [Material 3 guidelines](https://m3.material.io/).

@@ -104,7 +104,8 @@ jobs:
       id: kover
       uses: mi-kas/kover-report@v1
       with:
-        path: ${{ github.workspace }}/app/build/reports/kover/reportDebug.xml
+        path: |
+            app/build/reports/kover/reportDebug.xml
         token: ${{ secrets.GITHUB_TOKEN }}
         title: Code Coverage
         update-comment: true

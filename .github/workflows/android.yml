@@ -78,12 +78,15 @@ jobs:
     - name: Generate kover coverage report
       run: ./gradlew koverXmlReportDebug
 
-    - name: Upload test coverage
-      uses: actions/upload-artifact@v4
+    - name: Add coverage report to PR
+      id: kover
+      uses: mi-kas/kover-report@v1.9
       with:
-        name: reportDebug.xml
         path: |
             app/build/reports/kover/reportDebug.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: Code Coverage
+        update-comment: true
 
     - name: Upload Test Reports Folder
       uses: actions/upload-artifact@v4.3.1
@@ -106,13 +109,3 @@ jobs:
 
     - name: Android Test Report
       uses: asadmansr/android-test-report-action@v1.2.0
-
-    - name: Add coverage report to PR
-      id: kover
-      uses: mi-kas/kover-report@v1.9
-      with:
-        path: |
-            app/build/reports/kover/reportDebug.xml
-        token: ${{ secrets.GITHUB_TOKEN }}
-        title: Code Coverage
-        update-comment: true

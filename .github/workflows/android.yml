@@ -75,6 +75,16 @@ jobs:
         api-level: 33
         script: ./gradlew app:connectedDebugAndroidTest
 
+    - name: Generate kover coverage report
+      run: ./gradlew koverXmlReportDebug
+
+    - name: Upload test coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: reportDebug.xml
+        path: |
+            app/build/reports/kover/reportDebug.xml
+
     - name: Upload Test Reports Folder
       uses: actions/upload-artifact@v4.3.1
       if: ${{ always() }}
@@ -96,9 +106,6 @@ jobs:
 
     - name: Android Test Report
       uses: asadmansr/android-test-report-action@v1.2.0
-
-    - name: Generate kover coverage report
-      run: ./gradlew koverXmlReportDebug
 
     - name: Add coverage report to PR
       id: kover

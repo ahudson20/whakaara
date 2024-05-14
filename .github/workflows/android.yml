@@ -63,7 +63,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew app:assembleDebug
+      run: ./gradlew assembleDebug
 
     - name: Unit tests
       run: ./gradlew testDebugUnitTest
@@ -73,7 +73,7 @@ jobs:
       with:
         arch: 'x86_64'
         api-level: 33
-        script: ./gradlew app:connectedDebugAndroidTest
+        script: ./gradlew connectedDebugAndroidTest
 
     - name: Generate kover coverage report
       run: ./gradlew koverXmlReportDebug
@@ -84,6 +84,8 @@ jobs:
       with:
         path: |
             app/build/reports/kover/reportDebug.xml
+            core/data/build/reports/kover/reportDebug.xml
+            core/database/build/reports/kover/reportDebug.xml
         token: ${{ secrets.GITHUB_TOKEN }}
         title: Code Coverage
         update-comment: true
@@ -96,6 +98,10 @@ jobs:
         path: |
           app/build/reports
           app/build/test-results
+          core/data/build/reports
+          core/data/build/test-results
+          core/database/build/reports
+          core/database/build/test-results
 
   report:
     runs-on: ubuntu-latest

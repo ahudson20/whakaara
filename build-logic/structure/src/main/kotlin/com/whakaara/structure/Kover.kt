@@ -53,7 +53,7 @@ private val coveragePackageExclusions = listOf(
 )
 
 internal fun Project.configureKover(
-    androidComponentsExtension: AndroidComponentsExtension<*, *, *>,
+    androidComponentsExtension: AndroidComponentsExtension<*, *, *>
 ) {
     androidComponentsExtension.onVariants { variant ->
         configure<KoverReportExtension> {

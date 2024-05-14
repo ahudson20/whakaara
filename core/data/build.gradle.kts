@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.whakaara.android.library)
     alias(libs.plugins.whakaara.hilt)
     alias(libs.plugins.whakaara.lint)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -17,6 +18,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
     }
 }

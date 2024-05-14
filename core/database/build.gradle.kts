@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.whakaara.room)
     alias(libs.plugins.whakaara.hilt)
     alias(libs.plugins.whakaara.lint)
+    alias(libs.plugins.kotlinx.kover)
 }
 
 android {
@@ -20,6 +21,13 @@ android {
             )
         }
     }
+//    sourceSets {
+//        getByName("main") {
+//            java {
+//                srcDirs("src/main/java", "src/test/java")
+//            }
+//        }
+//    }
 }
 
 dependencies {
@@ -29,6 +37,7 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.androidx.ui.graphics.android)
 
+    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.jetbrains.kotlinx.coroutines.test)
     androidTestImplementation(libs.turbine)

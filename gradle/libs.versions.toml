@@ -42,6 +42,7 @@ kotlinCompilerExtensionVersion = "1.5.13"
 androidxComposeBom = "2024.02.02"
 uiGraphicsAndroid = "1.6.7"
 ui = "1.6.7"
+kover = "0.7.5"
 
 [libraries]
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -113,6 +114,7 @@ android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", ver
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
 kotlin-ktlint = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+kover-gradlePlugin = { group = "org.jetbrains.kotlinx.kover", name = "org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kover" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
@@ -121,6 +123,7 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltDaggerAndroid
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-android" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 
 # Plugins defined by this project
 whakaara-android-application = { id = "whakaara.android.application", version = "unspecified" }
@@ -131,3 +134,4 @@ whakaara-lint = { id = "whakaara.lint", version = "unspecified" }
 whakaara-application-compose = { id = "whakaara.application.compose", version = "unspecified" }
 whakaara-library-compose = { id = "whakaara.library.compose", version = "unspecified" }
 whakaara-room = { id = "whakaara.room", version = "unspecified" }
+whakaara-kover = { id = "whakaara.application.kover", version = "unspecified"}

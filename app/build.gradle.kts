@@ -4,6 +4,7 @@ import com.whakaara.structure.modules
 plugins {
     alias(libs.plugins.whakaara.android.application)
     alias(libs.plugins.whakaara.application.compose)
+    alias(libs.plugins.whakaara.kover)
     alias(libs.plugins.whakaara.hilt)
     alias(libs.plugins.whakaara.lint)
 }
@@ -18,6 +19,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -33,11 +38,6 @@ android {
         }
     }
 
-    buildFeatures {
-        compose = true
-        viewBinding = true
-    }
-
     packaging {
         resources {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
@@ -47,6 +47,12 @@ android {
             excludes.add("META-INF/*.properties")
             excludes.add("META-INF/AL2.0")
             excludes.add("META-INF/LGPL2.1")
+        }
+    }
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
         }
     }
 
@@ -64,6 +70,10 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+
+    // Kover
+    kover(project(Modules.coreData))
+    kover(project(Modules.coreDatabase))
 
     // Material
     implementation(libs.material)

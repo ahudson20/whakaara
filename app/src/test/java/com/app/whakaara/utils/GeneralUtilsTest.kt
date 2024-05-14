@@ -1,6 +1,8 @@
 package com.app.whakaara.utils
 
+import androidx.compose.ui.graphics.Color
 import com.app.whakaara.utility.GeneralUtils
+import com.app.whakaara.utility.GeneralUtils.Companion.toColorInt
 import com.whakaara.model.alarm.Alarm
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -51,5 +53,29 @@ class GeneralUtilsTest {
             assertEquals(true, this.isSnoozeEnabled)
             assertEquals(false, this.deleteAfterGoesOff)
         }
+    }
+
+    @Test
+    fun `convert string to colour`() {
+        // Given
+        val string = "{\"value\":-4294967296}"
+
+        // When
+        val colour = GeneralUtils.convertStringToColour(string = string)
+
+        // Then
+        assertEquals(Color.White, colour)
+    }
+
+    @Test
+    fun `convert float to colour int`() {
+        // Given
+        val float = 123.1F
+
+        // When
+        val value = float.toColorInt()
+
+        // Then
+        assertEquals(value, 31391)
     }
 }

@@ -55,7 +55,7 @@ jobs:
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
-      
+
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3.2.1
 
@@ -74,6 +74,9 @@ jobs:
         arch: 'x86_64'
         api-level: 33
         script: ./gradlew app:connectedDebugAndroidTest
+
+    - name: Generate kover coverage report
+      run: ./gradlew koverXmlReportDebug
 
     - name: Upload Test Reports Folder
       uses: actions/upload-artifact@v4.3.1
@@ -96,3 +99,11 @@ jobs:
 
     - name: Android Test Report
       uses: asadmansr/android-test-report-action@v1.2.0
+
+    - name: Add coverage report to PR
+      id: kover
+      uses: mi-kas/kover-report@v1
+      with:
+        path: app/build/reports/kover/reportDebug.xml
+        title: Code Coverage
+        update-comment: true

@@ -21,6 +21,7 @@ dependencies {
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.kotlin.ktlint)
     compileOnly(libs.ksp.gradlePlugin)
+    compileOnly(libs.kover.gradlePlugin)
 }
 
 gradlePlugin {
@@ -56,6 +57,10 @@ gradlePlugin {
         register("androidApplicationCompose") {
             id = "whakaara.application.compose"
             implementationClass = "AndroidApplicationComposePlugin"
+        }
+        register("androidApplicationKover") {
+            id = "whakaara.application.kover"
+            implementationClass = "AndroidApplicationKoverPlugin"
         }
     }
 }

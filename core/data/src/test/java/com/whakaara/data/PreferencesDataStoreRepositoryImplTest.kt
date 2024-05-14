@@ -60,7 +60,7 @@ class PreferencesDataStoreRepositoryImplTest {
         coEvery { preferencesDataStore.readTextColour } returns flowOf(textColour)
 
         // Then
-        repository.readBackgroundColour().test {
+        repository.readTextColour().test {
             val data = awaitItem()
             assertEquals(textColour, data)
             cancelAndIgnoreRemainingEvents()

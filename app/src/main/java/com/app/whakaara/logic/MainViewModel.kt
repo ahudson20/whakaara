@@ -285,11 +285,7 @@ class MainViewModel @Inject constructor(
     fun resetTimer() = viewModelScope.launch {
         timerManagerWrapper.resetTimer()
         preferencesDatastore.saveTimerData(
-            TimerStateDataStore(
-                remainingTimeInMillis = 0L,
-                isActive = false,
-                isPaused = false
-            )
+            state = TimerStateDataStore()
         )
     }
 
@@ -306,11 +302,17 @@ class MainViewModel @Inject constructor(
                     if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
                         if (isActive) {
                             timerManagerWrapper.recreateActiveTimer(
-                                milliseconds = remainingTimeInMillis - difference
+                                milliseconds = remainingTimeInMillis - difference,
+                                inputHours = inputHours,
+                                inputMinutes = inputMinutes,
+                                inputSeconds = inputSeconds
                             )
                         } else if (isPaused) {
                             timerManagerWrapper.recreatePausedTimer(
-                                milliseconds = remainingTimeInMillis - difference
+                                milliseconds = remainingTimeInMillis - difference,
+                                inputHours = inputHours,
+                                inputMinutes = inputMinutes,
+                                inputSeconds = inputSeconds
                             )
                         }
                         preferencesDatastore.saveTimerData(
@@ -329,7 +331,10 @@ class MainViewModel @Inject constructor(
                     remainingTimeInMillis = timerState.value.currentTime,
                     isActive = timerState.value.isTimerActive,
                     isPaused = timerState.value.isTimerPaused,
-                    timeStamp = System.currentTimeMillis()
+                    timeStamp = System.currentTimeMillis(),
+                    inputHours = timerState.value.inputHours,
+                    inputMinutes = timerState.value.inputMinutes,
+                    inputSeconds = timerState.value.inputSeconds
                 )
             )
         }

@@ -11,7 +11,6 @@ import org.junit.Before
 import org.junit.Test
 
 class PreferencesConverterTest {
-
     private lateinit var preferencesConverter: PreferencesConverter
 
     @Before

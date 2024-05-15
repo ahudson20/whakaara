@@ -129,8 +129,8 @@ class MainViewModelTest {
         every { timerManagerWrapper.startTimer() } just Runs
         every { timerManagerWrapper.pauseTimer() } just Runs
         every { timerManagerWrapper.restartTimer(any()) } just Runs
-        every { timerManagerWrapper.recreateActiveTimer(any()) } just Runs
-        every { timerManagerWrapper.recreatePausedTimer(any()) } just Runs
+        every { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) } just Runs
+        every { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) } just Runs
         every { timerManagerWrapper.pauseTimerNotificationCountdown() } just Runs
         every { timerManagerWrapper.startTimerNotificationCountdown(any()) } just Runs
         every { timerManagerWrapper.cancelNotification() } just Runs
@@ -779,8 +779,8 @@ class MainViewModelTest {
         viewModel.recreateTimer()
 
         // Then
-        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any()) }
-        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any()) }
+        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
         coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
         coVerify(exactly = 0) { preferencesDataStore.readTimerStatus() }
     }
@@ -796,8 +796,8 @@ class MainViewModelTest {
 
         // Then
         coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
-        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any()) }
-        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any()) }
+        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
         coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
     }
 
@@ -819,8 +819,8 @@ class MainViewModelTest {
 
         // Then
         coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
-        verify(exactly = 1) { timerManagerWrapper.recreateActiveTimer(any()) }
-        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any()) }
+        verify(exactly = 1) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
         coVerify(exactly = 1) { preferencesDataStore.saveTimerData(any()) }
     }
 
@@ -843,8 +843,8 @@ class MainViewModelTest {
 
         // Then
         coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
-        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any()) }
-        verify(exactly = 1) { timerManagerWrapper.recreatePausedTimer(any()) }
+        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+        verify(exactly = 1) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
         coVerify(exactly = 1) { preferencesDataStore.saveTimerData(any()) }
     }
 

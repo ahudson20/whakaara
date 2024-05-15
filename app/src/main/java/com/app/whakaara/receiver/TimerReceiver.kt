@@ -8,6 +8,8 @@ import com.whakaara.core.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACT
 import com.whakaara.core.constants.NotificationUtilsConstants.TIMER_RECEIVER_ACTION_STOP
 import com.whakaara.core.constants.NotificationUtilsConstants.TIMER_RECEIVER_CURRENT_TIME_EXTRA
 import com.whakaara.core.di.MainDispatcher
+import com.whakaara.data.datastore.PreferencesDataStoreRepository
+import com.whakaara.model.datastore.TimerStateDataStore
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import java.util.Calendar
@@ -21,6 +23,9 @@ class TimerReceiver : HiltBroadcastReceiver() {
     @Inject
     @MainDispatcher
     lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
+    lateinit var preferencesDatastore: PreferencesDataStoreRepository
 
     override fun onReceive(
         context: Context,
@@ -65,7 +70,10 @@ class TimerReceiver : HiltBroadcastReceiver() {
         }
     }
 
-    private fun stopTimer() {
+    private suspend fun stopTimer() {
         timerManagerWrapper.resetTimer()
+        preferencesDatastore.saveTimerData(
+            state = TimerStateDataStore()
+        )
     }
 }

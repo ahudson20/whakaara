@@ -24,7 +24,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimerManagerWrapperTest {
@@ -116,16 +115,16 @@ class TimerManagerWrapperTest {
     fun `recreate active timer`() = runTest {
         // Given
         val millis = 123123L
-        val inputHours = "01"
-        val inputMinutes = "02"
-        val inputSeconds = "03"
+        val inputHoursString = "01"
+        val inputMinutesString = "02"
+        val inputSecondsString = "03"
 
         // When
         timerManagerWrapper.recreateActiveTimer(
             milliseconds = millis,
-            inputHours = inputHours,
-            inputMinutes = inputMinutes,
-            inputSeconds = inputSeconds
+            inputHours = inputHoursString,
+            inputMinutes = inputMinutesString,
+            inputSeconds = inputSecondsString
         )
 
         // Then
@@ -138,9 +137,9 @@ class TimerManagerWrapperTest {
                 assertEquals(false, isStart)
                 assertEquals(true, isTimerActive)
                 assertEquals(millis, millisecondsFromTimerInput)
-                assertEquals(TimeUnit.MILLISECONDS.toHours(millis).toString(), inputHours)
-                assertEquals(TimeUnit.MILLISECONDS.toMinutes(millis).toString(), inputMinutes)
-                assertEquals(TimeUnit.MILLISECONDS.toSeconds(millis).toString(), inputSeconds)
+                assertEquals("01", inputHours)
+                assertEquals("02", inputMinutes)
+                assertEquals("03", inputSeconds)
                 cancelAndIgnoreRemainingEvents()
             }
         }

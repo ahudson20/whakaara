@@ -21,13 +21,6 @@ android {
             )
         }
     }
-//    sourceSets {
-//        getByName("main") {
-//            java {
-//                srcDirs("src/main/java", "src/test/java")
-//            }
-//        }
-//    }
 }
 
 dependencies {

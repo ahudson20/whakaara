@@ -55,7 +55,7 @@ jobs:
 
     - name: Setup Gradle
       uses: gradle/gradle-build-action@v3
-      
+
     - name: Set up Android SDK
       uses: android-actions/setup-android@v3.2.1
 
@@ -63,7 +63,7 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build with Gradle
-      run: ./gradlew app:assembleDebug
+      run: ./gradlew assembleDebug
 
     - name: Unit tests
       run: ./gradlew testDebugUnitTest
@@ -73,7 +73,22 @@ jobs:
       with:
         arch: 'x86_64'
         api-level: 33
-        script: ./gradlew app:connectedDebugAndroidTest
+        script: ./gradlew connectedDebugAndroidTest
+
+    - name: Generate kover coverage report
+      run: ./gradlew koverXmlReportDebug
+
+    - name: Add coverage report to PR
+      id: kover
+      uses: mi-kas/kover-report@v1.9
+      with:
+        path: |
+            app/build/reports/kover/reportDebug.xml
+            core/data/build/reports/kover/reportDebug.xml
+            core/database/build/reports/kover/reportDebug.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
+        title: Code Coverage
+        update-comment: true
 
     - name: Upload Test Reports Folder
       uses: actions/upload-artifact@v4.3.1
@@ -83,6 +98,10 @@ jobs:
         path: |
           app/build/reports
           app/build/test-results
+          core/data/build/reports
+          core/data/build/test-results
+          core/database/build/reports
+          core/database/build/test-results
 
   report:
     runs-on: ubuntu-latest

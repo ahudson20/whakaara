@@ -24,7 +24,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
-import java.util.concurrent.TimeUnit
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimerManagerWrapperTest {
@@ -62,126 +61,136 @@ class TimerManagerWrapperTest {
     }
 
     @Test
-    fun `update input hours should update state`() =
-        runTest {
-            // Given
-            timerManagerWrapper.updateInputHours("42")
+    fun `update input hours should update state`() = runTest {
+        // Given
+        timerManagerWrapper.updateInputHours("42")
 
-            // When
-            timerManagerWrapper.timerState.test {
-                val state = awaitItem()
-                // Then
-                with(state) {
-                    assertEquals("42", inputHours)
-                    assertEquals("00", inputMinutes)
-                    assertEquals("00", inputSeconds)
-                }
-            }
-        }
-
-    @Test
-    fun `update input minutes should update state`() =
-        runTest {
-            // Given
-            timerManagerWrapper.updateInputMinutes("42")
-
-            // When
-            timerManagerWrapper.timerState.test {
-                val state = awaitItem()
-                // Then
-                with(state) {
-                    assertEquals("00", inputHours)
-                    assertEquals("42", inputMinutes)
-                    assertEquals("00", inputSeconds)
-                }
-            }
-        }
-
-    @Test
-    fun `update input seconds should update state`() =
-        runTest {
-            // Given
-            timerManagerWrapper.updateInputSeconds("42")
-
-            // When
-            timerManagerWrapper.timerState.test {
-                val state = awaitItem()
-                // Then
-                with(state) {
-                    assertEquals("00", inputHours)
-                    assertEquals("00", inputMinutes)
-                    assertEquals("42", inputSeconds)
-                }
-            }
-        }
-
-    @Test
-    fun `recreate active timer`() =
-        runTest {
-            // Given
-            val millis = 123123L
-
-            // When
-            timerManagerWrapper.recreateActiveTimer(milliseconds = millis)
-
+        // When
+        timerManagerWrapper.timerState.test {
+            val state = awaitItem()
             // Then
-            verify(exactly = 1) { countDownTimerUtil.cancel() }
-            verify(exactly = 1) { countDownTimerUtil.countdown(any(), any(), any(), any()) }
-            timerManagerWrapper.timerState.test {
-                val state = awaitItem()
-                with(state) {
-                    assertEquals(false, isTimerPaused)
-                    assertEquals(false, isStart)
-                    assertEquals(true, isTimerActive)
-                    assertEquals(millis, millisecondsFromTimerInput)
-                    assertEquals(TimeUnit.MILLISECONDS.toHours(millis).toString(), inputHours)
-                    assertEquals(TimeUnit.MILLISECONDS.toMinutes(millis).toString(), inputMinutes)
-                    assertEquals(TimeUnit.MILLISECONDS.toSeconds(millis).toString(), inputSeconds)
-                    cancelAndIgnoreRemainingEvents()
-                }
+            with(state) {
+                assertEquals("42", inputHours)
+                assertEquals("00", inputMinutes)
+                assertEquals("00", inputSeconds)
             }
         }
+    }
 
     @Test
-    fun `recreate paused timer`() =
-        runTest {
-            // Given
-            val millis = 123123L
-            val millisFormatted = DateUtils.formatTimeForTimer(
-                millis = millis
-            )
+    fun `update input minutes should update state`() = runTest {
+        // Given
+        timerManagerWrapper.updateInputMinutes("42")
 
-            // When
-            timerManagerWrapper.recreatePausedTimer(milliseconds = millis)
-
+        // When
+        timerManagerWrapper.timerState.test {
+            val state = awaitItem()
             // Then
-            timerManagerWrapper.timerState.test {
-                val state = awaitItem()
-                with(state) {
-                    assertEquals(true, isTimerPaused)
-                    assertEquals(false, isStart)
-                    assertEquals(false, isTimerActive)
-                    assertEquals(millis, currentTime)
-                    assertEquals(millis, millisecondsFromTimerInput)
-                    assertEquals(millisFormatted, time)
-                    cancelAndIgnoreRemainingEvents()
-                }
+            with(state) {
+                assertEquals("00", inputHours)
+                assertEquals("42", inputMinutes)
+                assertEquals("00", inputSeconds)
             }
         }
+    }
 
     @Test
-    fun `cancel notification`() =
-        runTest {
-            // Given
-            val id = 300
-            val notificationId = slot<Int>()
-            coEvery { notificationManager.cancel(any()) } just Runs
+    fun `update input seconds should update state`() = runTest {
+        // Given
+        timerManagerWrapper.updateInputSeconds("42")
 
-            // When
-            timerManagerWrapper.cancelNotification()
-
+        // When
+        timerManagerWrapper.timerState.test {
+            val state = awaitItem()
             // Then
-            verify(exactly = 1) { notificationManager.cancel(capture(notificationId)) }
-            assertEquals(id, notificationId.captured)
+            with(state) {
+                assertEquals("00", inputHours)
+                assertEquals("00", inputMinutes)
+                assertEquals("42", inputSeconds)
+            }
         }
+    }
+
+    @Test
+    fun `recreate active timer`() = runTest {
+        // Given
+        val millis = 123123L
+        val inputHoursString = "01"
+        val inputMinutesString = "02"
+        val inputSecondsString = "03"
+
+        // When
+        timerManagerWrapper.recreateActiveTimer(
+            milliseconds = millis,
+            inputHours = inputHoursString,
+            inputMinutes = inputMinutesString,
+            inputSeconds = inputSecondsString
+        )
+
+        // Then
+        verify(exactly = 1) { countDownTimerUtil.cancel() }
+        verify(exactly = 1) { countDownTimerUtil.countdown(any(), any(), any(), any()) }
+        timerManagerWrapper.timerState.test {
+            val state = awaitItem()
+            with(state) {
+                assertEquals(false, isTimerPaused)
+                assertEquals(false, isStart)
+                assertEquals(true, isTimerActive)
+                assertEquals(millis, millisecondsFromTimerInput)
+                assertEquals("01", inputHours)
+                assertEquals("02", inputMinutes)
+                assertEquals("03", inputSeconds)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+    }
+
+    @Test
+    fun `recreate paused timer`() = runTest {
+        // Given
+        val millis = 123123L
+        val millisFormatted = DateUtils.formatTimeForTimer(
+            millis = millis
+        )
+        val inputHours = "01"
+        val inputMinutes = "02"
+        val inputSeconds = "03"
+
+        // When
+        timerManagerWrapper.recreatePausedTimer(
+            milliseconds = millis,
+            inputHours = inputHours,
+            inputMinutes = inputMinutes,
+            inputSeconds = inputSeconds
+        )
+
+        // Then
+        timerManagerWrapper.timerState.test {
+            val state = awaitItem()
+            with(state) {
+                assertEquals(true, isTimerPaused)
+                assertEquals(false, isStart)
+                assertEquals(false, isTimerActive)
+                assertEquals(millis, currentTime)
+                assertEquals(millis, millisecondsFromTimerInput)
+                assertEquals(millisFormatted, time)
+                cancelAndIgnoreRemainingEvents()
+            }
+        }
+    }
+
+    @Test
+    fun `cancel notification`() = runTest {
+        // Given
+        val id = 300
+        val notificationId = slot<Int>()
+        coEvery { notificationManager.cancel(any()) } just Runs
+
+        // When
+        timerManagerWrapper.cancelNotification()
+
+        // Then
+        verify(exactly = 1) { notificationManager.cancel(capture(notificationId)) }
+        assertEquals(id, notificationId.captured)
+    }
 }

@@ -10,6 +10,7 @@ import app.cash.turbine.test
 import com.whakaara.database.preferences.PreferencesDao
 import com.whakaara.database.preferences.PreferencesDatabase
 import com.whakaara.database.preferences.entity.PreferencesEntity
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.SettingsTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,15 +60,16 @@ class PreferencesEntityDatabaseTest {
     @Test
     fun insert_should_return_preferences_in_flow() =
         runTest {
-            val preferencesEntity =
-                PreferencesEntity(
-                    id = 100,
-                    isVibrateEnabled = false,
-                    isSnoozeEnabled = true,
-                    deleteAfterGoesOff = false,
-                    autoSilenceTime = SettingsTime.TEN,
-                    snoozeTime = SettingsTime.TEN
-                )
+            val preferencesEntity = PreferencesEntity(
+                id = 100,
+                isVibrateEnabled = false,
+                isSnoozeEnabled = true,
+                deleteAfterGoesOff = false,
+                autoSilenceTime = SettingsTime.TEN,
+                snoozeTime = SettingsTime.TEN,
+                gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+                timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
+            )
             preferencesDao.insert(preferencesEntity = preferencesEntity)
 
             preferencesDao.getPreferencesFlow().test {
@@ -80,15 +82,16 @@ class PreferencesEntityDatabaseTest {
     fun update_preference_should_return_updated() =
         runTest {
             // Given
-            val preferencesEntity =
-                PreferencesEntity(
-                    id = 100,
-                    isVibrateEnabled = false,
-                    isSnoozeEnabled = true,
-                    deleteAfterGoesOff = false,
-                    autoSilenceTime = SettingsTime.TEN,
-                    snoozeTime = SettingsTime.TEN
-                )
+            val preferencesEntity = PreferencesEntity(
+                id = 100,
+                isVibrateEnabled = false,
+                isSnoozeEnabled = true,
+                deleteAfterGoesOff = false,
+                autoSilenceTime = SettingsTime.TEN,
+                snoozeTime = SettingsTime.TEN,
+                gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+                timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
+            )
             preferencesDao.insert(preferencesEntity = preferencesEntity)
 
             // When

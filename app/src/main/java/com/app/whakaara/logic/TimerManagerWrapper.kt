@@ -42,7 +42,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.coroutines.cancellation.CancellationException
@@ -84,7 +83,12 @@ class TimerManagerWrapper @Inject constructor(
         }
     }
 
-    fun recreateActiveTimer(milliseconds: Long) {
+    fun recreateActiveTimer(
+        milliseconds: Long,
+        inputHours: String,
+        inputMinutes: String,
+        inputSeconds: String
+    ) {
         countDownTimerUtil.cancel()
         startCountDownTimer(timeToCountDown = milliseconds)
         timerState.update {
@@ -93,9 +97,9 @@ class TimerManagerWrapper @Inject constructor(
                 isStart = false,
                 isTimerActive = true,
                 millisecondsFromTimerInput = milliseconds,
-                inputHours = TimeUnit.MILLISECONDS.toHours(milliseconds).toString(),
-                inputMinutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds).toString(),
-                inputSeconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds).toString()
+                inputHours = inputHours,
+                inputMinutes = inputMinutes,
+                inputSeconds = inputSeconds
             )
         }
     }
@@ -169,7 +173,12 @@ class TimerManagerWrapper @Inject constructor(
         )
     }
 
-    fun recreatePausedTimer(milliseconds: Long) {
+    fun recreatePausedTimer(
+        milliseconds: Long,
+        inputHours: String,
+        inputMinutes: String,
+        inputSeconds: String
+    ) {
         timerState.update {
             it.copy(
                 isStart = false,
@@ -179,7 +188,10 @@ class TimerManagerWrapper @Inject constructor(
                 millisecondsFromTimerInput = milliseconds,
                 time = DateUtils.formatTimeForTimer(
                     millis = milliseconds
-                )
+                ),
+                inputHours = inputHours,
+                inputMinutes = inputMinutes,
+                inputSeconds = inputSeconds
             )
         }
     }
@@ -215,7 +227,6 @@ class TimerManagerWrapper @Inject constructor(
                 millisecondsFromTimerInput = ZERO_MILLIS
             )
         }
-        resetTimerStateDataStore()
     }
 
     fun restartTimer(autoRestartTimer: Boolean) {

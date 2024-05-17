@@ -1,6 +1,5 @@
 package com.whakaara.database.datastore
 
-import android.content.Context
 import androidx.compose.ui.graphics.Color
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -8,28 +7,19 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.whakaara.core.constants.DateUtilsConstants
 import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
 import com.whakaara.core.constants.GeneralConstants.ZERO_MILLIS
 import com.whakaara.model.datastore.StopwatchDataStore
 import com.whakaara.model.datastore.TimerStateDataStore
 import com.whakaara.model.stopwatch.Lap
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
-import javax.inject.Singleton
 
-val Context.preferencesDataStore: DataStore<Preferences> by preferencesDataStore("settings")
-
-@Singleton
-class PreferencesDataStore @Inject constructor(
-    @ApplicationContext
-    context: Context
+class PreferencesDataStore(
+    private val preferencesDataStore: DataStore<Preferences>
 ) {
-    private val preferencesDataStore = context.preferencesDataStore
-
     private object PreferencesKeys {
         val COLOUR_BACKGROUND_KEY = stringPreferencesKey("colour_background")
         val COLOUR_TEXT_KEY = stringPreferencesKey("colour_text")
@@ -38,6 +28,9 @@ class PreferencesDataStore @Inject constructor(
         val TIMER_ACTIVE_KEY = booleanPreferencesKey("timer_active")
         val TIMER_PAUSED_KEY = booleanPreferencesKey("timer_paused")
         val TIMER_TIME_STAMP = longPreferencesKey("timer_time_stamp")
+        val TIMER_INPUT_HOURS = stringPreferencesKey("timer_input_hours")
+        val TIMER_INPUT_MINUTES = stringPreferencesKey("timer_input_minutes")
+        val TIMER_INPUT_SECONDS = stringPreferencesKey("timer_input_seconds")
 
         // TODO: Shift to Room
         val STOPWATCH_TIME_MILLIS = longPreferencesKey("stopwatch_time")
@@ -75,7 +68,10 @@ class PreferencesDataStore @Inject constructor(
             remainingTimeInMillis = preferences[PreferencesKeys.TIMER_FINISH_KEY] ?: ZERO_MILLIS,
             isActive = preferences[PreferencesKeys.TIMER_ACTIVE_KEY] ?: false,
             isPaused = preferences[PreferencesKeys.TIMER_PAUSED_KEY] ?: false,
-            timeStamp = preferences[PreferencesKeys.TIMER_TIME_STAMP] ?: ZERO_MILLIS
+            timeStamp = preferences[PreferencesKeys.TIMER_TIME_STAMP] ?: ZERO_MILLIS,
+            inputHours = preferences[PreferencesKeys.TIMER_INPUT_HOURS] ?: DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+            inputMinutes = preferences[PreferencesKeys.TIMER_INPUT_MINUTES] ?: DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE,
+            inputSeconds = preferences[PreferencesKeys.TIMER_INPUT_SECONDS] ?: DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
         )
     }
 
@@ -85,6 +81,9 @@ class PreferencesDataStore @Inject constructor(
             preferences[PreferencesKeys.TIMER_ACTIVE_KEY] = state.isActive
             preferences[PreferencesKeys.TIMER_PAUSED_KEY] = state.isPaused
             preferences[PreferencesKeys.TIMER_TIME_STAMP] = state.timeStamp
+            preferences[PreferencesKeys.TIMER_INPUT_HOURS] = state.inputHours
+            preferences[PreferencesKeys.TIMER_INPUT_MINUTES] = state.inputMinutes
+            preferences[PreferencesKeys.TIMER_INPUT_SECONDS] = state.inputSeconds
         }
     }
     //endregion

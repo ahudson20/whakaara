@@ -35,7 +35,7 @@ import com.app.whakaara.R
 import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space80
+import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
@@ -93,7 +93,7 @@ fun AlarmSettings(
     )
 
     SettingsMenuLink(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         icon = {
             Icon(
                 imageVector = Icons.Default.NotificationsActive,
@@ -113,7 +113,7 @@ fun AlarmSettings(
 
     SettingsListDropdown(
         modifier = Modifier
-            .height(space80)
+            .height(space100)
             .testTag("alarm gradual dropdown"),
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.gradualSoundDuration.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_gradual_volume_increase_title)) },
@@ -132,7 +132,7 @@ fun AlarmSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         state = rememberBooleanSettingState(preferencesState.preferences.filteredAlarmList),
         title = { Text(text = stringResource(id = R.string.settings_screen_sort_alarm_list_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_sort_alarm_list_sub_title)) },
@@ -146,7 +146,7 @@ fun AlarmSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         state = rememberBooleanSettingState(preferencesState.preferences.isVibrateEnabled),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_vibrate_subtitle)) },
@@ -161,7 +161,7 @@ fun AlarmSettings(
 
     SettingsListDropdown(
         modifier = Modifier
-            .height(space80)
+            .height(space100)
             .testTag(tag = "alarm vibrate drop down"),
         enabled = preferencesState.preferences.isVibrateEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.vibrationPattern.value),
@@ -185,7 +185,7 @@ fun AlarmSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_snooze_subtitle)) },
         state = rememberBooleanSettingState(preferencesState.preferences.isSnoozeEnabled),
@@ -199,7 +199,7 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         enabled = preferencesState.preferences.isSnoozeEnabled,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.snoozeTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_snooze_duration_title)) },
@@ -217,7 +217,7 @@ fun AlarmSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         title = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_subtitle)) },
         state = rememberBooleanSettingState(preferencesState.preferences.upcomingAlarmNotification),
@@ -232,7 +232,7 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         enabled = preferencesState.preferences.upcomingAlarmNotification,
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.upcomingAlarmNotificationTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_upcoming_alarm_notification_time_title)) },
@@ -251,7 +251,7 @@ fun AlarmSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         title = { Text(text = stringResource(id = R.string.settings_screen_delete_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_delete_subtitle)) },
         state = rememberBooleanSettingState(preferencesState.preferences.deleteAfterGoesOff),
@@ -265,7 +265,7 @@ fun AlarmSettings(
     )
 
     SettingsListDropdown(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.autoSilenceTime.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_auto_silence_subtitle)) },
@@ -283,7 +283,7 @@ fun AlarmSettings(
     )
 
     SettingsMenuLink(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         icon = {
             Icon(
                 imageVector = Icons.Default.Widgets,

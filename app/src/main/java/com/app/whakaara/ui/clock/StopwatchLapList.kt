@@ -30,12 +30,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Shapes
-import com.app.whakaara.ui.theme.Spacings.space40
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.Spacings.spaceNone
+import com.app.whakaara.ui.theme.Spacings.spaceSmall
 import com.app.whakaara.ui.theme.Spacings.spaceXLarge
 import com.app.whakaara.ui.theme.Spacings.spaceXSmall
-import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.DateUtils
@@ -49,7 +48,7 @@ fun StopwatchLapList(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(top = if (lapList.isNotEmpty()) spaceNone else spaceMedium)
+            .fillMaxWidth()
             .animateContentSize()
             .height(height = if (lapList.isNotEmpty()) 350.dp else spaceNone)
             .verticalFadingEdge(
@@ -61,28 +60,50 @@ fun StopwatchLapList(
         reverseLayout = true
     ) {
         itemsIndexed(lapList) { index, item ->
-            if (index == 0) Spacer(modifier = Modifier.fillMaxWidth().height(spaceXxLarge))
-            LapCell(index = index, lap = item)
-            Spacer(modifier = Modifier.fillMaxWidth().height(spaceXSmall))
+            if (index != 0) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(spaceXSmall)
+
+                )
+            }
+
+            if (index == 0) {
+                Spacer(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(spaceSmall)
+                )
+            }
+
+            LapCell(
+                index = index,
+                lap = item
+            )
         }
     }
 }
 
 @Composable
 private fun LapCell(
+    modifier: Modifier = Modifier,
     index: Int,
     lap: Lap
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(start = space40, end = space40)
+            .padding(start = spaceMedium, end = spaceMedium)
     ) {
         Card(shape = Shapes.small) {
             Box(
                 modifier = Modifier.padding(all = spaceMedium)
             ) {
-                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
                     Text(text = index.inc().toString())
                     Box(
                         modifier = Modifier
@@ -127,6 +148,7 @@ fun Modifier.verticalFadingEdge(
                             lastItem.run {
                                 (size - (viewportEndOffset - offset)) / size.toFloat()
                             }
+
                         else -> 1f
                     }
                 }

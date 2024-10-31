@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MultiChoiceSegmentedButtonRow
@@ -39,7 +38,6 @@ import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.core.constants.GeneralConstants.DAYS_OF_WEEK
 import com.whakaara.core.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSheetDetailsAlarmInfo(
     modifier: Modifier = Modifier,

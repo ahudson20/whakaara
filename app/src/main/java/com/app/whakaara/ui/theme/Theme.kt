@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 import androidx.glance.material3.ColorProviders
@@ -258,43 +259,20 @@ object WidgetTheme {
 fun selectSchemeForContrast(isDark: Boolean): ColorScheme {
     val context = LocalContext.current
     var colorScheme = if (isDark) darkScheme else lightScheme
-    if (isContrastAvailable()) {
+
+    if (!LocalInspectionMode.current && isContrastAvailable()) {
         val uiModeManager = context.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
         val contrastLevel = uiModeManager.contrast
 
         colorScheme = when (contrastLevel) {
-            in 0.0f..0.33f ->
-                if (isDark) {
-                    darkScheme
-                } else {
-                    lightScheme
-                }
-
-            in 0.34f..0.66f ->
-                if (isDark) {
-                    mediumContrastDarkColorScheme
-                } else {
-                    mediumContrastLightColorScheme
-                }
-
-            in 0.67f..1.0f ->
-                if (isDark) {
-                    highContrastDarkColorScheme
-                } else {
-                    highContrastLightColorScheme
-                }
-
-            else ->
-                if (isDark) {
-                    darkScheme
-                } else {
-                    lightScheme
-                }
+            in 0.0f..0.33f -> if (isDark) darkScheme else lightScheme
+            in 0.34f..0.66f -> if (isDark) mediumContrastDarkColorScheme else mediumContrastLightColorScheme
+            in 0.67f..1.0f -> if (isDark) highContrastDarkColorScheme else highContrastLightColorScheme
+            else -> if (isDark) darkScheme else lightScheme
         }
-        return colorScheme
-    } else {
-        return colorScheme
     }
+
+    return colorScheme
 }
 
 @Composable

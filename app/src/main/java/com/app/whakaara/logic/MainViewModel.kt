@@ -29,7 +29,6 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
-
 // TODO: Feature modules + separate VM's for each feature
 @HiltViewModel
 class MainViewModel @Inject constructor(

@@ -1,6 +1,5 @@
 package com.app.whakaara.ui.clock
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonRow
@@ -63,12 +61,10 @@ fun Stopwatch(
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                StopwatchDisplay(modifier = Modifier.border(1.dp, Color.Blue), formattedTime = stopwatchState.formattedTime)
+                StopwatchDisplay(formattedTime = stopwatchState.formattedTime)
                 Spacer(modifier = Modifier.height(if (stopwatchState.lapList.isNotEmpty()) spaceMedium else spaceNone))
                 StopwatchLapList(
-                    modifier = Modifier
-                        .border(1.dp, Color.Green)
-                        .fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(),
                     lapList = stopwatchState.lapList,
                     listState = listState
                 )

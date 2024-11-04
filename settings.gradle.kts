@@ -30,3 +30,4 @@ include(
     ":core:model",
     ":core:test"
 )
+include(":feature:alarm")

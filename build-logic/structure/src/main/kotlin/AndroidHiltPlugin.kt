@@ -14,6 +14,7 @@ class AndroidHiltPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(libs.findLibrary("dagger.hilt.android").get())
                 "ksp"(libs.findLibrary("dagger.hilt.compiler.android").get())
+                add("implementation", libs.findLibrary("androidx.hilt.nav.compose").get())
             }
         }
     }

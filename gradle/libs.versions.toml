@@ -128,6 +128,7 @@ kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 # Plugins defined by this project
 whakaara-android-application = { id = "whakaara.android.application", version = "unspecified" }
 whakaara-android-library = { id = "whakaara.android.library", version = "unspecified" }
+whakaara-android-feature = { id = "whakaara.android.feature", version = "unspecified" }
 whakaara-hilt = { id = "whakaara.hilt", version = "unspecified" }
 whakaara-hilt-work = { id = "whakaara.hilt.work", version = "unspecified" }
 whakaara-lint = { id = "whakaara.lint", version = "unspecified" }

@@ -62,5 +62,9 @@ gradlePlugin {
             id = "whakaara.application.kover"
             implementationClass = "AndroidApplicationKoverPlugin"
         }
+        register("androidFeaturePlugin") {
+            id = "whakaara.android.feature"
+            implementationClass = "AndroidFeaturePlugin"
+        }
     }
 }

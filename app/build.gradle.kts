@@ -129,7 +129,6 @@ dependencies {
     implementation(libs.gson)
 
     // Hilt
-    implementation(libs.androidx.hilt.nav.compose)
     androidTestImplementation(libs.dagger.hilt.testing.android)
     kspTest(libs.dagger.hilt.compiler.android)
 

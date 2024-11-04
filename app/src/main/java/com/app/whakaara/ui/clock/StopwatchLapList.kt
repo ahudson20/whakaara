@@ -37,8 +37,10 @@ import com.app.whakaara.ui.theme.Spacings.spaceXLarge
 import com.app.whakaara.ui.theme.Spacings.spaceXSmall
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.app.whakaara.ui.theme.lightGreen
 import com.app.whakaara.utility.DateUtils
 import com.whakaara.model.stopwatch.Lap
+import java.util.Locale
 
 @Composable
 fun StopwatchLapList(
@@ -46,6 +48,9 @@ fun StopwatchLapList(
     lapList: MutableList<Lap>,
     listState: LazyListState
 ) {
+    val minDiff = lapList.minOfOrNull { it.diff }
+    val maxDiff = lapList.maxOfOrNull { it.diff }
+
     LazyColumn(
         modifier = modifier
             .fillMaxWidth()
@@ -79,7 +84,9 @@ fun StopwatchLapList(
 
             LapCell(
                 index = index,
-                lap = item
+                lap = item,
+                isMinDiff = (item.diff == minDiff),
+                isMaxDiff = (item.diff == maxDiff)
             )
         }
     }
@@ -89,8 +96,16 @@ fun StopwatchLapList(
 private fun LapCell(
     modifier: Modifier = Modifier,
     index: Int,
-    lap: Lap
+    lap: Lap,
+    isMinDiff: Boolean = false,
+    isMaxDiff: Boolean = false
 ) {
+    val diffTextColor = when {
+        isMinDiff -> lightGreen
+        isMaxDiff -> MaterialTheme.colorScheme.error
+        else -> Color.Unspecified
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -104,7 +119,10 @@ private fun LapCell(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = index.inc().toString())
+                    Text(
+                        text = String.format(Locale.ROOT,"%02d", index.inc()),
+                        color = diffTextColor
+                    )
                     Box(
                         modifier = Modifier
                             .weight(1f)

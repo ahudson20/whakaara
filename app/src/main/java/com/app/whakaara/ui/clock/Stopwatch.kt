@@ -63,6 +63,9 @@ fun Stopwatch(
             ) {
                 StopwatchDisplay(formattedTime = stopwatchState.formattedTime)
                 Spacer(modifier = Modifier.height(if (stopwatchState.lapList.isNotEmpty()) spaceMedium else spaceNone))
+                if (stopwatchState.lapList.isNotEmpty()) {
+                    StopwatchHeader()
+                }
                 StopwatchLapList(
                     modifier = Modifier.fillMaxWidth(),
                     lapList = stopwatchState.lapList,

@@ -32,6 +32,7 @@ import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
+import com.app.whakaara.ui.theme.Spacings.spaceXxxxLarge
 import com.app.whakaara.ui.theme.ThemePreviews
 import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.getNameFromUri
@@ -91,7 +92,7 @@ fun TimerSettings(
     )
 
     SettingsMenuLink(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(spaceXxxxLarge),
         icon = {
             Icon(
                 imageVector = Icons.Default.NotificationsActive,
@@ -111,7 +112,7 @@ fun TimerSettings(
 
     SettingsListDropdown(
         modifier = Modifier
-            .height(space80)
+            .height(spaceXxxxLarge)
             .testTag("timer gradual dropdown"),
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.timerGradualSoundDuration.ordinal),
         title = { Text(text = stringResource(id = R.string.settings_screen_gradual_volume_increase_title)) },
@@ -131,7 +132,7 @@ fun TimerSettings(
 
     SettingsSwitch(
         modifier = Modifier
-            .height(space80)
+            .height(spaceXxxxLarge)
             .testTag("timer vibrate switch"),
         state = rememberBooleanSettingState(preferencesState.preferences.isVibrationTimerEnabled),
         title = { Text(text = stringResource(id = R.string.settings_screen_vibrate_title)) },
@@ -172,7 +173,7 @@ fun TimerSettings(
 
     SettingsSwitch(
         modifier = Modifier
-            .height(space80)
+            .height(spaceXxxxLarge)
             .testTag("timer autoRestart switch"),
         state = rememberBooleanSettingState(preferencesState.preferences.autoRestartTimer),
         title = { Text(text = stringResource(id = R.string.settings_screen_auto_restart_timer_title)) },

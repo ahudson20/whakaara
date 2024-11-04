@@ -65,7 +65,7 @@ class BottomSheetAlarmDetailsTest {
             .assertIsOn()
 
         onNodeWithText(text = "Single-use").assertIsDisplayed()
-        onNodeWithText(text = "Alarm will delete after going off").assertIsDisplayed()
+        onNodeWithText(text = "Alarm deletes after going off").assertIsDisplayed()
         onNodeWithTag(testTag = "delete switch")
             .assertIsDisplayed()
             .assertIsToggleable()

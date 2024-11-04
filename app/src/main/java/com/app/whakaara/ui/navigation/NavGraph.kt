@@ -71,6 +71,7 @@ fun NavGraph(
                 is AlarmState.Loading -> Loading()
                 is AlarmState.Success ->
                     AlarmScreen(
+                        // TODO: shift this into the VM?
                         alarms = if (preferencesState.preferences.filteredAlarmList) {
                             val (enabled, disabled) = alarmState.alarms.partition { it.isEnabled }
 

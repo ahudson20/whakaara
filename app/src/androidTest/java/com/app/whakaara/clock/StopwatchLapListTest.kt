@@ -43,16 +43,16 @@ class StopwatchLapListTest {
         }
 
         // Then
-        onNodeWithText("3").assertIsDisplayed()
-        onNodeWithText("00:01:000").assertIsDisplayed()
-        onNodeWithText("00:00:250")
+        onNodeWithText("03").assertIsDisplayed()
+        onNodeWithText("00:03:000").assertIsDisplayed()
+        onNodeWithText("00:00:750")
 
-        onNodeWithText("2").assertIsDisplayed()
+        onNodeWithText("02").assertIsDisplayed()
         onNodeWithText("00:02:000").assertIsDisplayed()
         onNodeWithText("00:00:500")
 
-        onNodeWithText("1").assertIsDisplayed()
-        onNodeWithText("00:03:000").assertIsDisplayed()
-        onNodeWithText("00:00:750")
+        onNodeWithText("01").assertIsDisplayed()
+        onNodeWithText("00:01:000").assertIsDisplayed()
+        onNodeWithText("00:00:250")
     }
 }

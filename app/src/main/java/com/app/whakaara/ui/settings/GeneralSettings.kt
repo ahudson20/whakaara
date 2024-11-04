@@ -32,6 +32,7 @@ import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
 import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.theme.FontScalePreviews
+import com.app.whakaara.ui.theme.Spacings.space100
 import com.app.whakaara.ui.theme.Spacings.space80
 import com.app.whakaara.ui.theme.Spacings.spaceMedium
 import com.app.whakaara.ui.theme.ThemePreviews
@@ -153,7 +154,7 @@ fun GeneralSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         state = rememberBooleanSettingState(preferencesState.preferences.dynamicTheme),
         title = { Text(text = stringResource(id = R.string.settings_screen_dynamic_theme_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_dynamic_theme_subtitle)) },
@@ -167,7 +168,7 @@ fun GeneralSettings(
     )
 
     SettingsSwitch(
-        modifier = Modifier.height(space80),
+        modifier = Modifier.height(space100),
         state = rememberBooleanSettingState(preferencesState.preferences.timeFormat.toBoolean()),
         title = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_title)) },
         subtitle = { Text(text = stringResource(id = R.string.settings_screen_24_hour_format_subtitle)) },

@@ -120,7 +120,7 @@ private fun LapCell(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
-                        text = String.format(Locale.ROOT,"%02d", index.inc()),
+                        text = String.format(locale = Locale.ROOT, format = "%02d", index.inc()),
                         color = diffTextColor
                     )
                     Box(

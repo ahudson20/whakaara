@@ -28,6 +28,8 @@ include(
     ":core:database",
     ":core:data",
     ":core:model",
-    ":core:test"
+    ":core:test",
+    ":feature:alarm",
+    ":feature:stopwatch",
+    ":feature:timer"
 )
-include(":feature:alarm")

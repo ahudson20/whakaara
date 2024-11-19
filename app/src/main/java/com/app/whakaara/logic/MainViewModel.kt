@@ -3,9 +3,8 @@ package com.app.whakaara.logic
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.PreferencesState
+import com.whakaara.model.preferences.PreferencesState
 import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.asExternalModel
 import com.app.whakaara.state.asInternalModel
 import com.app.whakaara.utility.DateUtils.Companion.getAlarmTimeFormatted
@@ -15,7 +14,6 @@ import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.model.alarm.Alarm
-import com.whakaara.model.datastore.TimerStateDataStore
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.TimeFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,7 +33,7 @@ class MainViewModel @Inject constructor(
     private val repository: AlarmRepository,
     private val preferencesRepository: PreferencesRepository,
     private val alarmManagerWrapper: AlarmManagerWrapper,
-    private val timerManagerWrapper: TimerManagerWrapper,
+//    private val timerManagerWrapper: TimerManagerWrapper,
     private val stopwatchManagerWrapper: StopwatchManagerWrapper,
     private val preferencesDatastore: PreferencesDataStoreRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -53,7 +51,7 @@ class MainViewModel @Inject constructor(
     val stopwatchState: StateFlow<StopwatchState> = stopwatchManagerWrapper.stopwatchState.asStateFlow()
 
     // timer
-    val timerState: StateFlow<TimerState> = timerManagerWrapper.timerState.asStateFlow()
+//    val timerState: StateFlow<TimerState> = timerManagerWrapper.timerState.asStateFlow()
 
     init {
         getAllAlarms()
@@ -263,96 +261,96 @@ class MainViewModel @Inject constructor(
     //endregion
 
     //region timer
-    fun updateInputHours(newValue: String) {
-        timerManagerWrapper.updateInputHours(newValue)
-    }
-
-    fun updateInputMinutes(newValue: String) {
-        timerManagerWrapper.updateInputMinutes(newValue)
-    }
-
-    fun updateInputSeconds(newValue: String) {
-        timerManagerWrapper.updateInputSeconds(newValue)
-    }
-
-    fun startTimer() {
-        timerManagerWrapper.startTimer()
-    }
-
-    fun pauseTimer() {
-        timerManagerWrapper.pauseTimer()
-    }
-
-    fun resetTimer() = viewModelScope.launch {
-        timerManagerWrapper.resetTimer()
-        preferencesDatastore.saveTimerData(
-            state = TimerStateDataStore()
-        )
-    }
-
-    fun restartTimer(autoRestartTimer: Boolean) {
-        timerManagerWrapper.restartTimer(autoRestartTimer = autoRestartTimer)
-    }
-
-    fun recreateTimer() = viewModelScope.launch(mainDispatcher) {
-        if (timerState.value == TimerState()) {
-            val status = preferencesDatastore.readTimerStatus().first()
-            if (status != TimerStateDataStore()) {
-                with(status) {
-                    val difference = System.currentTimeMillis() - timeStamp
-                    if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
-                        if (isActive) {
-                            timerManagerWrapper.recreateActiveTimer(
-                                milliseconds = remainingTimeInMillis - difference,
-                                inputHours = inputHours,
-                                inputMinutes = inputMinutes,
-                                inputSeconds = inputSeconds
-                            )
-                        } else if (isPaused) {
-                            timerManagerWrapper.recreatePausedTimer(
-                                milliseconds = remainingTimeInMillis - difference,
-                                inputHours = inputHours,
-                                inputMinutes = inputMinutes,
-                                inputSeconds = inputSeconds
-                            )
-                        }
-                        preferencesDatastore.saveTimerData(
-                            state = TimerStateDataStore()
-                        )
-                    }
-                }
-            }
-        }
-    }
-
-    fun saveTimerStateForRecreation() = viewModelScope.launch(ioDispatcher) {
-        if (!timerState.value.isStart) {
-            preferencesDatastore.saveTimerData(
-                TimerStateDataStore(
-                    remainingTimeInMillis = timerState.value.currentTime,
-                    isActive = timerState.value.isTimerActive,
-                    isPaused = timerState.value.isTimerPaused,
-                    timeStamp = System.currentTimeMillis(),
-                    inputHours = timerState.value.inputHours,
-                    inputMinutes = timerState.value.inputMinutes,
-                    inputSeconds = timerState.value.inputSeconds
-                )
-            )
-        }
-    }
-
-    fun startTimerNotification() {
-        if (timerState.value.isTimerPaused) {
-            timerManagerWrapper.pauseTimerNotificationCountdown()
-        } else if (timerState.value.isTimerActive) {
-            timerManagerWrapper.startTimerNotificationCountdown(
-                milliseconds = timerState.value.currentTime + Calendar.getInstance().timeInMillis
-            )
-        }
-    }
-
-    fun cancelTimerNotification() {
-        timerManagerWrapper.cancelNotification()
-    }
+//    fun updateInputHours(newValue: String) {
+//        timerManagerWrapper.updateInputHours(newValue)
+//    }
+//
+//    fun updateInputMinutes(newValue: String) {
+//        timerManagerWrapper.updateInputMinutes(newValue)
+//    }
+//
+//    fun updateInputSeconds(newValue: String) {
+//        timerManagerWrapper.updateInputSeconds(newValue)
+//    }
+//
+//    fun startTimer() {
+//        timerManagerWrapper.startTimer()
+//    }
+//
+//    fun pauseTimer() {
+//        timerManagerWrapper.pauseTimer()
+//    }
+//
+//    fun resetTimer() = viewModelScope.launch {
+//        timerManagerWrapper.resetTimer()
+//        preferencesDatastore.saveTimerData(
+//            state = TimerStateDataStore()
+//        )
+//    }
+//
+//    fun restartTimer(autoRestartTimer: Boolean) {
+//        timerManagerWrapper.restartTimer(autoRestartTimer = autoRestartTimer)
+//    }
+//
+//    fun recreateTimer() = viewModelScope.launch(mainDispatcher) {
+//        if (timerState.value == TimerState()) {
+//            val status = preferencesDatastore.readTimerStatus().first()
+//            if (status != TimerStateDataStore()) {
+//                with(status) {
+//                    val difference = System.currentTimeMillis() - timeStamp
+//                    if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
+//                        if (isActive) {
+//                            timerManagerWrapper.recreateActiveTimer(
+//                                milliseconds = remainingTimeInMillis - difference,
+//                                inputHours = inputHours,
+//                                inputMinutes = inputMinutes,
+//                                inputSeconds = inputSeconds
+//                            )
+//                        } else if (isPaused) {
+//                            timerManagerWrapper.recreatePausedTimer(
+//                                milliseconds = remainingTimeInMillis - difference,
+//                                inputHours = inputHours,
+//                                inputMinutes = inputMinutes,
+//                                inputSeconds = inputSeconds
+//                            )
+//                        }
+//                        preferencesDatastore.saveTimerData(
+//                            state = TimerStateDataStore()
+//                        )
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    fun saveTimerStateForRecreation() = viewModelScope.launch(ioDispatcher) {
+//        if (!timerState.value.isStart) {
+//            preferencesDatastore.saveTimerData(
+//                TimerStateDataStore(
+//                    remainingTimeInMillis = timerState.value.currentTime,
+//                    isActive = timerState.value.isTimerActive,
+//                    isPaused = timerState.value.isTimerPaused,
+//                    timeStamp = System.currentTimeMillis(),
+//                    inputHours = timerState.value.inputHours,
+//                    inputMinutes = timerState.value.inputMinutes,
+//                    inputSeconds = timerState.value.inputSeconds
+//                )
+//            )
+//        }
+//    }
+//
+//    fun startTimerNotification() {
+//        if (timerState.value.isTimerPaused) {
+//            timerManagerWrapper.pauseTimerNotificationCountdown()
+//        } else if (timerState.value.isTimerActive) {
+//            timerManagerWrapper.startTimerNotificationCountdown(
+//                milliseconds = timerState.value.currentTime + Calendar.getInstance().timeInMillis
+//            )
+//        }
+//    }
+//
+//    fun cancelTimerNotification() {
+//        timerManagerWrapper.cancelNotification()
+//    }
     // endregion
 }

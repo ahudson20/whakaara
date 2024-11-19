@@ -82,7 +82,7 @@
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".receiver.TimerReceiver"
+        <receiver android:name="net.vbuild.verwoodpages.timer.reciever.TimerReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>

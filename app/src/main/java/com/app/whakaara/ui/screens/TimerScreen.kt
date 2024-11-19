@@ -30,24 +30,24 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.state.StringStateEvent
-import com.app.whakaara.state.TimerState
 import com.app.whakaara.ui.clock.TimerCountdownDisplay
 import com.app.whakaara.ui.clock.TimerInputField
 import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonRow
-import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.DateUtils
-import com.app.whakaara.utility.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.shouldShowRationale
+import com.whakaara.core.NotificationUtils
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_HOURS_INPUT_REGEX
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.core.rememberPermissionStateSafe
 import com.whakaara.model.preferences.TimeFormat
+import com.whakaara.model.timer.TimerState
 import java.util.Calendar
 
 @OptIn(ExperimentalPermissionsApi::class)

@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SwipeToDismissBox
 import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
@@ -18,18 +17,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.ui.theme.AlarmPreviewProvider
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.core.designsystem.theme.AlarmPreviewProvider
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space10
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.TimeFormat
 import java.util.Calendar
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardContainerSwipeToDismiss(
     modifier: Modifier = Modifier,

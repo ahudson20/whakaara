@@ -11,7 +11,7 @@ import com.app.whakaara.receiver.StopwatchReceiver
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.asInternalModel
 import com.app.whakaara.utility.DateUtils
-import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
 import com.whakaara.core.constants.GeneralConstants.MAX_NUMBER_OF_LAPS
 import com.whakaara.core.constants.GeneralConstants.TIMER_START_DELAY_MILLIS

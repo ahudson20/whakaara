@@ -3,9 +3,9 @@ package com.app.whakaara.settings
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.state.PreferencesState
+import com.whakaara.model.preferences.PreferencesState
 import com.app.whakaara.ui.settings.TimerSettings
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
 

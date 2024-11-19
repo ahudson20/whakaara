@@ -38,10 +38,10 @@ import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
 import com.app.whakaara.activities.WidgetConfig
 import com.app.whakaara.receiver.AppWidgetReceiver
-import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.space40
-import com.app.whakaara.ui.theme.Spacings.spaceXSmall
-import com.app.whakaara.ui.theme.WidgetTheme
+import com.whakaara.core.designsystem.theme.Spacings.space10
+import com.whakaara.core.designsystem.theme.Spacings.space40
+import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
+import com.whakaara.core.designsystem.theme.WidgetTheme
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.whakaara.data.alarm.AlarmRepository
@@ -114,7 +114,7 @@ class AppWidget : GlanceAppWidget() {
                     listOfAlarms
                 }.filter { it.isEnabled }.minByOrNull { it.date.timeInMillis }
 
-            GlanceTheme(colors = WidgetTheme.colors) {
+            GlanceTheme(colors = com.whakaara.core.designsystem.theme.WidgetTheme.colors) {
                 NextAlarm(
                     nextAlarm = nextAlarm,
                     textColour = textColour,

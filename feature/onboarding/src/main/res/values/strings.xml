@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="onboarding_button_next">Next</string>
+    <string name="onboarding_button_complete">Complete</string>
+    <string name="onboarding_widget_title">Widget</string>
+    <string name="onboarding_widget_button">Create widget</string>
+    <string name="onboarding_widget_sub_text">This app supports displaying your next scheduled alarm in a widget</string>
+    <string name="onboarding_widget_sub_text_second">Try adding it to the home screen and using it!</string>
+    <string name="onboarding_battery_title">Battery</string>
+    <string name="onboarding_battery_sub_text">This app requires unrestricted battery settings, otherwise certain functionality may not work as expected!</string>
+    <string name="onboarding_battery_button">Disable battery optimization</string>
+    <string name="onboarding_notification_button_enabled">Permission granted</string>
+    <string name="onboarding_notification_button_not_enabled">Enable notifications</string>
+    <string name="onboarding_notification_title">Notifications</string>
+    <string name="onboarding_sub_text">This app requires permission to send you notifications!</string>
+    <string name="onboarding_welcome_title">Welcome to whakaara</string>
+    <string name="onboarding_welcome_sub_text">This screen will guide you through the most important setup steps</string>
+    <string name="onboarding_welcome_icon_description">whakaara app icon</string>
+</resources>

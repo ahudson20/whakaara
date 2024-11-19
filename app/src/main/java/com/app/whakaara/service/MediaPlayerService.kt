@@ -27,7 +27,7 @@ import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utility.GeneralUtils
-import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants
 import com.whakaara.core.constants.NotificationUtilsConstants.FOREGROUND_SERVICE_ID
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID

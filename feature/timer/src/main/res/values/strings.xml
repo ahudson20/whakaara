@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="timer_notification_title_active">Timer active</string>
+    <string name="timer_notification_sub_text_active">Time left</string>
+    <string name="timer_notification_title_paused">Timer paused</string>
+    <string name="notification_sub_text_paused">Paused</string>
+    <string name="notification_timer_play_action_label">Resume</string>
+    <string name="notification_timer_pause_action_label">Pause</string>
+    <string name="notification_timer_stop_action_label">Stop</string>
+</resources>

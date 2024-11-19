@@ -9,11 +9,10 @@ import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
-import com.app.whakaara.receiver.TimerReceiver
+import net.vbuild.verwoodpages.timer.reciever.TimerReceiver
 import com.app.whakaara.service.MediaPlayerService
-import com.app.whakaara.state.TimerState
 import com.app.whakaara.utility.DateUtils
-import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_STARTING_FORMAT
 import com.whakaara.core.constants.GeneralConstants.RESET_TIMER_DATASTORE_TAG
@@ -36,6 +35,7 @@ import com.whakaara.core.constants.NotificationUtilsConstants.TIMER_RECEIVER_CUR
 import com.whakaara.core.di.ApplicationScope
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.model.datastore.TimerStateDataStore
+import com.whakaara.model.timer.TimerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -432,7 +432,7 @@ class TimerManagerWrapper @Inject constructor(
 
     companion object {
         fun Context.getTimerReceiverIntent(intentAction: String): Intent {
-            return Intent(this, TimerReceiver::class.java).apply {
+            return Intent(this, net.vbuild.verwoodpages.timer.reciever.TimerReceiver::class.java).apply {
                 action = intentAction
             }
         }

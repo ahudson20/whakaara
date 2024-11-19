@@ -3,9 +3,9 @@ package com.app.whakaara.ui.screens
 import androidx.compose.runtime.Composable
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.clock.Stopwatch
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 
 @Composable
 fun StopwatchScreen(

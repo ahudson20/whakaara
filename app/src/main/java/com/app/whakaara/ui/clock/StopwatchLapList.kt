@@ -28,16 +28,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Shapes
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.Spacings.spaceNone
-import com.app.whakaara.ui.theme.Spacings.spaceSmall
-import com.app.whakaara.ui.theme.Spacings.spaceXLarge
-import com.app.whakaara.ui.theme.Spacings.spaceXSmall
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.ui.theme.lightGreen
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Shapes
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.Spacings.spaceNone
+import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
+import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
+import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.lightGreen
 import com.app.whakaara.utility.DateUtils
 import com.whakaara.model.stopwatch.Lap
 import java.util.Locale
@@ -101,7 +101,7 @@ private fun LapCell(
     isMaxDiff: Boolean = false
 ) {
     val diffTextColor = when {
-        isMinDiff -> lightGreen
+        isMinDiff -> com.whakaara.core.designsystem.theme.lightGreen
         isMaxDiff -> MaterialTheme.colorScheme.error
         else -> Color.Unspecified
     }
@@ -111,7 +111,7 @@ private fun LapCell(
             .fillMaxWidth()
             .padding(start = spaceMedium, end = spaceMedium)
     ) {
-        Card(shape = Shapes.small) {
+        Card(shape = com.whakaara.core.designsystem.theme.Shapes.small) {
             Box(
                 modifier = Modifier.padding(all = spaceMedium)
             ) {

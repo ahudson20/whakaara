@@ -28,13 +28,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import com.app.whakaara.R
 import com.app.whakaara.state.UpdateBottomSheetDetailsAlarmInfo
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.Spacings.space250
-import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space10
+import com.whakaara.core.designsystem.theme.Spacings.space20
+import com.whakaara.core.designsystem.theme.Spacings.space250
+import com.whakaara.core.designsystem.theme.Spacings.spaceXxSmall
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.core.constants.GeneralConstants.DAYS_OF_WEEK
 import com.whakaara.core.constants.NotificationUtilsConstants.ALARM_TITLE_MAX_CHARS
 

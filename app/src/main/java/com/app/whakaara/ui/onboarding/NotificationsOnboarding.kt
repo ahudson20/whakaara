@@ -33,19 +33,17 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.app.whakaara.R
-import com.app.whakaara.ui.floatingactionbutton.rememberPermissionStateSafe
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Shapes
-import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.Spacings.space200
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.ui.theme.lightBlueAnimation
-import com.app.whakaara.utility.NotificationUtils
+import com.whakaara.core.rememberPermissionStateSafe
+import com.whakaara.core.designsystem.theme.Spacings.space20
+import com.whakaara.core.designsystem.theme.Spacings.space200
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.NotificationUtils
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.shouldShowRationale
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -70,8 +68,8 @@ fun NotificationsOnboarding(
                 modifier = Modifier
                     .size(space200)
                     .align(Alignment.Center)
-                    .clip(Shapes.medium)
-                    .background(color = lightBlueAnimation),
+                    .clip(com.whakaara.core.designsystem.theme.Shapes.medium)
+                    .background(color = com.whakaara.core.designsystem.theme.lightBlueAnimation),
                 isCompleted = notificationPermissionState.status.isGranted
             )
         }

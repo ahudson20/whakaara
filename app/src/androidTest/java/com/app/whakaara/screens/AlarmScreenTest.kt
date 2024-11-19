@@ -6,10 +6,10 @@ import androidx.compose.ui.test.assertIsToggleable
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.state.PreferencesState
+import com.whakaara.model.preferences.PreferencesState
 import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.ui.screens.AlarmScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import org.junit.Ignore
 import org.junit.Rule

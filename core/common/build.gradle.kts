@@ -17,3 +17,8 @@ android {
         }
     }
 }
+
+dependencies {
+    implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.material3)
+}

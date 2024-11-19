@@ -10,9 +10,11 @@ object Modules {
     const val coreDatabase = ":core:database"
     const val coreModel = ":core:model"
     const val coreTest = ":core:test"
+    const val coreDesignSystem = ":core:designsystem"
     const val featureAlarm = ":feature:alarm"
     const val featureStopwatch = ":feature:stopwatch"
     const val featureTimer = ":feature:timer"
+    const val featureOnboarding = ":feature:onboarding"
 }
 
 fun DependencyHandlerScope.modules(vararg module: String) {

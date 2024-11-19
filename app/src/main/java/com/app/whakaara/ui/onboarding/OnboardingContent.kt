@@ -31,20 +31,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
-import com.app.whakaara.state.PreferencesState
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space80
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.Spacings.spaceSmall
-import com.app.whakaara.ui.theme.Spacings.spaceXLarge
-import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.ui.theme.darkGreen
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space80
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
+import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
+import com.whakaara.core.designsystem.theme.Spacings.spaceXxSmall
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.model.onboarding.OnboardingItems
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.PreferencesState
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingContent(
     modifier: Modifier = Modifier,
@@ -156,7 +155,7 @@ private fun Indicator(isSelected: Boolean) {
             animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy),
             label = "indicator size"
         )
-    val color = if (isSelected) darkGreen else darkGreen.copy(alpha = 0.5f)
+    val color = if (isSelected) com.whakaara.core.designsystem.theme.darkGreen else com.whakaara.core.designsystem.theme.darkGreen.copy(alpha = 0.5f)
 
     Box(
         modifier = Modifier
@@ -167,13 +166,12 @@ private fun Indicator(isSelected: Boolean) {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @ThemePreviews
 @FontScalePreviews
 fun OnboardingContentPreview() {
     val pages = OnboardingItems.entries.toTypedArray()
-    WhakaaraTheme {
+   WhakaaraTheme {
         OnboardingContent(
             pages = pages,
             pagerState = rememberPagerState(pageCount = { pages.size }),

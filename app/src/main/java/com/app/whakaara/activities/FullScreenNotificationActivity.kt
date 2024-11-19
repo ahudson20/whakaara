@@ -22,7 +22,7 @@ import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.ui.screens.AlarmFullScreen
 import com.app.whakaara.ui.screens.TimerFullScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM

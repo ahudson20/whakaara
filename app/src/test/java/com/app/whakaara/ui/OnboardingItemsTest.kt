@@ -1,6 +1,6 @@
 package com.app.whakaara.ui
 
-import com.app.whakaara.ui.onboarding.OnboardingItems
+import com.whakaara.model.onboarding.OnboardingItems
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Test

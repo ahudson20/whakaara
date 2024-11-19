@@ -17,12 +17,13 @@ import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.state.events.StopwatchEventCallbacks
 import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
+import net.vbuild.verwoodpages.timer.TimerViewModel
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -34,6 +35,7 @@ class MainActivity :
     StopwatchEventCallbacks,
     PreferencesEventCallbacks {
     private val viewModel: MainViewModel by viewModels()
+    private val timerViewModel: TimerViewModel by viewModels()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,7 @@ class MainActivity :
             val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
             val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
             val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
-            val timerState by viewModel.timerState.collectAsStateWithLifecycle()
+//            val timerState by viewModel.timerState.collectAsStateWithLifecycle()
 
             val useDarkColours = when (preferencesState.preferences.appTheme) {
                 AppTheme.MODE_DAY -> false
@@ -55,7 +57,7 @@ class MainActivity :
                 AppTheme.MODE_AUTO -> isSystemInDarkTheme()
             }
 
-            WhakaaraTheme(
+            com.whakaara.core.designsystem.theme.WhakaaraTheme(
                 darkTheme = useDarkColours,
                 dynamicColor = preferencesState.preferences.dynamicTheme
             ) {
@@ -63,7 +65,7 @@ class MainActivity :
                     preferencesState = preferencesState,
                     alarmState = alarmState,
                     stopwatchState = stopwatchState,
-                    timerState = timerState,
+//                    timerState = timerState,
                     alarmEventCallbacks = this@MainActivity,
                     timerEventCallbacks = this@MainActivity,
                     stopwatchEventCallbacks = this@MainActivity,
@@ -76,9 +78,14 @@ class MainActivity :
     override fun onResume() {
         super.onResume()
         with(viewModel) {
-            recreateTimer()
+//            recreateTimer()
             recreateStopwatch()
             cancelStopwatchNotification()
+//            cancelTimerNotification()
+        }
+
+        with(timerViewModel) {
+            recreateTimer()
             cancelTimerNotification()
         }
     }
@@ -86,9 +93,14 @@ class MainActivity :
     override fun onPause() {
         super.onPause()
         with(viewModel) {
-            saveTimerStateForRecreation()
+//            saveTimerStateForRecreation()
             saveStopwatchStateForRecreation()
             startStopwatchNotification()
+//            startTimerNotification()
+        }
+
+        with(timerViewModel) {
+            saveTimerStateForRecreation()
             startTimerNotification()
         }
     }
@@ -124,31 +136,31 @@ class MainActivity :
 
     //region timer
     override fun updateHours(newValue: String) {
-        viewModel.updateInputHours(newValue = newValue)
+        timerViewModel.updateInputHours(newValue = newValue)
     }
 
     override fun updateMinutes(newValue: String) {
-        viewModel.updateInputMinutes(newValue = newValue)
+        timerViewModel.updateInputMinutes(newValue = newValue)
     }
 
     override fun updateSeconds(newValue: String) {
-        viewModel.updateInputSeconds(newValue = newValue)
+        timerViewModel.updateInputSeconds(newValue = newValue)
     }
 
     override fun startTimer() {
-        viewModel.startTimer()
+        timerViewModel.startTimer()
     }
 
     override fun stopTimer() {
-        viewModel.resetTimer()
+        timerViewModel.resetTimer()
     }
 
     override fun pauseTimer() {
-        viewModel.pauseTimer()
+        timerViewModel.pauseTimer()
     }
 
     override fun restartTimer(autoRestartTimer: Boolean) {
-        viewModel.restartTimer(autoRestartTimer = autoRestartTimer)
+        timerViewModel.restartTimer(autoRestartTimer = autoRestartTimer)
     }
     //endregion
 

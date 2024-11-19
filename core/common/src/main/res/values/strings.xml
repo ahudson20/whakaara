@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_prompt_message">Notification permission required</string>
+    <string name="permission_prompt_action_label">Go to settings</string>
+</resources>

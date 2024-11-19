@@ -13,7 +13,7 @@ import com.app.whakaara.receiver.AppWidgetReceiver
 import com.app.whakaara.receiver.UpcomingAlarmReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utility.DateUtils
-import com.app.whakaara.utility.PendingIntentUtils
+import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_AUTO_SILENCE
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_REQUEST_CODE

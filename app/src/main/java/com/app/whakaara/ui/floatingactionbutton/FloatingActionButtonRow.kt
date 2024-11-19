@@ -28,9 +28,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.app.whakaara.R
-import com.app.whakaara.ui.theme.BooleanPreviewProvider
-import com.app.whakaara.ui.theme.Shapes
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.Shapes
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 
 @Composable
 fun FloatingActionButtonRow(
@@ -176,7 +175,7 @@ fun FloatingActionButtonStopPreview() {
 @Preview
 @Composable
 fun FloatingActionButtonPlayPausePreview(
-    @PreviewParameter(BooleanPreviewProvider::class) isPlaying: Boolean
+    @PreviewParameter(com.whakaara.core.designsystem.theme.BooleanPreviewProvider::class) isPlaying: Boolean
 ) {
     WhakaaraTheme {
         FloatingActionButtonPlayPause(

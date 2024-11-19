@@ -37,19 +37,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsContent
-import com.app.whakaara.ui.theme.AlarmPreviewProvider
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Shapes
-import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.Spacings.space28
-import com.app.whakaara.ui.theme.Spacings.space80
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.dokar.sheets.BottomSheet
 import com.dokar.sheets.rememberBottomSheetState
+import com.whakaara.core.designsystem.theme.AlarmPreviewProvider
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space10
+import com.whakaara.core.designsystem.theme.Spacings.space20
+import com.whakaara.core.designsystem.theme.Spacings.space28
+import com.whakaara.core.designsystem.theme.Spacings.space80
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.TimeFormat
 import kotlinx.coroutines.launch
@@ -86,11 +85,11 @@ fun Card(
     }
 
     ElevatedCard(
-        shape = Shapes.extraLarge,
+        shape = com.whakaara.core.designsystem.theme.Shapes.extraLarge,
         modifier = modifier
             .fillMaxWidth()
             .height(space80)
-            .clip(Shapes.extraLarge)
+            .clip(com.whakaara.core.designsystem.theme.Shapes.extraLarge)
             .clickable {
                 scope.launch { sheetState.expand() }
             }

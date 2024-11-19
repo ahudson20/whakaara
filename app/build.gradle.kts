@@ -62,7 +62,7 @@ android {
 }
 
 dependencies {
-    modules(Modules.coreCommon, Modules.coreData)
+    modules(Modules.coreCommon, Modules.coreData, Modules.featureTimer, Modules.featureAlarm, Modules.featureStopwatch, Modules.featureOnboarding, Modules.coreDesignSystem)
     testImplementation(project(Modules.coreTest))
 
     implementation(libs.androidx.navigation.compose)
@@ -148,5 +148,5 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
 
     // Lottie animation
-    implementation(libs.lottie)
+//    implementation(libs.lottie)
 }

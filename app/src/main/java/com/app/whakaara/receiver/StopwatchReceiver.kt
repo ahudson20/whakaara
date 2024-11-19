@@ -5,9 +5,11 @@ import android.content.Intent
 import com.app.whakaara.logic.StopwatchManagerWrapper
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.asExternalModel
+import com.whakaara.core.HiltBroadcastReceiver
 import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_PAUSE
 import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_START
 import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_STOP
+import com.whakaara.core.goAsync
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first

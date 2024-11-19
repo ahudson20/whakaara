@@ -6,9 +6,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollTo
-import com.app.whakaara.state.PreferencesState
+import com.whakaara.model.preferences.PreferencesState
 import com.app.whakaara.ui.screens.SettingsScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test

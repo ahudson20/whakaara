@@ -13,7 +13,7 @@ import com.app.whakaara.state.ListStateEvent
 import com.app.whakaara.state.StringStateEvent
 import com.app.whakaara.state.UpdateBottomSheetDetailsAlarmInfo
 import com.app.whakaara.ui.bottomsheet.details.BottomSheetDetailsAlarmInfo
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
 

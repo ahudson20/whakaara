@@ -8,7 +8,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.ui.screens.StopwatchScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
 

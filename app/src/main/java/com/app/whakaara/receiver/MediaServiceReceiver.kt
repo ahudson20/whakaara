@@ -7,11 +7,13 @@ import android.util.Log
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.TimerManagerWrapper
 import com.app.whakaara.service.MediaPlayerService
+import com.whakaara.core.HiltBroadcastReceiver
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID
 import com.whakaara.core.constants.NotificationUtilsConstants.MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
+import com.whakaara.core.goAsync
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

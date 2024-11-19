@@ -22,14 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space275
-import com.app.whakaara.ui.theme.Spacings.spaceXLarge
-import com.app.whakaara.ui.theme.Spacings.spaceXSmall
-import com.app.whakaara.ui.theme.Spacings.spaceXxSmall
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.ui.theme.primaryGreen
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space275
+import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
+import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
+import com.whakaara.core.designsystem.theme.Spacings.spaceXxSmall
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.primaryGreen
 
 @Composable
 fun TimerCountdownDisplay(
@@ -58,7 +58,7 @@ fun TimerCountdownDisplay(
             CircularProgressIndicator(
                 modifier = Modifier.size(space275),
                 progress = { animatedProgress },
-                color = primaryGreen,
+                color = com.whakaara.core.designsystem.theme.primaryGreen,
                 strokeWidth = spaceXSmall
             )
             Column(

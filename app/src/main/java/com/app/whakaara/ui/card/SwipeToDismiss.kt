@@ -24,11 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Shapes
-import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Shapes
+import com.whakaara.core.designsystem.theme.Spacings.space20
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -55,7 +55,7 @@ fun DismissBackground(
 
     Box(
         modifier = modifier
-            .clip(shape = Shapes.extraLarge)
+            .clip(shape = com.whakaara.core.designsystem.theme.Shapes.extraLarge)
             .fillMaxSize()
             .background(color),
         contentAlignment = Alignment.CenterEnd
@@ -70,7 +70,6 @@ fun DismissBackground(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @ThemePreviews
 @FontScalePreviews

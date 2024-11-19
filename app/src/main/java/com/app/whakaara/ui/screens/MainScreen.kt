@@ -9,9 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.state.TimerState
 import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.state.events.StopwatchEventCallbacks
@@ -19,11 +17,12 @@ import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.navigation.BottomNavigation
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
 import java.util.Calendar
 
@@ -32,7 +31,7 @@ fun MainScreen(
     preferencesState: PreferencesState,
     alarmState: AlarmState,
     stopwatchState: StopwatchState,
-    timerState: TimerState,
+//    timerState: TimerState,
     alarmEventCallbacks: AlarmEventCallbacks,
     timerEventCallbacks: TimerEventCallbacks,
     stopwatchEventCallbacks: StopwatchEventCallbacks,
@@ -63,7 +62,7 @@ fun MainScreen(
                 preferencesState = preferencesState,
                 alarmState = alarmState,
                 stopwatchState = stopwatchState,
-                timerState = timerState,
+//                timerState = timerState,
                 alarmEventCallbacks = alarmEventCallbacks,
                 timerEventCallbacks = timerEventCallbacks,
                 stopwatchEventCallbacks = stopwatchEventCallbacks,
@@ -82,7 +81,7 @@ fun MainPreview() {
             preferencesState = PreferencesState(),
             alarmState = AlarmState.Success(),
             stopwatchState = StopwatchState(),
-            timerState = TimerState(),
+//            timerState = TimerState(),
             alarmEventCallbacks = object : AlarmEventCallbacks {
                 override fun create(alarm: Alarm) {}
 
@@ -136,7 +135,8 @@ fun MainPreview() {
 
                 override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
                     shouldEnableUpcomingAlarmNotification: Boolean
-                ) {}
+                ) {
+                }
             }
         )
     }

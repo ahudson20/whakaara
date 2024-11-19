@@ -18,15 +18,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.Spacings.space275
-import com.app.whakaara.ui.theme.Spacings.spaceSmall
-import com.app.whakaara.ui.theme.Spacings.spaceXSmall
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.darkGreen
-import com.app.whakaara.ui.theme.lightGreen
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space20
+import com.whakaara.core.designsystem.theme.Spacings.space275
+import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
+import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
+import com.whakaara.core.designsystem.theme.ThemePreviews
 
 @Composable
 fun StopwatchDisplay(
@@ -42,13 +40,13 @@ fun StopwatchDisplay(
             modifier = Modifier
                 .size(space275)
                 .clip(CircleShape)
-                .background(darkGreen)
+                .background(com.whakaara.core.designsystem.theme.darkGreen)
         ) {
             Box(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .size(space275 - space20)
-                    .border(width = spaceXSmall, color = lightGreen, shape = CircleShape)
+                    .border(width = spaceXSmall, color = com.whakaara.core.designsystem.theme.lightGreen, shape = CircleShape)
                     .clip(CircleShape)
                     .background(color = Color.Transparent)
             )

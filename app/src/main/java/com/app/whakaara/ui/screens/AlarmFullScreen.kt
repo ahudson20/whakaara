@@ -17,12 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.ui.clock.TextClock
-import com.app.whakaara.ui.theme.AlarmPreviewProvider
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.core.designsystem.theme.AlarmPreviewProvider
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.TimeFormat
 
@@ -82,8 +81,8 @@ fun AlarmFullScreen(
 
 @Composable
 @ThemePreviews
-@FontScalePreviews
-fun NotificationFullScreenPreview(
+@com.whakaara.core.designsystem.theme.FontScalePreviews
+private fun NotificationFullScreenPreview(
     @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {
     WhakaaraTheme {

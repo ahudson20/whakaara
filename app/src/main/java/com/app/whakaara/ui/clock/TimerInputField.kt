@@ -17,12 +17,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.app.whakaara.state.StringStateEvent
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.ui.theme.darkGreen
-import com.app.whakaara.ui.theme.primaryGreen
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.darkGreen
+import com.whakaara.core.designsystem.theme.primaryGreen
 import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 
 @Composable
@@ -37,7 +37,7 @@ fun TimerInputField(
         modifier = modifier
     ) {
         OutlinedTextField(
-            modifier = Modifier.width(Spacings.space100),
+            modifier = Modifier.width(com.whakaara.core.designsystem.theme.Spacings.space100),
             value = updateStringEvent.value,
             onValueChange = {
                 if (it.matches(Regex(regex))) {
@@ -60,12 +60,12 @@ fun TimerInputField(
                 fontWeight = FontWeight.Black
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = darkGreen,
-                unfocusedBorderColor = primaryGreen,
-                focusedTextColor = darkGreen,
-                unfocusedTextColor = darkGreen,
-                focusedContainerColor = primaryGreen,
-                unfocusedContainerColor = primaryGreen
+                focusedBorderColor = com.whakaara.core.designsystem.theme.darkGreen,
+                unfocusedBorderColor = com.whakaara.core.designsystem.theme.primaryGreen,
+                focusedTextColor = com.whakaara.core.designsystem.theme.darkGreen,
+                unfocusedTextColor = com.whakaara.core.designsystem.theme.darkGreen,
+                focusedContainerColor = com.whakaara.core.designsystem.theme.primaryGreen,
+                unfocusedContainerColor = com.whakaara.core.designsystem.theme.primaryGreen
             )
         )
         Text(text = label)

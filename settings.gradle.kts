@@ -31,5 +31,7 @@ include(
     ":core:test",
     ":feature:alarm",
     ":feature:stopwatch",
-    ":feature:timer"
+    ":feature:timer",
+    ":feature:onboarding"
 )
+include(":core:designsystem")

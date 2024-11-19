@@ -1,6 +1,5 @@
 package com.app.whakaara.ui.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,15 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.onboarding.OnboardingContent
-import com.app.whakaara.ui.onboarding.OnboardingItems
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.model.onboarding.OnboardingItems
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.PreferencesState
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingScreen(
     navigateToHome: () -> Unit,
@@ -31,6 +29,7 @@ fun OnboardingScreen(
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val snackbarHostState = remember { SnackbarHostState() }
+
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)

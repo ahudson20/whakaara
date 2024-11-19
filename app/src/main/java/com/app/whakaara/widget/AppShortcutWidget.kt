@@ -18,8 +18,8 @@ import androidx.glance.layout.ContentScale
 import androidx.glance.layout.size
 import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
-import com.app.whakaara.ui.theme.Spacings.spaceXxLarge
-import com.app.whakaara.ui.theme.WidgetTheme
+import com.whakaara.core.designsystem.theme.Spacings.spaceXxLarge
+import com.whakaara.core.designsystem.theme.WidgetTheme
 
 class AppShortcutWidget : GlanceAppWidget() {
     @OptIn(ExperimentalLayoutApi::class)
@@ -28,14 +28,14 @@ class AppShortcutWidget : GlanceAppWidget() {
         id: GlanceId
     ) {
         provideContent {
-            GlanceTheme(colors = WidgetTheme.colors) {
+            GlanceTheme(colors = com.whakaara.core.designsystem.theme.WidgetTheme.colors) {
                 Image(
                     modifier = GlanceModifier.size(spaceXxLarge)
                         .clickable(actionStartActivity<MainActivity>()),
                     contentDescription = LocalContext.current.getString(R.string.widget_next_alarm_icon_description),
                     provider = ImageProvider(R.drawable.outline_alarm_24),
                     contentScale = ContentScale.FillBounds,
-                    colorFilter = ColorFilter.tint(WidgetTheme.colors.tertiary)
+                    colorFilter = ColorFilter.tint(com.whakaara.core.designsystem.theme.WidgetTheme.colors.tertiary)
                 )
             }
         }

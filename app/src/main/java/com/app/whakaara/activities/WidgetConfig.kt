@@ -33,9 +33,9 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.R
-import com.app.whakaara.ui.theme.Spacings.space10
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.Spacings.space10
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.app.whakaara.ui.widget.ColourPicker
 import com.app.whakaara.utility.GeneralUtils.Companion.convertStringToColour
 import com.app.whakaara.widget.AppWidget

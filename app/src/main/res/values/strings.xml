@@ -2,9 +2,6 @@
     <string name="app_name">whakaara</string>
     <string name="time_picker_dialog_title">Select time</string>
 
-    <string name="permission_prompt_message">Notification permission required</string>
-    <string name="permission_prompt_action_label">Go to settings</string>
-
     <string name="bottom_sheet_title">Edit alarm</string>
     <string name="bottom_sheet_sub_title">Off</string>
     <string name="bottom_sheet_snooze_switch">Snooze</string>
@@ -133,23 +130,6 @@
     <string name="widget_config_text_colour">Text Colour</string>
 
     <string name="timer_full_screen_cancelled">Timer cancelled</string>
-
-    <string name="onboarding_button_next">Next</string>
-    <string name="onboarding_button_complete">Complete</string>
-    <string name="onboarding_widget_title">Widget</string>
-    <string name="onboarding_widget_button">Create widget</string>
-    <string name="onboarding_widget_sub_text">This app supports displaying your next scheduled alarm in a widget</string>
-    <string name="onboarding_widget_sub_text_second">Try adding it to the home screen and using it!</string>
-    <string name="onboarding_battery_title">Battery</string>
-    <string name="onboarding_battery_sub_text">This app requires unrestricted battery settings, otherwise certain functionality may not work as expected!</string>
-    <string name="onboarding_battery_button">Disable battery optimization</string>
-    <string name="onboarding_notification_button_enabled">Permission granted</string>
-    <string name="onboarding_notification_button_not_enabled">Enable notifications</string>
-    <string name="onboarding_notification_title">Notifications</string>
-    <string name="onboarding_sub_text">This app requires permission to send you notifications!</string>
-    <string name="onboarding_welcome_title">Welcome to whakaara</string>
-    <string name="onboarding_welcome_sub_text">This screen will guide you through the most important setup steps</string>
-    <string name="onboarding_welcome_icon_description">whakaara app icon</string>
 
     <string name="notification_timer_play_action_label">Resume</string>
     <string name="notification_timer_pause_action_label">Pause</string>

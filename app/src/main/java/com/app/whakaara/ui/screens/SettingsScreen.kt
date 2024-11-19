@@ -22,18 +22,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign.Companion.Center
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.app.whakaara.state.PreferencesState
 import com.app.whakaara.ui.navigation.BottomNavItem
 import com.app.whakaara.ui.settings.AlarmSettings
 import com.app.whakaara.ui.settings.GeneralSettings
 import com.app.whakaara.ui.settings.TimerSettings
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.RoutePreviewProvider
-import com.app.whakaara.ui.theme.Spacings.space20
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.RoutePreviewProvider
+import com.whakaara.core.designsystem.theme.Spacings.space20
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
 
 @OptIn(ExperimentalMaterial3Api::class)

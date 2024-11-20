@@ -6,30 +6,25 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
-import com.app.whakaara.state.events.AlarmEventCallbacks
-import com.app.whakaara.state.events.StopwatchEventCallbacks
-import com.app.whakaara.state.events.TimerEventCallbacks
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.RootScreen
-import com.whakaara.model.preferences.Preferences
+import com.whakaara.feature.timer.navigation.timerScreen
 import com.whakaara.onboarding.navigation.onboardingScreen
 import com.whakaara.stopwatch.navigation.stopwatchScreen
-import com.whakaara.timer.navigation.timerScreen
 import net.vbuild.verwoodpages.alarm.navigation.alarmScreen
-import net.vbuild.verwoodpages.alarm.navigation.navigateToAlarmScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    shouldShowOnboarding: Boolean = false,
+    shouldShowOnboarding: Boolean = false
 //    preferencesState: PreferencesState,
 //    alarmState: AlarmState,
 //    stopwatchState: StopwatchState,
 //    timerState: TimerState,
-    alarmEventCallbacks: AlarmEventCallbacks,
-    timerEventCallbacks: TimerEventCallbacks,
-    stopwatchEventCallbacks: StopwatchEventCallbacks,
-    updatePreferences: (preferences: Preferences) -> Unit
+//    alarmEventCallbacks: AlarmEventCallbacks,
+//    timerEventCallbacks: TimerEventCallbacks,
+//    stopwatchEventCallbacks: StopwatchEventCallbacks,
+//    updatePreferences: (preferences: Preferences) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -165,7 +160,11 @@ private fun NavGraphBuilder.addOnboardingRoute(navController: NavController) {
     ) {
         onboardingScreen(
             navigateHome = {
-                navController.navigateToAlarmScreen()
+                navController.navigate(RootScreen.Alarm.route) {
+                    popUpTo(RootScreen.Onboarding.route) {
+                        inclusive = true
+                    }
+                }
             }
         )
     }

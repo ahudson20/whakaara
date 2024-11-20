@@ -29,8 +29,8 @@ import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import com.whakaara.core.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.model.alarm.Alarm
-import com.whakaara.timer.TimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -18,11 +18,11 @@ import com.app.whakaara.state.events.StopwatchEventCallbacks
 import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.TimeFormat
-import com.whakaara.timer.TimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.Calendar
 
@@ -47,8 +47,8 @@ class MainActivity :
 
         setContent {
             val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
-            val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
-            val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
+//            val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
+//            val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
 //            val timerState by viewModel.timerState.collectAsStateWithLifecycle()
 
             val useDarkColours = when (preferencesState.preferences.appTheme) {
@@ -63,17 +63,19 @@ class MainActivity :
             ) {
                 MainScreen(
                     preferencesState = preferencesState,
-                    alarmState = alarmState,
-                    stopwatchState = stopwatchState,
+//                    alarmState = alarmState,
+//                    stopwatchState = stopwatchState,
 //                    timerState = timerState,
-                    alarmEventCallbacks = this@MainActivity,
-                    timerEventCallbacks = this@MainActivity,
-                    stopwatchEventCallbacks = this@MainActivity,
+//                    alarmEventCallbacks = this@MainActivity,
+//                    timerEventCallbacks = this@MainActivity,
+//                    stopwatchEventCallbacks = this@MainActivity,
                     preferencesEventCallbacks = this@MainActivity
                 )
             }
         }
     }
+
+    // TODO: remove callbacks, shift into respective VM's
 
     override fun onResume() {
         super.onResume()

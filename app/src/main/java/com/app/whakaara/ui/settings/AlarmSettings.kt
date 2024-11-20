@@ -32,7 +32,7 @@ import com.alorma.compose.settings.ui.SettingsListDropdown
 import com.alorma.compose.settings.ui.SettingsMenuLink
 import com.alorma.compose.settings.ui.SettingsSwitch
 import com.app.whakaara.R
-import com.app.whakaara.receiver.AppWidgetReceiver
+import com.whakaara.core.widget.AppWidgetReceiver
 import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings.space100
@@ -295,7 +295,7 @@ fun AlarmSettings(
         onClick = {
             scope.launch {
                 GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
-                    receiver = AppWidgetReceiver::class.java
+                    receiver = com.whakaara.core.widget.AppWidgetReceiver::class.java
                 )
             }
         }

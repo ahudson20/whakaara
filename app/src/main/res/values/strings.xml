@@ -117,9 +117,6 @@
 
 
     <string name="widget_next_alarm_description">Shows next active alarm</string>
-    <string name="widget_next_alarm_icon_description">Alarm icon</string>
-    <string name="widget_next_alarm_title">Next alarm</string>
-    <string name="widget_next_alarm_none">None set</string>
     <string name="widget_next_alarm_preview_time">12:59PM</string>
     <string name="widget_next_alarm_preview_title">Wake up now!</string>
     <string name="widget_shortcut_description">App shortcut</string>

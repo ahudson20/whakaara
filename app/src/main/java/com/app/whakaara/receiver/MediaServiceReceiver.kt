@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.app.whakaara.logic.AlarmManagerWrapper
-import com.app.whakaara.logic.TimerManagerWrapper
 import com.app.whakaara.service.MediaPlayerService
 import com.whakaara.core.HiltBroadcastReceiver
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_ALARM_ID

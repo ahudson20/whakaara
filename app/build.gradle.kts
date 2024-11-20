@@ -62,7 +62,16 @@ android {
 }
 
 dependencies {
-    modules(Modules.coreCommon, Modules.coreData, Modules.featureTimer, Modules.featureAlarm, Modules.featureStopwatch, Modules.featureOnboarding, Modules.coreDesignSystem)
+    modules(
+        Modules.coreCommon,
+        Modules.coreData,
+        Modules.coreDesignSystem,
+        Modules.coreWidget,
+        Modules.featureTimer,
+        Modules.featureAlarm,
+        Modules.featureStopwatch,
+        Modules.featureOnboarding
+    )
     testImplementation(project(Modules.coreTest))
 
     implementation(libs.androidx.navigation.compose)

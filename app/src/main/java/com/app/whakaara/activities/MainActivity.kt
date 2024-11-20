@@ -22,8 +22,8 @@ import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.TimeFormat
+import com.whakaara.timer.TimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import net.vbuild.verwoodpages.timer.TimerViewModel
 import java.util.Calendar
 
 @AndroidEntryPoint
@@ -57,7 +57,7 @@ class MainActivity :
                 AppTheme.MODE_AUTO -> isSystemInDarkTheme()
             }
 
-            com.whakaara.core.designsystem.theme.WhakaaraTheme(
+            WhakaaraTheme(
                 darkTheme = useDarkColours,
                 dynamicColor = preferencesState.preferences.dynamicTheme
             ) {

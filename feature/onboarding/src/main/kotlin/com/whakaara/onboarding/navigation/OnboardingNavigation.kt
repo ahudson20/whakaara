@@ -11,10 +11,14 @@ fun NavController.navigateToOnboarding(navOptions: NavOptions? = null) {
     navigate(LeafScreen.Onboarding.route, navOptions)
 }
 
-fun NavGraphBuilder.onboardingScreen() {
+fun NavGraphBuilder.onboardingScreen(
+    navigateHome: () -> Unit
+) {
     composable(
         route = LeafScreen.Onboarding.route
     ) {
-        OnboardingRoute()
+        OnboardingRoute(
+            navigateHome = navigateHome
+        )
     }
 }

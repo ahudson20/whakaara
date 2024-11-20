@@ -21,4 +21,8 @@ android {
 dependencies {
     implementation(libs.accompanist.permissions)
     implementation(libs.androidx.material3)
+
+    // For AppWidgets support
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
 }

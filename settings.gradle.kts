@@ -35,3 +35,4 @@ include(
     ":feature:onboarding"
 )
 include(":core:designsystem")
+include(":core:widget")

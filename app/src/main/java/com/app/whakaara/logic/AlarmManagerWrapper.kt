@@ -9,7 +9,7 @@ import android.provider.Settings
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import com.app.whakaara.R
 import com.app.whakaara.activities.MainActivity
-import com.app.whakaara.receiver.AppWidgetReceiver
+import com.whakaara.core.widget.AppWidgetReceiver
 import com.app.whakaara.receiver.UpcomingAlarmReceiver
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.utility.DateUtils
@@ -240,7 +240,7 @@ class AlarmManagerWrapper @Inject constructor(
 
     fun updateWidget() {
         app.sendBroadcast(
-            Intent(app, AppWidgetReceiver::class.java).apply {
+            Intent(app, com.whakaara.core.widget.AppWidgetReceiver::class.java).apply {
                 action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
             }
         )

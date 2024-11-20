@@ -59,9 +59,10 @@ fun MainScreen(
         Box(modifier = Modifier.padding(innerPadding)) {
             NavGraph(
                 navController = navController,
-                preferencesState = preferencesState,
-                alarmState = alarmState,
-                stopwatchState = stopwatchState,
+                shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding,
+//                preferencesState = preferencesState,
+//                alarmState = alarmState,
+//                stopwatchState = stopwatchState,
 //                timerState = timerState,
                 alarmEventCallbacks = alarmEventCallbacks,
                 timerEventCallbacks = timerEventCallbacks,

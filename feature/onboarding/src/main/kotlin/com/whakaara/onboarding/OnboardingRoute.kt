@@ -6,7 +6,11 @@ import com.whakaara.onboarding.ui.OnboardingScreen
 
 @Composable
 fun OnboardingRoute(
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel(),
+    navigateHome: () -> Unit
 ) {
-    OnboardingScreen()
+    OnboardingScreen(
+        navigateToHome = navigateHome,
+        updatePreferences = viewModel::updatePreferences
+    )
 }

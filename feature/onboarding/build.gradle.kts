@@ -12,10 +12,13 @@ android {
 
 dependencies {
     // Modules
-    modules(Modules.coreCommon, Modules.coreDesignSystem)
+    modules(Modules.coreCommon, Modules.coreDesignSystem, Modules.coreWidget)
 
     // Accompanist permissions
     implementation(libs.accompanist.permissions)
+
+    // For AppWidgets support
+    implementation(libs.androidx.glance.appwidget)
 
     // Lottie animation
     implementation(libs.lottie)
@@ -31,4 +34,5 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.junit.ext)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
 }

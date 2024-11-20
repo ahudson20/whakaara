@@ -39,8 +39,6 @@ import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.core.designsystem.theme.darkGreen
 import com.whakaara.model.onboarding.OnboardingItems
-import com.whakaara.model.preferences.Preferences
-import com.whakaara.model.preferences.PreferencesState
 import kotlinx.coroutines.launch
 import net.vbuild.verwoodpages.onboarding.R
 
@@ -51,8 +49,7 @@ fun OnboardingContent(
     pages: Array<OnboardingItems>,
     snackbarHostState: SnackbarHostState,
     navigateToHome: () -> Unit,
-    preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     Column(modifier = modifier.fillMaxSize()) {
@@ -76,11 +73,7 @@ fun OnboardingContent(
             pagerState = pagerState
         ) {
             if (pagerState.currentPage == pages.size - 1) {
-                updatePreferences(
-                    preferencesState.preferences.copy(
-                        shouldShowOnboarding = false
-                    )
-                )
+                updatePreferences()
                 navigateToHome()
             } else {
                 scope.launch {
@@ -175,7 +168,6 @@ fun OnboardingContentPreview() {
             pagerState = rememberPagerState(pageCount = { pages.size }),
             snackbarHostState = remember { SnackbarHostState() },
             navigateToHome = {},
-            preferencesState = PreferencesState(),
             updatePreferences = {}
         )
     }

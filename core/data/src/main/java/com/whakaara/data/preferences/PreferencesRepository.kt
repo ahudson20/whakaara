@@ -11,4 +11,6 @@ interface PreferencesRepository {
     fun getPreferencesFlow(): Flow<Preferences>
 
     fun getPreferences(): Preferences
+
+    suspend fun updateShouldShowOnboarding(shouldShowOnboarding: Boolean)
 }

@@ -17,4 +17,8 @@ class PreferencesImpl(
     override fun getPreferencesFlow(): Flow<Preferences> = preferencesDao.getPreferencesFlow().map { it.asExternalModel() }
 
     override fun getPreferences(): Preferences = preferencesDao.getPreferences().asExternalModel()
+
+    override suspend fun updateShouldShowOnboarding(shouldShowOnboarding: Boolean) {
+        preferencesDao.updateShouldShowOnboarding(shouldShowOnboarding)
+    }
 }

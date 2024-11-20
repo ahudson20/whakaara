@@ -22,19 +22,21 @@ import com.app.whakaara.logic.MainViewModel
 import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.ui.screens.AlarmFullScreen
 import com.app.whakaara.ui.screens.TimerFullScreen
-import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.app.whakaara.utility.GeneralUtils
 import com.app.whakaara.utility.GeneralUtils.Companion.showToast
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import com.whakaara.core.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.timer.TimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FullScreenNotificationActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
+    private val timerViewModel: TimerViewModel by viewModels()
     private lateinit var alarm: Alarm
 
     private val broadCastReceiverFinishActivity =
@@ -78,7 +80,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
                     )
                 } else {
                     TimerFullScreen(
-                        resetTimer = viewModel::resetTimer,
+                        resetTimer = timerViewModel::resetTimer,
                         timeFormat = preferencesState.preferences.timeFormat
                     )
                 }

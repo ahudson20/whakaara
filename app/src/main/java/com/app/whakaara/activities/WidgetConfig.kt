@@ -33,13 +33,13 @@ import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.R
+import com.app.whakaara.ui.widget.ColourPicker
+import com.app.whakaara.utility.GeneralUtils.Companion.convertStringToColour
+import com.google.gson.Gson
 import com.whakaara.core.designsystem.theme.Spacings.space10
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
-import com.app.whakaara.ui.widget.ColourPicker
-import com.app.whakaara.utility.GeneralUtils.Companion.convertStringToColour
-import com.app.whakaara.widget.AppWidget
-import com.google.gson.Gson
+import com.whakaara.core.widget.AppWidget
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first

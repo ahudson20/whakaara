@@ -3,7 +3,7 @@ package com.whakaara.core.designsystem.theme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import com.app.whakaara.R
+import com.whakaara.core.designsystem.R
 
 private val mediumFontFamily =
     FontFamily(

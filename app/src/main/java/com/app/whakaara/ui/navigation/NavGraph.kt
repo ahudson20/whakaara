@@ -6,27 +6,25 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
-import com.app.whakaara.state.AlarmState
-import com.whakaara.model.preferences.PreferencesState
-import com.app.whakaara.state.StopwatchState
 import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.state.events.StopwatchEventCallbacks
 import com.app.whakaara.state.events.TimerEventCallbacks
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.RootScreen
-import com.whakaara.core.constants.GeneralConstants.ONBOARDING_ROUTE
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.onboarding.navigation.onboardingScreen
 import com.whakaara.stopwatch.navigation.stopwatchScreen
 import com.whakaara.timer.navigation.timerScreen
 import net.vbuild.verwoodpages.alarm.navigation.alarmScreen
+import net.vbuild.verwoodpages.alarm.navigation.navigateToAlarmScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    preferencesState: PreferencesState,
-    alarmState: AlarmState,
-    stopwatchState: StopwatchState,
+    shouldShowOnboarding: Boolean = false,
+//    preferencesState: PreferencesState,
+//    alarmState: AlarmState,
+//    stopwatchState: StopwatchState,
 //    timerState: TimerState,
     alarmEventCallbacks: AlarmEventCallbacks,
     timerEventCallbacks: TimerEventCallbacks,
@@ -35,11 +33,10 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = if (preferencesState.preferences.shouldShowOnboarding) {
-            ONBOARDING_ROUTE
+        startDestination = if (shouldShowOnboarding) {
+            RootScreen.Onboarding.route
         } else {
             RootScreen.Alarm.route
-//            BottomNavItem.Alarm.route
         }
     ) {
         addOnboardingRoute(navController)
@@ -166,6 +163,10 @@ private fun NavGraphBuilder.addOnboardingRoute(navController: NavController) {
         route = RootScreen.Onboarding.route,
         startDestination = LeafScreen.Onboarding.route
     ) {
-        onboardingScreen()
+        onboardingScreen(
+            navigateHome = {
+                navController.navigateToAlarmScreen()
+            }
+        )
     }
 }

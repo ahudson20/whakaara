@@ -8,21 +8,17 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.whakaara.model.onboarding.OnboardingItems
-import com.whakaara.model.preferences.Preferences
-import com.whakaara.model.preferences.PreferencesState
 
 @Composable
 fun OnboardingScreen(
     navigateToHome: () -> Unit,
     pages: Array<OnboardingItems> = OnboardingItems.entries.toTypedArray(),
-    preferencesState: PreferencesState,
-    updatePreferences: (preferences: Preferences) -> Unit
+    updatePreferences: () -> Unit
 ) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val snackbarHostState = remember { SnackbarHostState() }
@@ -44,7 +40,6 @@ fun OnboardingScreen(
                 pagerState = pagerState,
                 snackbarHostState = snackbarHostState,
                 navigateToHome = navigateToHome,
-                preferencesState = preferencesState,
                 updatePreferences = updatePreferences
             )
         }

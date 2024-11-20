@@ -15,7 +15,6 @@ import com.app.whakaara.R
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.CountDownTimerUtil
 import com.app.whakaara.logic.StopwatchManagerWrapper
-import com.app.whakaara.logic.TimerManagerWrapper
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.constants.NotificationUtilsConstants.CHANNEL_ID
 import com.whakaara.core.di.ApplicationScope

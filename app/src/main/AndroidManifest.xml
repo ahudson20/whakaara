@@ -33,6 +33,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="app" android:host="mainactivity" />
             </intent-filter>
 
             <intent-filter>
@@ -97,7 +98,7 @@
             android:enabled="true">
         </receiver>
 
-        <receiver android:name=".receiver.AppWidgetReceiver"
+        <receiver android:name="com.whakaara.core.widget.AppWidgetReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -108,7 +109,7 @@
                 android:resource="@xml/next_alarm_widget_info" />
         </receiver>
 
-        <receiver android:name=".widget.AppShortcutWidgetReceiver"
+        <receiver android:name="com.whakaara.core.widget.AppShortcutWidgetReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

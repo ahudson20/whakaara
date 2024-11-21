@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.clock
+package com.whakaara.feature.timer.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.width
@@ -16,14 +16,13 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
-import com.app.whakaara.state.StringStateEvent
+import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
 import com.whakaara.core.designsystem.theme.FontScalePreviews
-import com.whakaara.core.designsystem.theme.Spacings
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.core.designsystem.theme.darkGreen
 import com.whakaara.core.designsystem.theme.primaryGreen
-import com.whakaara.core.constants.DateUtilsConstants.TIMER_INPUT_INITIAL_VALUE
+import com.whakaara.model.StringStateEvent
 
 @Composable
 fun TimerInputField(
@@ -60,12 +59,12 @@ fun TimerInputField(
                 fontWeight = FontWeight.Black
             ),
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = com.whakaara.core.designsystem.theme.darkGreen,
-                unfocusedBorderColor = com.whakaara.core.designsystem.theme.primaryGreen,
-                focusedTextColor = com.whakaara.core.designsystem.theme.darkGreen,
-                unfocusedTextColor = com.whakaara.core.designsystem.theme.darkGreen,
-                focusedContainerColor = com.whakaara.core.designsystem.theme.primaryGreen,
-                unfocusedContainerColor = com.whakaara.core.designsystem.theme.primaryGreen
+                focusedBorderColor = darkGreen,
+                unfocusedBorderColor = primaryGreen,
+                focusedTextColor = darkGreen,
+                unfocusedTextColor = darkGreen,
+                focusedContainerColor = primaryGreen,
+                unfocusedContainerColor = primaryGreen
             )
         )
         Text(text = label)

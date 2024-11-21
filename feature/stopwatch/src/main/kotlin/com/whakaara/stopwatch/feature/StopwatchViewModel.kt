@@ -1,4 +1,4 @@
-package com.whakaara.stopwatch
+package com.whakaara.stopwatch.feature
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel

@@ -45,14 +45,24 @@
                 android:resource="@xml/shortcuts" />
 
         </activity>
+
         <activity
             android:name=".activities.FullScreenNotificationActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Whakaara"
             android:showForAllUsers="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.FullScreenNotificationActivity" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="app" android:host="fullscreennotificationactivity" />
+            </intent-filter>
+
+        </activity>
 
         <activity android:name=".activities.WidgetConfig"
             android:exported="true"

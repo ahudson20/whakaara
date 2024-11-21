@@ -23,7 +23,6 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import com.app.whakaara.R
 import com.app.whakaara.activities.FullScreenNotificationActivity
 import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utility.GeneralUtils
@@ -37,7 +36,6 @@ import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_REQUEST_COD
 import com.whakaara.core.constants.NotificationUtilsConstants.MEDIA_SERVICE_EXCEPTION_TAG
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
-import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER
 import com.whakaara.core.constants.NotificationUtilsConstants.PLAY
 import com.whakaara.core.constants.NotificationUtilsConstants.SERVICE_ACTION
 import com.whakaara.core.constants.NotificationUtilsConstants.STOP
@@ -75,9 +73,9 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
     @Inject
     lateinit var vibrator: Vibrator
 
-    @Inject
-    @Named("timer")
-    lateinit var timerNotificationBuilder: NotificationCompat.Builder
+//    @Inject
+//    @Named("timer")
+//    lateinit var timerNotificationBuilder: NotificationCompat.Builder
 
     @Inject
     @Named("alarm")
@@ -120,7 +118,7 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             preferencesRepository.getPreferences()
         }
 
-        if (data.getInt(NOTIFICATION_TYPE) == NOTIFICATION_TYPE_ALARM) {
+//        if (data.getInt(NOTIFICATION_TYPE) == NOTIFICATION_TYPE_ALARM) {
             val alarm = runBlocking {
                 alarmRepository.getAlarmById(
                     id = UUID.fromString(data.getString(INTENT_ALARM_ID))
@@ -152,20 +150,21 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
             )
 
             if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
-        } else {
-            setupMediaPlayer(
-                soundPath = preferences.timerSoundPath,
-                duration = preferences.timerGradualSoundDuration.inMillis()
-            )
-
-            startForeground(
-                FOREGROUND_SERVICE_ID,
-                createTimerNotification(),
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-            )
-
-            if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
-        }
+//        }
+//        else {
+//            setupMediaPlayer(
+//                soundPath = preferences.timerSoundPath,
+//                duration = preferences.timerGradualSoundDuration.inMillis()
+//            )
+//
+//            startForeground(
+//                FOREGROUND_SERVICE_ID,
+//                createTimerNotification(),
+//                ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+//            )
+//
+//            if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
+//        }
 
         if (!powerManager.isInteractive) {
             wakeLock = powerManager.run {
@@ -294,42 +293,42 @@ class MediaPlayerService : LifecycleService(), MediaPlayer.OnPreparedListener {
         }.build()
     }
 
-    private fun createTimerNotification(): Notification {
-        val fullScreenIntent = Intent().apply {
-            setClass(applicationContext, FullScreenNotificationActivity::class.java)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_TIMER)
-
-            /**
-             * Unsure why I need to set an action here.
-             * If I don't, I can't get the extras in the activity this intent starts.
-             * https://stackoverflow.com/questions/15343840/intent-extras-missing-when-activity-started#:~:text=We%20stumbled%20upon,might%20fix%20it.
-             * */
-            action = INTENT_EXTRA_ACTION_ARBITRARY
-        }
-        val fullScreenPendingIntent = PendingIntentUtils.getActivity(
-            applicationContext,
-            INTENT_REQUEST_CODE,
-            fullScreenIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val intent = Intent(applicationContext, MediaServiceReceiver::class.java).apply {
-            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM)
-        }
-        val pendingIntent = PendingIntentUtils.getBroadcast(
-            context = applicationContext,
-            id = INTENT_REQUEST_CODE,
-            intent = intent,
-            flag = PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        return timerNotificationBuilder.apply {
-            addAction(R.drawable.baseline_cancel_24, applicationContext.getString(R.string.timer_notification_action_label), pendingIntent)
-            setFullScreenIntent(fullScreenPendingIntent, true)
-            setDeleteIntent(pendingIntent)
-            setContentText(applicationContext.getString(R.string.timer_notification_content_text))
-        }.build()
-    }
+//    private fun createTimerNotification(): Notification {
+//        val fullScreenIntent = Intent().apply {
+//            setClass(applicationContext, FullScreenNotificationActivity::class.java)
+//            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_TIMER)
+//
+//            /**
+//             * Unsure why I need to set an action here.
+//             * If I don't, I can't get the extras in the activity this intent starts.
+//             * https://stackoverflow.com/questions/15343840/intent-extras-missing-when-activity-started#:~:text=We%20stumbled%20upon,might%20fix%20it.
+//             * */
+//            action = INTENT_EXTRA_ACTION_ARBITRARY
+//        }
+//        val fullScreenPendingIntent = PendingIntentUtils.getActivity(
+//            applicationContext,
+//            INTENT_REQUEST_CODE,
+//            fullScreenIntent,
+//            PendingIntent.FLAG_UPDATE_CURRENT
+//        )
+//
+//        val intent = Intent(applicationContext, MediaServiceReceiver::class.java).apply {
+//            putExtra(NOTIFICATION_TYPE, NOTIFICATION_TYPE_ALARM)
+//        }
+//        val pendingIntent = PendingIntentUtils.getBroadcast(
+//            context = applicationContext,
+//            id = INTENT_REQUEST_CODE,
+//            intent = intent,
+//            flag = PendingIntent.FLAG_UPDATE_CURRENT
+//        )
+//        return timerNotificationBuilder.apply {
+//            addAction(R.drawable.baseline_cancel_24, applicationContext.getString(R.string.timer_notification_action_label), pendingIntent)
+//            setFullScreenIntent(fullScreenPendingIntent, true)
+//            setDeleteIntent(pendingIntent)
+//            setContentText(applicationContext.getString(R.string.timer_notification_content_text))
+//        }.build()
+//    }
 
     override fun onCreate() {
         super.onCreate()

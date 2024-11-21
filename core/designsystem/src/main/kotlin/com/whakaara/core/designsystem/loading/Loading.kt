@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.loading
+package com.whakaara.core.designsystem.loading
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

@@ -9,7 +9,7 @@ sealed class RootScreen(val route: String) {
     data object Onboarding : RootScreen("onboarding_root")
 
     // TODO: settings feature module?
-//    data object Settings: RootScreen("settings_root")
+    data object Settings: RootScreen("settings_root")
 }
 
 sealed class LeafScreen(val route: String) {

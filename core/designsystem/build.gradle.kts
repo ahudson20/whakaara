@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.glance.material3)
+    implementation(libs.androidx.material.icons.extended)
 
     testImplementation(libs.junit)
 

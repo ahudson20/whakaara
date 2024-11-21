@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "net.vbuild.verwoodpages.stopwatch"
+    namespace = "com.whakaara.feature.stopwatch"
 }
 
 dependencies {

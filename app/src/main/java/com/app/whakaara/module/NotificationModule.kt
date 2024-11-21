@@ -138,27 +138,27 @@ class NotificationModule {
         alarmManager: AlarmManager
     ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
 
-    @Provides
-    @Singleton
-    fun providesTimerManagerWrapper(
-        app: Application,
-        alarmManager: AlarmManager,
-        notificationManager: NotificationManager,
-        @Named("timer")
-        timerNotificationBuilder: NotificationCompat.Builder,
-        countDownTimerUtil: CountDownTimerUtil,
-        preferencesDataStore: PreferencesDataStoreRepository,
-        @ApplicationScope
-        coroutineScope: CoroutineScope
-    ): TimerManagerWrapper = TimerManagerWrapper(
-        app,
-        alarmManager,
-        notificationManager,
-        timerNotificationBuilder,
-        countDownTimerUtil,
-        preferencesDataStore,
-        coroutineScope
-    )
+//    @Provides
+//    @Singleton
+//    fun providesTimerManagerWrapper(
+//        app: Application,
+//        alarmManager: AlarmManager,
+//        notificationManager: NotificationManager,
+//        @Named("timer")
+//        timerNotificationBuilder: NotificationCompat.Builder,
+//        countDownTimerUtil: CountDownTimerUtil,
+//        preferencesDataStore: PreferencesDataStoreRepository,
+//        @ApplicationScope
+//        coroutineScope: CoroutineScope
+//    ): TimerManagerWrapper = TimerManagerWrapper(
+//        app,
+//        alarmManager,
+//        notificationManager,
+//        timerNotificationBuilder,
+//        countDownTimerUtil,
+//        preferencesDataStore,
+//        coroutineScope
+//    )
 
     @Provides
     @Singleton

@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.floatingactionbutton
+package com.whakaara.core.designsystem
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandHorizontally
@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.app.whakaara.R
+import com.whakaara.core.designsystem.theme.BooleanPreviewProvider
 import com.whakaara.core.designsystem.theme.Shapes
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 
@@ -175,7 +175,7 @@ fun FloatingActionButtonStopPreview() {
 @Preview
 @Composable
 fun FloatingActionButtonPlayPausePreview(
-    @PreviewParameter(com.whakaara.core.designsystem.theme.BooleanPreviewProvider::class) isPlaying: Boolean
+    @PreviewParameter(BooleanPreviewProvider::class) isPlaying: Boolean
 ) {
     WhakaaraTheme {
         FloatingActionButtonPlayPause(

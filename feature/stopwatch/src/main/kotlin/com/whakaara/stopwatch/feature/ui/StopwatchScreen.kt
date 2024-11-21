@@ -1,4 +1,4 @@
-package com.whakaara.stopwatch.ui
+package com.whakaara.stopwatch.feature.ui
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

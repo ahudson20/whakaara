@@ -7,4 +7,13 @@
     <string name="notification_timer_play_action_label">Resume</string>
     <string name="notification_timer_pause_action_label">Pause</string>
     <string name="notification_timer_stop_action_label">Stop</string>
+
+    <string name="timer_notification_action_label">Stop</string>
+    <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>
+
+    <string name="timer_screen_hour_label">Hours</string>
+    <string name="timer_screen_minutes_label">Minutes</string>
+    <string name="timer_screen_seconds_label">Seconds</string>
+    <string name="timer_screen_paused">Paused</string>
+    <string name="timer_notification_content_title">Timer Complete</string>
 </resources>

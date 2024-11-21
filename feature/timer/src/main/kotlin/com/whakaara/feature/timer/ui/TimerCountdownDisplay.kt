@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.clock
+package com.whakaara.feature.timer.ui
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -29,7 +29,6 @@ import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
 import com.whakaara.core.designsystem.theme.Spacings.spaceXxSmall
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
-import com.whakaara.core.designsystem.theme.primaryGreen
 
 @Composable
 fun TimerCountdownDisplay(

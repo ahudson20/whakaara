@@ -40,10 +40,10 @@
 
     <string name="floating_action_button_icon_description">Create alarm</string>
     <string name="delete_icon_content_description">Delete icon</string>
-    <string name="pause_timer_icon_content_description">Pause timer icon button</string>
-    <string name="start_timer_icon_content_description">Start timer icon button</string>
-    <string name="stop_timer_icon_content_description">Stop timer icon button</string>
-    <string name="lap_reset_icon_content_description">Extra fab icon button</string>
+<!--    <string name="pause_timer_icon_content_description">Pause timer icon button</string>-->
+<!--    <string name="start_timer_icon_content_description">Start timer icon button</string>-->
+<!--    <string name="stop_timer_icon_content_description">Stop timer icon button</string>-->
+<!--    <string name="lap_reset_icon_content_description">Extra fab icon button</string>-->
     <string name="system_time_icon_content_description">System time</string>
     <string name="settings_icon_content_description">Alarm settings icon</string>
     <string name="timer_countdown_finish_time_icon_content_description">Timer finish time icon</string>
@@ -93,13 +93,13 @@
     <string name="settings_screen_gradual_volume_increase_title">Gentle rise</string>
     <string name="settings_screen_gradual_volume_increase_subtitle">Gradually increase volume</string>
 
-    <string name="timer_screen_hour_label">Hours</string>
-    <string name="timer_screen_minutes_label">Minutes</string>
-    <string name="timer_screen_seconds_label">Seconds</string>
-    <string name="timer_notification_content_title">Timer Complete</string>
-    <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>
-    <string name="timer_notification_action_label">Stop</string>
-    <string name="timer_screen_paused">Paused</string>
+<!--    <string name="timer_screen_hour_label">Hours</string>-->
+<!--    <string name="timer_screen_minutes_label">Minutes</string>-->
+<!--    <string name="timer_screen_seconds_label">Seconds</string>-->
+<!--    <string name="timer_notification_content_title">Timer Complete</string>-->
+<!--    <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>-->
+<!--    <string name="timer_notification_action_label">Stop</string>-->
+<!--    <string name="timer_screen_paused">Paused</string>-->
 
     <string name="shortcut_alarm_short_label">Alarm</string>
     <string name="shortcut_alarm_long_label">Create alarm</string>

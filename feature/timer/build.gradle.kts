@@ -7,12 +7,12 @@ plugins {
 }
 
 android {
-    namespace = "net.vbuild.verwoodpages.timer"
+    namespace = "com.whakaara.feature.timer"
 }
 
 dependencies {
     // Modules
-    modules(Modules.coreCommon)
+    modules(Modules.coreCommon, Modules.coreDesignSystem)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3)
@@ -20,6 +20,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.junit)
 

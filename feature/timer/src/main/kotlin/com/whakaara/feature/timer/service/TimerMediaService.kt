@@ -23,15 +23,13 @@ import androidx.lifecycle.LifecycleService
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants
 import com.whakaara.core.constants.NotificationUtilsConstants
-import com.whakaara.core.di.IoDispatcher
 import com.whakaara.data.preferences.PreferencesRepository
+import com.whakaara.feature.timer.R
 import com.whakaara.feature.timer.reciever.TimerMediaServiceReceiver
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.VibrationPattern
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
-import net.vbuild.verwoodpages.timer.R
 import java.util.TimerTask
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -52,10 +50,6 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
     @Inject
     lateinit var powerManager: PowerManager
-
-    @Inject
-    @IoDispatcher
-    lateinit var iODispatcher: CoroutineDispatcher
 
     @Inject
     lateinit var volumeShaperConfiguration: VolumeShaper.Configuration.Builder

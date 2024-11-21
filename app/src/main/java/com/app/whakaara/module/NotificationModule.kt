@@ -2,10 +2,8 @@ package com.app.whakaara.module
 
 import android.app.AlarmManager
 import android.app.Application
-import android.app.Notification
 import android.app.Notification.CATEGORY_ALARM
 import android.app.Notification.CATEGORY_STOPWATCH
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
 import android.content.Context
@@ -15,7 +13,6 @@ import com.app.whakaara.R
 import com.app.whakaara.logic.AlarmManagerWrapper
 import com.app.whakaara.logic.CountDownTimerUtil
 import com.app.whakaara.logic.StopwatchManagerWrapper
-import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.constants.NotificationUtilsConstants.CHANNEL_ID
 import com.whakaara.core.di.ApplicationScope
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
@@ -31,32 +28,32 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NotificationModule {
-    @Provides
-    @Singleton
-    fun provideNotificationChannel() =
-        NotificationChannel(
-            CHANNEL_ID,
-            NotificationUtilsConstants.CHANNEL_NAME,
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            enableLights(true)
-            setBypassDnd(true)
-            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-            setShowBadge(true)
-            setSound(null, null)
-        }
-
-    @Provides
-    @Singleton
-    fun provideNotificationManager(
-        @ApplicationContext
-        context: Context,
-        channel: NotificationChannel
-    ): NotificationManager {
-        return (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
-            createNotificationChannel(channel)
-        }
-    }
+//    @Provides
+//    @Singleton
+//    fun provideNotificationChannel() =
+//        NotificationChannel(
+//            CHANNEL_ID,
+//            NotificationUtilsConstants.CHANNEL_NAME,
+//            NotificationManager.IMPORTANCE_HIGH
+//        ).apply {
+//            enableLights(true)
+//            setBypassDnd(true)
+//            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+//            setShowBadge(true)
+//            setSound(null, null)
+//        }
+//
+//    @Provides
+//    @Singleton
+//    fun provideNotificationManager(
+//        @ApplicationContext
+//        context: Context,
+//        channel: NotificationChannel
+//    ): NotificationManager {
+//        return (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).apply {
+//            createNotificationChannel(channel)
+//        }
+//    }
 
     @Provides
     @Named("alarm")
@@ -75,21 +72,21 @@ class NotificationModule {
         }
     }
 
-    @Provides
-    @Named("timer")
-    fun provideNotificationBuilderForTimer(
-        @ApplicationContext
-        context: Context
-    ): NotificationCompat.Builder {
-        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
-            color = Color.WHITE
-            setSmallIcon(R.drawable.baseline_access_time_24)
-            setCategory(CATEGORY_ALARM)
-            setAutoCancel(false)
-            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            setContentTitle(context.getString(R.string.timer_notification_content_title))
-        }
-    }
+//    @Provides
+//    @Named("timer")
+//    fun provideNotificationBuilderForTimer(
+//        @ApplicationContext
+//        context: Context
+//    ): NotificationCompat.Builder {
+//        return NotificationCompat.Builder(context, CHANNEL_ID).apply {
+//            color = Color.WHITE
+//            setSmallIcon(R.drawable.baseline_access_time_24)
+//            setCategory(CATEGORY_ALARM)
+//            setAutoCancel(false)
+//            setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
+//            setContentTitle(context.getString(R.string.timer_notification_content_title))
+//        }
+//    }
 
     @Provides
     @Named("stopwatch")

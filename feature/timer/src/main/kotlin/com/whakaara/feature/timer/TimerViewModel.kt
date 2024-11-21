@@ -37,7 +37,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import net.vbuild.verwoodpages.timer.R
 import java.util.Calendar
 import javax.inject.Inject
 import javax.inject.Named

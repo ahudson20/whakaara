@@ -1,4 +1,4 @@
-package com.app.whakaara.module
+package com.whakaara.core.di
 
 import android.app.Application
 import android.app.Service

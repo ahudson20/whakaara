@@ -16,4 +16,6 @@
     <string name="timer_screen_seconds_label">Seconds</string>
     <string name="timer_screen_paused">Paused</string>
     <string name="timer_notification_content_title">Timer Complete</string>
+
+    <string name="timer_countdown_finish_time_icon_content_description">Timer finish time icon</string>
 </resources>

@@ -11,7 +11,6 @@ import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
 import com.app.whakaara.logic.AlarmManagerWrapper
-import com.app.whakaara.logic.CountDownTimerUtil
 import com.app.whakaara.logic.StopwatchManagerWrapper
 import com.whakaara.core.constants.NotificationUtilsConstants.CHANNEL_ID
 import com.whakaara.core.di.ApplicationScope
@@ -175,7 +174,7 @@ class NotificationModule {
         preferencesDataStore
     )
 
-    @Provides
-    @Singleton
-    fun providesCountDownTimerUtil(): CountDownTimerUtil = CountDownTimerUtil()
+//    @Provides
+//    @Singleton
+//    fun providesCountDownTimerUtil(): CountDownTimerUtil = CountDownTimerUtil()
 }

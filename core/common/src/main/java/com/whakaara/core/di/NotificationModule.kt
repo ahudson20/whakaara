@@ -4,6 +4,7 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import com.whakaara.core.CountDownTimerUtil
 import com.whakaara.core.constants.NotificationUtilsConstants
 import dagger.Module
 import dagger.Provides
@@ -41,4 +42,8 @@ class NotificationModule {
             createNotificationChannel(channel)
         }
     }
+
+    @Provides
+    @Singleton
+    fun providesCountDownTimerUtil(): CountDownTimerUtil = CountDownTimerUtil()
 }

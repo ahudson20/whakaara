@@ -1,11 +1,11 @@
-package com.app.whakaara.clock
+package com.whakaara.feature.stopwatch
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.ui.clock.StopwatchLapList
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.ui.StopwatchLapList
 import com.whakaara.model.stopwatch.Lap
 import org.junit.Rule
 import org.junit.Test

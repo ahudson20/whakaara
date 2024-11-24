@@ -57,10 +57,10 @@ fun TimerScreen(
     updateSeconds: (newValue: String) -> Unit,
     startTimer: () -> Unit,
     stopTimer: () -> Unit,
-    restartTimer: (autoRestartTimer: Boolean) -> Unit,
+    restartTimer: () -> Unit, //autoRestartTimer: Boolean
     pauseTimer: () -> Unit,
     timeFormat: TimeFormat,
-    autoRestartTimer: Boolean
+//    autoRestartTimer: Boolean
 ) {
     val focusManager = LocalFocusManager.current
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
@@ -113,7 +113,7 @@ fun TimerScreen(
                     }
                 },
                 onExtraButtonClicked = {
-                    restartTimer(autoRestartTimer)
+                    restartTimer() //autoRestartTimer
                 }
             )
         },
@@ -222,8 +222,8 @@ fun TimerPreview() {
             pauseTimer = {},
             stopTimer = {},
             restartTimer = {},
-            timeFormat = TimeFormat.TWELVE_HOURS,
-            autoRestartTimer = true
+            timeFormat = TimeFormat.TWELVE_HOURS
+//            autoRestartTimer = true
         )
     }
 }

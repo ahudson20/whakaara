@@ -1,12 +1,22 @@
 package com.whakaara.feature.stopwatch
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.whakaara.stopwatch.feature.ui.StopwatchScreen
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.whakaara.feature.stopwatch.ui.StopwatchScreen
 
 @Composable
 fun StopwatchRoute(
     viewModel: StopwatchViewModel = hiltViewModel()
 ) {
-    StopwatchScreen()
+    val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
+
+    StopwatchScreen(
+        stopwatchState = stopwatchState,
+        onStart = viewModel::startStopwatch,
+        onPause = viewModel::pauseStopwatch,
+        onStop = viewModel::resetStopwatch,
+        onLap = viewModel::lapStopwatch
+    )
 }

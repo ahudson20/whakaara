@@ -1,13 +1,13 @@
-package com.app.whakaara.clock
+package com.whakaara.feature.stopwatch
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.ui.clock.Stopwatch
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.ui.Stopwatch
+import com.whakaara.model.stopwatch.StopwatchState
 import org.junit.Rule
 import org.junit.Test
 

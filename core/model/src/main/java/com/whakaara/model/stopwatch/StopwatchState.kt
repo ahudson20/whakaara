@@ -1,9 +1,8 @@
-package com.app.whakaara.state
+package com.whakaara.model.stopwatch
 
 import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_STARTING_TIME
 import com.whakaara.core.constants.GeneralConstants.ZERO_MILLIS
 import com.whakaara.model.datastore.StopwatchDataStore
-import com.whakaara.model.stopwatch.Lap
 
 data class StopwatchState(
     val timeMillis: Long = ZERO_MILLIS,

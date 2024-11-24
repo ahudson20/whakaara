@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.clock
+package com.whakaara.feature.stopwatch.ui
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +29,6 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.whakaara.core.designsystem.theme.FontScalePreviews
-import com.whakaara.core.designsystem.theme.Shapes
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.Spacings.spaceNone
 import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
@@ -37,8 +36,7 @@ import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
 import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
-import com.whakaara.core.designsystem.theme.lightGreen
-import com.app.whakaara.utility.DateUtils
+import com.whakaara.feature.stopwatch.util.DateUtils
 import com.whakaara.model.stopwatch.Lap
 import java.util.Locale
 

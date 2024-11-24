@@ -3,10 +3,6 @@ package com.app.whakaara.logic
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.whakaara.state.AlarmState
-import com.whakaara.model.preferences.PreferencesState
-import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.state.asExternalModel
-import com.app.whakaara.state.asInternalModel
 import com.app.whakaara.utility.DateUtils.Companion.getAlarmTimeFormatted
 import com.whakaara.core.di.IoDispatcher
 import com.whakaara.core.di.MainDispatcher
@@ -15,13 +11,13 @@ import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -34,7 +30,7 @@ class MainViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
     private val alarmManagerWrapper: AlarmManagerWrapper,
 //    private val timerManagerWrapper: TimerManagerWrapper,
-    private val stopwatchManagerWrapper: StopwatchManagerWrapper,
+//    private val stopwatchManagerWrapper: StopwatchManagerWrapper,
     private val preferencesDatastore: PreferencesDataStoreRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
@@ -48,7 +44,7 @@ class MainViewModel @Inject constructor(
     val preferencesUiState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
     // stopwatch
-    val stopwatchState: StateFlow<StopwatchState> = stopwatchManagerWrapper.stopwatchState.asStateFlow()
+//    val stopwatchState: StateFlow<StopwatchState> = stopwatchManagerWrapper.stopwatchState.asStateFlow()
 
     // timer
 //    val timerState: StateFlow<TimerState> = timerManagerWrapper.timerState.asStateFlow()
@@ -208,57 +204,57 @@ class MainViewModel @Inject constructor(
 
     //endregion
 
-    //region stopwatch
-    fun startStopwatch() {
-        stopwatchManagerWrapper.startStopwatch()
-    }
-
-    fun pauseStopwatch() {
-        stopwatchManagerWrapper.pauseStopwatch()
-    }
-
-    fun resetStopwatch() = viewModelScope.launch(ioDispatcher) {
-        stopwatchManagerWrapper.resetStopwatch()
-        preferencesDatastore.clearStopwatchState()
-    }
-
-    fun lapStopwatch() {
-        stopwatchManagerWrapper.lapStopwatch()
-    }
-
-    fun saveStopwatchStateForRecreation() = viewModelScope.launch(ioDispatcher) {
-        if (stopwatchState.value.isActive || stopwatchState.value.isPaused) {
-            preferencesDatastore.saveStopwatchState(
-                state = stopwatchState.value.asInternalModel()
-            )
-        }
-    }
-
-    fun recreateStopwatch() = viewModelScope.launch(mainDispatcher) {
-        if (stopwatchState.value == StopwatchState()) {
-            val state = preferencesDatastore.readStopwatchState().first().asExternalModel()
-            if (state.isActive) {
-                stopwatchManagerWrapper.recreateStopwatchActive(state = state)
-                preferencesDatastore.clearStopwatchState()
-            } else if (state.isPaused) {
-                stopwatchManagerWrapper.recreateStopwatchPaused(state = state)
-                preferencesDatastore.clearStopwatchState()
-            }
-        }
-    }
-
-    fun startStopwatchNotification() {
-        if (stopwatchState.value.isActive) {
-            stopwatchManagerWrapper.createStopwatchNotification()
-        } else if (stopwatchState.value.isPaused) {
-            stopwatchManagerWrapper.pauseStopwatchNotification()
-        }
-    }
-
-    fun cancelStopwatchNotification() {
-        stopwatchManagerWrapper.cancelNotification()
-    }
-    //endregion
+//    //region stopwatch
+//    fun startStopwatch() {
+//        stopwatchManagerWrapper.startStopwatch()
+//    }
+//
+//    fun pauseStopwatch() {
+//        stopwatchManagerWrapper.pauseStopwatch()
+//    }
+//
+//    fun resetStopwatch() = viewModelScope.launch(ioDispatcher) {
+//        stopwatchManagerWrapper.resetStopwatch()
+//        preferencesDatastore.clearStopwatchState()
+//    }
+//
+//    fun lapStopwatch() {
+//        stopwatchManagerWrapper.lapStopwatch()
+//    }
+//
+//    fun saveStopwatchStateForRecreation() = viewModelScope.launch(ioDispatcher) {
+//        if (stopwatchState.value.isActive || stopwatchState.value.isPaused) {
+//            preferencesDatastore.saveStopwatchState(
+//                state = stopwatchState.value.asInternalModel()
+//            )
+//        }
+//    }
+//
+//    fun recreateStopwatch() = viewModelScope.launch(mainDispatcher) {
+//        if (stopwatchState.value == StopwatchState()) {
+//            val state = preferencesDatastore.readStopwatchState().first().asExternalModel()
+//            if (state.isActive) {
+//                stopwatchManagerWrapper.recreateStopwatchActive(state = state)
+//                preferencesDatastore.clearStopwatchState()
+//            } else if (state.isPaused) {
+//                stopwatchManagerWrapper.recreateStopwatchPaused(state = state)
+//                preferencesDatastore.clearStopwatchState()
+//            }
+//        }
+//    }
+//
+//    fun startStopwatchNotification() {
+//        if (stopwatchState.value.isActive) {
+//            stopwatchManagerWrapper.createStopwatchNotification()
+//        } else if (stopwatchState.value.isPaused) {
+//            stopwatchManagerWrapper.pauseStopwatchNotification()
+//        }
+//    }
+//
+//    fun cancelStopwatchNotification() {
+//        stopwatchManagerWrapper.cancelNotification()
+//    }
+//    //endregion
 
     //region timer
 //    fun updateInputHours(newValue: String) {

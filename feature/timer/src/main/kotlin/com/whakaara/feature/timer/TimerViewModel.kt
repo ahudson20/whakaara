@@ -19,11 +19,13 @@ import com.whakaara.core.di.ApplicationScope
 import com.whakaara.core.di.IoDispatcher
 import com.whakaara.core.di.MainDispatcher
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
+import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.data.timer.TimerRepository
 import com.whakaara.feature.timer.reciever.TimerReceiver
 import com.whakaara.feature.timer.service.TimerMediaService
 import com.whakaara.feature.timer.util.DateUtils
 import com.whakaara.model.datastore.TimerStateDataStore
+import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.timer.TimerState
 import com.whakaara.model.timer.TimerStateReceiver
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +37,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -52,6 +55,7 @@ class TimerViewModel @Inject constructor(
     private val countDownTimerUtil: CountDownTimerUtil,
     private val preferencesDatastore: PreferencesDataStoreRepository,
     private val timerRepository: TimerRepository,
+    private val preferencesRepository: PreferencesRepository,
     @ApplicationScope private val coroutineScope: CoroutineScope,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher
@@ -59,8 +63,19 @@ class TimerViewModel @Inject constructor(
 
     private val _timerState: MutableStateFlow<TimerState> = MutableStateFlow(TimerState())
     val timerState: StateFlow<TimerState> = _timerState.asStateFlow()
+
+    private val _preferences: MutableStateFlow<PreferencesState> = MutableStateFlow(PreferencesState())
+    val preferences: StateFlow<PreferencesState> = _preferences.asStateFlow()
+
     init {
+        collectPreferencesState()
         collectTimerStateFromReceiver()
+    }
+
+    private fun collectPreferencesState() = viewModelScope.launch {
+        preferencesRepository.getPreferencesFlow().flowOn(ioDispatcher).collect { preferences ->
+            _preferences.value = PreferencesState(preferences = preferences, isReady = true)
+        }
     }
 
     private fun collectTimerStateFromReceiver() = viewModelScope.launch {
@@ -173,8 +188,8 @@ class TimerViewModel @Inject constructor(
         )
     }
 
-    fun restartTimer(autoRestartTimer: Boolean) {
-        if (autoRestartTimer) {
+    fun restartTimer() {
+        if (_preferences.value.preferences.autoRestartTimer) {
             cancelNotification()
             cancelTimerAlarm()
             countDownTimerUtil.cancel()

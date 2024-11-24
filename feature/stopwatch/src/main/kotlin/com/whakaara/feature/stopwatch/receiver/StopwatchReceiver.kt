@@ -1,27 +1,26 @@
-package com.app.whakaara.receiver
+package com.whakaara.feature.stopwatch.receiver
 
 import android.content.Context
 import android.content.Intent
-import com.app.whakaara.logic.StopwatchManagerWrapper
-import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.state.asExternalModel
 import com.whakaara.core.HiltBroadcastReceiver
 import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_PAUSE
 import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_START
 import com.whakaara.core.constants.NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_STOP
+import com.whakaara.core.di.MainDispatcher
 import com.whakaara.core.goAsync
-import com.whakaara.data.datastore.PreferencesDataStoreRepository
+import com.whakaara.data.stopwatch.StopwatchRepository
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class StopwatchReceiver : HiltBroadcastReceiver() {
     @Inject
-    lateinit var stopwatchManagerWrapper: StopwatchManagerWrapper
+    @MainDispatcher
+    lateinit var mainDispatcher: CoroutineDispatcher
 
     @Inject
-    lateinit var preferencesDatastore: PreferencesDataStoreRepository
+    lateinit var repository: StopwatchRepository
 
     override fun onReceive(
         context: Context,
@@ -31,15 +30,18 @@ class StopwatchReceiver : HiltBroadcastReceiver() {
         val actionsList = listOf(STOPWATCH_RECEIVER_ACTION_START, STOPWATCH_RECEIVER_ACTION_PAUSE, STOPWATCH_RECEIVER_ACTION_STOP)
         if (!actionsList.contains(intent.action)) return
 
-        goAsync {
-            val state = preferencesDatastore.readStopwatchState().first()
+        goAsync(
+            coroutineContext = mainDispatcher
+        ) {
             when (intent.action) {
                 STOPWATCH_RECEIVER_ACTION_START -> {
-                    startStopwatch(state = state.asExternalModel())
+                    startStopwatch()
                 }
+
                 STOPWATCH_RECEIVER_ACTION_PAUSE -> {
-                    pauseStopwatch(state = state.asExternalModel())
+                    pauseStopwatch()
                 }
+
                 STOPWATCH_RECEIVER_ACTION_STOP -> {
                     stopStopwatch()
                 }
@@ -47,24 +49,15 @@ class StopwatchReceiver : HiltBroadcastReceiver() {
         }
     }
 
-    private fun startStopwatch(state: StopwatchState) {
-        with(stopwatchManagerWrapper) {
-            recreateStopwatchActiveFromReceiver(state = state)
-            cancelNotification()
-            createStopwatchNotification()
-        }
+    private fun startStopwatch() {
+        repository.startStopwatch()
     }
 
-    private fun pauseStopwatch(state: StopwatchState) {
-        with(stopwatchManagerWrapper) {
-            recreateStopwatchPausedFromReceiver(state = state)
-            cancelNotification()
-            pauseStopwatchNotification()
-        }
+    private fun pauseStopwatch() {
+        repository.pauseStopwatch()
     }
 
     private suspend fun stopStopwatch() {
-        stopwatchManagerWrapper.resetStopwatch()
-        preferencesDatastore.clearStopwatchState()
+        repository.stopStopwatch()
     }
 }

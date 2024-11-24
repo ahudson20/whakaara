@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.clock
+package com.whakaara.feature.stopwatch.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,14 +15,14 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.ui.floatingactionbutton.FloatingActionButtonRow
+import com.whakaara.core.designsystem.FloatingActionButtonRow
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.Spacings.spaceNone
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.stopwatch.Lap
+import com.whakaara.model.stopwatch.StopwatchState
 
 @Composable
 fun Stopwatch(

@@ -1,4 +1,4 @@
-package com.app.whakaara.screens
+package com.whakaara.feature.stopwatch
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.assertIsDisplayed
@@ -6,9 +6,9 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.state.StopwatchState
-import com.app.whakaara.ui.screens.StopwatchScreen
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.ui.StopwatchScreen
+import com.whakaara.model.stopwatch.StopwatchState
 import org.junit.Rule
 import org.junit.Test
 

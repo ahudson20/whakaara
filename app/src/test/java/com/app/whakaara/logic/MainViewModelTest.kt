@@ -3,16 +3,15 @@ package com.app.whakaara.logic
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
 import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.StopwatchState
 import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.model.alarm.Alarm
-import com.whakaara.model.datastore.StopwatchDataStore
-import com.whakaara.model.datastore.TimerStateDataStore
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
 import com.whakaara.model.preferences.TimeFormat
+import com.whakaara.model.stopwatch.StopwatchState
+import com.whakaara.model.timer.TimerState
 import com.whakaara.test.MainDispatcherRule
 import com.whakaara.test.MockUtil
 import io.mockk.Runs
@@ -54,8 +53,8 @@ class MainViewModelTest {
     private var repository: AlarmRepository = mockk(relaxed = true)
     private var preferencesRepository: PreferencesRepository = mockk(relaxed = true)
     private var alarmManagerWrapper: AlarmManagerWrapper = mockk(relaxed = true)
-    private var timerManagerWrapper: TimerManagerWrapper = mockk(relaxed = true)
-    private var stopwatchManagerWrapper: StopwatchManagerWrapper = mockk(relaxed = true)
+//    private var timerManagerWrapper: TimerManagerWrapper = mockk(relaxed = true)
+//    private var stopwatchManagerWrapper: StopwatchManagerWrapper = mockk(relaxed = true)
     private var preferencesDataStore: PreferencesDataStoreRepository = mockk(relaxed = true)
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
@@ -110,36 +109,36 @@ class MainViewModelTest {
         every { alarmManagerWrapper.updateWidget() } just Runs
         every { alarmManagerWrapper.cancelUpcomingAlarm(any(), any()) } just Runs
 
-        every { stopwatchManagerWrapper.startStopwatch() } just Runs
-        every { stopwatchManagerWrapper.pauseStopwatch() } just Runs
-        every { stopwatchManagerWrapper.resetStopwatch() } just Runs
-        every { stopwatchManagerWrapper.lapStopwatch() } just Runs
-        every { stopwatchManagerWrapper.createStopwatchNotification() } just Runs
-        every { stopwatchManagerWrapper.pauseStopwatchNotification() } just Runs
-        every { stopwatchManagerWrapper.cancelNotification() } just Runs
+//        every { stopwatchManagerWrapper.startStopwatch() } just Runs
+//        every { stopwatchManagerWrapper.pauseStopwatch() } just Runs
+//        every { stopwatchManagerWrapper.resetStopwatch() } just Runs
+//        every { stopwatchManagerWrapper.lapStopwatch() } just Runs
+//        every { stopwatchManagerWrapper.createStopwatchNotification() } just Runs
+//        every { stopwatchManagerWrapper.pauseStopwatchNotification() } just Runs
+//        every { stopwatchManagerWrapper.cancelNotification() } just Runs
 
         coEvery { preferencesDataStore.saveStopwatchState(any()) } just Runs
         coEvery { preferencesDataStore.clearStopwatchState() } just Runs
         coEvery { preferencesDataStore.saveTimerData(any()) } just Runs
 
-        every { timerManagerWrapper.updateInputHours(any()) } just Runs
-        every { timerManagerWrapper.updateInputMinutes(any()) } just Runs
-        every { timerManagerWrapper.updateInputSeconds(any()) } just Runs
-        every { timerManagerWrapper.startTimer() } just Runs
-        every { timerManagerWrapper.pauseTimer() } just Runs
-        every { timerManagerWrapper.restartTimer(any()) } just Runs
-        every { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) } just Runs
-        every { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) } just Runs
-        every { timerManagerWrapper.pauseTimerNotificationCountdown() } just Runs
-        every { timerManagerWrapper.startTimerNotificationCountdown(any()) } just Runs
-        every { timerManagerWrapper.cancelNotification() } just Runs
+//        every { timerManagerWrapper.updateInputHours(any()) } just Runs
+//        every { timerManagerWrapper.updateInputMinutes(any()) } just Runs
+//        every { timerManagerWrapper.updateInputSeconds(any()) } just Runs
+//        every { timerManagerWrapper.startTimer() } just Runs
+//        every { timerManagerWrapper.pauseTimer() } just Runs
+//        every { timerManagerWrapper.restartTimer(any()) } just Runs
+//        every { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) } just Runs
+//        every { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) } just Runs
+//        every { timerManagerWrapper.pauseTimerNotificationCountdown() } just Runs
+//        every { timerManagerWrapper.startTimerNotificationCountdown(any()) } just Runs
+//        every { timerManagerWrapper.cancelNotification() } just Runs
 
         viewModel = MainViewModel(
             repository,
             preferencesRepository,
             alarmManagerWrapper,
-            timerManagerWrapper,
-            stopwatchManagerWrapper,
+//            timerManagerWrapper,
+//            stopwatchManagerWrapper,
             preferencesDataStore,
             testDispatcher,
             testDispatcherMain
@@ -508,406 +507,406 @@ class MainViewModelTest {
     //endregion
 
     //region stopwatch
-    @Test
-    fun `start stopwatch`() = runTest {
-        // Given + When
-        viewModel.startStopwatch()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.startStopwatch() }
-    }
-
-    @Test
-    fun `pause stopwatch`() = runTest {
-        // Given + When
-        viewModel.pauseStopwatch()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.pauseStopwatch() }
-    }
-
-    @Test
-    fun `reset stopwatch`() = runTest {
-        // Given + When
-        viewModel.resetStopwatch()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.resetStopwatch() }
-        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
-    }
-
-    @Test
-    fun `lap stopwatch`() = runTest {
-        // Given + When
-        viewModel.lapStopwatch()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.lapStopwatch() }
-    }
-
-    @Test
-    fun `save stopwatch state for recreation - not active or paused`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState
-
-        // When
-        viewModel.saveStopwatchStateForRecreation()
-
-        // Then
-        coVerify(exactly = 0) { preferencesDataStore.saveStopwatchState(any()) }
-    }
-
-    @Test
-    fun `save stopwatch state for recreation - active state`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isActive = true, timeMillis = 123L)
-        val stopwatchStateSlot = slot<StopwatchDataStore>()
-
-        // When
-        viewModel.saveStopwatchStateForRecreation()
-
-        // Then
-        coVerify(exactly = 1) { preferencesDataStore.saveStopwatchState(capture(stopwatchStateSlot)) }
-        with(stopwatchStateSlot.captured) {
-            assertEquals(true, isActive)
-            assertEquals(123L, timeMillis)
-        }
-    }
-
-    @Test
-    fun `save stopwatch state for recreation - paused state`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isPaused = true, timeMillis = 123L)
-        val stopwatchStateSlot = slot<StopwatchDataStore>()
-
-        // When
-        viewModel.saveStopwatchStateForRecreation()
-
-        // Then
-        coVerify(exactly = 1) { preferencesDataStore.saveStopwatchState(capture(stopwatchStateSlot)) }
-        with(stopwatchStateSlot.captured) {
-            assertEquals(true, isPaused)
-            assertEquals(123L, timeMillis)
-        }
-    }
-
-    @Test
-    fun `recreate stopwatch state - not default state`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isPaused = true, timeMillis = 123L)
-
-        // When
-        viewModel.recreateStopwatch()
-
-        // Then
-        verify(exactly = 0) { stopwatchManagerWrapper.recreateStopwatchActive(any()) }
-        coVerify(exactly = 0) { preferencesDataStore.clearStopwatchState() }
-    }
-
-    @Test
-    fun `recreate stopwatch state - default state, preferences state is active`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState
-        coEvery { preferencesDataStore.readStopwatchState() } returns flowOf(StopwatchDataStore(isActive = true, timeMillis = 123L))
-        val stopwatchStateSlot = slot<StopwatchState>()
-
-        // When
-        viewModel.recreateStopwatch()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.recreateStopwatchActive(capture(stopwatchStateSlot)) }
-        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
-        with(stopwatchStateSlot.captured) {
-            assertEquals(true, isActive)
-            assertEquals(123L, timeMillis)
-        }
-    }
-
-    @Test
-    fun `recreate stopwatch state - default state, preferences state is paused`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState
-        coEvery { preferencesDataStore.readStopwatchState() } returns flowOf(StopwatchDataStore(isPaused = true, timeMillis = 123L))
-        val stopwatchStateSlot = slot<StopwatchState>()
-
-        // When
-        viewModel.recreateStopwatch()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.recreateStopwatchPaused(capture(stopwatchStateSlot)) }
-        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
-        with(stopwatchStateSlot.captured) {
-            assertEquals(true, isPaused)
-            assertEquals(123L, timeMillis)
-        }
-    }
-
-    @Test
-    fun `start stopwatch notification - state is active`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isActive = true, timeMillis = 123L)
-
-        // When
-        viewModel.startStopwatchNotification()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.createStopwatchNotification() }
-    }
-
-    @Test
-    fun `start stopwatch notification - state is paused`() = runTest {
-        // Given
-        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isPaused = true, timeMillis = 123L)
-
-        // When
-        viewModel.startStopwatchNotification()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.pauseStopwatchNotification() }
-    }
-
-    @Test
-    fun `cancel stopwatch notification`() = runTest {
-        // Given + When
-        viewModel.cancelStopwatchNotification()
-
-        // Then
-        verify(exactly = 1) { stopwatchManagerWrapper.cancelNotification() }
-    }
+//    @Test
+//    fun `start stopwatch`() = runTest {
+//        // Given + When
+//        viewModel.startStopwatch()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.startStopwatch() }
+//    }
+//
+//    @Test
+//    fun `pause stopwatch`() = runTest {
+//        // Given + When
+//        viewModel.pauseStopwatch()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.pauseStopwatch() }
+//    }
+//
+//    @Test
+//    fun `reset stopwatch`() = runTest {
+//        // Given + When
+//        viewModel.resetStopwatch()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.resetStopwatch() }
+//        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
+//    }
+//
+//    @Test
+//    fun `lap stopwatch`() = runTest {
+//        // Given + When
+//        viewModel.lapStopwatch()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.lapStopwatch() }
+//    }
+//
+//    @Test
+//    fun `save stopwatch state for recreation - not active or paused`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState
+//
+//        // When
+//        viewModel.saveStopwatchStateForRecreation()
+//
+//        // Then
+//        coVerify(exactly = 0) { preferencesDataStore.saveStopwatchState(any()) }
+//    }
+//
+//    @Test
+//    fun `save stopwatch state for recreation - active state`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isActive = true, timeMillis = 123L)
+//        val stopwatchStateSlot = slot<StopwatchDataStore>()
+//
+//        // When
+//        viewModel.saveStopwatchStateForRecreation()
+//
+//        // Then
+//        coVerify(exactly = 1) { preferencesDataStore.saveStopwatchState(capture(stopwatchStateSlot)) }
+//        with(stopwatchStateSlot.captured) {
+//            assertEquals(true, isActive)
+//            assertEquals(123L, timeMillis)
+//        }
+//    }
+//
+//    @Test
+//    fun `save stopwatch state for recreation - paused state`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isPaused = true, timeMillis = 123L)
+//        val stopwatchStateSlot = slot<StopwatchDataStore>()
+//
+//        // When
+//        viewModel.saveStopwatchStateForRecreation()
+//
+//        // Then
+//        coVerify(exactly = 1) { preferencesDataStore.saveStopwatchState(capture(stopwatchStateSlot)) }
+//        with(stopwatchStateSlot.captured) {
+//            assertEquals(true, isPaused)
+//            assertEquals(123L, timeMillis)
+//        }
+//    }
+//
+//    @Test
+//    fun `recreate stopwatch state - not default state`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isPaused = true, timeMillis = 123L)
+//
+//        // When
+//        viewModel.recreateStopwatch()
+//
+//        // Then
+//        verify(exactly = 0) { stopwatchManagerWrapper.recreateStopwatchActive(any()) }
+//        coVerify(exactly = 0) { preferencesDataStore.clearStopwatchState() }
+//    }
+//
+//    @Test
+//    fun `recreate stopwatch state - default state, preferences state is active`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState
+//        coEvery { preferencesDataStore.readStopwatchState() } returns flowOf(StopwatchDataStore(isActive = true, timeMillis = 123L))
+//        val stopwatchStateSlot = slot<StopwatchState>()
+//
+//        // When
+//        viewModel.recreateStopwatch()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.recreateStopwatchActive(capture(stopwatchStateSlot)) }
+//        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
+//        with(stopwatchStateSlot.captured) {
+//            assertEquals(true, isActive)
+//            assertEquals(123L, timeMillis)
+//        }
+//    }
+//
+//    @Test
+//    fun `recreate stopwatch state - default state, preferences state is paused`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState
+//        coEvery { preferencesDataStore.readStopwatchState() } returns flowOf(StopwatchDataStore(isPaused = true, timeMillis = 123L))
+//        val stopwatchStateSlot = slot<StopwatchState>()
+//
+//        // When
+//        viewModel.recreateStopwatch()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.recreateStopwatchPaused(capture(stopwatchStateSlot)) }
+//        coVerify(exactly = 1) { preferencesDataStore.clearStopwatchState() }
+//        with(stopwatchStateSlot.captured) {
+//            assertEquals(true, isPaused)
+//            assertEquals(123L, timeMillis)
+//        }
+//    }
+//
+//    @Test
+//    fun `start stopwatch notification - state is active`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isActive = true, timeMillis = 123L)
+//
+//        // When
+//        viewModel.startStopwatchNotification()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.createStopwatchNotification() }
+//    }
+//
+//    @Test
+//    fun `start stopwatch notification - state is paused`() = runTest {
+//        // Given
+//        every { stopwatchManagerWrapper.stopwatchState.value } returns stopwatchState.copy(isPaused = true, timeMillis = 123L)
+//
+//        // When
+//        viewModel.startStopwatchNotification()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.pauseStopwatchNotification() }
+//    }
+//
+//    @Test
+//    fun `cancel stopwatch notification`() = runTest {
+//        // Given + When
+//        viewModel.cancelStopwatchNotification()
+//
+//        // Then
+//        verify(exactly = 1) { stopwatchManagerWrapper.cancelNotification() }
+//    }
     //endregion
 
     //region timer
-    @Test
-    fun `update input hours`() = runTest {
-        // Given
-        val input = "19"
-        val inputSlot = slot<String>()
-
-        // When
-        viewModel.updateInputHours(newValue = input)
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.updateInputHours(capture(inputSlot)) }
-        assertEquals(input, inputSlot.captured)
-    }
-
-    @Test
-    fun `update input minutes`() = runTest {
-        // Given
-        val input = "19"
-        val inputSlot = slot<String>()
-
-        // When
-        viewModel.updateInputMinutes(newValue = input)
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.updateInputMinutes(capture(inputSlot)) }
-        assertEquals(input, inputSlot.captured)
-    }
-
-    @Test
-    fun `update input seconds`() = runTest {
-        // Given
-        val input = "19"
-        val inputSlot = slot<String>()
-
-        // When
-        viewModel.updateInputSeconds(newValue = input)
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.updateInputSeconds(capture(inputSlot)) }
-        assertEquals(input, inputSlot.captured)
-    }
-
-    @Test
-    fun `start timer`() = runTest {
-        // Given + When
-        viewModel.startTimer()
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.startTimer() }
-    }
-
-    @Test
-    fun `pause timer`() = runTest {
-        // Given + When
-        viewModel.pauseTimer()
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.pauseTimer() }
-    }
-
-    @Test
-    fun `reset timer`() = runTest {
-        // Given
-        val timerDataStoreSlot = slot<TimerStateDataStore>()
-
-        // When
-        viewModel.resetTimer()
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.resetTimer() }
-        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(capture(timerDataStoreSlot)) }
-        with(timerDataStoreSlot.captured) {
-            assertEquals(0L, remainingTimeInMillis)
-            assertEquals(false, isActive)
-            assertEquals(false, isPaused)
-        }
-    }
-
-    @Test
-    fun `restart timer`() = runTest {
-        // Given
-        val autoRestart = false
-        val autoRestartSlot = slot<Boolean>()
-
-        // When
-        viewModel.restartTimer(autoRestartTimer = autoRestart)
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.restartTimer(capture(autoRestartSlot)) }
-        assertEquals(autoRestart, autoRestartSlot.captured)
-    }
-
-    @Test
-    fun `recreate timer - state is not empty`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState.copy(currentTime = 420L)
-
-        // When
-        viewModel.recreateTimer()
-
-        // Then
-        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
-        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
-        coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
-        coVerify(exactly = 0) { preferencesDataStore.readTimerStatus() }
-    }
-
-    @Test
-    fun `recreate timer - state is empty, no state saved in datastore`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState
-        coEvery { preferencesDataStore.readTimerStatus() } returns flowOf(TimerStateDataStore())
-
-        // When
-        viewModel.recreateTimer()
-
-        // Then
-        coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
-        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
-        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
-        coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
-    }
-
-    @Test
-    fun `recreate timer - state is empty, active state saved in datastore`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState
-        coEvery { preferencesDataStore.readTimerStatus() } returns
-            flowOf(
-                TimerStateDataStore(
-                    remainingTimeInMillis = 420L,
-                    isActive = true,
-                    timeStamp = System.currentTimeMillis()
-                )
-            )
-
-        // When
-        viewModel.recreateTimer()
-
-        // Then
-        coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
-        verify(exactly = 1) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
-        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
-        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(any()) }
-    }
-
-    @Test
-    fun `recreate timer - state is empty, paused state saved in datastore`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState
-        coEvery { preferencesDataStore.readTimerStatus() } returns
-            flowOf(
-                TimerStateDataStore(
-                    remainingTimeInMillis = 420L,
-                    isActive = false,
-                    isPaused = true,
-                    timeStamp = System.currentTimeMillis()
-                )
-            )
-
-        // When
-        viewModel.recreateTimer()
-
-        // Then
-        coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
-        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
-        verify(exactly = 1) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
-        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(any()) }
-    }
-
-    @Test
-    fun `save timer state for recreation - not start`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState.copy(isTimerActive = true, isStart = false, currentTime = 420L)
-        val timerStateDataStoreSlot = slot<TimerStateDataStore>()
-
-        // When
-        viewModel.saveTimerStateForRecreation()
-
-        // Then
-        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(capture(timerStateDataStoreSlot)) }
-        with(timerStateDataStoreSlot.captured) {
-            assertEquals(420L, remainingTimeInMillis)
-            assertEquals(true, isActive)
-            assertEquals(false, isPaused)
-        }
-    }
-
-    @Test
-    fun `save timer state for recreation - is start`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState.copy(isStart = true)
-
-        // When
-        viewModel.saveTimerStateForRecreation()
-
-        // Then
-        coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
-    }
-
-    @Test
-    fun `start timer notification - timer active`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState.copy(isTimerActive = true)
-
-        // When
-        viewModel.startTimerNotification()
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.startTimerNotificationCountdown(any()) }
-    }
-
-    @Test
-    fun `start timer notification - timer paused`() = runTest {
-        // Given
-        every { timerManagerWrapper.timerState.value } returns timerState.copy(isTimerPaused = true)
-
-        // When
-        viewModel.startTimerNotification()
-
-        // Then
-        verify { timerManagerWrapper.pauseTimerNotificationCountdown() }
-    }
-
-    @Test
-    fun `cancel timer notification`() = runTest {
-        // Given + When
-        viewModel.cancelTimerNotification()
-
-        // Then
-        verify(exactly = 1) { timerManagerWrapper.cancelNotification() }
-    }
+//    @Test
+//    fun `update input hours`() = runTest {
+//        // Given
+//        val input = "19"
+//        val inputSlot = slot<String>()
+//
+//        // When
+//        viewModel.updateInputHours(newValue = input)
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.updateInputHours(capture(inputSlot)) }
+//        assertEquals(input, inputSlot.captured)
+//    }
+//
+//    @Test
+//    fun `update input minutes`() = runTest {
+//        // Given
+//        val input = "19"
+//        val inputSlot = slot<String>()
+//
+//        // When
+//        viewModel.updateInputMinutes(newValue = input)
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.updateInputMinutes(capture(inputSlot)) }
+//        assertEquals(input, inputSlot.captured)
+//    }
+//
+//    @Test
+//    fun `update input seconds`() = runTest {
+//        // Given
+//        val input = "19"
+//        val inputSlot = slot<String>()
+//
+//        // When
+//        viewModel.updateInputSeconds(newValue = input)
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.updateInputSeconds(capture(inputSlot)) }
+//        assertEquals(input, inputSlot.captured)
+//    }
+//
+//    @Test
+//    fun `start timer`() = runTest {
+//        // Given + When
+//        viewModel.startTimer()
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.startTimer() }
+//    }
+//
+//    @Test
+//    fun `pause timer`() = runTest {
+//        // Given + When
+//        viewModel.pauseTimer()
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.pauseTimer() }
+//    }
+//
+//    @Test
+//    fun `reset timer`() = runTest {
+//        // Given
+//        val timerDataStoreSlot = slot<TimerStateDataStore>()
+//
+//        // When
+//        viewModel.resetTimer()
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.resetTimer() }
+//        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(capture(timerDataStoreSlot)) }
+//        with(timerDataStoreSlot.captured) {
+//            assertEquals(0L, remainingTimeInMillis)
+//            assertEquals(false, isActive)
+//            assertEquals(false, isPaused)
+//        }
+//    }
+//
+//    @Test
+//    fun `restart timer`() = runTest {
+//        // Given
+//        val autoRestart = false
+//        val autoRestartSlot = slot<Boolean>()
+//
+//        // When
+//        viewModel.restartTimer(autoRestartTimer = autoRestart)
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.restartTimer(capture(autoRestartSlot)) }
+//        assertEquals(autoRestart, autoRestartSlot.captured)
+//    }
+//
+//    @Test
+//    fun `recreate timer - state is not empty`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState.copy(currentTime = 420L)
+//
+//        // When
+//        viewModel.recreateTimer()
+//
+//        // Then
+//        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+//        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
+//        coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
+//        coVerify(exactly = 0) { preferencesDataStore.readTimerStatus() }
+//    }
+//
+//    @Test
+//    fun `recreate timer - state is empty, no state saved in datastore`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState
+//        coEvery { preferencesDataStore.readTimerStatus() } returns flowOf(TimerStateDataStore())
+//
+//        // When
+//        viewModel.recreateTimer()
+//
+//        // Then
+//        coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
+//        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+//        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
+//        coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
+//    }
+//
+//    @Test
+//    fun `recreate timer - state is empty, active state saved in datastore`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState
+//        coEvery { preferencesDataStore.readTimerStatus() } returns
+//            flowOf(
+//                TimerStateDataStore(
+//                    remainingTimeInMillis = 420L,
+//                    isActive = true,
+//                    timeStamp = System.currentTimeMillis()
+//                )
+//            )
+//
+//        // When
+//        viewModel.recreateTimer()
+//
+//        // Then
+//        coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
+//        verify(exactly = 1) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+//        verify(exactly = 0) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
+//        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(any()) }
+//    }
+//
+//    @Test
+//    fun `recreate timer - state is empty, paused state saved in datastore`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState
+//        coEvery { preferencesDataStore.readTimerStatus() } returns
+//            flowOf(
+//                TimerStateDataStore(
+//                    remainingTimeInMillis = 420L,
+//                    isActive = false,
+//                    isPaused = true,
+//                    timeStamp = System.currentTimeMillis()
+//                )
+//            )
+//
+//        // When
+//        viewModel.recreateTimer()
+//
+//        // Then
+//        coVerify(exactly = 1) { preferencesDataStore.readTimerStatus() }
+//        verify(exactly = 0) { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) }
+//        verify(exactly = 1) { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) }
+//        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(any()) }
+//    }
+//
+//    @Test
+//    fun `save timer state for recreation - not start`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState.copy(isTimerActive = true, isStart = false, currentTime = 420L)
+//        val timerStateDataStoreSlot = slot<TimerStateDataStore>()
+//
+//        // When
+//        viewModel.saveTimerStateForRecreation()
+//
+//        // Then
+//        coVerify(exactly = 1) { preferencesDataStore.saveTimerData(capture(timerStateDataStoreSlot)) }
+//        with(timerStateDataStoreSlot.captured) {
+//            assertEquals(420L, remainingTimeInMillis)
+//            assertEquals(true, isActive)
+//            assertEquals(false, isPaused)
+//        }
+//    }
+//
+//    @Test
+//    fun `save timer state for recreation - is start`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState.copy(isStart = true)
+//
+//        // When
+//        viewModel.saveTimerStateForRecreation()
+//
+//        // Then
+//        coVerify(exactly = 0) { preferencesDataStore.saveTimerData(any()) }
+//    }
+//
+//    @Test
+//    fun `start timer notification - timer active`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState.copy(isTimerActive = true)
+//
+//        // When
+//        viewModel.startTimerNotification()
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.startTimerNotificationCountdown(any()) }
+//    }
+//
+//    @Test
+//    fun `start timer notification - timer paused`() = runTest {
+//        // Given
+//        every { timerManagerWrapper.timerState.value } returns timerState.copy(isTimerPaused = true)
+//
+//        // When
+//        viewModel.startTimerNotification()
+//
+//        // Then
+//        verify { timerManagerWrapper.pauseTimerNotificationCountdown() }
+//    }
+//
+//    @Test
+//    fun `cancel timer notification`() = runTest {
+//        // Given + When
+//        viewModel.cancelTimerNotification()
+//
+//        // Then
+//        verify(exactly = 1) { timerManagerWrapper.cancelNotification() }
+//    }
     //endregion
 }

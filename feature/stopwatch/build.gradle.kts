@@ -12,7 +12,7 @@ android {
 
 dependencies {
     // Modules
-    modules(Modules.coreCommon)
+    modules(Modules.coreCommon, Modules.coreDesignSystem)
 
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.material3)
@@ -25,4 +25,5 @@ dependencies {
 
     androidTestImplementation(libs.androidx.test.junit.ext)
     androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit)
 }

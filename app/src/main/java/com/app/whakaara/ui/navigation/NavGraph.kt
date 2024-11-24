@@ -8,9 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.RootScreen
+import com.whakaara.feature.stopwatch.navigation.stopwatchScreen
 import com.whakaara.feature.timer.navigation.timerScreen
 import com.whakaara.onboarding.navigation.onboardingScreen
-import com.whakaara.stopwatch.feature.navigation.stopwatchScreen
 import net.vbuild.verwoodpages.alarm.navigation.alarmScreen
 
 @Composable

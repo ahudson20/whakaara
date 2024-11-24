@@ -2,16 +2,12 @@ package com.app.whakaara.utility
 
 import com.whakaara.core.constants.DateUtilsConstants.DATE_FORMAT_12_HOUR
 import com.whakaara.core.constants.DateUtilsConstants.DATE_FORMAT_24_HOUR
-import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_FORMAT
-import com.whakaara.core.constants.DateUtilsConstants.STOPWATCH_FORMAT_NO_HOURS
-import com.whakaara.core.constants.DateUtilsConstants.TIMER_FORMAT
 import com.whakaara.model.preferences.TimeFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 import kotlin.math.abs
-import kotlin.time.Duration.Companion.milliseconds
 
 class DateUtils {
     companion object {
@@ -75,41 +71,41 @@ class DateUtils {
 //            return seconds * millisecondsInSecond
 //        }
 
-        fun formatTimeForTimer(millis: Long): String {
-            return millis.milliseconds.toComponents { hours, minutes, seconds, _ ->
-                TIMER_FORMAT.format(hours, minutes, seconds)
-            }
-        }
+//        fun formatTimeForTimer(millis: Long): String {
+//            return millis.milliseconds.toComponents { hours, minutes, seconds, _ ->
+//                TIMER_FORMAT.format(hours, minutes, seconds)
+//            }
+//        }
 
-        fun formatTimeForStopwatch(millis: Long): String {
-            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
-                STOPWATCH_FORMAT.format(
-                    hours,
-                    minutes,
-                    seconds,
-                    TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
-                )
-            }
-        }
+//        fun formatTimeForStopwatch(millis: Long): String {
+//            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
+//                STOPWATCH_FORMAT.format(
+//                    hours,
+//                    minutes,
+//                    seconds,
+//                    TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
+//                )
+//            }
+//        }
 
-        fun formatTimeForStopwatchLap(millis: Long): String {
-            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
-                if (hours == 0L) {
-                    STOPWATCH_FORMAT_NO_HOURS.format(
-                        minutes,
-                        seconds,
-                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
-                    )
-                } else {
-                    STOPWATCH_FORMAT.format(
-                        hours,
-                        minutes,
-                        seconds,
-                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
-                    )
-                }
-            }
-        }
+//        fun formatTimeForStopwatchLap(millis: Long): String {
+//            return millis.milliseconds.toComponents { hours, minutes, seconds, nanoseconds ->
+//                if (hours == 0L) {
+//                    STOPWATCH_FORMAT_NO_HOURS.format(
+//                        minutes,
+//                        seconds,
+//                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
+//                    )
+//                } else {
+//                    STOPWATCH_FORMAT.format(
+//                        hours,
+//                        minutes,
+//                        seconds,
+//                        TimeUnit.MILLISECONDS.convert(nanoseconds.toLong(), TimeUnit.NANOSECONDS)
+//                    )
+//                }
+//            }
+//        }
 
 //        fun generateMillisecondsFromTimerInputValues(
 //            hours: String,

@@ -1,4 +1,4 @@
-package com.app.whakaara.ui.clock
+package com.whakaara.feature.stopwatch.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

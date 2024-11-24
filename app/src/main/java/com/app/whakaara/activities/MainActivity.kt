@@ -18,6 +18,7 @@ import com.app.whakaara.state.events.StopwatchEventCallbacks
 import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.StopwatchViewModel
 import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.AppTheme
@@ -36,6 +37,7 @@ class MainActivity :
     PreferencesEventCallbacks {
     private val viewModel: MainViewModel by viewModels()
     private val timerViewModel: TimerViewModel by viewModels()
+    private val stopwatchViewModel: StopwatchViewModel by viewModels()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,11 +81,14 @@ class MainActivity :
 
     override fun onResume() {
         super.onResume()
-        with(viewModel) {
+//        with(viewModel) {
 //            recreateTimer()
+//            cancelTimerNotification()
+//        }
+
+        with(stopwatchViewModel) {
             recreateStopwatch()
             cancelStopwatchNotification()
-//            cancelTimerNotification()
         }
 
         with(timerViewModel) {
@@ -94,11 +99,9 @@ class MainActivity :
 
     override fun onPause() {
         super.onPause()
-        with(viewModel) {
-//            saveTimerStateForRecreation()
+        with(stopwatchViewModel) {
             saveStopwatchStateForRecreation()
             startStopwatchNotification()
-//            startTimerNotification()
         }
 
         with(timerViewModel) {
@@ -162,25 +165,25 @@ class MainActivity :
     }
 
     override fun restartTimer(autoRestartTimer: Boolean) {
-        timerViewModel.restartTimer(autoRestartTimer = autoRestartTimer)
+        timerViewModel.restartTimer() //autoRestartTimer = autoRestartTimer
     }
     //endregion
 
     //region stopwatch
     override fun startStopwatch() {
-        viewModel.startStopwatch()
+//        viewModel.startStopwatch()
     }
 
     override fun pauseStopwatch() {
-        viewModel.pauseStopwatch()
+//        viewModel.pauseStopwatch()
     }
 
     override fun stopStopwatch() {
-        viewModel.resetStopwatch()
+//        viewModel.resetStopwatch()
     }
 
     override fun lapStopwatch() {
-        viewModel.lapStopwatch()
+//        viewModel.lapStopwatch()
     }
     //endregion
 

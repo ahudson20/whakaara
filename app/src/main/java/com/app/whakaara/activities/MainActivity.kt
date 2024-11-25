@@ -11,7 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.logic.MainViewModel
-import com.app.whakaara.state.AlarmState
+import com.whakaara.model.alarm.AlarmState
 import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.state.events.StopwatchEventCallbacks

@@ -1,28 +1,18 @@
 package com.app.whakaara.module
 
-import android.app.AlarmManager
-import android.app.Application
 import android.app.Notification.CATEGORY_ALARM
 import android.app.Notification.CATEGORY_STOPWATCH
-import android.app.NotificationManager
-import android.app.Service
 import android.content.Context
 import android.graphics.Color
 import androidx.core.app.NotificationCompat
 import com.app.whakaara.R
-import com.app.whakaara.logic.AlarmManagerWrapper
-import com.app.whakaara.logic.StopwatchManagerWrapper
 import com.whakaara.core.constants.NotificationUtilsConstants.CHANNEL_ID
-import com.whakaara.core.di.ApplicationScope
-import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
 import javax.inject.Named
-import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -123,16 +113,16 @@ class NotificationModule {
         }
     }
 
-    @Provides
-    @Singleton
-    fun provideAlarmManager(app: Application): AlarmManager = app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
-
-    @Provides
-    @Singleton
-    fun providesAlarmManagerWrapper(
-        app: Application,
-        alarmManager: AlarmManager
-    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
+//    @Provides
+//    @Singleton
+//    fun provideAlarmManager(app: Application): AlarmManager = app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
+//
+//    @Provides
+//    @Singleton
+//    fun providesAlarmManagerWrapper(
+//        app: Application,
+//        alarmManager: AlarmManager
+//    ): AlarmManagerWrapper = AlarmManagerWrapper(app, alarmManager)
 
 //    @Provides
 //    @Singleton
@@ -156,23 +146,23 @@ class NotificationModule {
 //        coroutineScope
 //    )
 
-    @Provides
-    @Singleton
-    fun providesStopwatchManagerWrapper(
-        app: Application,
-        notificationManager: NotificationManager,
-        @Named("stopwatch")
-        stopwatchNotificationBuilder: NotificationCompat.Builder,
-        @ApplicationScope
-        coroutineScope: CoroutineScope,
-        preferencesDataStore: PreferencesDataStoreRepository
-    ): StopwatchManagerWrapper = StopwatchManagerWrapper(
-        app,
-        notificationManager,
-        stopwatchNotificationBuilder,
-        coroutineScope,
-        preferencesDataStore
-    )
+//    @Provides
+//    @Singleton
+//    fun providesStopwatchManagerWrapper(
+//        app: Application,
+//        notificationManager: NotificationManager,
+//        @Named("stopwatch")
+//        stopwatchNotificationBuilder: NotificationCompat.Builder,
+//        @ApplicationScope
+//        coroutineScope: CoroutineScope,
+//        preferencesDataStore: PreferencesDataStoreRepository
+//    ): StopwatchManagerWrapper = StopwatchManagerWrapper(
+//        app,
+//        notificationManager,
+//        stopwatchNotificationBuilder,
+//        coroutineScope,
+//        preferencesDataStore
+//    )
 
 //    @Provides
 //    @Singleton

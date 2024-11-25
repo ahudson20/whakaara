@@ -1,8 +1,11 @@
 package com.whakaara.core.di
 
+import android.app.AlarmManager
+import android.app.Application
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.Service
 import android.content.Context
 import com.whakaara.core.CountDownTimerUtil
 import com.whakaara.core.constants.NotificationUtilsConstants
@@ -46,4 +49,8 @@ class NotificationModule {
     @Provides
     @Singleton
     fun providesCountDownTimerUtil(): CountDownTimerUtil = CountDownTimerUtil()
+
+    @Provides
+    @Singleton
+    fun provideAlarmManager(app: Application): AlarmManager = app.getSystemService(Service.ALARM_SERVICE) as AlarmManager
 }

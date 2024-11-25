@@ -1,30 +1,30 @@
 <resources>
     <string name="app_name">whakaara</string>
-    <string name="time_picker_dialog_title">Select time</string>
+<!--    <string name="time_picker_dialog_title">Select time</string>-->
 
     <string name="bottom_sheet_title">Edit alarm</string>
     <string name="bottom_sheet_sub_title">Off</string>
     <string name="bottom_sheet_snooze_switch">Snooze</string>
     <string name="bottom_sheet_snooze_switch_sub_title">Snooze on alarm</string>
-    <string name="bottom_sheet_vibration_switch">Vibrate</string>
-    <string name="bottom_sheet_vibration_switch_sub_title">Vibrate on alarm</string>
-    <string name="bottom_sheet_delete_switch">Single-use</string>
-    <string name="bottom_sheet_delete_switch_sub_title">Alarm deletes after going off</string>
-    <string name="bottom_sheet_save_button">Save</string>
-    <string name="bottom_sheet_close_button">Cancel</string>
-    <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>
-    <string name="bottom_sheet_content_alarm_title">Title</string>
-    <string name="bottom_sheet_icon_cancel_content_description">Cancel alarm changes</string>
-    <string name="bottom_sheet_icon_save_content_description">Save alarm changes</string>
-    <string name="bottom_sheet_repeat_switch_title">Repeating</string>
-    <string name="bottom_sheet_repeat_switch_sub_title">Alarm will repeat daily</string>
-    <string name="bottom_sheet_custom_alarm_days_title">Custom</string>
-    <string name="bottom_sheet_custom_alarm_days_sub_title">Select certain days to repeat alarm</string>
-    <string name="bottom_sheet_title_characters">%1$d / %2$d</string>
+<!--    <string name="bottom_sheet_vibration_switch">Vibrate</string>-->
+<!--    <string name="bottom_sheet_vibration_switch_sub_title">Vibrate on alarm</string>-->
+<!--    <string name="bottom_sheet_delete_switch">Single-use</string>-->
+<!--    <string name="bottom_sheet_delete_switch_sub_title">Alarm deletes after going off</string>-->
+<!--    <string name="bottom_sheet_save_button">Save</string>-->
+<!--    <string name="bottom_sheet_close_button">Cancel</string>-->
+<!--    <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>-->
+<!--    <string name="bottom_sheet_content_alarm_title">Title</string>-->
+<!--    <string name="bottom_sheet_icon_cancel_content_description">Cancel alarm changes</string>-->
+<!--    <string name="bottom_sheet_icon_save_content_description">Save alarm changes</string>-->
+<!--    <string name="bottom_sheet_repeat_switch_title">Repeating</string>-->
+<!--    <string name="bottom_sheet_repeat_switch_sub_title">Alarm will repeat daily</string>-->
+<!--    <string name="bottom_sheet_custom_alarm_days_title">Custom</string>-->
+<!--    <string name="bottom_sheet_custom_alarm_days_sub_title">Select certain days to repeat alarm</string>-->
+<!--    <string name="bottom_sheet_title_characters">%1$d / %2$d</string>-->
 
-    <string name="card_alarm_sub_title_off">Off</string>
-    <string name="card_repeat_daily_icon_content_description">Repeat alarm daily icon</string>
-    <string name="card_alarm_single_shot_content_description">Delete after goes off icon</string>
+<!--    <string name="card_alarm_sub_title_off">Off</string>-->
+<!--    <string name="card_repeat_daily_icon_content_description">Repeat alarm daily icon</string>-->
+<!--    <string name="card_alarm_single_shot_content_description">Delete after goes off icon</string>-->
 
     <string name="notification_action_deleted">%1$s deleted</string>
     <string name="notification_action_cancelled">%1$s cancelled</string>
@@ -36,10 +36,10 @@
 
     <string name="notification_sub_text">Tap to dismiss</string>
 
-    <string name="alarm_screen_empty_list">No alarms to display</string>
+<!--    <string name="alarm_screen_empty_list">No alarms to display</string>-->
 
-    <string name="floating_action_button_icon_description">Create alarm</string>
-    <string name="delete_icon_content_description">Delete icon</string>
+<!--    <string name="floating_action_button_icon_description">Create alarm</string>-->
+<!--    <string name="delete_icon_content_description">Delete icon</string>-->
 <!--    <string name="pause_timer_icon_content_description">Pause timer icon button</string>-->
 <!--    <string name="start_timer_icon_content_description">Start timer icon button</string>-->
 <!--    <string name="stop_timer_icon_content_description">Stop timer icon button</string>-->
@@ -133,7 +133,7 @@
     <string name="notification_timer_stop_action_label">Stop</string>
     <string name="notification_upcoming_alarm_cancel">Cancel</string>
 
-    <string name="time_until_alarm_formatted_prefix">Alarm in</string>
+<!--    <string name="time_until_alarm_formatted_prefix">Alarm in</string>-->
 
-    <string name="alarm_less_than_one_minute">less than 1 minute</string>
+<!--    <string name="alarm_less_than_one_minute">less than 1 minute</string>-->
 </resources>

@@ -11,7 +11,7 @@ import com.whakaara.core.RootScreen
 import com.whakaara.feature.stopwatch.navigation.stopwatchScreen
 import com.whakaara.feature.timer.navigation.timerScreen
 import com.whakaara.onboarding.navigation.onboardingScreen
-import net.vbuild.verwoodpages.alarm.navigation.alarmScreen
+import com.whakaara.feature.alarm.navigation.alarmScreen
 
 @Composable
 fun NavGraph(

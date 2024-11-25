@@ -2,7 +2,7 @@ package com.app.whakaara.logic
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
-import com.app.whakaara.state.AlarmState
+import com.whakaara.model.alarm.AlarmState
 import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.data.preferences.PreferencesRepository

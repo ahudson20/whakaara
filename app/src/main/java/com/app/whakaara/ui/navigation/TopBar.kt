@@ -13,24 +13,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
-import com.whakaara.model.preferences.PreferencesState
 import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.screens.SettingsScreen
+import com.dokar.sheets.BottomSheet
+import com.dokar.sheets.rememberBottomSheetState
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.RoutePreviewProvider
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
-import com.dokar.sheets.BottomSheet
-import com.dokar.sheets.rememberBottomSheetState
 import com.whakaara.model.preferences.Preferences
+import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
-    route: String,
+    route: String?,
     preferencesState: PreferencesState,
     preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
@@ -39,9 +38,19 @@ fun TopBar(
 
     TopAppBar(
         title = {
-            Text(
-                text = route.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-            )
+            when (route) {
+                BottomNavItem.Alarm.route -> {
+                    Text(text = "Alarm")
+                }
+
+                BottomNavItem.Timer.route -> {
+                    Text(text = "Timer")
+                }
+
+                BottomNavItem.Stopwatch.route -> {
+                    Text(text = "Stopwatch")
+                }
+            }
         },
         actions = {
             when (route) {
@@ -67,7 +76,7 @@ fun TopBar(
         skipPeeked = true
     ) {
         SettingsScreen(
-            route = route,
+            route = route ?: "",
             preferencesState = preferencesState,
             updatePreferences = preferencesEventCallbacks::updatePreferences,
             updateAllAlarmSubtitles = preferencesEventCallbacks::updateAllAlarmSubtitles,

@@ -2,6 +2,7 @@ package com.whakaara.data.alarm
 
 import com.whakaara.model.alarm.Alarm
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 import java.util.UUID
 
 interface AlarmRepository {
@@ -23,4 +24,10 @@ interface AlarmRepository {
     )
 
     suspend fun getAlarmById(id: UUID): Alarm
+
+    val triggerFlow: SharedFlow<Unit>
+    fun triggerAlarmRecreation()
+
+    val deleteAlarmTriggerFlow: SharedFlow<String>
+    fun triggerDeleteAlarmById(id: String)
 }

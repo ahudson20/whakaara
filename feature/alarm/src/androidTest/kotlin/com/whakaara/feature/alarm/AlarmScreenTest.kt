@@ -45,28 +45,13 @@ class AlarmScreenTest {
                 AlarmScreen(
                     alarms = listOf(firstAlarm, secondAlarm),
                     preferencesState = PreferencesState(),
-//                    alarmEventCallbacks = object : AlarmEventCallbacks {
-//                        override fun create(alarm: Alarm) {}
-//
-//                        override fun delete(alarm: Alarm) {}
-//
-//                        override fun disable(alarm: Alarm) {}
-//
-//                        override fun enable(alarm: Alarm) {}
-//
-//                        override fun reset(alarm: Alarm) {}
-//
-//                        override fun getInitialTimeToAlarm(
-//                            isEnabled: Boolean,
-//                            time: Calendar
-//                        ): String {
-//                            return ""
-//                        }
-//
-//                        override fun getTimeUntilAlarmFormatted(date: Calendar): String {
-//                            return ""
-//                        }
-//                    }
+                    create = {},
+                    delete = {},
+                    disable = {},
+                    enable = {},
+                    reset = {},
+                    getInitialTimeToAlarm = { _, _ -> "" },
+                    getTimeUntilAlarmFormatted = { "" }
                 )
             }
         }

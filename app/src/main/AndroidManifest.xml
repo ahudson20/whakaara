@@ -74,7 +74,7 @@
 
 
         <receiver
-            android:name="com.app.whakaara.receiver.RecreateAlarmsReceiver"
+            android:name="com.app.whakaara.com.whakaara.feature.alarm.receiver.RecreateAlarmsReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

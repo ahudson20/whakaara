@@ -52,7 +52,7 @@ class MainViewModelTest {
     private lateinit var viewModel: MainViewModel
     private var repository: AlarmRepository = mockk(relaxed = true)
     private var preferencesRepository: PreferencesRepository = mockk(relaxed = true)
-    private var alarmManagerWrapper: AlarmManagerWrapper = mockk(relaxed = true)
+//    private var alarmManagerWrapper: AlarmManagerWrapper = mockk(relaxed = true)
 //    private var timerManagerWrapper: TimerManagerWrapper = mockk(relaxed = true)
 //    private var stopwatchManagerWrapper: StopwatchManagerWrapper = mockk(relaxed = true)
     private var preferencesDataStore: PreferencesDataStoreRepository = mockk(relaxed = true)
@@ -102,12 +102,12 @@ class MainViewModelTest {
         coEvery { preferencesRepository.getPreferencesFlow() } returns flowOf(preferences)
         coEvery { preferencesRepository.updatePreferences(any()) } just Runs
 
-        every { alarmManagerWrapper.createAlarm(any(), any(), any(), any(), any(), any(), any()) } just Runs
-        every { alarmManagerWrapper.stopStartUpdateWidget(any(), any(), any(), any(), any(), any(), any()) } just Runs
-        every { alarmManagerWrapper.deleteAlarm(any()) } just Runs
-        every { alarmManagerWrapper.setUpcomingAlarm(any(), any(), any(), any(), any(), any()) } just Runs
-        every { alarmManagerWrapper.updateWidget() } just Runs
-        every { alarmManagerWrapper.cancelUpcomingAlarm(any(), any()) } just Runs
+//        every { alarmManagerWrapper.createAlarm(any(), any(), any(), any(), any(), any(), any()) } just Runs
+//        every { alarmManagerWrapper.stopStartUpdateWidget(any(), any(), any(), any(), any(), any(), any()) } just Runs
+//        every { alarmManagerWrapper.deleteAlarm(any()) } just Runs
+//        every { alarmManagerWrapper.setUpcomingAlarm(any(), any(), any(), any(), any(), any()) } just Runs
+//        every { alarmManagerWrapper.updateWidget() } just Runs
+//        every { alarmManagerWrapper.cancelUpcomingAlarm(any(), any()) } just Runs
 
 //        every { stopwatchManagerWrapper.startStopwatch() } just Runs
 //        every { stopwatchManagerWrapper.pauseStopwatch() } just Runs

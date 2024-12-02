@@ -52,7 +52,13 @@ import java.util.Calendar
 fun AlarmScreen(
     alarms: List<Alarm>,
     preferencesState: PreferencesState,
-//    alarmEventCallbacks: AlarmEventCallbacks
+    create: (alarm: Alarm) -> Unit,
+    delete: (alarm: Alarm) -> Unit,
+    disable: (alarm: Alarm) -> Unit,
+    enable: (alarm: Alarm) -> Unit,
+    reset: (alarm: Alarm) -> Unit,
+    getInitialTimeToAlarm: (isEnabled: Boolean, time: Calendar) -> String,
+    getTimeUntilAlarmFormatted: (date: Calendar) -> String
 ) {
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
     val scope = rememberCoroutineScope()
@@ -108,12 +114,12 @@ fun AlarmScreen(
             modifier = Modifier.padding(innerPadding),
             alarms = alarms,
             timeFormat = preferencesState.preferences.timeFormat,
-            delete = alarmEventCallbacks::delete,
-            disable = alarmEventCallbacks::disable,
-            enable = alarmEventCallbacks::enable,
-            reset = alarmEventCallbacks::reset,
-            getInitialTimeToAlarm = alarmEventCallbacks::getInitialTimeToAlarm,
-            getTimeUntilAlarmFormatted = alarmEventCallbacks::getTimeUntilAlarmFormatted
+            delete = delete,
+            disable = disable,
+            enable = enable,
+            reset = reset,
+            getInitialTimeToAlarm = getInitialTimeToAlarm,
+            getTimeUntilAlarmFormatted = getTimeUntilAlarmFormatted
         )
 
         AnimatedVisibility(isDialogShown.value) {
@@ -126,7 +132,7 @@ fun AlarmScreen(
                         set(Calendar.MINUTE, it.minute)
                         set(Calendar.SECOND, 0)
                     }
-                    alarmEventCallbacks.create(
+                    create(
                         Alarm(
                             date = date,
                             subTitle = DateUtils.getAlarmTimeFormatted(
@@ -140,7 +146,7 @@ fun AlarmScreen(
                     )
                     isDialogShown.value = false
                     context.showToast(
-                        message = alarmEventCallbacks.getTimeUntilAlarmFormatted(date)
+                        message = getTimeUntilAlarmFormatted(date)
                     )
                 },
                 title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },
@@ -160,28 +166,13 @@ fun AlarmScreenPreview(
         AlarmScreen(
             alarms = listOf(alarm),
             preferencesState = PreferencesState(),
-//            alarmEventCallbacks = object : AlarmEventCallbacks {
-//                override fun create(alarm: Alarm) {}
-//
-//                override fun delete(alarm: Alarm) {}
-//
-//                override fun disable(alarm: Alarm) {}
-//
-//                override fun enable(alarm: Alarm) {}
-//
-//                override fun reset(alarm: Alarm) {}
-//
-//                override fun getInitialTimeToAlarm(
-//                    isEnabled: Boolean,
-//                    time: Calendar
-//                ): String {
-//                    return ""
-//                }
-//
-//                override fun getTimeUntilAlarmFormatted(date: Calendar): String {
-//                    return ""
-//                }
-//            }
+            create = {},
+            delete = {},
+            disable = {},
+            enable = {},
+            reset = {},
+            getInitialTimeToAlarm = { _, _ -> "" },
+            getTimeUntilAlarmFormatted = { "" }
         )
     }
 }

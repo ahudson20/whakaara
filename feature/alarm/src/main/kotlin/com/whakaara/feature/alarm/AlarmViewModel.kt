@@ -6,6 +6,7 @@ import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.content.Intent
 import android.provider.Settings
+import android.util.Log
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +17,7 @@ import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.di.IoDispatcher
 import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.preferences.PreferencesRepository
+import com.whakaara.feature.alarm.service.AlarmMediaService
 import com.whakaara.feature.alarm.utils.DateUtils
 import com.whakaara.feature.alarm.utils.DateUtils.Companion.getAlarmTimeFormatted
 import com.whakaara.model.alarm.Alarm
@@ -30,6 +32,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
@@ -46,10 +49,13 @@ class AlarmViewModel @Inject constructor(
     val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()
 
     private val _preferencesState = MutableStateFlow(PreferencesState())
+    val preferencesState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
     init {
         getAllAlarms()
         getPreferences()
+        observeTrigger()
+        observeDeleteTrigger()
     }
 
     private fun getAllAlarms() = viewModelScope.launch {
@@ -61,6 +67,39 @@ class AlarmViewModel @Inject constructor(
     private fun getPreferences() = viewModelScope.launch {
         preferencesRepository.getPreferencesFlow().flowOn(ioDispatcher).collect { preferences ->
             _preferencesState.value = PreferencesState(preferences = preferences, isReady = true)
+        }
+    }
+
+    private fun observeTrigger() = viewModelScope.launch(ioDispatcher) {
+        repository.triggerFlow.collect {
+            recreateEnabledAlarms()
+        }
+    }
+
+    private suspend fun recreateEnabledAlarms() {
+        val preferences = preferencesRepository.getPreferences()
+        val enabledAlarms = repository.getAllAlarms().filter { it.isEnabled }
+        enabledAlarms.forEach { alarm ->
+            createAlarm(
+                alarmId = alarm.alarmId.toString(),
+                autoSilenceTime = preferences.autoSilenceTime.value,
+                date = alarm.date,
+                upcomingAlarmNotificationEnabled = preferences.upcomingAlarmNotification,
+                upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value,
+                repeatAlarmDaily = alarm.repeatDaily,
+                daysOfWeek = alarm.daysOfWeek
+            )
+        }
+    }
+
+    private fun observeDeleteTrigger() = viewModelScope.launch {
+        repository.deleteAlarmTriggerFlow.collect { alarmId ->
+            try {
+                deleteAlarm(alarmId)
+                repository.deleteAlarmById(UUID.fromString(alarmId))
+            } catch (e: Exception) {
+                Log.e("AlarmViewModel", "Failed to delete alarm: $alarmId", e)
+            }
         }
     }
 
@@ -264,7 +303,6 @@ class AlarmViewModel @Inject constructor(
 
     private fun userHasNotGrantedAlarmPermission() = alarmManager.canScheduleExactAlarms()
 
-    @OptIn(ExperimentalLayoutApi::class)
     private fun setAlarm(
         alarmId: String,
         autoSilenceTime: Int,
@@ -358,7 +396,7 @@ class AlarmViewModel @Inject constructor(
         action: Int = NotificationUtilsConstants.PLAY,
         type: Int,
         alarmId: String? = null
-    ) = Intent(app, MediaPlayerService::class.java).apply {
+    ) = Intent(app, AlarmMediaService::class.java).apply {
         this.action = alarmId
         putExtra(NotificationUtilsConstants.INTENT_AUTO_SILENCE, autoSilenceTime)
         putExtra(NotificationUtilsConstants.SERVICE_ACTION, action)
@@ -367,7 +405,7 @@ class AlarmViewModel @Inject constructor(
     }
 
     private fun stopAlarm(alarmId: String) {
-        val intent = Intent(app, MediaPlayerService::class.java).apply {
+        val intent = Intent(app, AlarmMediaService::class.java).apply {
             // setting unique action allows for differentiation when deleting.
             this.action = alarmId
         }

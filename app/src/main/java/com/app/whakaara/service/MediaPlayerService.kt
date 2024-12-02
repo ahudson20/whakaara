@@ -24,7 +24,6 @@ import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.whakaara.activities.FullScreenNotificationActivity
-import com.app.whakaara.receiver.MediaServiceReceiver
 import com.app.whakaara.utility.GeneralUtils
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants

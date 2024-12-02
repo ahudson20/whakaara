@@ -1,25 +1,16 @@
-package com.app.whakaara.receiver
+package com.whakaara.feature.alarm.receiver
 
 import android.content.Context
 import android.content.Intent
-import com.app.whakaara.logic.AlarmManagerWrapper
 import com.whakaara.core.HiltBroadcastReceiver
-import com.whakaara.core.goAsync
 import com.whakaara.data.alarm.AlarmRepository
-import com.whakaara.data.preferences.PreferencesRepository
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class RecreateAlarmsReceiver : HiltBroadcastReceiver() {
     @Inject
-    lateinit var repo: AlarmRepository
-
-    @Inject
-    lateinit var preferencesRepo: PreferencesRepository
-
-    @Inject
-    lateinit var alarmManagerWrapper: AlarmManagerWrapper
+    lateinit var alarmRepository: AlarmRepository
 
     override fun onReceive(
         context: Context,
@@ -39,19 +30,8 @@ class RecreateAlarmsReceiver : HiltBroadcastReceiver() {
             )
         if (!actionsList.contains(intent.action)) return
 
-        goAsync {
-            val preferences = preferencesRepo.getPreferences()
-            repo.getAllAlarms().filter { it.isEnabled }.forEach {
-                alarmManagerWrapper.createAlarm(
-                    alarmId = it.alarmId.toString(),
-                    autoSilenceTime = preferences.autoSilenceTime.value,
-                    date = it.date,
-                    upcomingAlarmNotificationEnabled = preferences.upcomingAlarmNotification,
-                    upcomingAlarmNotificationTime = preferences.upcomingAlarmNotificationTime.value,
-                    repeatAlarmDaily = it.repeatDaily,
-                    daysOfWeek = it.daysOfWeek
-                )
-            }
+        if (intent.action in actionsList) {
+            alarmRepository.triggerAlarmRecreation()
         }
     }
 }

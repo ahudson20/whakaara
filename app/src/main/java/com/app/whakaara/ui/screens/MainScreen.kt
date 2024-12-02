@@ -13,7 +13,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.navigation.BottomNavigation
@@ -39,14 +38,14 @@ fun MainScreen(
     preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentSelectedScreen by navController.currentScreenAsState()
+    val currentRoute by navController.currentRouteAsState()
 
     Scaffold(
         topBar = {
             if (!preferencesState.preferences.shouldShowOnboarding) {
                 TopBar(
-                    route = navBackStackEntry?.destination?.route.toString(), // TODO: change this
+                    route = currentRoute,
                     preferencesState = preferencesState,
                     preferencesEventCallbacks = preferencesEventCallbacks
                 )
@@ -173,6 +172,23 @@ private fun NavController.currentScreenAsState(): State<RootScreen> {
             }
         }
         addOnDestinationChangedListener(listener)
+        onDispose {
+            removeOnDestinationChangedListener(listener)
+        }
+    }
+    return selectedItem
+}
+
+@Stable
+@Composable
+private fun NavController.currentRouteAsState(): State<String?> {
+    val selectedItem = remember { mutableStateOf<String?>(null) }
+    DisposableEffect(this) {
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            selectedItem.value = destination.route
+        }
+        addOnDestinationChangedListener(listener)
+
         onDispose {
             removeOnDestinationChangedListener(listener)
         }

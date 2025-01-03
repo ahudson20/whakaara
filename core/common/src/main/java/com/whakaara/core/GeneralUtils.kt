@@ -1,4 +1,4 @@
-package com.app.whakaara.utility
+package com.whakaara.core
 
 import android.content.Context
 import android.media.RingtoneManager
@@ -6,8 +6,7 @@ import android.net.Uri
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import com.google.gson.Gson
-import com.whakaara.core.constants.GeneralConstants.RINGTONE_NONE_SELECTED
-import com.whakaara.model.alarm.Alarm
+import com.whakaara.core.constants.GeneralConstants
 
 class GeneralUtils {
     companion object {
@@ -23,20 +22,7 @@ class GeneralUtils {
             if (ringtone != null) {
                 return ringtone.getTitle(this)
             }
-            return RINGTONE_NONE_SELECTED
-        }
-
-        /**
-         * Can't pass parcelize object to a BroadcastReceiver inside a PendingIntent extra.
-         * Going to convert the object to a string to pass to the receiver.
-         * https://issuetracker.google.com/issues/36914697
-         * */
-        fun convertAlarmObjectToString(alarm: Alarm): String {
-            return Gson().toJson(alarm)
-        }
-
-        fun convertStringToAlarmObject(string: String?): Alarm {
-            return Gson().fromJson(string, Alarm::class.java)
+            return GeneralConstants.RINGTONE_NONE_SELECTED
         }
 
         fun convertStringToColour(string: String): Color {

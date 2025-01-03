@@ -74,7 +74,7 @@
 
 
         <receiver
-            android:name="com.app.whakaara.com.whakaara.feature.alarm.receiver.RecreateAlarmsReceiver"
+            android:name="com.whakaara.feature.alarm.receiver.RecreateAlarmsReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -88,17 +88,27 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.MediaServiceReceiver"
+<!--        <receiver android:name=".receiver.MediaServiceReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false">-->
+<!--        </receiver>-->
+
+        <receiver android:name="com.whakaara.feature.alarm.receiver.AlarmMediaServiceReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>
 
-        <receiver android:name="net.vbuild.verwoodpages.timer.reciever.TimerReceiver"
+        <receiver android:name="com.whakaara.feature.timer.reciever.TimerMediaServiceReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".receiver.StopwatchReceiver"
+        <receiver android:name="com.whakaara.feature.timer.reciever.TimerReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+
+        <receiver android:name="com.whakaara.feature.stopwatch.receiver.StopwatchReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>
@@ -131,7 +141,14 @@
         </receiver>
 
         <service
-            android:name="com.app.whakaara.service.MediaPlayerService"
+            android:name="com.whakaara.feature.alarm.service.AlarmMediaService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            />
+
+        <service
+            android:name="com.whakaara.feature.timer.service.TimerMediaService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback"

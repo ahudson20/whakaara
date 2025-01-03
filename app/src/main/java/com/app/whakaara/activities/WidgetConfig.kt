@@ -34,8 +34,8 @@ import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.state.PreferencesGlanceStateDefinition
 import com.app.whakaara.R
 import com.app.whakaara.ui.widget.ColourPicker
-import com.app.whakaara.utility.GeneralUtils.Companion.convertStringToColour
 import com.google.gson.Gson
+import com.whakaara.core.GeneralUtils.Companion.convertStringToColour
 import com.whakaara.core.designsystem.theme.Spacings.space10
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
@@ -150,7 +150,7 @@ class WidgetConfig : ComponentActivity() {
                                     finish()
                                 }
                             ) {
-                                Text(text = stringResource(id = R.string.bottom_sheet_close_button))
+                                Text(text = stringResource(id = R.string.widget_config_cancel_button))
                             }
                             Spacer(modifier = Modifier.width(space10))
                             Button(
@@ -178,7 +178,7 @@ class WidgetConfig : ComponentActivity() {
                                     finish()
                                 }
                             ) {
-                                Text(text = stringResource(id = R.string.bottom_sheet_save_button))
+                                Text(text = stringResource(id = R.string.widget_config_save_button))
                             }
                         }
                     }

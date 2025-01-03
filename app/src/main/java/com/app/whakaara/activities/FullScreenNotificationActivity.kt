@@ -16,19 +16,19 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.app.whakaara.R
 import com.app.whakaara.logic.MainViewModel
-import com.app.whakaara.service.MediaPlayerService
 import com.app.whakaara.ui.screens.AlarmFullScreen
 import com.app.whakaara.ui.screens.TimerFullScreen
-import com.app.whakaara.utility.GeneralUtils
-import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.core.GeneralUtils.Companion.showToast
 import com.whakaara.core.constants.NotificationUtilsConstants.INTENT_EXTRA_ALARM
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE
 import com.whakaara.core.constants.NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM
 import com.whakaara.core.constants.NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.alarm.AlarmViewModel
+import com.whakaara.feature.alarm.service.AlarmMediaService
+import com.whakaara.feature.alarm.utils.GeneralUtils
 import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.model.alarm.Alarm
 import dagger.hilt.android.AndroidEntryPoint
@@ -37,6 +37,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class FullScreenNotificationActivity : ComponentActivity() {
     private val viewModel: MainViewModel by viewModels()
     private val timerViewModel: TimerViewModel by viewModels()
+    private val alarmViewModel: AlarmViewModel by viewModels()
     private lateinit var alarm: Alarm
 
     private val broadCastReceiverFinishActivity =
@@ -61,7 +62,7 @@ class FullScreenNotificationActivity : ComponentActivity() {
 
         hideSystemBars()
         turnScreenOnAndKeyguardOff()
-        LocalBroadcastManager.getInstance(this).registerReceiver(broadCastReceiverFinishActivity, IntentFilter(STOP_FULL_SCREEN_ACTIVITY))
+        registerReceiver(broadCastReceiverFinishActivity, IntentFilter(STOP_FULL_SCREEN_ACTIVITY), RECEIVER_NOT_EXPORTED)
 
         if (notificationType == NOTIFICATION_TYPE_ALARM) {
             alarm = GeneralUtils.convertStringToAlarmObject(string = intent.getStringExtra(INTENT_EXTRA_ALARM))
@@ -74,8 +75,8 @@ class FullScreenNotificationActivity : ComponentActivity() {
                 if (notificationType == NOTIFICATION_TYPE_ALARM) {
                     AlarmFullScreen(
                         alarm = alarm,
-                        snooze = viewModel::snooze,
-                        disable = viewModel::disable,
+                        snooze = alarmViewModel::snooze,
+                        disable = alarmViewModel::disable,
                         timeFormat = preferencesState.preferences.timeFormat
                     )
                 } else {
@@ -92,15 +93,16 @@ class FullScreenNotificationActivity : ComponentActivity() {
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         onBackPressedDispatcher.onBackPressed()
-        viewModel.disable(alarm = alarm)
+        alarmViewModel.disable(alarm = alarm)
         this@FullScreenNotificationActivity.showToast(message = this@FullScreenNotificationActivity.getString(R.string.notification_action_cancelled, alarm.title))
         finishAndRemoveTask()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        applicationContext.stopService(Intent(this@FullScreenNotificationActivity, MediaPlayerService::class.java))
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadCastReceiverFinishActivity)
+        applicationContext.stopService(Intent(this@FullScreenNotificationActivity, AlarmMediaService::class.java))
+//        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadCastReceiverFinishActivity)
+        unregisterReceiver(broadCastReceiverFinishActivity)
     }
 
     private fun hideSystemBars() {

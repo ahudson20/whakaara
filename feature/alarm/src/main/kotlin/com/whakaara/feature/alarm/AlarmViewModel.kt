@@ -3,20 +3,21 @@ package com.whakaara.feature.alarm
 import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
-import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.net.Uri
 import android.provider.Settings
 import android.util.Log
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
 import com.whakaara.core.PendingIntentUtils
+import com.whakaara.core.WidgetUpdater
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.di.IoDispatcher
 import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.preferences.PreferencesRepository
+import com.whakaara.feature.alarm.receiver.UpcomingAlarmReceiver
 import com.whakaara.feature.alarm.service.AlarmMediaService
 import com.whakaara.feature.alarm.utils.DateUtils
 import com.whakaara.feature.alarm.utils.DateUtils.Companion.getAlarmTimeFormatted
@@ -42,6 +43,7 @@ class AlarmViewModel @Inject constructor(
     private val alarmManager: AlarmManager,
     private val repository: AlarmRepository,
     private val preferencesRepository: PreferencesRepository,
+    private val widgetUpdater: WidgetUpdater,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ): AndroidViewModel(application = app) {
 
@@ -328,7 +330,10 @@ class AlarmViewModel @Inject constructor(
         val alarmInfoPendingIntent = PendingIntentUtils.getActivity(
             app,
             NotificationUtilsConstants.INTENT_REQUEST_CODE,
-            Intent(app, MainActivity::class.java),
+            Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("app://mainactivity")
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            },
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
@@ -420,12 +425,8 @@ class AlarmViewModel @Inject constructor(
         alarmManager.cancel(pendingIntent)
     }
 
-    fun updateWidget() {
-        app.sendBroadcast(
-            Intent(app, AppWidgetReceiver::class.java).apply {
-                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-            }
-        )
+    private fun updateWidget() {
+        widgetUpdater.updateWidget()
     }
 
     fun cancelUpcomingAlarm(

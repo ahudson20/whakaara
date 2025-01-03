@@ -14,12 +14,16 @@ dependencies {
     // Modules
     modules(Modules.coreCommon, Modules.coreDesignSystem)
 
+    // androidx libs
     implementation(libs.androidx.material3)
     implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.lifecycle.service)
+
     implementation(libs.accompanist.permissions)
     implementation(libs.compose.material3.datetime.pickers)
     implementation(libs.dokar3.bottomsheet)
     implementation(libs.chargemap.numberpicker)
+    implementation(libs.gson)
 
     testImplementation(libs.junit)
 

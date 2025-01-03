@@ -6,13 +6,13 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.sp
-import com.app.whakaara.state.HoursUpdateEvent
+import com.chargemap.compose.numberpicker.FullHours
+import com.chargemap.compose.numberpicker.HoursNumberPicker
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings.spaceLarge
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
-import com.chargemap.compose.numberpicker.FullHours
-import com.chargemap.compose.numberpicker.HoursNumberPicker
+import com.whakaara.feature.alarm.HoursUpdateEvent
 
 @Composable
 fun BottomSheetTimePicker(

@@ -18,6 +18,7 @@ import android.os.Process
 import android.os.VibrationAttributes
 import android.os.Vibrator
 import android.provider.Settings
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import com.whakaara.core.PendingIntentUtils
@@ -141,6 +142,7 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
              * */
             action = NotificationUtilsConstants.INTENT_EXTRA_ACTION_ARBITRARY
         }
+
         val fullScreenPendingIntent = PendingIntentUtils.getActivity(
             applicationContext,
             NotificationUtilsConstants.INTENT_REQUEST_CODE,
@@ -181,7 +183,35 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     }
 
     private fun stop() {
+        // release wakelock
+        if (::wakeLock.isInitialized) wakeLock.release()
 
+        // Remove this service from foreground state, clear notification
+        stopForeground(STOP_FOREGROUND_REMOVE)
+
+        // cancel vibration if still running
+        if (::vibrationTask.isInitialized) vibrationTask.cancel()
+        vibrator.cancel()
+
+        // cancel countdown timer
+        handler.removeCallbacks(runnable)
+
+        // stop ringtone if running, release resources associated
+        try {
+            if (mediaPlayer.isPlaying) {
+                mediaPlayer.stop()
+            }
+
+            mediaPlayer.apply {
+                reset()
+                release()
+            }
+        } catch (exception: IllegalStateException) {
+            Log.e(NotificationUtilsConstants.MEDIA_SERVICE_EXCEPTION_TAG, "MediaPlayer was not initialized.. Cannot stop it...")
+        }
+
+        // cancel fullScreenIntent
+        sendBroadcast(Intent(NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY))
     }
 
     override fun onStartCommand(
@@ -233,5 +263,4 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
         super.onDestroy()
         stop()
     }
-
 }

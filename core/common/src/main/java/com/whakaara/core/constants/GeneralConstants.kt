@@ -21,4 +21,6 @@ object GeneralConstants {
 
     const val RESET_TIMER_DATASTORE_TAG = "resetTimerStateDataStoreTAG"
     const val GO_ASYNC_TAG = "goAsyncTAG"
+
+    const val ACTION_UPDATE_WIDGET = "com.whakaara.core.widget.ACTION_UPDATE_WIDGET"
 }

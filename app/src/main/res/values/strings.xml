@@ -2,7 +2,7 @@
     <string name="app_name">whakaara</string>
 <!--    <string name="time_picker_dialog_title">Select time</string>-->
 
-    <string name="bottom_sheet_title">Edit alarm</string>
+<!--    <string name="bottom_sheet_title">Edit alarm</string>-->
     <string name="bottom_sheet_sub_title">Off</string>
     <string name="bottom_sheet_snooze_switch">Snooze</string>
     <string name="bottom_sheet_snooze_switch_sub_title">Snooze on alarm</string>
@@ -34,7 +34,7 @@
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>
 
-    <string name="notification_sub_text">Tap to dismiss</string>
+<!--    <string name="notification_sub_text">Tap to dismiss</string>-->
 
 <!--    <string name="alarm_screen_empty_list">No alarms to display</string>-->
 
@@ -96,7 +96,7 @@
 <!--    <string name="timer_screen_hour_label">Hours</string>-->
 <!--    <string name="timer_screen_minutes_label">Minutes</string>-->
 <!--    <string name="timer_screen_seconds_label">Seconds</string>-->
-<!--    <string name="timer_notification_content_title">Timer Complete</string>-->
+    <string name="timer_notification_content_title_fullscreen">Timer Complete</string>
 <!--    <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>-->
 <!--    <string name="timer_notification_action_label">Stop</string>-->
 <!--    <string name="timer_screen_paused">Paused</string>-->
@@ -112,8 +112,8 @@
     <string name="timer_notification_sub_text_active">Time left</string>
     <string name="timer_notification_title_paused">Timer paused</string>
     <string name="notification_sub_text_paused">Paused</string>
-    <string name="upcoming_alarm_notification_content_title">Upcoming alarm</string>
-    <string name="upcoming_alarm_notification_sub_text">Time to alarm</string>
+<!--    <string name="upcoming_alarm_notification_content_title">Upcoming alarm</string>-->
+<!--    <string name="upcoming_alarm_notification_sub_text">Time to alarm</string>-->
 
 
     <string name="widget_next_alarm_description">Shows next active alarm</string>
@@ -136,4 +136,7 @@
 <!--    <string name="time_until_alarm_formatted_prefix">Alarm in</string>-->
 
 <!--    <string name="alarm_less_than_one_minute">less than 1 minute</string>-->
+
+    <string name="widget_config_save_button">Save</string>
+    <string name="widget_config_cancel_button">Cancel</string>"
 </resources>

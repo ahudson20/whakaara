@@ -3,6 +3,7 @@ import com.whakaara.structure.modules
 
 plugins {
     alias(libs.plugins.whakaara.android.library)
+    alias(libs.plugins.whakaara.library.compose)
     alias(libs.plugins.whakaara.hilt)
     alias(libs.plugins.whakaara.lint)
 }

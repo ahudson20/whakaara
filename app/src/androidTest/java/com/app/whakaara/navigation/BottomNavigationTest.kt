@@ -6,6 +6,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.ui.navigation.BottomNavigation
+import com.whakaara.core.RootScreen
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import org.junit.Rule
 import org.junit.Test
@@ -20,7 +21,8 @@ class BottomNavigationTest {
         setContent {
             WhakaaraTheme {
                 BottomNavigation(
-                    navController = rememberNavController()
+                    navController = rememberNavController(),
+                    currentSelectedScreen = RootScreen.Alarm
                 )
             }
         }

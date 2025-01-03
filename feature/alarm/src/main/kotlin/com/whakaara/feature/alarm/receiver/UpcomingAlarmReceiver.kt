@@ -1,22 +1,19 @@
-package com.app.whakaara.receiver
+package com.whakaara.feature.alarm.receiver
 
+import android.app.AlarmManager
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.app.whakaara.R
-import com.app.whakaara.logic.AlarmManagerWrapper
 import com.whakaara.core.HiltBroadcastReceiver
 import com.whakaara.core.PendingIntentUtils
+import com.whakaara.core.WidgetUpdater
 import com.whakaara.core.constants.NotificationUtilsConstants
-import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION
-import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME
-import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
-import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START
-import com.whakaara.core.constants.NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP
 import com.whakaara.core.goAsync
 import com.whakaara.data.alarm.AlarmRepository
+import com.whakaara.feature.alarm.R
+import com.whakaara.feature.alarm.service.AlarmMediaService
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.UUID
 import javax.inject.Inject
@@ -35,7 +32,10 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
     lateinit var alarmRepository: AlarmRepository
 
     @Inject
-    lateinit var alarmManagerWrapper: AlarmManagerWrapper
+    lateinit var alarmManager: AlarmManager
+
+    @Inject
+    lateinit var widgetUpdater: WidgetUpdater
 
     override fun onReceive(
         context: Context,
@@ -44,29 +44,29 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
         super.onReceive(context, intent)
         val actionsList =
             listOf(
-                UPCOMING_ALARM_RECEIVER_ACTION_START,
-                UPCOMING_ALARM_RECEIVER_ACTION_STOP,
-                UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
+                NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START,
+                NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP,
+                NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL
             )
-        val intentAction = intent.getStringExtra(UPCOMING_ALARM_INTENT_ACTION)
+        val intentAction = intent.getStringExtra(NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION)
         if (!actionsList.contains(intentAction)) return
 
         val millis =
             intent.getLongExtra(
-                UPCOMING_ALARM_INTENT_TRIGGER_TIME,
+                NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME,
                 0L
             )
 
         goAsync {
             when (intentAction) {
-                UPCOMING_ALARM_RECEIVER_ACTION_START -> {
+                NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_START -> {
                     startNotification(millis = millis, context = context, alarmId = intent.action)
                 }
-                UPCOMING_ALARM_RECEIVER_ACTION_STOP -> {
+                NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_STOP -> {
                     stopNotification(millis = millis)
                 }
-                UPCOMING_ALARM_RECEIVER_ACTION_CANCEL -> {
-                    cancelUpcomingAlarm(alarmId = intent.action, millis = millis)
+                NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL -> {
+                    cancelUpcomingAlarm(alarmId = intent.action, millis = millis, context = context)
                 }
             }
         }
@@ -80,8 +80,8 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
         val intent =
             Intent(context, UpcomingAlarmReceiver::class.java).apply {
                 action = alarmId
-                putExtra(UPCOMING_ALARM_INTENT_ACTION, UPCOMING_ALARM_RECEIVER_ACTION_CANCEL)
-                putExtra(UPCOMING_ALARM_INTENT_TRIGGER_TIME, millis)
+                putExtra(NotificationUtilsConstants.UPCOMING_ALARM_INTENT_ACTION, NotificationUtilsConstants.UPCOMING_ALARM_RECEIVER_ACTION_CANCEL)
+                putExtra(NotificationUtilsConstants.UPCOMING_ALARM_INTENT_TRIGGER_TIME, millis)
             }
         val pendingIntent =
             PendingIntentUtils.getBroadcast(
@@ -106,13 +106,40 @@ class UpcomingAlarmReceiver : HiltBroadcastReceiver() {
     }
 
     private suspend fun cancelUpcomingAlarm(
+        context: Context,
         alarmId: String?,
         millis: Long
     ) {
-        if (alarmId != null) {
+        alarmId?.let { id ->
             alarmRepository.isEnabled(id = UUID.fromString(alarmId), isEnabled = false)
-            alarmManagerWrapper.deleteAlarm(alarmId = alarmId)
+
+            updateWidget()
+
+            stopAlarm(
+                alarmId = id,
+                context = context
+            )
+
             stopNotification(millis = millis)
         }
+    }
+
+    private fun stopAlarm(alarmId: String, context: Context) {
+        val intent = Intent(context, AlarmMediaService::class.java).apply {
+            this.action = alarmId
+        }
+
+        val pendingIntent = PendingIntentUtils.getService(
+            context = context,
+            id = NotificationUtilsConstants.INTENT_REQUEST_CODE,
+            intent = intent,
+            flag = PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        alarmManager.cancel(pendingIntent)
+    }
+
+    private fun updateWidget() {
+        widgetUpdater.updateWidget()
     }
 }

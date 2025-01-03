@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.ui.clock.TextClock
-import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.core.GeneralUtils.Companion.showToast
 import com.whakaara.core.designsystem.theme.AlarmPreviewProvider
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.ThemePreviews

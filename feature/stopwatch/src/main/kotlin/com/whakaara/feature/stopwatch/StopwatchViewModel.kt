@@ -21,6 +21,7 @@ import com.whakaara.data.stopwatch.StopwatchRepository
 import com.whakaara.feature.stopwatch.receiver.StopwatchReceiver
 import com.whakaara.feature.stopwatch.util.DateUtils
 import com.whakaara.model.stopwatch.Lap
+import com.whakaara.model.stopwatch.StopwatchReceiverState
 import com.whakaara.model.stopwatch.StopwatchState
 import com.whakaara.model.stopwatch.asExternalModel
 import com.whakaara.model.stopwatch.asInternalModel
@@ -36,7 +37,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -64,11 +64,11 @@ class StopwatchViewModel @Inject constructor(
         val localState = preferencesDataStore.readStopwatchState().first().asExternalModel()
         stopwatchRepository.stopwatchState.collectLatest { state ->
             when (state) {
-                is com.whakaara.model.stopwatch.StopwatchReceiver.Idle -> {
+                is StopwatchReceiverState.Idle -> {
                     Log.d("StopwatchViewModel", "StopwatchReceiver.Idle")
                 }
 
-                is com.whakaara.model.stopwatch.StopwatchReceiver.Started -> {
+                is StopwatchReceiverState.Started -> {
                     recreateStopwatchActiveFromReceiver(state = localState)
                     cancelNotification()
                     createStopwatchNotification()
@@ -76,7 +76,7 @@ class StopwatchViewModel @Inject constructor(
                     Log.d("StopwatchViewModel", "StopwatchReceiver.Started")
                 }
 
-                is com.whakaara.model.stopwatch.StopwatchReceiver.Paused -> {
+                is StopwatchReceiverState.Paused -> {
                     recreateStopwatchPausedFromReceiver(state = localState)
                     cancelNotification()
                     pauseStopwatchNotification()
@@ -84,7 +84,7 @@ class StopwatchViewModel @Inject constructor(
                     Log.d("StopwatchViewModel", "StopwatchReceiver.Paused")
                 }
 
-                is com.whakaara.model.stopwatch.StopwatchReceiver.Stopped -> {
+                is StopwatchReceiverState.Stopped -> {
                     resetStopwatch()
 
                     Log.d("StopwatchViewModel", "StopwatchReceiver.Stopped")
@@ -227,7 +227,7 @@ class StopwatchViewModel @Inject constructor(
         startStopwatch()
     }
 
-    suspend fun recreateStopwatchActiveFromReceiver(state: StopwatchState) {
+    private suspend fun recreateStopwatchActiveFromReceiver(state: StopwatchState) {
         if (stopwatchState.value != StopwatchState()) {
             startStopwatch()
         } else {
@@ -243,7 +243,7 @@ class StopwatchViewModel @Inject constructor(
         preferencesDataStore.saveStopwatchState(stopwatchState.value.asInternalModel())
     }
 
-    fun recreateStopwatchPausedFromReceiver(state: StopwatchState) {
+    private suspend fun recreateStopwatchPausedFromReceiver(state: StopwatchState) {
         if (stopwatchState.value != StopwatchState()) {
             pauseStopwatch()
         } else {
@@ -254,28 +254,23 @@ class StopwatchViewModel @Inject constructor(
                 state = state.copy(
                     lastTimeStamp = current,
                     timeMillis = time,
-                    formattedTime = DateUtils.formatTimeForStopwatch(
-                        millis = time
-                    ),
+                    formattedTime = DateUtils.formatTimeForStopwatch(millis = time),
                     isPaused = true,
                     isActive = false,
                     isStart = false
                 )
             )
         }
-
-        runBlocking {
-            preferencesDataStore.saveStopwatchState(stopwatchState.value.asInternalModel())
-        }
+        preferencesDataStore.saveStopwatchState(stopwatchState.value.asInternalModel())
     }
 
-    fun recreateStopwatchPaused(state: StopwatchState) {
+    private fun recreateStopwatchPaused(state: StopwatchState) {
         _stopwatchState.update {
             state
         }
     }
 
-    fun createStopwatchNotification() {
+    private fun createStopwatchNotification() {
         val lastTimeStamp = System.currentTimeMillis()
         val setWhen =
             if (stopwatchState.value.isStart) {

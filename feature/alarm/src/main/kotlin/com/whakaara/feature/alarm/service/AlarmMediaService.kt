@@ -26,18 +26,18 @@ import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.di.IoDispatcher
+import com.whakaara.core.di.MainDispatcher
 import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.feature.alarm.receiver.AlarmMediaServiceReceiver
 import com.whakaara.feature.alarm.utils.GeneralUtils
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.GradualSoundDuration
-import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.VibrationPattern
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import java.time.LocalDate
 import java.util.TimerTask
 import java.util.UUID
@@ -73,6 +73,10 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     lateinit var iODispatcher: CoroutineDispatcher
 
     @Inject
+    @MainDispatcher
+    lateinit var mainDispatcher: CoroutineDispatcher
+
+    @Inject
     lateinit var volumeShaperConfiguration: VolumeShaper.Configuration.Builder
 
     private var serviceLooper: Looper? = null
@@ -98,52 +102,55 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     }
 
     private fun play(data: Bundle) {
-        val preferences: Preferences = runBlocking {
-            preferencesRepository.getPreferences()
-        }
-
-        val alarm = runBlocking {
-            alarmRepository.getAlarmById(
+        lifecycleScope.launch(iODispatcher) {
+            val preferences = preferencesRepository.getPreferences()
+            val alarm = alarmRepository.getAlarmById(
                 id = UUID.fromString(data.getString(NotificationUtilsConstants.INTENT_ALARM_ID))
             )
-        }
 
-        val today = LocalDate.now().getDayOfWeek().value - 1
-        if (alarm.daysOfWeek.isNotEmpty() && !alarm.daysOfWeek.contains(today)) {
-            this.stopSelf()
-        }
-
-        if (!alarm.repeatDaily || alarm.daysOfWeek.isEmpty()) {
-            if (alarm.deleteAfterGoesOff) {
-                deleteAlarmById(alarmId = alarm.alarmId)
-            } else {
-                setIsEnabledToFalse(alarmId = alarm.alarmId)
-            }
-        }
-
-        setupMediaPlayer(
-            soundPath = preferences.alarmSoundPath,
-            duration = preferences.gradualSoundDuration.inMillis()
-        )
-
-        startForeground(
-            NotificationUtilsConstants.FOREGROUND_SERVICE_ID,
-            createAlarmNotification(alarm = alarm),
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-        )
-
-        if (preferences.isVibrateEnabled) vibrate(vibrationPattern = preferences.vibrationPattern)
-
-        if (!powerManager.isInteractive) {
-            wakeLock = powerManager.run {
-                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, GeneralConstants.WAKE_LOCK_TAG).apply {
-                    acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+            withContext(mainDispatcher) {
+                val today = LocalDate.now().dayOfWeek.value - 1
+                if (alarm.daysOfWeek.isNotEmpty() && !alarm.daysOfWeek.contains(today)) {
+                    stopSelf()
+                    return@withContext
                 }
+
+                if (!alarm.repeatDaily || alarm.daysOfWeek.isEmpty()) {
+                    if (alarm.deleteAfterGoesOff) {
+                        deleteAlarmById(alarm.alarmId)
+                    } else {
+                        setIsEnabledToFalse(alarm.alarmId)
+                    }
+                }
+
+                setupMediaPlayer(
+                    soundPath = preferences.alarmSoundPath,
+                    duration = preferences.gradualSoundDuration.inMillis()
+                )
+
+                startForeground(
+                    NotificationUtilsConstants.FOREGROUND_SERVICE_ID,
+                    createAlarmNotification(alarm = alarm),
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+                )
+
+                if (preferences.isVibrateEnabled) {
+                    vibrate(vibrationPattern = preferences.vibrationPattern)
+                }
+
+                if (!powerManager.isInteractive) {
+                    wakeLock = powerManager.newWakeLock(
+                        PowerManager.PARTIAL_WAKE_LOCK,
+                        GeneralConstants.WAKE_LOCK_TAG
+                    ).apply {
+                        acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+                    }
+                }
+
+                // set timeout on service
+                handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
             }
         }
-
-        // set timeout on service
-        handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
     }
 
     private fun setupMediaPlayer(soundPath: String, duration: Long) {

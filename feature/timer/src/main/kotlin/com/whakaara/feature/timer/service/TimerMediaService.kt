@@ -21,16 +21,21 @@ import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
+import androidx.lifecycle.lifecycleScope
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants
 import com.whakaara.core.constants.NotificationUtilsConstants
+import com.whakaara.core.di.IoDispatcher
+import com.whakaara.core.di.MainDispatcher
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.feature.timer.R
 import com.whakaara.feature.timer.reciever.TimerMediaServiceReceiver
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.VibrationPattern
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.TimerTask
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -59,6 +64,14 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     @Named("timer")
     lateinit var timerNotificationBuilder: NotificationCompat.Builder
 
+    @Inject
+    @IoDispatcher
+    lateinit var iODispatcher: CoroutineDispatcher
+
+    @Inject
+    @MainDispatcher
+    lateinit var mainDispatcher: CoroutineDispatcher
+
 
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
@@ -83,33 +96,35 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     }
 
     private fun play(data: Bundle) {
-        val preferences: Preferences = runBlocking {
-            preferencesRepository.getPreferences()
-        }
+        lifecycleScope.launch(iODispatcher) {
+            val preferences: Preferences = preferencesRepository.getPreferences()
 
-        setupMediaPlayer(
-            soundPath = preferences.timerSoundPath,
-            duration = preferences.timerGradualSoundDuration.inMillis()
-        )
+            withContext(mainDispatcher) {
+                setupMediaPlayer(
+                    soundPath = preferences.timerSoundPath,
+                    duration = preferences.timerGradualSoundDuration.inMillis()
+                )
 
-        startForeground(
-            NotificationUtilsConstants.FOREGROUND_SERVICE_ID,
-            createTimerNotification(),
-            ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
-        )
+                startForeground(
+                    NotificationUtilsConstants.FOREGROUND_SERVICE_ID,
+                    createTimerNotification(),
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST
+                )
 
-        if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
+                if (preferences.isVibrationTimerEnabled) vibrate(vibrationPattern = preferences.timerVibrationPattern)
 
-        if (!powerManager.isInteractive) {
-            wakeLock = powerManager.run {
-                newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, GeneralConstants.WAKE_LOCK_TAG).apply {
-                    acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+                if (!powerManager.isInteractive) {
+                    wakeLock = powerManager.run {
+                        newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, GeneralConstants.WAKE_LOCK_TAG).apply {
+                            acquire(TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+                        }
+                    }
                 }
+
+                // set timeout on service
+                handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
             }
         }
-
-        // set timeout on service
-        handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
     }
 
     private fun setupMediaPlayer(soundPath: String, duration: Long) {

@@ -31,6 +31,7 @@ import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.feature.alarm.receiver.AlarmMediaServiceReceiver
 import com.whakaara.feature.alarm.utils.GeneralUtils
 import com.whakaara.model.alarm.Alarm
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.VibrationPattern
 import dagger.hilt.android.AndroidEntryPoint
@@ -146,7 +147,10 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     }
 
     private fun setupMediaPlayer(soundPath: String, duration: Long) {
-        volumeShaperConfiguration.apply { setDuration(duration) }
+        if (duration > GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER.seconds) {
+            volumeShaperConfiguration.apply { setDuration(duration) }
+        }
+
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,
@@ -222,8 +226,10 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
     private fun createAlarmNotification(alarm: Alarm): Notification {
         val fullScreenIntent = Intent().apply {
-            data = Uri.parse("app://fullscreennotificationactivity") // TODO: fix this later
-//            setClass(applicationContext, FullScreenNotificationActivity::class.java)
+            setClassName(
+                applicationContext.packageName,
+                "com.app.whakaara.activities.FullScreenNotificationActivity"
+            )
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(NotificationUtilsConstants.NOTIFICATION_TYPE, NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM)
             putExtra(NotificationUtilsConstants.INTENT_EXTRA_ALARM, GeneralUtils.convertAlarmObjectToString(alarm))

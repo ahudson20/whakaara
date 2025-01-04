@@ -130,8 +130,10 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
     private fun createTimerNotification(): Notification {
         val fullScreenIntent = Intent().apply {
-            data = Uri.parse("app://fullscreennotificationactivity") // TODO: fix this later
-//            setClass(applicationContext, FullScreenNotificationActivity::class.java)
+            setClassName(
+                applicationContext.packageName,
+                "com.app.whakaara.activities.FullScreenNotificationActivity"
+            )
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(NotificationUtilsConstants.NOTIFICATION_TYPE, NotificationUtilsConstants.NOTIFICATION_TYPE_TIMER)
 

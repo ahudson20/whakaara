@@ -1,12 +1,5 @@
 package com.whakaara.model.preferences
 
-import com.whakaara.model.preferences.AppTheme
-import com.whakaara.model.preferences.GradualSoundDuration
-import com.whakaara.model.preferences.Preferences
-import com.whakaara.model.preferences.SettingsTime
-import com.whakaara.model.preferences.TimeFormat
-import com.whakaara.model.preferences.VibrationPattern
-
 data class PreferencesState(
     val isReady: Boolean = false,
     val preferences: Preferences = Preferences(

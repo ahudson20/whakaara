@@ -22,7 +22,6 @@ fun TimerRoute(
         stopTimer = viewModel::resetTimer,
         restartTimer = viewModel::restartTimer,
         pauseTimer = viewModel::pauseTimer,
-        timeFormat = preferences.preferences.timeFormat,
-//        autoRestartTimer = preferences.preferences.autoRestartTimer
+        timeFormat = preferences.preferences.timeFormat
     )
 }

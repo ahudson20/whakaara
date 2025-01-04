@@ -3,10 +3,9 @@ package com.whakaara.feature.alarm
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.app.whakaara.state.HoursUpdateEvent
-import com.whakaara.feature.alarm.ui.BottomSheetTimePicker
-import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.chargemap.compose.numberpicker.FullHours
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.alarm.ui.BottomSheetTimePicker
 import org.junit.Rule
 import org.junit.Test
 

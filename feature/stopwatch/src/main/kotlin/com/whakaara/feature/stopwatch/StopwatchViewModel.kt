@@ -51,7 +51,7 @@ class StopwatchViewModel @Inject constructor(
     @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val preferencesDataStore: PreferencesDataStoreRepository,
     private val stopwatchRepository: StopwatchRepository
-): AndroidViewModel(application = app) {
+) : AndroidViewModel(application = app) {
 
     private val _stopwatchState: MutableStateFlow<StopwatchState> = MutableStateFlow(StopwatchState())
     val stopwatchState: StateFlow<StopwatchState> = _stopwatchState.asStateFlow()

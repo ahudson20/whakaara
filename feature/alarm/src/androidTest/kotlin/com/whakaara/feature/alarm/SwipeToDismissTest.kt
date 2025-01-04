@@ -1,16 +1,14 @@
 package com.whakaara.feature.alarm
 
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
-import com.whakaara.feature.alarm.ui.DismissBackground
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.alarm.ui.DismissBackground
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalMaterial3Api::class)
 class SwipeToDismissTest {
     @get:Rule
     val composeTestRule = createComposeRule()

@@ -3,8 +3,8 @@ package com.whakaara.feature.alarm
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import com.whakaara.feature.alarm.ui.BottomSheetDetailsTopBar
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.alarm.ui.BottomSheetDetailsTopBar
 import org.junit.Rule
 import org.junit.Test
 

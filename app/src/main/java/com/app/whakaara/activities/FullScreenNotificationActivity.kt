@@ -101,7 +101,6 @@ class FullScreenNotificationActivity : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
         applicationContext.stopService(Intent(this@FullScreenNotificationActivity, AlarmMediaService::class.java))
-//        LocalBroadcastManager.getInstance(this).unregisterReceiver(broadCastReceiverFinishActivity)
         unregisterReceiver(broadCastReceiverFinishActivity)
     }
 

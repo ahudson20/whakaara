@@ -356,7 +356,7 @@ class TimerViewModel @Inject constructor(
         )
     }
 
-    fun recreatePausedTimer(
+    private fun recreatePausedTimer(
         milliseconds: Long,
         inputHours: String,
         inputMinutes: String,
@@ -415,7 +415,7 @@ class TimerViewModel @Inject constructor(
         putExtra(NotificationUtilsConstants.INTENT_ALARM_ID, alarmId)
     }
 
-    fun startTimerNotificationCountdown(milliseconds: Long) {
+    private fun startTimerNotificationCountdown(milliseconds: Long) {
         val pauseReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = NotificationUtilsConstants.TIMER_RECEIVER_ACTION_PAUSE)
         val stopTimerReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = NotificationUtilsConstants.TIMER_RECEIVER_ACTION_STOP)
 
@@ -507,7 +507,7 @@ class TimerViewModel @Inject constructor(
         )
     }
 
-    fun cancelTimerAlarm() {
+    private fun cancelTimerAlarm() {
         val startReceiverIntent =
             Intent(app, TimerMediaService::class.java).apply {
                 this.action = NotificationUtilsConstants.INTENT_TIMER_NOTIFICATION_ID

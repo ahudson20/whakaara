@@ -1,7 +1,7 @@
 package com.whakaara.feature.alarm
 
-import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.feature.alarm.utils.DateUtils
+import com.whakaara.model.preferences.TimeFormat
 import org.junit.Assert
 import org.junit.Test
 import java.util.Calendar

@@ -72,7 +72,6 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     @MainDispatcher
     lateinit var mainDispatcher: CoroutineDispatcher
 
-
     private var serviceLooper: Looper? = null
     private var serviceHandler: ServiceHandler? = null
 

@@ -28,7 +28,6 @@ class WidgetConfigViewModel @Inject constructor(
     private val preferencesDataStoreRepository: PreferencesDataStoreRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application = app) {
-
     private val _textColor = MutableStateFlow<Color?>(null)
     val textColor: StateFlow<Color?> = _textColor.asStateFlow()
 

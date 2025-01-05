@@ -24,6 +24,8 @@ class AndroidLintPlugin : Plugin<Project> {
                 filter {
                     exclude("**/generated/**")
                     include("**/kotlin/**")
+
+                    exclude("**/app/src/test/java/com/app/whakaara/logic/**")
                 }
             }
         }

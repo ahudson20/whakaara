@@ -20,8 +20,6 @@ class MainViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-
-    // preferences
     private val _preferencesState = MutableStateFlow(PreferencesState())
     val preferencesUiState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 

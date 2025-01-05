@@ -1,15 +1,5 @@
 root = true
 
-# Ignore specific files
-[**/app/src/test/java/com/app/whakaara/logic/AlarmManagerWrapperTest.kt]
-disabled_rules=all
-
-[**/app/src/test/java/com/app/whakaara/logic/StopwatchManagerWrapperTest.kt]
-disabled_rules=all
-
-[**/app/src/test/java/com/app/whakaara/logic/TimerManagerWrapperTest.kt]
-disabled_rules=all
-
 [*]
 indent_size = 4
 insert_final_newline = true

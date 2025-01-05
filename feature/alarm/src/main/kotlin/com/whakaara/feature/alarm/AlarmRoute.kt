@@ -2,7 +2,6 @@ package com.whakaara.feature.alarm
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.whakaara.core.designsystem.loading.Loading
 import com.whakaara.feature.alarm.ui.AlarmScreen

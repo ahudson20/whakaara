@@ -2,7 +2,6 @@ package com.whakaara.feature.stopwatch
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.whakaara.feature.stopwatch.ui.StopwatchScreen
 

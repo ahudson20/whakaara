@@ -308,7 +308,6 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
         return super.onStartCommand(intent, flags, startId)
     }
 
-
     override fun onPrepared(mp: MediaPlayer?) {
         val volumeShaper = mediaPlayer.createVolumeShaper(volumeShaperConfiguration.build())
         mediaPlayer.start()

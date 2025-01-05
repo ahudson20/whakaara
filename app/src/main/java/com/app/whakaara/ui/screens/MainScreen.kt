@@ -29,12 +29,6 @@ import com.whakaara.model.preferences.TimeFormat
 @Composable
 fun MainScreen(
     preferencesState: PreferencesState,
-//    alarmState: AlarmState,
-//    stopwatchState: StopwatchState,
-//    timerState: TimerState,
-//    alarmEventCallbacks: AlarmEventCallbacks,
-//    timerEventCallbacks: TimerEventCallbacks,
-//    stopwatchEventCallbacks: StopwatchEventCallbacks,
     preferencesEventCallbacks: PreferencesEventCallbacks
 ) {
     val navController = rememberNavController()
@@ -63,15 +57,7 @@ fun MainScreen(
         Box(modifier = Modifier.padding(innerPadding)) {
             NavGraph(
                 navController = navController,
-                shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding,
-//                preferencesState = preferencesState,
-//                alarmState = alarmState,
-//                stopwatchState = stopwatchState,
-//                timerState = timerState,
-//                alarmEventCallbacks = alarmEventCallbacks,
-//                timerEventCallbacks = timerEventCallbacks,
-//                stopwatchEventCallbacks = stopwatchEventCallbacks,
-//                updatePreferences = preferencesEventCallbacks::updatePreferences
+                shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding
             )
         }
     }
@@ -84,55 +70,6 @@ fun MainPreview() {
     WhakaaraTheme {
         MainScreen(
             preferencesState = PreferencesState(),
-//            alarmState = AlarmState.Success(),
-//            stopwatchState = StopwatchState(),
-//            timerState = TimerState(),
-//            alarmEventCallbacks = object : AlarmEventCallbacks {
-//                override fun create(alarm: Alarm) {}
-//
-//                override fun delete(alarm: Alarm) {}
-//
-//                override fun disable(alarm: Alarm) {}
-//
-//                override fun enable(alarm: Alarm) {}
-//
-//                override fun reset(alarm: Alarm) {}
-//
-//                override fun getInitialTimeToAlarm(
-//                    isEnabled: Boolean,
-//                    time: Calendar
-//                ): String {
-//                    return ""
-//                }
-//
-//                override fun getTimeUntilAlarmFormatted(date: Calendar): String {
-//                    return ""
-//                }
-//            },
-//            timerEventCallbacks = object : TimerEventCallbacks {
-//                override fun updateHours(newValue: String) {}
-//
-//                override fun updateMinutes(newValue: String) {}
-//
-//                override fun updateSeconds(newValue: String) {}
-//
-//                override fun startTimer() {}
-//
-//                override fun stopTimer() {}
-//
-//                override fun pauseTimer() {}
-//
-//                override fun restartTimer(autoRestartTimer: Boolean) {}
-//            },
-//            stopwatchEventCallbacks = object : StopwatchEventCallbacks {
-//                override fun startStopwatch() {}
-//
-//                override fun pauseStopwatch() {}
-//
-//                override fun stopStopwatch() {}
-//
-//                override fun lapStopwatch() {}
-//            },
             preferencesEventCallbacks = object : PreferencesEventCallbacks {
                 override fun updatePreferences(preferences: Preferences) {}
 

@@ -44,8 +44,8 @@ class AlarmViewModel @Inject constructor(
     private val repository: AlarmRepository,
     private val preferencesRepository: PreferencesRepository,
     private val widgetUpdater: WidgetUpdater,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-): AndroidViewModel(application = app) {
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+) : AndroidViewModel(application = app) {
 
     private val _alarmState = MutableStateFlow<AlarmState>(AlarmState.Loading)
     val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()

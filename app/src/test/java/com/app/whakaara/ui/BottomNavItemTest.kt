@@ -6,6 +6,7 @@ import androidx.compose.material.icons.outlined.HourglassEmpty
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Timer
 import com.app.whakaara.ui.navigation.BottomNavItem
+import com.whakaara.core.RootScreen
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -16,7 +17,7 @@ class BottomNavItemTest {
 
         assertEquals(item.title, "Alarm")
         assertEquals(item.icon, Icons.Outlined.Alarm)
-        assertEquals(item.route, "alarm")
+        assertEquals(item.route, RootScreen.Alarm.route)
     }
 
     @Test
@@ -25,7 +26,7 @@ class BottomNavItemTest {
 
         assertEquals(item.title, "Settings")
         assertEquals(item.icon, Icons.Outlined.Settings)
-        assertEquals(item.route, "settings")
+        assertEquals(item.route, RootScreen.Settings.route)
     }
 
     @Test
@@ -34,7 +35,7 @@ class BottomNavItemTest {
 
         assertEquals(item.title, "Timer")
         assertEquals(item.icon, Icons.Outlined.HourglassEmpty)
-        assertEquals(item.route, "timer")
+        assertEquals(item.route, RootScreen.Timer.route)
     }
 
     @Test
@@ -43,6 +44,6 @@ class BottomNavItemTest {
 
         assertEquals(item.title, "Stopwatch")
         assertEquals(item.icon, Icons.Outlined.Timer)
-        assertEquals(item.route, "stopwatch")
+        assertEquals(item.route, RootScreen.Stopwatch.route)
     }
 }

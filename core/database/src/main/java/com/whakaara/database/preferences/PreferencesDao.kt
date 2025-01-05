@@ -21,4 +21,7 @@ interface PreferencesDao {
 
     @Query("SELECT * FROM preferences_table")
     fun getPreferences(): PreferencesEntity
+
+    @Query("UPDATE preferences_table SET shouldShowOnboarding = :shouldShowOnboarding")
+    suspend fun updateShouldShowOnboarding(shouldShowOnboarding: Boolean)
 }

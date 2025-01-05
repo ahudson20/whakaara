@@ -33,6 +33,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="app" android:host="mainactivity" />
             </intent-filter>
 
             <intent-filter>
@@ -44,14 +45,24 @@
                 android:resource="@xml/shortcuts" />
 
         </activity>
+
         <activity
             android:name=".activities.FullScreenNotificationActivity"
+            android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Whakaara"
             android:showForAllUsers="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
-            tools:ignore="LockedOrientationActivity" />
+            tools:ignore="LockedOrientationActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.FullScreenNotificationActivity" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <data android:scheme="app" android:host="fullscreennotificationactivity" />
+            </intent-filter>
+
+        </activity>
 
         <activity android:name=".activities.WidgetConfig"
             android:exported="true"
@@ -63,7 +74,7 @@
 
 
         <receiver
-            android:name="com.app.whakaara.receiver.RecreateAlarmsReceiver"
+            android:name="com.whakaara.feature.alarm.receiver.RecreateAlarmsReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
@@ -77,17 +88,27 @@
             </intent-filter>
         </receiver>
 
-        <receiver android:name=".receiver.MediaServiceReceiver"
+<!--        <receiver android:name=".receiver.MediaServiceReceiver"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false">-->
+<!--        </receiver>-->
+
+        <receiver android:name="com.whakaara.feature.alarm.receiver.AlarmMediaServiceReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".receiver.TimerReceiver"
+        <receiver android:name="com.whakaara.feature.timer.reciever.TimerMediaServiceReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>
 
-        <receiver android:name=".receiver.StopwatchReceiver"
+        <receiver android:name="com.whakaara.feature.timer.reciever.TimerReceiver"
+            android:enabled="true"
+            android:exported="false">
+        </receiver>
+
+        <receiver android:name="com.whakaara.feature.stopwatch.receiver.StopwatchReceiver"
             android:enabled="true"
             android:exported="false">
         </receiver>
@@ -97,7 +118,7 @@
             android:enabled="true">
         </receiver>
 
-        <receiver android:name=".receiver.AppWidgetReceiver"
+        <receiver android:name="com.whakaara.core.widget.AppWidgetReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -108,7 +129,7 @@
                 android:resource="@xml/next_alarm_widget_info" />
         </receiver>
 
-        <receiver android:name=".widget.AppShortcutWidgetReceiver"
+        <receiver android:name="com.whakaara.core.widget.AppShortcutWidgetReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -120,7 +141,14 @@
         </receiver>
 
         <service
-            android:name="com.app.whakaara.service.MediaPlayerService"
+            android:name="com.whakaara.feature.alarm.service.AlarmMediaService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"
+            />
+
+        <service
+            android:name="com.whakaara.feature.timer.service.TimerMediaService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaPlayback"

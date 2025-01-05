@@ -5,6 +5,9 @@ import com.whakaara.database.alarm.entity.AlarmEntity
 import com.whakaara.database.alarm.entity.asExternalModel
 import com.whakaara.database.alarm.entity.asInternalModel
 import com.whakaara.model.alarm.Alarm
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.map
 import java.util.UUID
 
@@ -29,4 +32,17 @@ class AlarmRepositoryImpl(
     ) = alarmDao.isEnabled(id, isEnabled)
 
     override suspend fun getAlarmById(id: UUID): Alarm = alarmDao.getAlarmById(id).asExternalModel()
+
+    private val _triggerFlow = MutableSharedFlow<Unit>(replay = 0)
+    override val triggerFlow: SharedFlow<Unit> = _triggerFlow.asSharedFlow()
+
+    override fun triggerAlarmRecreation() {
+        _triggerFlow.tryEmit(Unit)
+    }
+
+    private val _deleteAlarmTriggerFlow = MutableSharedFlow<String>(replay = 0)
+    override val deleteAlarmTriggerFlow: SharedFlow<String> = _deleteAlarmTriggerFlow.asSharedFlow()
+    override fun triggerDeleteAlarmById(id: String) {
+        _deleteAlarmTriggerFlow.tryEmit(id)
+    }
 }

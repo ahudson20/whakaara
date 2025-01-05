@@ -19,11 +19,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.space200
-import com.app.whakaara.ui.theme.Spacings.space5
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space200
+import com.whakaara.core.designsystem.theme.Spacings.space5
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 
 @Composable
 fun ColourPicker(

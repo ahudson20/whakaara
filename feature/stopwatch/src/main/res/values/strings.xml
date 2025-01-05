@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="notification_timer_play_action_label">Resume</string>
+    <string name="notification_timer_pause_action_label">Pause</string>
+    <string name="notification_timer_stop_action_label">Stop</string>
+<!--    <string name="notification_upcoming_alarm_cancel">Cancel</string>-->
+    <string name="notification_sub_text_paused">Paused</string>
+
+    <string name="stopwatch_notification_sub_text">Elapsed time</string>
+</resources>

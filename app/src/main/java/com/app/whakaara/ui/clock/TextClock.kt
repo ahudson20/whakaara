@@ -6,10 +6,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.res.ResourcesCompat
 import com.app.whakaara.R
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
 import com.whakaara.core.constants.DateUtilsConstants
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.preferences.TimeFormat
 
 @Composable

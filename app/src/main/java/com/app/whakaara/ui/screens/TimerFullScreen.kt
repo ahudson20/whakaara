@@ -17,11 +17,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.app.whakaara.R
 import com.app.whakaara.ui.clock.TextClock
-import com.app.whakaara.ui.theme.FontScalePreviews
-import com.app.whakaara.ui.theme.Spacings.spaceMedium
-import com.app.whakaara.ui.theme.ThemePreviews
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.app.whakaara.utility.GeneralUtils.Companion.showToast
+import com.whakaara.core.GeneralUtils.Companion.showToast
+import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
+import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.preferences.TimeFormat
 
 @Composable
@@ -40,7 +40,7 @@ fun TimerFullScreen(
                 .padding(innerPadding)
         ) {
             Text(
-                text = stringResource(id = R.string.timer_notification_content_title),
+                text = stringResource(id = R.string.timer_notification_content_title_fullscreen),
                 style = MaterialTheme.typography.titleLarge
             )
 

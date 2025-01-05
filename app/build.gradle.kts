@@ -62,7 +62,16 @@ android {
 }
 
 dependencies {
-    modules(Modules.coreCommon, Modules.coreData)
+    modules(
+        Modules.coreCommon,
+        Modules.coreData,
+        Modules.coreDesignSystem,
+        Modules.coreWidget,
+        Modules.featureTimer,
+        Modules.featureAlarm,
+        Modules.featureStopwatch,
+        Modules.featureOnboarding
+    )
     testImplementation(project(Modules.coreTest))
 
     implementation(libs.androidx.navigation.compose)
@@ -129,7 +138,6 @@ dependencies {
     implementation(libs.gson)
 
     // Hilt
-    implementation(libs.androidx.hilt.nav.compose)
     androidTestImplementation(libs.dagger.hilt.testing.android)
     kspTest(libs.dagger.hilt.compiler.android)
 
@@ -149,5 +157,5 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
 
     // Lottie animation
-    implementation(libs.lottie)
+//    implementation(libs.lottie)
 }

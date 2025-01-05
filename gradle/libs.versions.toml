@@ -22,8 +22,8 @@ accompanistPermissions = "0.34.0"
 chargemap = "1.0.3"
 dokar3 = "0.5.7"
 material3 = "1.3.1"
-materialIconsExtended = "1.7.5"
-materialVersion = "1.7.5"
+materialIconsExtended = "1.7.6"
+materialVersion = "1.7.6"
 timePickerVersion = "0.7.2"
 composeSettingsM3 = "1.0.3"
 turbine = "1.1.0"
@@ -128,6 +128,7 @@ kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 # Plugins defined by this project
 whakaara-android-application = { id = "whakaara.android.application", version = "unspecified" }
 whakaara-android-library = { id = "whakaara.android.library", version = "unspecified" }
+whakaara-android-feature = { id = "whakaara.android.feature", version = "unspecified" }
 whakaara-hilt = { id = "whakaara.hilt", version = "unspecified" }
 whakaara-hilt-work = { id = "whakaara.hilt.work", version = "unspecified" }
 whakaara-lint = { id = "whakaara.lint", version = "unspecified" }

@@ -6,6 +6,10 @@ import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.data.datastore.PreferencesDataStoreRepositoryImpl
 import com.whakaara.data.preferences.PreferencesImpl
 import com.whakaara.data.preferences.PreferencesRepository
+import com.whakaara.data.stopwatch.StopwatchRepository
+import com.whakaara.data.stopwatch.StopwatchRepositoryImpl
+import com.whakaara.data.timer.TimerRepository
+import com.whakaara.data.timer.TimerRepositoryImpl
 import com.whakaara.database.alarm.AlarmDao
 import com.whakaara.database.datastore.PreferencesDataStore
 import com.whakaara.database.preferences.PreferencesDao
@@ -38,4 +42,16 @@ class DataModule {
         PreferencesDataStoreRepositoryImpl(
             preferencesDataStore = preferencesDataStore
         )
+
+    @Provides
+    @Singleton
+    fun provideTimerRepository(
+        preferencesDataStore: PreferencesDataStore
+    ): TimerRepository = TimerRepositoryImpl(preferencesDataStore = preferencesDataStore)
+
+    @Provides
+    @Singleton
+    fun provideStopwatchRepository(
+        preferencesDataStore: PreferencesDataStore
+    ): StopwatchRepository = StopwatchRepositoryImpl(preferencesDataStore = preferencesDataStore)
 }

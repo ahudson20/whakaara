@@ -11,43 +11,35 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.logic.MainViewModel
-import com.app.whakaara.state.AlarmState
-import com.app.whakaara.state.events.AlarmEventCallbacks
 import com.app.whakaara.state.events.PreferencesEventCallbacks
-import com.app.whakaara.state.events.StopwatchEventCallbacks
-import com.app.whakaara.state.events.TimerEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
-import com.whakaara.model.alarm.Alarm
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.alarm.AlarmViewModel
+import com.whakaara.feature.stopwatch.StopwatchViewModel
+import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.model.preferences.AppTheme
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.TimeFormat
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.Calendar
 
 @AndroidEntryPoint
 @ExperimentalLayoutApi
-class MainActivity :
-    ComponentActivity(),
-    AlarmEventCallbacks,
-    TimerEventCallbacks,
-    StopwatchEventCallbacks,
-    PreferencesEventCallbacks {
+class MainActivity : ComponentActivity(), PreferencesEventCallbacks {
     private val viewModel: MainViewModel by viewModels()
+    private val timerViewModel: TimerViewModel by viewModels()
+    private val stopwatchViewModel: StopwatchViewModel by viewModels()
+    private val alarmViewModel: AlarmViewModel by viewModels()
 
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         installSplashScreen().setKeepOnScreenCondition {
-            viewModel.alarmState.value is AlarmState.Loading && !viewModel.preferencesUiState.value.isReady
+            !viewModel.preferencesUiState.value.isReady
         }
 
         setContent {
             val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
-            val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
-            val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
-            val timerState by viewModel.timerState.collectAsStateWithLifecycle()
 
             val useDarkColours = when (preferencesState.preferences.appTheme) {
                 AppTheme.MODE_DAY -> false
@@ -61,13 +53,10 @@ class MainActivity :
             ) {
                 MainScreen(
                     preferencesState = preferencesState,
-                    alarmState = alarmState,
-                    stopwatchState = stopwatchState,
-                    timerState = timerState,
-                    alarmEventCallbacks = this@MainActivity,
-                    timerEventCallbacks = this@MainActivity,
-                    stopwatchEventCallbacks = this@MainActivity,
-                    preferencesEventCallbacks = this@MainActivity
+                    preferencesEventCallbacks = this@MainActivity,
+                    alarmViewModel = alarmViewModel,
+                    timerViewModel = timerViewModel,
+                    stopwatchViewModel = stopwatchViewModel
                 )
             }
         }
@@ -75,114 +64,40 @@ class MainActivity :
 
     override fun onResume() {
         super.onResume()
-        with(viewModel) {
-            recreateTimer()
+
+        with(stopwatchViewModel) {
             recreateStopwatch()
             cancelStopwatchNotification()
+        }
+
+        with(timerViewModel) {
+            recreateTimer()
             cancelTimerNotification()
         }
     }
 
     override fun onPause() {
         super.onPause()
-        with(viewModel) {
-            saveTimerStateForRecreation()
+        with(stopwatchViewModel) {
             saveStopwatchStateForRecreation()
             startStopwatchNotification()
+        }
+
+        with(timerViewModel) {
+            saveTimerStateForRecreation()
             startTimerNotification()
         }
     }
 
-    //region alarm
-    override fun create(alarm: Alarm) {
-        viewModel.create(alarm = alarm)
-    }
-
-    override fun delete(alarm: Alarm) {
-        viewModel.delete(alarm = alarm)
-    }
-
-    override fun disable(alarm: Alarm) {
-        viewModel.disable(alarm = alarm)
-    }
-
-    override fun enable(alarm: Alarm) {
-        viewModel.enable(alarm = alarm)
-    }
-
-    override fun reset(alarm: Alarm) {
-        viewModel.reset(alarm = alarm)
-    }
-
-    override fun getInitialTimeToAlarm(
-        isEnabled: Boolean,
-        time: Calendar
-    ): String = viewModel.getInitialTimeToAlarm(isEnabled = isEnabled, time = time)
-
-    override fun getTimeUntilAlarmFormatted(date: Calendar): String = viewModel.getTimeUntilAlarmFormatted(date = date)
-    //endregion
-
-    //region timer
-    override fun updateHours(newValue: String) {
-        viewModel.updateInputHours(newValue = newValue)
-    }
-
-    override fun updateMinutes(newValue: String) {
-        viewModel.updateInputMinutes(newValue = newValue)
-    }
-
-    override fun updateSeconds(newValue: String) {
-        viewModel.updateInputSeconds(newValue = newValue)
-    }
-
-    override fun startTimer() {
-        viewModel.startTimer()
-    }
-
-    override fun stopTimer() {
-        viewModel.resetTimer()
-    }
-
-    override fun pauseTimer() {
-        viewModel.pauseTimer()
-    }
-
-    override fun restartTimer(autoRestartTimer: Boolean) {
-        viewModel.restartTimer(autoRestartTimer = autoRestartTimer)
-    }
-    //endregion
-
-    //region stopwatch
-    override fun startStopwatch() {
-        viewModel.startStopwatch()
-    }
-
-    override fun pauseStopwatch() {
-        viewModel.pauseStopwatch()
-    }
-
-    override fun stopStopwatch() {
-        viewModel.resetStopwatch()
-    }
-
-    override fun lapStopwatch() {
-        viewModel.lapStopwatch()
-    }
-    //endregion
-
-    //region preferences
     override fun updatePreferences(preferences: Preferences) {
         viewModel.updatePreferences(preferences = preferences)
     }
 
     override fun updateAllAlarmSubtitles(format: TimeFormat) {
-        viewModel.updateAllAlarmSubtitles(format = format)
+        alarmViewModel.updateAllAlarmSubtitles(format = format)
     }
 
     override fun updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification: Boolean) {
-        viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(
-            shouldEnableUpcomingAlarmNotification = shouldEnableUpcomingAlarmNotification
-        )
+        alarmViewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(shouldEnableUpcomingAlarmNotification)
     }
-    //endregion
 }

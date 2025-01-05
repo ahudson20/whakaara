@@ -1,33 +1,9 @@
 <resources>
     <string name="app_name">whakaara</string>
-    <string name="time_picker_dialog_title">Select time</string>
 
-    <string name="permission_prompt_message">Notification permission required</string>
-    <string name="permission_prompt_action_label">Go to settings</string>
-
-    <string name="bottom_sheet_title">Edit alarm</string>
     <string name="bottom_sheet_sub_title">Off</string>
     <string name="bottom_sheet_snooze_switch">Snooze</string>
     <string name="bottom_sheet_snooze_switch_sub_title">Snooze on alarm</string>
-    <string name="bottom_sheet_vibration_switch">Vibrate</string>
-    <string name="bottom_sheet_vibration_switch_sub_title">Vibrate on alarm</string>
-    <string name="bottom_sheet_delete_switch">Single-use</string>
-    <string name="bottom_sheet_delete_switch_sub_title">Alarm deletes after going off</string>
-    <string name="bottom_sheet_save_button">Save</string>
-    <string name="bottom_sheet_close_button">Cancel</string>
-    <string name="bottom_sheet_title_time_until_alarm">Alarm in %1$s:%2$s</string>
-    <string name="bottom_sheet_content_alarm_title">Title</string>
-    <string name="bottom_sheet_icon_cancel_content_description">Cancel alarm changes</string>
-    <string name="bottom_sheet_icon_save_content_description">Save alarm changes</string>
-    <string name="bottom_sheet_repeat_switch_title">Repeating</string>
-    <string name="bottom_sheet_repeat_switch_sub_title">Alarm will repeat daily</string>
-    <string name="bottom_sheet_custom_alarm_days_title">Custom</string>
-    <string name="bottom_sheet_custom_alarm_days_sub_title">Select certain days to repeat alarm</string>
-    <string name="bottom_sheet_title_characters">%1$d / %2$d</string>
-
-    <string name="card_alarm_sub_title_off">Off</string>
-    <string name="card_repeat_daily_icon_content_description">Repeat alarm daily icon</string>
-    <string name="card_alarm_single_shot_content_description">Delete after goes off icon</string>
 
     <string name="notification_action_deleted">%1$s deleted</string>
     <string name="notification_action_cancelled">%1$s cancelled</string>
@@ -37,19 +13,8 @@
     <string name="notification_action_button_snooze">Snooze</string>
     <string name="notification_action_button_dismiss">Dismiss</string>
 
-    <string name="notification_sub_text">Tap to dismiss</string>
-
-    <string name="alarm_screen_empty_list">No alarms to display</string>
-
-    <string name="floating_action_button_icon_description">Create alarm</string>
-    <string name="delete_icon_content_description">Delete icon</string>
-    <string name="pause_timer_icon_content_description">Pause timer icon button</string>
-    <string name="start_timer_icon_content_description">Start timer icon button</string>
-    <string name="stop_timer_icon_content_description">Stop timer icon button</string>
-    <string name="lap_reset_icon_content_description">Extra fab icon button</string>
     <string name="system_time_icon_content_description">System time</string>
     <string name="settings_icon_content_description">Alarm settings icon</string>
-    <string name="timer_countdown_finish_time_icon_content_description">Timer finish time icon</string>
     <string name="settings_screen_battery_optimization_icon_content_description">Battery optimization icon</string>
 
 
@@ -96,13 +61,7 @@
     <string name="settings_screen_gradual_volume_increase_title">Gentle rise</string>
     <string name="settings_screen_gradual_volume_increase_subtitle">Gradually increase volume</string>
 
-    <string name="timer_screen_hour_label">Hours</string>
-    <string name="timer_screen_minutes_label">Minutes</string>
-    <string name="timer_screen_seconds_label">Seconds</string>
-    <string name="timer_notification_content_title">Timer Complete</string>
-    <string name="timer_notification_content_text">Press stop or swipe to dismiss</string>
-    <string name="timer_notification_action_label">Stop</string>
-    <string name="timer_screen_paused">Paused</string>
+    <string name="timer_notification_content_title_fullscreen">Timer Complete</string>
 
     <string name="shortcut_alarm_short_label">Alarm</string>
     <string name="shortcut_alarm_long_label">Create alarm</string>
@@ -115,14 +74,9 @@
     <string name="timer_notification_sub_text_active">Time left</string>
     <string name="timer_notification_title_paused">Timer paused</string>
     <string name="notification_sub_text_paused">Paused</string>
-    <string name="upcoming_alarm_notification_content_title">Upcoming alarm</string>
-    <string name="upcoming_alarm_notification_sub_text">Time to alarm</string>
 
 
     <string name="widget_next_alarm_description">Shows next active alarm</string>
-    <string name="widget_next_alarm_icon_description">Alarm icon</string>
-    <string name="widget_next_alarm_title">Next alarm</string>
-    <string name="widget_next_alarm_none">None set</string>
     <string name="widget_next_alarm_preview_time">12:59PM</string>
     <string name="widget_next_alarm_preview_title">Wake up now!</string>
     <string name="widget_shortcut_description">App shortcut</string>
@@ -134,29 +88,15 @@
 
     <string name="timer_full_screen_cancelled">Timer cancelled</string>
 
-    <string name="onboarding_button_next">Next</string>
-    <string name="onboarding_button_complete">Complete</string>
-    <string name="onboarding_widget_title">Widget</string>
-    <string name="onboarding_widget_button">Create widget</string>
-    <string name="onboarding_widget_sub_text">This app supports displaying your next scheduled alarm in a widget</string>
-    <string name="onboarding_widget_sub_text_second">Try adding it to the home screen and using it!</string>
-    <string name="onboarding_battery_title">Battery</string>
-    <string name="onboarding_battery_sub_text">This app requires unrestricted battery settings, otherwise certain functionality may not work as expected!</string>
-    <string name="onboarding_battery_button">Disable battery optimization</string>
-    <string name="onboarding_notification_button_enabled">Permission granted</string>
-    <string name="onboarding_notification_button_not_enabled">Enable notifications</string>
-    <string name="onboarding_notification_title">Notifications</string>
-    <string name="onboarding_sub_text">This app requires permission to send you notifications!</string>
-    <string name="onboarding_welcome_title">Welcome to whakaara</string>
-    <string name="onboarding_welcome_sub_text">This screen will guide you through the most important setup steps</string>
-    <string name="onboarding_welcome_icon_description">whakaara app icon</string>
-
     <string name="notification_timer_play_action_label">Resume</string>
     <string name="notification_timer_pause_action_label">Pause</string>
     <string name="notification_timer_stop_action_label">Stop</string>
     <string name="notification_upcoming_alarm_cancel">Cancel</string>
 
-    <string name="time_until_alarm_formatted_prefix">Alarm in</string>
+    <string name="widget_config_save_button">Save</string>
+    <string name="widget_config_cancel_button">Cancel</string>
 
-    <string name="alarm_less_than_one_minute">less than 1 minute</string>
+    <string name="top_bar_title_alarm">Alarm</string>
+    <string name="top_bar_title_timer">Timer</string>
+    <string name="top_bar_title_stopwatch">Stopwatch</string>
 </resources>

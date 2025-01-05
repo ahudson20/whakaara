@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.app.whakaara.ui.screens.AlarmFullScreen
-import com.app.whakaara.ui.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.TimeFormat
 import org.junit.Rule

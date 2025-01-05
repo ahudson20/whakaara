@@ -28,5 +28,11 @@ include(
     ":core:database",
     ":core:data",
     ":core:model",
-    ":core:test"
+    ":core:test",
+    ":feature:alarm",
+    ":feature:stopwatch",
+    ":feature:timer",
+    ":feature:onboarding"
 )
+include(":core:designsystem")
+include(":core:widget")

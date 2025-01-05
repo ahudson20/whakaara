@@ -94,7 +94,9 @@ class StopwatchViewModel @Inject constructor(
     }
 
     fun saveStopwatchStateForRecreation() = viewModelScope.launch(ioDispatcher) {
+        println("stopwatchState.value.isActive || stopwatchState.value.isPaused: ${stopwatchState.value.isActive || stopwatchState.value.isPaused}")
         if (stopwatchState.value.isActive || stopwatchState.value.isPaused) {
+            println("saveStopwatchState")
             preferencesDataStore.saveStopwatchState(
                 state = stopwatchState.value.asInternalModel()
             )
@@ -115,9 +117,12 @@ class StopwatchViewModel @Inject constructor(
     }
 
     fun startStopwatchNotification() {
+        println("startStopwatchNotification")
         if (stopwatchState.value.isActive) {
+            println("createStopwatchNotification")
             createStopwatchNotification()
         } else if (stopwatchState.value.isPaused) {
+            println("pauseStopwatchNotification")
             pauseStopwatchNotification()
         }
     }
@@ -271,6 +276,7 @@ class StopwatchViewModel @Inject constructor(
     }
 
     private fun createStopwatchNotification() {
+        println("--------createStopwatchNotification-------------")
         val lastTimeStamp = System.currentTimeMillis()
         val setWhen =
             if (stopwatchState.value.isStart) {

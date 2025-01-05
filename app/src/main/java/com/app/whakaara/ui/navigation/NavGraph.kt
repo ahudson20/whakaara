@@ -8,14 +8,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.RootScreen
+import com.whakaara.feature.alarm.AlarmViewModel
 import com.whakaara.feature.alarm.navigation.alarmScreen
+import com.whakaara.feature.stopwatch.StopwatchViewModel
 import com.whakaara.feature.stopwatch.navigation.stopwatchScreen
+import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.feature.timer.navigation.timerScreen
 import com.whakaara.onboarding.navigation.onboardingScreen
 
 @Composable
 fun NavGraph(
     navController: NavHostController,
+    stopwatchViewModel: StopwatchViewModel,
+    timerViewModel: TimerViewModel,
+    alarmViewModel: AlarmViewModel,
     shouldShowOnboarding: Boolean = false
 ) {
     NavHost(
@@ -27,36 +33,54 @@ fun NavGraph(
         }
     ) {
         addOnboardingRoute(navController)
-        addAlarmRoute()
-        addTimerRoute()
-        addStopwatchRoute()
+        addAlarmRoute(
+            viewModel = alarmViewModel
+        )
+        addTimerRoute(
+            viewModel = timerViewModel
+        )
+        addStopwatchRoute(
+            viewModel = stopwatchViewModel
+        )
     }
 }
 
-private fun NavGraphBuilder.addAlarmRoute() {
+private fun NavGraphBuilder.addAlarmRoute(
+    viewModel: AlarmViewModel
+) {
     navigation(
         route = RootScreen.Alarm.route,
         startDestination = LeafScreen.Alarm.route
     ) {
-        alarmScreen()
+        alarmScreen(
+            viewModel = viewModel
+        )
     }
 }
 
-private fun NavGraphBuilder.addTimerRoute() {
+private fun NavGraphBuilder.addTimerRoute(
+    viewModel: TimerViewModel
+) {
     navigation(
         route = RootScreen.Timer.route,
         startDestination = LeafScreen.Timer.route
     ) {
-        timerScreen()
+        timerScreen(
+            viewModel = viewModel
+        )
     }
 }
 
-private fun NavGraphBuilder.addStopwatchRoute() {
+private fun NavGraphBuilder.addStopwatchRoute(
+    viewModel: StopwatchViewModel
+) {
     navigation(
         route = RootScreen.Stopwatch.route,
         startDestination = LeafScreen.Stopwatch.route
     ) {
-        stopwatchScreen()
+        stopwatchScreen(
+            viewModel = viewModel
+        )
     }
 }
 

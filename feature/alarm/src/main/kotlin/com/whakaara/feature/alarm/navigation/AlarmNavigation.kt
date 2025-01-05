@@ -8,12 +8,15 @@ import androidx.navigation.navDeepLink
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.constants.GeneralConstants.DEEPLINK_ALARM
 import com.whakaara.feature.alarm.AlarmRoute
+import com.whakaara.feature.alarm.AlarmViewModel
 
 fun NavController.navigateToAlarmScreen(navOptions: NavOptions? = null) {
     navigate(LeafScreen.Alarm.route, navOptions)
 }
 
-fun NavGraphBuilder.alarmScreen() {
+fun NavGraphBuilder.alarmScreen(
+    viewModel: AlarmViewModel
+) {
     composable(
         route = LeafScreen.Alarm.route,
         deepLinks = listOf(
@@ -22,6 +25,8 @@ fun NavGraphBuilder.alarmScreen() {
             }
         )
     ) {
-        AlarmRoute()
+        AlarmRoute(
+            viewModel = viewModel
+        )
     }
 }

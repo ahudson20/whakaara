@@ -295,7 +295,7 @@ fun AlarmSettings(
         onClick = {
             scope.launch {
                 GlanceAppWidgetManager(context).requestPinGlanceAppWidget(
-                    receiver = com.whakaara.core.widget.AppWidgetReceiver::class.java
+                    receiver = AppWidgetReceiver::class.java
                 )
             }
         }

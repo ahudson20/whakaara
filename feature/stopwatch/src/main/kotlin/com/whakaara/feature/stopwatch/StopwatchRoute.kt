@@ -8,7 +8,7 @@ import com.whakaara.feature.stopwatch.ui.StopwatchScreen
 
 @Composable
 fun StopwatchRoute(
-    viewModel: StopwatchViewModel = hiltViewModel()
+    viewModel: StopwatchViewModel
 ) {
     val stopwatchState by viewModel.stopwatchState.collectAsStateWithLifecycle()
 

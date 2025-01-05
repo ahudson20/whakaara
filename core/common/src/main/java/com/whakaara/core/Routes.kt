@@ -18,4 +18,6 @@ sealed class LeafScreen(val route: String) {
     data object Timer : LeafScreen("timer")
 
     data object Onboarding : LeafScreen("onboarding")
+
+    data object Settings : LeafScreen("settings")
 }

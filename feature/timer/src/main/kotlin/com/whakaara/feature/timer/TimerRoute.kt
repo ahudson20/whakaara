@@ -8,7 +8,7 @@ import com.whakaara.feature.timer.ui.TimerScreen
 
 @Composable
 fun TimerRoute(
-    viewModel: TimerViewModel = hiltViewModel()
+    viewModel: TimerViewModel
 ) {
     val timerState by viewModel.timerState.collectAsStateWithLifecycle()
     val preferences by viewModel.preferences.collectAsStateWithLifecycle()

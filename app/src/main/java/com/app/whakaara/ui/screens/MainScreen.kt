@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
@@ -22,6 +23,9 @@ import com.whakaara.core.RootScreen
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.alarm.AlarmViewModel
+import com.whakaara.feature.stopwatch.StopwatchViewModel
+import com.whakaara.feature.timer.TimerViewModel
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
@@ -29,7 +33,10 @@ import com.whakaara.model.preferences.TimeFormat
 @Composable
 fun MainScreen(
     preferencesState: PreferencesState,
-    preferencesEventCallbacks: PreferencesEventCallbacks
+    preferencesEventCallbacks: PreferencesEventCallbacks,
+    stopwatchViewModel: StopwatchViewModel,
+    timerViewModel: TimerViewModel,
+    alarmViewModel: AlarmViewModel
 ) {
     val navController = rememberNavController()
     val currentSelectedScreen by navController.currentScreenAsState()
@@ -57,7 +64,10 @@ fun MainScreen(
         Box(modifier = Modifier.padding(innerPadding)) {
             NavGraph(
                 navController = navController,
-                shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding
+                shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding,
+                alarmViewModel = alarmViewModel,
+                timerViewModel = timerViewModel,
+                stopwatchViewModel = stopwatchViewModel
             )
         }
     }
@@ -79,7 +89,10 @@ fun MainPreview() {
                     shouldEnableUpcomingAlarmNotification: Boolean
                 ) {
                 }
-            }
+            },
+            alarmViewModel = hiltViewModel(),
+            stopwatchViewModel = hiltViewModel(),
+            timerViewModel = hiltViewModel()
         )
     }
 }

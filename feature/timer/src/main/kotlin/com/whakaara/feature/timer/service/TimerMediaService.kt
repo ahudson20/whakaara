@@ -30,6 +30,7 @@ import com.whakaara.core.di.MainDispatcher
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.feature.timer.R
 import com.whakaara.feature.timer.reciever.TimerMediaServiceReceiver
+import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.VibrationPattern
 import dagger.hilt.android.AndroidEntryPoint
@@ -127,7 +128,10 @@ class TimerMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     }
 
     private fun setupMediaPlayer(soundPath: String, duration: Long) {
-        volumeShaperConfiguration.apply { setDuration(duration) }
+        if (duration > GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER.seconds) {
+            volumeShaperConfiguration.apply { setDuration(duration) }
+        }
+
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,

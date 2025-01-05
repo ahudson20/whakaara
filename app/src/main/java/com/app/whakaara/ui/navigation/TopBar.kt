@@ -40,15 +40,15 @@ fun TopBar(
         title = {
             when (route) {
                 BottomNavItem.Alarm.route -> {
-                    Text(text = "Alarm")
+                    Text(text = stringResource(id = R.string.top_bar_title_alarm))
                 }
 
                 BottomNavItem.Timer.route -> {
-                    Text(text = "Timer")
+                    Text(text = stringResource(id = R.string.top_bar_title_timer))
                 }
 
                 BottomNavItem.Stopwatch.route -> {
-                    Text(text = "Stopwatch")
+                    Text(text = stringResource(id = R.string.top_bar_title_stopwatch))
                 }
             }
         },

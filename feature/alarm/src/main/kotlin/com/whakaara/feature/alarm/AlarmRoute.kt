@@ -10,7 +10,7 @@ import com.whakaara.model.alarm.AlarmState
 
 @Composable
 fun AlarmRoute(
-    viewModel: AlarmViewModel = hiltViewModel()
+    viewModel: AlarmViewModel
 ) {
     val alarmState by viewModel.alarmState.collectAsStateWithLifecycle()
     val preferencesState by viewModel.preferencesState.collectAsStateWithLifecycle()

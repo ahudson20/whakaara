@@ -53,7 +53,10 @@ class MainActivity : ComponentActivity(), PreferencesEventCallbacks {
             ) {
                 MainScreen(
                     preferencesState = preferencesState,
-                    preferencesEventCallbacks = this@MainActivity
+                    preferencesEventCallbacks = this@MainActivity,
+                    alarmViewModel = alarmViewModel,
+                    timerViewModel = timerViewModel,
+                    stopwatchViewModel = stopwatchViewModel
                 )
             }
         }

@@ -8,12 +8,15 @@ import androidx.navigation.navDeepLink
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.constants.GeneralConstants.DEEPLINK_TIMER
 import com.whakaara.feature.timer.TimerRoute
+import com.whakaara.feature.timer.TimerViewModel
 
 fun NavController.navigateToTimerScreen(navOptions: NavOptions? = null) {
     navigate(LeafScreen.Timer.route, navOptions)
 }
 
-fun NavGraphBuilder.timerScreen() {
+fun NavGraphBuilder.timerScreen(
+    viewModel: TimerViewModel
+) {
     composable(
         route = LeafScreen.Timer.route,
         deepLinks = listOf(
@@ -22,6 +25,8 @@ fun NavGraphBuilder.timerScreen() {
             }
         )
     ) {
-        TimerRoute()
+        TimerRoute(
+            viewModel = viewModel
+        )
     }
 }

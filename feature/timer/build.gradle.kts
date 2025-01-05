@@ -30,4 +30,6 @@ dependencies {
     androidTestImplementation(libs.androidx.test.junit.ext)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit)
+
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

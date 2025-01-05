@@ -1,5 +1,15 @@
 root = true
 
+# Ignore specific files
+[app/src/test/java/com/app/whakaara/logic/AlarmManagerWrapperTest.kt]
+disabled_rules=all
+
+[app/src/test/java/com/app/whakaara/logic/StopwatchManagerWrapperTest.kt]
+disabled_rules=all
+
+[app/src/test/java/com/app/whakaara/logic/TimerManagerWrapperTest.kt]
+disabled_rules=all
+
 [*]
 indent_size = 4
 insert_final_newline = true
@@ -18,7 +28,6 @@ ktlint_standard_trailing-comma-on-declaration-site = disabled
 ktlint_standard_max-line-length = disabled
 ktlint_standard_import-ordering = disabled
 ktlint_standard_final-newline = enabled
-ktlint_standard_import-ordering = disabled
 ktlint_function_naming_ignore_when_annotated_with = Composable, _
 ktlint_standard_string-template-indent = disabled
 ktlint_standard_multiline-expression-wrapping = disabled

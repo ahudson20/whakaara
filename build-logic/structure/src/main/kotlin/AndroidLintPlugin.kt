@@ -24,11 +24,6 @@ class AndroidLintPlugin : Plugin<Project> {
                 filter {
                     exclude("**/generated/**")
                     include("**/kotlin/**")
-
-                    // TODO: remove when migrating unit tests
-                    exclude("AlarmManagerWrapperTest.kt")
-                    exclude("StopwatchManagerWrapperTest.kt")
-                    exclude("TimerManagerWrapperTest.kt")
                 }
             }
         }

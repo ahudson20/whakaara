@@ -314,7 +314,7 @@ class StopwatchViewModel @Inject constructor(
         )
     }
 
-    fun pauseStopwatchNotification() {
+    private fun pauseStopwatchNotification() {
         val startReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_START)
         val stopReceiverIntent = app.applicationContext.getTimerReceiverIntent(intentAction = NotificationUtilsConstants.STOPWATCH_RECEIVER_ACTION_STOP)
 

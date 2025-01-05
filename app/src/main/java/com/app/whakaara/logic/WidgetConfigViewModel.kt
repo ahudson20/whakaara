@@ -26,7 +26,7 @@ import javax.inject.Inject
 class WidgetConfigViewModel @Inject constructor(
     private val app: Application,
     private val preferencesDataStoreRepository: PreferencesDataStoreRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application = app) {
 
     private val _textColor = MutableStateFlow<Color?>(null)

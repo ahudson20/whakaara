@@ -2,32 +2,24 @@ package com.app.whakaara.logic
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import app.cash.turbine.test
-import com.whakaara.model.alarm.AlarmState
-import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.data.datastore.PreferencesDataStoreRepository
 import com.whakaara.data.preferences.PreferencesRepository
 import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.SettingsTime
-import com.whakaara.model.preferences.TimeFormat
-import com.whakaara.model.stopwatch.StopwatchState
-import com.whakaara.model.timer.TimerState
 import com.whakaara.test.MainDispatcherRule
 import com.whakaara.test.MockUtil
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.slot
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -35,6 +27,8 @@ import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
 import java.util.Calendar
+
+// TODO: migrate tests into relevant feature module unit tests
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(JUnit4::class)
@@ -47,24 +41,19 @@ class MainViewModelTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     private var testDispatcher = UnconfinedTestDispatcher()
-    private var testDispatcherMain = UnconfinedTestDispatcher()
 
     private lateinit var viewModel: MainViewModel
-    private var repository: AlarmRepository = mockk(relaxed = true)
     private var preferencesRepository: PreferencesRepository = mockk(relaxed = true)
-//    private var alarmManagerWrapper: AlarmManagerWrapper = mockk(relaxed = true)
-//    private var timerManagerWrapper: TimerManagerWrapper = mockk(relaxed = true)
-//    private var stopwatchManagerWrapper: StopwatchManagerWrapper = mockk(relaxed = true)
     private var preferencesDataStore: PreferencesDataStoreRepository = mockk(relaxed = true)
     private lateinit var preferences: Preferences
     private lateinit var alarms: List<Alarm>
-    private lateinit var stopwatchState: StopwatchState
-    private lateinit var timerState: TimerState
+//    private lateinit var stopwatchState: StopwatchState
+//    private lateinit var timerState: TimerState
 
     @Before
     fun setUp() {
-        stopwatchState = StopwatchState()
-        timerState = TimerState()
+//        stopwatchState = StopwatchState()
+//        timerState = TimerState()
 
         alarms = listOf(
             Alarm(
@@ -94,82 +83,43 @@ class MainViewModelTest {
         )
         preferences = MockUtil.mockDefaultPreferences()
 
-        coEvery { repository.getAllAlarmsFlow() } returns flowOf(alarms)
-        coEvery { repository.insert(any()) } just Runs
-        coEvery { repository.delete(any()) } just Runs
-        coEvery { repository.update(any()) } just Runs
-
         coEvery { preferencesRepository.getPreferencesFlow() } returns flowOf(preferences)
         coEvery { preferencesRepository.updatePreferences(any()) } just Runs
-
-//        every { alarmManagerWrapper.createAlarm(any(), any(), any(), any(), any(), any(), any()) } just Runs
-//        every { alarmManagerWrapper.stopStartUpdateWidget(any(), any(), any(), any(), any(), any(), any()) } just Runs
-//        every { alarmManagerWrapper.deleteAlarm(any()) } just Runs
-//        every { alarmManagerWrapper.setUpcomingAlarm(any(), any(), any(), any(), any(), any()) } just Runs
-//        every { alarmManagerWrapper.updateWidget() } just Runs
-//        every { alarmManagerWrapper.cancelUpcomingAlarm(any(), any()) } just Runs
-
-//        every { stopwatchManagerWrapper.startStopwatch() } just Runs
-//        every { stopwatchManagerWrapper.pauseStopwatch() } just Runs
-//        every { stopwatchManagerWrapper.resetStopwatch() } just Runs
-//        every { stopwatchManagerWrapper.lapStopwatch() } just Runs
-//        every { stopwatchManagerWrapper.createStopwatchNotification() } just Runs
-//        every { stopwatchManagerWrapper.pauseStopwatchNotification() } just Runs
-//        every { stopwatchManagerWrapper.cancelNotification() } just Runs
-
         coEvery { preferencesDataStore.saveStopwatchState(any()) } just Runs
         coEvery { preferencesDataStore.clearStopwatchState() } just Runs
         coEvery { preferencesDataStore.saveTimerData(any()) } just Runs
 
-//        every { timerManagerWrapper.updateInputHours(any()) } just Runs
-//        every { timerManagerWrapper.updateInputMinutes(any()) } just Runs
-//        every { timerManagerWrapper.updateInputSeconds(any()) } just Runs
-//        every { timerManagerWrapper.startTimer() } just Runs
-//        every { timerManagerWrapper.pauseTimer() } just Runs
-//        every { timerManagerWrapper.restartTimer(any()) } just Runs
-//        every { timerManagerWrapper.recreateActiveTimer(any(), any(), any(), any()) } just Runs
-//        every { timerManagerWrapper.recreatePausedTimer(any(), any(), any(), any()) } just Runs
-//        every { timerManagerWrapper.pauseTimerNotificationCountdown() } just Runs
-//        every { timerManagerWrapper.startTimerNotificationCountdown(any()) } just Runs
-//        every { timerManagerWrapper.cancelNotification() } just Runs
-
         viewModel = MainViewModel(
-            repository,
             preferencesRepository,
-            alarmManagerWrapper,
-//            timerManagerWrapper,
-//            stopwatchManagerWrapper,
-            preferencesDataStore,
-            testDispatcher,
-            testDispatcherMain
+            testDispatcher
         )
     }
 
-    @Test
-    fun `init test - alarm state`() = runTest {
-        // Given + When + Then
-        viewModel.alarmState.test {
-            val alarmState = awaitItem()
-
-            assertTrue(alarmState is AlarmState.Success)
-
-            with(alarmState as AlarmState.Success) {
-                assertEquals(2, this.alarms.size)
-
-                this.alarms[0].apply {
-                    assertEquals("First Alarm Title", this.title)
-                    assertEquals("14:34 PM", this.subTitle)
-                }
-
-                this.alarms[1].apply {
-                    assertEquals("Second Alarm Title", this.title)
-                    assertEquals("14:34 PM", this.subTitle)
-                }
-            }
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
+//    @Test
+//    fun `init test - alarm state`() = runTest {
+//        // Given + When + Then
+//        viewModel.alarmState.test {
+//            val alarmState = awaitItem()
+//
+//            assertTrue(alarmState is AlarmState.Success)
+//
+//            with(alarmState as AlarmState.Success) {
+//                assertEquals(2, this.alarms.size)
+//
+//                this.alarms[0].apply {
+//                    assertEquals("First Alarm Title", this.title)
+//                    assertEquals("14:34 PM", this.subTitle)
+//                }
+//
+//                this.alarms[1].apply {
+//                    assertEquals("Second Alarm Title", this.title)
+//                    assertEquals("14:34 PM", this.subTitle)
+//                }
+//            }
+//
+//            cancelAndIgnoreRemainingEvents()
+//        }
+//    }
 
     @Test
     fun `init test - preferences state`() = runTest {
@@ -207,303 +157,303 @@ class MainViewModelTest {
     }
 
     //region alarm
-    @Test
-    fun `create alarm`() = runTest {
-        // Given
-        val alarm = Alarm(
-            date = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 12)
-                set(Calendar.MINUTE, 34)
-            },
-            subTitle = "10:03PM"
-        )
-        val alarmSlot = slot<Alarm>()
+//    @Test
+//    fun `create alarm`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            subTitle = "10:03PM"
+//        )
+//        val alarmSlot = slot<Alarm>()
+//
+//        // When
+//        viewModel.create(alarm = alarm)
+//
+//        // Then
+//        coVerify(exactly = 1) { repository.insert(capture(alarmSlot)) }
+//        coVerify(exactly = 1) {
+//            alarmManagerWrapper.createAlarm(
+//                alarm.alarmId.toString(),
+//                alarm.date,
+//                any(),
+//                any(),
+//                any(),
+//                alarm.repeatDaily,
+//                alarm.daysOfWeek
+//            )
+//        }
+//        with(alarmSlot.captured) {
+//            assertEquals(alarm.date, date)
+//            assertEquals("10:03PM", subTitle)
+//        }
+//    }
 
-        // When
-        viewModel.create(alarm = alarm)
+//    @Test
+//    fun `delete alarm`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            subTitle = "10:03PM"
+//        )
+//        val alarmSlot = slot<Alarm>()
+//        val alarmIdSlot = slot<String>()
+//
+//        // When
+//        viewModel.delete(alarm = alarm)
+//
+//        // Then
+//        coVerify(exactly = 1) { repository.delete(capture(alarmSlot)) }
+//        coVerify(exactly = 1) { alarmManagerWrapper.deleteAlarm(capture(alarmIdSlot)) }
+//        coVerify(exactly = 1) { alarmManagerWrapper.cancelUpcomingAlarm(alarmId = any(), alarmDate = any()) }
+//        with(alarmSlot.captured) {
+//            assertEquals(alarm.date, date)
+//            assertEquals("10:03PM", subTitle)
+//        }
+//        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
+//    }
 
-        // Then
-        coVerify(exactly = 1) { repository.insert(capture(alarmSlot)) }
-        coVerify(exactly = 1) {
-            alarmManagerWrapper.createAlarm(
-                alarm.alarmId.toString(),
-                alarm.date,
-                any(),
-                any(),
-                any(),
-                alarm.repeatDaily,
-                alarm.daysOfWeek
-            )
-        }
-        with(alarmSlot.captured) {
-            assertEquals(alarm.date, date)
-            assertEquals("10:03PM", subTitle)
-        }
-    }
+//    @Test
+//    fun `disable alarm`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            subTitle = "10:03PM"
+//        )
+//        val alarmSlot = slot<Alarm>()
+//        val alarmIdSlot = slot<String>()
+//
+//        // When
+//        viewModel.disable(alarm = alarm)
+//
+//        // Then
+//        coVerify(exactly = 1) { repository.update(capture(alarmSlot)) }
+//        coVerify(exactly = 1) { alarmManagerWrapper.deleteAlarm(alarmId = capture(alarmIdSlot)) }
+//        coVerify(exactly = 1) { alarmManagerWrapper.cancelUpcomingAlarm(alarmId = any(), alarmDate = any()) }
+//        with(alarmSlot.captured) {
+//            assertEquals(alarm.date, date)
+//            assertEquals("10:03PM", subTitle)
+//            assertEquals(false, isEnabled)
+//        }
+//        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
+//    }
 
-    @Test
-    fun `delete alarm`() = runTest {
-        // Given
-        val alarm = Alarm(
-            date = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 12)
-                set(Calendar.MINUTE, 34)
-            },
-            subTitle = "10:03PM"
-        )
-        val alarmSlot = slot<Alarm>()
-        val alarmIdSlot = slot<String>()
+//    @Test
+//    fun `enable alarm`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            subTitle = "10:03PM"
+//        )
+//        val alarmSlot = slot<Alarm>()
+//
+//        // When
+//        viewModel.enable(alarm = alarm)
+//
+//        // Then
+//        coVerify(exactly = 1) { repository.update(capture(alarmSlot)) }
+//        coVerify(exactly = 1) {
+//            alarmManagerWrapper.stopStartUpdateWidget(
+//                alarmId = alarm.alarmId.toString(),
+//                date = alarm.date,
+//                any(),
+//                any(),
+//                any(),
+//                alarm.repeatDaily,
+//                alarm.daysOfWeek
+//            )
+//        }
+//        with(alarmSlot.captured) {
+//            assertEquals(alarm.date, date)
+//            assertEquals("10:03PM", subTitle)
+//            assertEquals(true, isEnabled)
+//        }
+//    }
 
-        // When
-        viewModel.delete(alarm = alarm)
+//    @Test
+//    fun `reset alarm`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            subTitle = "10:03PM"
+//        )
+//        val alarmSlot = slot<Alarm>()
+//        val alarmIdSlot = slot<String>()
+//
+//        // When
+//        viewModel.reset(alarm = alarm)
+//
+//        // Then
+//        coVerify(exactly = 1) { repository.update(capture(alarmSlot)) }
+//        coVerify(exactly = 1) {
+//            alarmManagerWrapper.stopStartUpdateWidget(
+//                alarmId = capture(alarmIdSlot),
+//                date = alarm.date,
+//                any(),
+//                any(),
+//                any(),
+//                alarm.repeatDaily,
+//                alarm.daysOfWeek
+//            )
+//        }
+//        with(alarmSlot.captured) {
+//            assertEquals(alarm.date, date)
+//            assertEquals("10:03PM", subTitle)
+//            assertEquals(true, isEnabled)
+//        }
+//        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
+//    }
 
-        // Then
-        coVerify(exactly = 1) { repository.delete(capture(alarmSlot)) }
-        coVerify(exactly = 1) { alarmManagerWrapper.deleteAlarm(capture(alarmIdSlot)) }
-        coVerify(exactly = 1) { alarmManagerWrapper.cancelUpcomingAlarm(alarmId = any(), alarmDate = any()) }
-        with(alarmSlot.captured) {
-            assertEquals(alarm.date, date)
-            assertEquals("10:03PM", subTitle)
-        }
-        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
-    }
+//    @Test
+//    fun `snooze alarm`() = runTest {
+//        // Given
+//        val alarm = Alarm(
+//            date = Calendar.getInstance().apply {
+//                set(Calendar.HOUR_OF_DAY, 12)
+//                set(Calendar.MINUTE, 34)
+//            },
+//            subTitle = "10:03PM"
+//        )
+//        val alarmIdSlot = slot<String>()
+//
+//        // When
+//        viewModel.snooze(alarm = alarm)
+//
+//        // Then
+//        coVerify(exactly = 1) {
+//            alarmManagerWrapper.stopStartUpdateWidget(
+//                alarmId = capture(alarmIdSlot),
+//                date = any(),
+//                any(),
+//                any(),
+//                any(),
+//                alarm.repeatDaily,
+//                alarm.daysOfWeek
+//            )
+//        }
+//        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
+//    }
 
-    @Test
-    fun `disable alarm`() = runTest {
-        // Given
-        val alarm = Alarm(
-            date = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 12)
-                set(Calendar.MINUTE, 34)
-            },
-            subTitle = "10:03PM"
-        )
-        val alarmSlot = slot<Alarm>()
-        val alarmIdSlot = slot<String>()
+//    @Test
+//    fun `update all alarm subtitles 12 hour format`() = runTest {
+//        // Given
+//        val alarmSlots = mutableListOf<Alarm>()
+//
+//        // When
+//        viewModel.updateAllAlarmSubtitles(format = TimeFormat.TWELVE_HOURS)
+//
+//        // Then
+//        coVerify(exactly = 2) { repository.update(capture(alarmSlots)) }
+//        coVerify(exactly = 1) { alarmManagerWrapper.updateWidget() }
+//        alarmSlots.forEach {
+//            assertEquals("2:34 PM", it.subTitle)
+//        }
+//    }
 
-        // When
-        viewModel.disable(alarm = alarm)
+//    @Test
+//    fun `update all alarm subtitles 24 hour format`() = runTest {
+//        // Given
+//        val alarmSlots = mutableListOf<Alarm>()
+//
+//        // When
+//        viewModel.updateAllAlarmSubtitles(format = TimeFormat.TWENTY_FOUR_HOURS)
+//
+//        // Then
+//        coVerify(exactly = 2) { repository.update(capture(alarmSlots)) }
+//        coVerify(exactly = 1) { alarmManagerWrapper.updateWidget() }
+//        alarmSlots.forEach {
+//            assertEquals("14:34", it.subTitle)
+//        }
+//    }
 
-        // Then
-        coVerify(exactly = 1) { repository.update(capture(alarmSlot)) }
-        coVerify(exactly = 1) { alarmManagerWrapper.deleteAlarm(alarmId = capture(alarmIdSlot)) }
-        coVerify(exactly = 1) { alarmManagerWrapper.cancelUpcomingAlarm(alarmId = any(), alarmDate = any()) }
-        with(alarmSlot.captured) {
-            assertEquals(alarm.date, date)
-            assertEquals("10:03PM", subTitle)
-            assertEquals(false, isEnabled)
-        }
-        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
-    }
+//    @Test
+//    fun `update current alarms to add upcoming alarm notification`() = runTest {
+//        // Given
+//        val alarmIdSlots = mutableListOf<String>()
+//        val upcomingAlarmNotificationEnabledSlots = mutableListOf<Boolean>()
+//
+//        // When
+//        viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(true)
+//
+//        // Then
+//        coVerify(exactly = 2) {
+//            alarmManagerWrapper.setUpcomingAlarm(
+//                capture(alarmIdSlots),
+//                any(),
+//                capture(upcomingAlarmNotificationEnabledSlots),
+//                any(),
+//                any(),
+//                any()
+//            )
+//        }
+//        assertEquals(2, alarmIdSlots.size)
+//        assertEquals(alarms.first().alarmId.toString(), alarmIdSlots.first())
+//        assertEquals(alarms.last().alarmId.toString(), alarmIdSlots.last())
+//        assertEquals(2, upcomingAlarmNotificationEnabledSlots.size)
+//        upcomingAlarmNotificationEnabledSlots.forEach {
+//            assertEquals(true, it)
+//        }
+//    }
 
-    @Test
-    fun `enable alarm`() = runTest {
-        // Given
-        val alarm = Alarm(
-            date = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 12)
-                set(Calendar.MINUTE, 34)
-            },
-            subTitle = "10:03PM"
-        )
-        val alarmSlot = slot<Alarm>()
+//    @Test
+//    fun `update current alarms to remove upcoming alarm notification`() = runTest {
+//        // Given
+//        val alarmIdSlots = mutableListOf<String>()
+//
+//        // When
+//        viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(false)
+//
+//        // Then
+//        coVerify(exactly = 2) { alarmManagerWrapper.cancelUpcomingAlarm(capture(alarmIdSlots), any()) }
+//        assertEquals(2, alarmIdSlots.size)
+//        assertEquals(alarms.first().alarmId.toString(), alarmIdSlots.first())
+//        assertEquals(alarms.last().alarmId.toString(), alarmIdSlots.last())
+//    }
 
-        // When
-        viewModel.enable(alarm = alarm)
+//    @Test
+//    fun `get initial time to alarm`() = runTest {
+//        // Given
+//        val booleanSlot = slot<Boolean>()
+//        val timeSlot = slot<Calendar>()
+//        val isEnabled = true
+//        val time = Calendar.getInstance()
+//
+//        // When
+//        viewModel.getInitialTimeToAlarm(isEnabled = isEnabled, time = time)
+//
+//        // Then
+//        verify(exactly = 1) { alarmManagerWrapper.getInitialTimeToAlarm(capture(booleanSlot), capture(timeSlot)) }
+//        assertEquals(isEnabled, booleanSlot.captured)
+//        assertEquals(time, timeSlot.captured)
+//    }
 
-        // Then
-        coVerify(exactly = 1) { repository.update(capture(alarmSlot)) }
-        coVerify(exactly = 1) {
-            alarmManagerWrapper.stopStartUpdateWidget(
-                alarmId = alarm.alarmId.toString(),
-                date = alarm.date,
-                any(),
-                any(),
-                any(),
-                alarm.repeatDaily,
-                alarm.daysOfWeek
-            )
-        }
-        with(alarmSlot.captured) {
-            assertEquals(alarm.date, date)
-            assertEquals("10:03PM", subTitle)
-            assertEquals(true, isEnabled)
-        }
-    }
-
-    @Test
-    fun `reset alarm`() = runTest {
-        // Given
-        val alarm = Alarm(
-            date = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 12)
-                set(Calendar.MINUTE, 34)
-            },
-            subTitle = "10:03PM"
-        )
-        val alarmSlot = slot<Alarm>()
-        val alarmIdSlot = slot<String>()
-
-        // When
-        viewModel.reset(alarm = alarm)
-
-        // Then
-        coVerify(exactly = 1) { repository.update(capture(alarmSlot)) }
-        coVerify(exactly = 1) {
-            alarmManagerWrapper.stopStartUpdateWidget(
-                alarmId = capture(alarmIdSlot),
-                date = alarm.date,
-                any(),
-                any(),
-                any(),
-                alarm.repeatDaily,
-                alarm.daysOfWeek
-            )
-        }
-        with(alarmSlot.captured) {
-            assertEquals(alarm.date, date)
-            assertEquals("10:03PM", subTitle)
-            assertEquals(true, isEnabled)
-        }
-        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
-    }
-
-    @Test
-    fun `snooze alarm`() = runTest {
-        // Given
-        val alarm = Alarm(
-            date = Calendar.getInstance().apply {
-                set(Calendar.HOUR_OF_DAY, 12)
-                set(Calendar.MINUTE, 34)
-            },
-            subTitle = "10:03PM"
-        )
-        val alarmIdSlot = slot<String>()
-
-        // When
-        viewModel.snooze(alarm = alarm)
-
-        // Then
-        coVerify(exactly = 1) {
-            alarmManagerWrapper.stopStartUpdateWidget(
-                alarmId = capture(alarmIdSlot),
-                date = any(),
-                any(),
-                any(),
-                any(),
-                alarm.repeatDaily,
-                alarm.daysOfWeek
-            )
-        }
-        assertEquals(alarm.alarmId.toString(), alarmIdSlot.captured)
-    }
-
-    @Test
-    fun `update all alarm subtitles 12 hour format`() = runTest {
-        // Given
-        val alarmSlots = mutableListOf<Alarm>()
-
-        // When
-        viewModel.updateAllAlarmSubtitles(format = TimeFormat.TWELVE_HOURS)
-
-        // Then
-        coVerify(exactly = 2) { repository.update(capture(alarmSlots)) }
-        coVerify(exactly = 1) { alarmManagerWrapper.updateWidget() }
-        alarmSlots.forEach {
-            assertEquals("2:34 PM", it.subTitle)
-        }
-    }
-
-    @Test
-    fun `update all alarm subtitles 24 hour format`() = runTest {
-        // Given
-        val alarmSlots = mutableListOf<Alarm>()
-
-        // When
-        viewModel.updateAllAlarmSubtitles(format = TimeFormat.TWENTY_FOUR_HOURS)
-
-        // Then
-        coVerify(exactly = 2) { repository.update(capture(alarmSlots)) }
-        coVerify(exactly = 1) { alarmManagerWrapper.updateWidget() }
-        alarmSlots.forEach {
-            assertEquals("14:34", it.subTitle)
-        }
-    }
-
-    @Test
-    fun `update current alarms to add upcoming alarm notification`() = runTest {
-        // Given
-        val alarmIdSlots = mutableListOf<String>()
-        val upcomingAlarmNotificationEnabledSlots = mutableListOf<Boolean>()
-
-        // When
-        viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(true)
-
-        // Then
-        coVerify(exactly = 2) {
-            alarmManagerWrapper.setUpcomingAlarm(
-                capture(alarmIdSlots),
-                any(),
-                capture(upcomingAlarmNotificationEnabledSlots),
-                any(),
-                any(),
-                any()
-            )
-        }
-        assertEquals(2, alarmIdSlots.size)
-        assertEquals(alarms.first().alarmId.toString(), alarmIdSlots.first())
-        assertEquals(alarms.last().alarmId.toString(), alarmIdSlots.last())
-        assertEquals(2, upcomingAlarmNotificationEnabledSlots.size)
-        upcomingAlarmNotificationEnabledSlots.forEach {
-            assertEquals(true, it)
-        }
-    }
-
-    @Test
-    fun `update current alarms to remove upcoming alarm notification`() = runTest {
-        // Given
-        val alarmIdSlots = mutableListOf<String>()
-
-        // When
-        viewModel.updateCurrentAlarmsToAddOrRemoveUpcomingAlarmNotification(false)
-
-        // Then
-        coVerify(exactly = 2) { alarmManagerWrapper.cancelUpcomingAlarm(capture(alarmIdSlots), any()) }
-        assertEquals(2, alarmIdSlots.size)
-        assertEquals(alarms.first().alarmId.toString(), alarmIdSlots.first())
-        assertEquals(alarms.last().alarmId.toString(), alarmIdSlots.last())
-    }
-
-    @Test
-    fun `get initial time to alarm`() = runTest {
-        // Given
-        val booleanSlot = slot<Boolean>()
-        val timeSlot = slot<Calendar>()
-        val isEnabled = true
-        val time = Calendar.getInstance()
-
-        // When
-        viewModel.getInitialTimeToAlarm(isEnabled = isEnabled, time = time)
-
-        // Then
-        verify(exactly = 1) { alarmManagerWrapper.getInitialTimeToAlarm(capture(booleanSlot), capture(timeSlot)) }
-        assertEquals(isEnabled, booleanSlot.captured)
-        assertEquals(time, timeSlot.captured)
-    }
-
-    @Test
-    fun `get time until alarm formatted`() = runTest {
-        // Given
-        val date = Calendar.getInstance()
-        val dateSlot = slot<Calendar>()
-
-        // When
-        viewModel.getTimeUntilAlarmFormatted(date = date)
-
-        // Then
-        verify(exactly = 1) { alarmManagerWrapper.getTimeUntilAlarmFormatted(capture(dateSlot)) }
-        assertEquals(date, dateSlot.captured)
-    }
+//    @Test
+//    fun `get time until alarm formatted`() = runTest {
+//        // Given
+//        val date = Calendar.getInstance()
+//        val dateSlot = slot<Calendar>()
+//
+//        // When
+//        viewModel.getTimeUntilAlarmFormatted(date = date)
+//
+//        // Then
+//        verify(exactly = 1) { alarmManagerWrapper.getTimeUntilAlarmFormatted(capture(dateSlot)) }
+//        assertEquals(date, dateSlot.captured)
+//    }
     //endregion
 
     //region stopwatch

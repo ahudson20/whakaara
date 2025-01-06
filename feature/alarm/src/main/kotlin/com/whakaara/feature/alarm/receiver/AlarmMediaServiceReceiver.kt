@@ -22,7 +22,9 @@ class AlarmMediaServiceReceiver : HiltBroadcastReceiver() {
         val alarmId = intent.getStringExtra(NotificationUtilsConstants.INTENT_ALARM_ID) ?: return
         val alarmType = intent.getIntExtra(NotificationUtilsConstants.NOTIFICATION_TYPE, -1)
 
-        if (alarmType != -1) {
+        if (alarmType == -1) {
+            return
+        } else {
             goAsync {
                 try {
                     repository.triggerDeleteAlarmById(alarmId)

@@ -2,7 +2,6 @@ package com.whakaara.core.widget
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import androidx.glance.ColorFilter
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -25,8 +24,11 @@ class AppShortcutWidget : GlanceAppWidget() {
         id: GlanceId
     ) {
         val deepLinkIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("app://mainactivity")
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            setClassName(
+                context.packageName,
+                "com.app.whakaara.activities.MainActivity"
+            )
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
 
         provideContent {

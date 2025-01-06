@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.media.MediaPlayer
 import android.media.VolumeShaper
-import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
@@ -17,11 +16,11 @@ import android.os.PowerManager
 import android.os.Process
 import android.os.VibrationAttributes
 import android.os.Vibrator
-import android.provider.Settings
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.whakaara.core.GeneralUtils.Companion.parseOrDefault
+import com.whakaara.core.LogUtils.logE
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants
 import com.whakaara.core.constants.NotificationUtilsConstants
@@ -161,11 +160,7 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
         mediaPlayer.apply {
             setDataSource(
                 applicationContext,
-                if (soundPath.isNotEmpty()) {
-                    Uri.parse(soundPath)
-                } else {
-                    Settings.System.DEFAULT_ALARM_ALERT_URI
-                }
+                parseOrDefault(soundPath)
             )
             setOnPreparedListener(this@AlarmMediaService)
             prepareAsync()
@@ -224,7 +219,7 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
                 release()
             }
         } catch (exception: IllegalStateException) {
-            Log.e(NotificationUtilsConstants.MEDIA_SERVICE_EXCEPTION_TAG, "MediaPlayer was not initialized.. Cannot stop it...")
+            logE(message = "MediaPlayer was not initialized.. Cannot stop it...", throwable = exception)
         }
 
         // cancel fullScreenIntent

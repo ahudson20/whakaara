@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.whakaara.core.HiltBroadcastReceiver
+import com.whakaara.core.LogUtils.logD
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.goAsync
 import com.whakaara.data.alarm.AlarmRepository
@@ -30,10 +31,7 @@ class AlarmMediaServiceReceiver : HiltBroadcastReceiver() {
                     repository.triggerDeleteAlarmById(alarmId)
                     context.stopService(Intent(context, AlarmMediaService::class.java))
                 } catch (exception: Exception) {
-                    Log.d(
-                        NotificationUtilsConstants.MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG,
-                        exception.printStackTrace().toString()
-                    )
+                    logD(message = "failed to delete alarm: $alarmId", throwable = exception)
                 }
             }
         }

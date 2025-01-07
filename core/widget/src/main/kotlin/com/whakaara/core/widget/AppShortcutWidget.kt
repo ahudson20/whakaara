@@ -15,6 +15,7 @@ import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.provideContent
 import androidx.glance.layout.ContentScale
 import androidx.glance.layout.size
+import com.whakaara.core.constants.GeneralConstants.MAIN_ACTIVITY
 import com.whakaara.core.designsystem.theme.Spacings.spaceXxLarge
 import com.whakaara.core.designsystem.theme.WidgetTheme
 
@@ -26,7 +27,7 @@ class AppShortcutWidget : GlanceAppWidget() {
         val deepLinkIntent = Intent(Intent.ACTION_VIEW).apply {
             setClassName(
                 context.packageName,
-                "com.app.whakaara.activities.MainActivity"
+                MAIN_ACTIVITY
             )
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

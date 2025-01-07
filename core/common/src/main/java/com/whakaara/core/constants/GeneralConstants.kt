@@ -16,4 +16,7 @@ object GeneralConstants {
     val DAYS_OF_WEEK = listOf("M", "T", "W", "T", "F", "S", "S")
 
     const val MAX_NUMBER_OF_LAPS = 100
+
+    const val MAIN_ACTIVITY = "com.app.whakaara.activities.MainActivity"
+    const val FULL_SCREEN_NOTIFICATION_ACTIVITY = "com.app.whakaara.activities.FullScreenNotificationActivity"
 }

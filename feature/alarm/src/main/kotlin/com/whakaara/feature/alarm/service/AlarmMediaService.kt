@@ -23,6 +23,7 @@ import com.whakaara.core.GeneralUtils.Companion.parseOrDefault
 import com.whakaara.core.LogUtils.logE
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.GeneralConstants
+import com.whakaara.core.constants.GeneralConstants.FULL_SCREEN_NOTIFICATION_ACTIVITY
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.di.IoDispatcher
 import com.whakaara.core.di.MainDispatcher
@@ -230,7 +231,7 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
         val fullScreenIntent = Intent().apply {
             setClassName(
                 applicationContext.packageName,
-                "com.app.whakaara.activities.FullScreenNotificationActivity"
+                FULL_SCREEN_NOTIFICATION_ACTIVITY
             )
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra(NotificationUtilsConstants.NOTIFICATION_TYPE, NotificationUtilsConstants.NOTIFICATION_TYPE_ALARM)

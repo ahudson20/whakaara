@@ -2,7 +2,6 @@ package com.whakaara.feature.alarm.receiver
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.whakaara.core.HiltBroadcastReceiver
 import com.whakaara.core.LogUtils.logD
 import com.whakaara.core.constants.NotificationUtilsConstants

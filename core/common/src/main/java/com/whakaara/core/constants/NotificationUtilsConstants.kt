@@ -26,9 +26,6 @@ object NotificationUtilsConstants {
     const val INTENT_ALARM_ID = "alarm_id"
     const val INTENT_TIMER_NOTIFICATION_ID = "timer_notification_id"
 
-    const val MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG = "MediaReceiver exception"
-    const val MEDIA_SERVICE_EXCEPTION_TAG = "MediaService exception"
-
     const val FOREGROUND_SERVICE_ID = 100
 
     const val TIMER_RECEIVER_ACTION_START = "start_timer"

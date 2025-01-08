@@ -2,8 +2,6 @@ package com.whakaara.core.widget
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpSize
@@ -39,9 +37,11 @@ import androidx.glance.state.PreferencesGlanceStateDefinition
 import androidx.glance.unit.ColorProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.whakaara.core.constants.GeneralConstants.MAIN_ACTIVITY
 import com.whakaara.core.designsystem.theme.Spacings.space10
 import com.whakaara.core.designsystem.theme.Spacings.space40
 import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
+import com.whakaara.core.designsystem.theme.WidgetTheme
 import com.whakaara.data.alarm.AlarmRepository
 import com.whakaara.model.alarm.Alarm
 import dagger.hilt.EntryPoint
@@ -112,7 +112,7 @@ class AppWidget : GlanceAppWidget() {
                     listOfAlarms
                 }.filter { it.isEnabled }.minByOrNull { it.date.timeInMillis }
 
-            GlanceTheme(colors = com.whakaara.core.designsystem.theme.WidgetTheme.colors) {
+            GlanceTheme(colors = WidgetTheme.colors) {
                 NextAlarm(
                     nextAlarm = nextAlarm,
                     textColour = textColour,
@@ -122,7 +122,6 @@ class AppWidget : GlanceAppWidget() {
         }
     }
 
-    @OptIn(ExperimentalLayoutApi::class)
     @Composable
     private fun NextAlarm(
         nextAlarm: Alarm?,
@@ -130,9 +129,13 @@ class AppWidget : GlanceAppWidget() {
         backgroundColor: Color
     ) {
         val size = LocalSize.current
+        val context = LocalContext.current
         val deepLinkIntent = Intent(Intent.ACTION_VIEW).apply {
-            data = Uri.parse("app://mainactivity")
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            setClassName(
+                context.packageName,
+                MAIN_ACTIVITY
+            )
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         Row(
             modifier = GlanceModifier

@@ -2,9 +2,8 @@ package com.whakaara.feature.timer.reciever
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.whakaara.core.HiltBroadcastReceiver
-import com.whakaara.core.constants.NotificationUtilsConstants
+import com.whakaara.core.LogUtils.logD
 import com.whakaara.core.goAsync
 import com.whakaara.data.timer.TimerRepository
 import com.whakaara.feature.timer.service.TimerMediaService
@@ -26,7 +25,7 @@ class TimerMediaServiceReceiver : HiltBroadcastReceiver() {
                 repository.stopTimer()
                 context.stopService(Intent(context, TimerMediaService::class.java))
             } catch (exception: Exception) {
-                Log.d(NotificationUtilsConstants.MEDIA_SERVICE_RECEIVER_EXCEPTION_TAG, exception.printStackTrace().toString())
+                logD(message = "Failed to reset timer, stop service", throwable = exception)
             }
         }
     }

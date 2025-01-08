@@ -3,6 +3,7 @@ package com.whakaara.core
 import android.content.Context
 import android.media.RingtoneManager
 import android.net.Uri
+import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import com.google.gson.Gson
@@ -30,5 +31,9 @@ class GeneralUtils {
         }
 
         fun Float.toColorInt(): Int = (this * 255 + 0.5f).toInt()
+
+        fun parseOrDefault(path: String): Uri {
+            return if (path.isNotEmpty()) Uri.parse(path) else Settings.System.DEFAULT_ALARM_ALERT_URI
+        }
     }
 }

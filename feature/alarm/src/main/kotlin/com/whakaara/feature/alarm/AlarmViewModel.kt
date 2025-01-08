@@ -6,11 +6,11 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.chargemap.compose.numberpicker.FullHours
 import com.chargemap.compose.numberpicker.Hours
+import com.whakaara.core.LogUtils.logD
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.WidgetUpdater
 import com.whakaara.core.constants.NotificationUtilsConstants
@@ -99,8 +99,8 @@ class AlarmViewModel @Inject constructor(
             try {
                 deleteAlarm(alarmId)
                 repository.deleteAlarmById(UUID.fromString(alarmId))
-            } catch (e: Exception) {
-                Log.e("AlarmViewModel", "Failed to delete alarm: $alarmId", e)
+            } catch (exception: Exception) {
+                logD("Failed to delete alarm: $alarmId", exception)
             }
         }
     }

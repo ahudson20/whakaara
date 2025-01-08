@@ -6,11 +6,12 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.whakaara.core.CountDownTimerUtil
+import com.whakaara.core.LogUtils.logD
+import com.whakaara.core.LogUtils.logE
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.DateUtilsConstants
 import com.whakaara.core.constants.GeneralConstants
@@ -82,27 +83,27 @@ class TimerViewModel @Inject constructor(
         timerRepository.timerState.collectLatest { state ->
             when (state) {
                 is TimerStateReceiver.Idle -> {
-                    Log.d("TimerViewModel", "TimerStateReceiver.Idle")
+                    logD("TimerStateReceiver.Idle")
                 }
 
                 is TimerStateReceiver.Started -> {
                     startTimer()
                     startTimerNotificationCountdown(milliseconds = state.currentTime + Calendar.getInstance().timeInMillis)
 
-                    Log.d("TimerViewModel", "TimerStateReceiver.Started")
+                    logD("TimerStateReceiver.Started")
                 }
 
                 is TimerStateReceiver.Paused -> {
                     pauseTimer()
                     pauseTimerNotificationCountdown()
 
-                    Log.d("TimerViewModel", "TimerStateReceiver.Paused")
+                    logD("TimerStateReceiver.Paused")
                 }
 
                 is TimerStateReceiver.Stopped -> {
                     resetTimer()
 
-                    Log.d("TimerViewModel", "TimerStateReceiver.Stopped")
+                    logD("TimerStateReceiver.Stopped")
                 }
             }
         }
@@ -535,10 +536,10 @@ class TimerViewModel @Inject constructor(
                     state = TimerStateDataStore()
                 )
             }
-        } catch (e: CancellationException) {
-            throw e
-        } catch (t: Throwable) {
-            Log.e(GeneralConstants.RESET_TIMER_DATASTORE_TAG, "resetTimerStateDataStore execution failed", t)
+        } catch (exception: CancellationException) {
+            throw exception
+        } catch (throwable: Throwable) {
+            logE(message = "resetTimerStateDataStore execution failed", throwable = throwable)
         } finally {
             // Nothing can be in the `finally` block after this, as this throws a
             // `CancellationException`

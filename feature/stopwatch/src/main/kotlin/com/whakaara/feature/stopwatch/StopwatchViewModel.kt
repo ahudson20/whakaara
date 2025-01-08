@@ -5,10 +5,10 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.whakaara.core.LogUtils.logD
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.constants.DateUtilsConstants
 import com.whakaara.core.constants.GeneralConstants
@@ -65,7 +65,7 @@ class StopwatchViewModel @Inject constructor(
         stopwatchRepository.stopwatchState.collectLatest { state ->
             when (state) {
                 is StopwatchReceiverState.Idle -> {
-                    Log.d("StopwatchViewModel", "StopwatchReceiver.Idle")
+                    logD("StopwatchReceiver.Idle")
                 }
 
                 is StopwatchReceiverState.Started -> {
@@ -73,7 +73,7 @@ class StopwatchViewModel @Inject constructor(
                     cancelNotification()
                     createStopwatchNotification()
 
-                    Log.d("StopwatchViewModel", "StopwatchReceiver.Started")
+                    logD("StopwatchReceiver.Started")
                 }
 
                 is StopwatchReceiverState.Paused -> {
@@ -81,13 +81,13 @@ class StopwatchViewModel @Inject constructor(
                     cancelNotification()
                     pauseStopwatchNotification()
 
-                    Log.d("StopwatchViewModel", "StopwatchReceiver.Paused")
+                    logD("StopwatchReceiver.Paused")
                 }
 
                 is StopwatchReceiverState.Stopped -> {
                     resetStopwatch()
 
-                    Log.d("StopwatchViewModel", "StopwatchReceiver.Stopped")
+                    logD("StopwatchReceiver.Stopped")
                 }
             }
         }

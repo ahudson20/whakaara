@@ -38,7 +38,9 @@ class DatabaseModule {
         context,
         PreferencesDatabase::class.java,
         "preferences_database"
-    ).createFromAsset("database/preferences.db").build()
+    ).createFromAsset("database/preferences.db")
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Provides
     @Singleton

@@ -31,6 +31,8 @@
     <string name="settings_screen_snooze_title">Snooze</string>
     <string name="settings_screen_snooze_subtitle">Allow alarms to be snoozed</string>
     <string name="settings_screen_delete_title">Delete</string>
+    <string name="settings_screen_flash_light_title">Flashlight</string>
+    <string name="settings_screen_flash_light_subtitle">Strobe light when alarms go off</string>
     <string name="settings_screen_delete_subtitle">Alarms are deleted after they go off</string>
     <string name="settings_screen_snooze_duration_title">Snooze duration</string>
     <string name="settings_screen_auto_silence_title">Auto silence</string>

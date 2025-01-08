@@ -264,6 +264,20 @@ fun AlarmSettings(
         }
     )
 
+    SettingsSwitch(
+        modifier = Modifier.height(space100),
+        title = { Text(text = stringResource(id = R.string.settings_screen_flash_light_title)) },
+        subtitle = { Text(text = stringResource(id = R.string.settings_screen_flash_light_subtitle)) },
+        state = rememberBooleanSettingState(preferencesState.preferences.flashLight),
+        onCheckedChange = {
+            updatePreferences(
+                preferencesState.preferences.copy(
+                    flashLight = it
+                )
+            )
+        }
+    )
+
     SettingsListDropdown(
         modifier = Modifier.height(space100),
         state = rememberIntSettingState(defaultValue = preferencesState.preferences.autoSilenceTime.ordinal),

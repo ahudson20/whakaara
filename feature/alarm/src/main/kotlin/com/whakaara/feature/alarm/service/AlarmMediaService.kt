@@ -2,8 +2,11 @@ package com.whakaara.feature.alarm.service
 
 import android.app.Notification
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.media.MediaPlayer
 import android.media.VolumeShaper
 import android.os.Bundle
@@ -36,6 +39,9 @@ import com.whakaara.model.preferences.GradualSoundDuration
 import com.whakaara.model.preferences.VibrationPattern
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -89,6 +95,9 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
     private lateinit var vibrationTask: TimerTask
     private lateinit var wakeLock: PowerManager.WakeLock
+    private lateinit var cameraManager: CameraManager
+    private var cameraId: String? = null
+    private var flashlightJob: Job? = null
 
     private inner class ServiceHandler(looper: Looper) : Handler(looper) {
         override fun handleMessage(msg: Message) {
@@ -149,6 +158,10 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
                 // set timeout on service
                 handler.postDelayed(runnable, TimeUnit.MINUTES.toMillis(preferences.autoSilenceTime.value.toLong()))
+
+                if (preferences.flashLight && cameraId != null) {
+                    startFlashlightStrobe()
+                }
             }
         }
     }
@@ -223,6 +236,9 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
             logE(message = "MediaPlayer was not initialized.. Cannot stop it...", throwable = exception)
         }
 
+        // stop flashlight
+        stopFlashlightStrobe()
+
         // cancel fullScreenIntent
         sendBroadcast(Intent(NotificationUtilsConstants.STOP_FULL_SCREEN_ACTIVITY))
     }
@@ -270,6 +286,36 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
         }.build()
     }
 
+    private fun startFlashlightStrobe(interval: Long = 300L) {
+        if (cameraId == null) return
+
+        flashlightJob = lifecycleScope.launch(iODispatcher) {
+            try {
+                delay(100)
+                while (isActive) {
+                    cameraManager.setTorchMode(cameraId!!, true)
+                    delay(interval)
+                    cameraManager.setTorchMode(cameraId!!, false)
+                    delay(interval)
+                }
+            } catch (exception: Exception) {
+                logE("Error toggling flashlight: ${exception.message}", exception)
+                stopFlashlightStrobe()
+            }
+        }
+    }
+
+    private fun stopFlashlightStrobe() {
+        flashlightJob?.cancel()
+        flashlightJob = null
+
+        try {
+            cameraId?.let { cameraManager.setTorchMode(it, false) }
+        } catch (exception: Exception) {
+            logE(message = "Error turning off flashlight: ${exception.message}", throwable = exception)
+        }
+    }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -278,6 +324,12 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
 
             serviceLooper = looper
             serviceHandler = ServiceHandler(looper)
+        }
+
+        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        cameraId = cameraManager.cameraIdList.find {
+            cameraManager.getCameraCharacteristics(it)
+                .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true
         }
     }
 

@@ -26,7 +26,7 @@ fun AlarmRoute(
                 create = viewModel::create,
                 delete = viewModel::delete,
                 disable = viewModel::disable,
-                enable = viewModel::disable,
+                enable = viewModel::enable,
                 reset = viewModel::reset,
                 getInitialTimeToAlarm = viewModel::getInitialTimeToAlarm,
                 getTimeUntilAlarmFormatted = viewModel::getTimeUntilAlarmFormatted

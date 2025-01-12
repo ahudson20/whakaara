@@ -51,6 +51,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Named
 import kotlin.concurrent.timerTask
+import kotlin.coroutines.cancellation.CancellationException
 
 @AndroidEntryPoint
 class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
@@ -293,14 +294,23 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
             try {
                 delay(100)
                 while (isActive) {
-                    cameraManager.setTorchMode(cameraId!!, true)
-                    delay(interval)
-                    cameraManager.setTorchMode(cameraId!!, false)
-                    delay(interval)
+                    cameraId?.let { id ->
+                        cameraManager.setTorchMode(id, true)
+                        delay(interval)
+                        cameraManager.setTorchMode(id, false)
+                        delay(interval)
+                    }
                 }
+            } catch (exception: CancellationException) {
+                logE(message = "Flashlight coroutine cancelled", throwable = exception)
             } catch (exception: Exception) {
-                logE("Error toggling flashlight: ${exception.message}", exception)
-                stopFlashlightStrobe()
+                logE(message = "Error toggling flashlight: ${exception.message}", throwable = exception)
+            } finally {
+                try {
+                    cameraId?.let { cameraManager.setTorchMode(it, false) }
+                } catch (exception: Exception) {
+                    logE(message = "Error turning off flashlight in finally: ${exception.message}", throwable = exception)
+                }
             }
         }
     }

@@ -39,7 +39,6 @@ class DatabaseModule {
         PreferencesDatabase::class.java,
         "preferences_database"
     ).createFromAsset("database/preferences.db")
-        .fallbackToDestructiveMigration()
         .build()
 
     @Provides

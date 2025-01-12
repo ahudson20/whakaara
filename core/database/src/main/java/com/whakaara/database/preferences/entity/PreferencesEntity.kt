@@ -32,7 +32,8 @@ data class PreferencesEntity(
     val autoRestartTimer: Boolean = true,
     val timerSoundPath: String = "",
     val gradualSoundDuration: GradualSoundDuration,
-    val timerGradualSoundDuration: GradualSoundDuration
+    val timerGradualSoundDuration: GradualSoundDuration,
+    val flashLight: Boolean = false
 )
 
 fun PreferencesEntity.asExternalModel() = Preferences(
@@ -56,7 +57,8 @@ fun PreferencesEntity.asExternalModel() = Preferences(
     autoRestartTimer = autoRestartTimer,
     timerSoundPath = timerSoundPath,
     gradualSoundDuration = gradualSoundDuration,
-    timerGradualSoundDuration = timerGradualSoundDuration
+    timerGradualSoundDuration = timerGradualSoundDuration,
+    flashLight = flashLight
 )
 
 fun Preferences.asInternalModel() = PreferencesEntity(
@@ -79,5 +81,6 @@ fun Preferences.asInternalModel() = PreferencesEntity(
     autoRestartTimer = autoRestartTimer,
     timerSoundPath = timerSoundPath,
     gradualSoundDuration = gradualSoundDuration,
-    timerGradualSoundDuration = timerGradualSoundDuration
+    timerGradualSoundDuration = timerGradualSoundDuration,
+    flashLight = flashLight
 )

@@ -47,6 +47,7 @@ object MockUtil {
         autoRestartTimer = true,
         timerSoundPath = "",
         gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
-        timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
+        timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+        flashLight = false
     )
 }

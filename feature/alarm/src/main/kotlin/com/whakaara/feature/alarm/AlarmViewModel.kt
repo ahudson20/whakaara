@@ -4,7 +4,6 @@ import android.app.AlarmManager
 import android.app.Application
 import android.app.PendingIntent
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +12,7 @@ import com.chargemap.compose.numberpicker.Hours
 import com.whakaara.core.LogUtils.logD
 import com.whakaara.core.PendingIntentUtils
 import com.whakaara.core.WidgetUpdater
+import com.whakaara.core.constants.GeneralConstants.MAIN_ACTIVITY
 import com.whakaara.core.constants.NotificationUtilsConstants
 import com.whakaara.core.di.IoDispatcher
 import com.whakaara.data.alarm.AlarmRepository
@@ -327,13 +327,18 @@ class AlarmViewModel @Inject constructor(
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
+        val deepLinkIntent = Intent(Intent.ACTION_VIEW).apply {
+            setClassName(
+                app.applicationContext.packageName,
+                MAIN_ACTIVITY
+            )
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+
         val alarmInfoPendingIntent = PendingIntentUtils.getActivity(
             app,
             NotificationUtilsConstants.INTENT_REQUEST_CODE,
-            Intent(Intent.ACTION_VIEW).apply {
-                data = Uri.parse("app://mainactivity")
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK
-            },
+            deepLinkIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
         )
 
@@ -352,7 +357,7 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun setUpcomingAlarm(
+    private fun setUpcomingAlarm(
         alarmId: String,
         alarmDate: Calendar,
         upcomingAlarmNotificationEnabled: Boolean,
@@ -429,7 +434,7 @@ class AlarmViewModel @Inject constructor(
         widgetUpdater.updateWidget()
     }
 
-    fun cancelUpcomingAlarm(
+    private fun cancelUpcomingAlarm(
         alarmId: String,
         alarmDate: Calendar
     ) {

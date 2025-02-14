@@ -10,10 +10,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.R
 
 @Composable
 fun StopwatchHeader(
@@ -27,10 +29,9 @@ fun StopwatchHeader(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // TODO: string resources after modularization
-            Text("Lap")
-            Text(text = "Total time")
-            Text(text = "Lap times")
+            Text(text = stringResource(R.string.stopwatch_header_lap))
+            Text(text = stringResource(R.string.stopwatch_header_total_time))
+            Text(text = stringResource(R.string.stopwatch_header_lap_times))
         }
         HorizontalDivider(
             modifier = Modifier.padding(vertical = 8.dp)

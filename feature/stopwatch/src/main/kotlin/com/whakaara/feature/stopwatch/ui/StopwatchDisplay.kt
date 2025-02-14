@@ -25,6 +25,7 @@ import com.whakaara.core.designsystem.theme.Spacings.space275
 import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
 import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
 import com.whakaara.core.designsystem.theme.ThemePreviews
+import com.whakaara.core.designsystem.theme.lightGreen
 
 @Composable
 fun StopwatchDisplay(
@@ -46,7 +47,7 @@ fun StopwatchDisplay(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .size(space275 - space20)
-                    .border(width = spaceXSmall, color = com.whakaara.core.designsystem.theme.lightGreen, shape = CircleShape)
+                    .border(width = spaceXSmall, color = lightGreen, shape = CircleShape)
                     .clip(CircleShape)
                     .background(color = Color.Transparent)
             )
@@ -76,6 +77,43 @@ fun StopwatchDisplay(
             }
         }
     }
+}
+
+@Composable
+fun StopwatchDisplayLandscape(
+    modifier: Modifier = Modifier,
+    formattedTime: String
+) {
+    Column(
+        modifier = modifier,
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            style = MaterialTheme.typography.displayLarge.copy(
+                fontSize = 54.sp,
+                color = Color.White
+            ),
+            text = if (formattedTime.substring(0, 2) == TIMER_INPUT_INITIAL_VALUE) {
+                formattedTime.substring(3, 8)
+            } else {
+                formattedTime.substring(0, 8)
+            }
+        )
+        Text(
+            style = MaterialTheme.typography.titleLarge.copy(color = Color.White),
+            text = formattedTime.split(":")[3]
+        )
+    }
+}
+
+@Composable
+@ThemePreviews
+@FontScalePreviews
+fun StopwatchDisplayLandscapePreview() {
+    StopwatchDisplayLandscape(
+        formattedTime = "10:10:00:000"
+    )
 }
 
 @Composable

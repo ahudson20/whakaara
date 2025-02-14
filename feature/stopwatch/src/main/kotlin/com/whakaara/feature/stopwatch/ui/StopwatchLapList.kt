@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Shapes
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.Spacings.spaceNone
 import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
@@ -109,7 +110,7 @@ private fun LapCell(
             .fillMaxWidth()
             .padding(start = spaceMedium, end = spaceMedium)
     ) {
-        Card(shape = com.whakaara.core.designsystem.theme.Shapes.small) {
+        Card(shape = Shapes.small) {
             Box(
                 modifier = Modifier.padding(all = spaceMedium)
             ) {
@@ -142,7 +143,7 @@ fun Modifier.verticalFadingEdge(
     length: Dp,
     edgeColor: Color? = null
 ) = composed(
-    debugInspectorInfo {
+    inspectorInfo = debugInspectorInfo {
         name = "length"
         value = length
     }
@@ -150,25 +151,47 @@ fun Modifier.verticalFadingEdge(
     val color = edgeColor ?: MaterialTheme.colorScheme.background
 
     drawWithContent {
-        val bottomFadingEdgeStrength by derivedStateOf {
-            lazyListState.layoutInfo.run {
-                val lastItem = visibleItemsInfo.lastOrNull()
-                if (lastItem == null) {
-                    0f
-                } else {
-                    when {
-                        visibleItemsInfo.size in 0..1 -> 0f
-                        lastItem.index < totalItemsCount - 1 -> 1f
-                        lastItem.offset + lastItem.size <= viewportEndOffset -> 1f
-                        lastItem.offset + lastItem.size > viewportEndOffset ->
-                            lastItem.run {
-                                (size - (viewportEndOffset - offset)) / size.toFloat()
-                            }
+        val topFadingEdgeStrength by derivedStateOf {
+            lazyListState.layoutInfo
+                .run {
+                    val firstItem = visibleItemsInfo.firstOrNull()
+                    if (firstItem == null) {
+                        0f
+                    } else {
+                        when {
+                            visibleItemsInfo.size in 0..1 -> 0f
+                            firstItem.index > 0 -> 1f // Added
+                            firstItem.offset == viewportStartOffset -> 0f
+                            firstItem.offset < viewportStartOffset ->
+                                firstItem.run { kotlin.math.abs(offset) / size.toFloat() }
 
-                        else -> 1f
+                            else -> 1f
+                        }
                     }
                 }
-            }.coerceAtMost(1f) * length.value
+                .coerceAtMost(1f) * length.value
+        }
+        val bottomFadingEdgeStrength by derivedStateOf {
+            lazyListState.layoutInfo
+                .run {
+                    val lastItem = visibleItemsInfo.lastOrNull()
+                    if (lastItem == null) {
+                        0f
+                    } else {
+                        when {
+                            visibleItemsInfo.size in 0..1 -> 0f
+                            lastItem.index < totalItemsCount - 1 -> 1f // Added
+                            lastItem.offset + lastItem.size <= viewportEndOffset -> 0f // added the <=
+                            lastItem.offset + lastItem.size > viewportEndOffset ->
+                                lastItem.run {
+                                    (size - (viewportEndOffset - offset)) / size.toFloat() // Fixed the percentage computation
+                                }
+
+                            else -> 1f
+                        }
+                    }
+                }
+                .coerceAtMost(1f) * length.value
         }
 
         drawContent()
@@ -176,13 +199,25 @@ fun Modifier.verticalFadingEdge(
         drawRect(
             brush = Brush.verticalGradient(
                 colors = listOf(
-                    Color.Transparent,
-                    color
+                    color,
+                    Color.Transparent
                 ),
-                startY = size.height - bottomFadingEdgeStrength,
-                endY = size.height
+                startY = 0f,
+                endY = bottomFadingEdgeStrength
             ),
-            topLeft = Offset(x = 0f, y = size.height - bottomFadingEdgeStrength)
+            size = size.copy(height = bottomFadingEdgeStrength)
+        )
+
+        drawRect(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color.Transparent,
+                    color,
+                ),
+                startY = size.height - topFadingEdgeStrength,
+                endY = size.height,
+            ),
+            topLeft = Offset(x = 0f, y = size.height - topFadingEdgeStrength)
         )
     }
 }

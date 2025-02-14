@@ -95,9 +95,6 @@ fun TimerScreen(
 
                             else -> {
                                 /**PERMISSION DENIED - SHOW PROMPT**/
-                                /**PERMISSION DENIED - SHOW PROMPT**/
-                                /**PERMISSION DENIED - SHOW PROMPT**/
-                                /**PERMISSION DENIED - SHOW PROMPT**/
                                 if (notificationPermissionState.status.shouldShowRationale) {
                                     NotificationUtils.snackBarPromptPermission(
                                         scope = scope,

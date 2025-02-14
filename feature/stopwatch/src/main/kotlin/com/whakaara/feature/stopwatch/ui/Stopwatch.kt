@@ -1,8 +1,14 @@
 package com.whakaara.feature.stopwatch.ui
 
+import android.content.res.Configuration
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,12 +17,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import com.whakaara.core.designsystem.FloatingActionButtonRow
 import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Spacings.space20
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.Spacings.spaceNone
 import com.whakaara.core.designsystem.theme.ThemePreviews
@@ -31,6 +40,34 @@ fun Stopwatch(
     onPause: () -> Unit = {},
     onStop: () -> Unit = {},
     onLap: () -> Unit = {}
+) {
+    val configuration = LocalConfiguration.current
+    if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        PortraitStopwatchLayout(
+            stopwatchState = stopwatchState,
+            onStart = onStart,
+            onPause = onPause,
+            onStop = onStop,
+            onLap = onLap
+        )
+    } else {
+        LandscapeStopwatchLayout(
+            stopwatchState = stopwatchState,
+            onStart = onStart,
+            onPause = onPause,
+            onStop = onStop,
+            onLap = onLap
+        )
+    }
+}
+
+@Composable
+fun PortraitStopwatchLayout(
+    stopwatchState: StopwatchState,
+    onStart: () -> Unit,
+    onPause: () -> Unit,
+    onStop: () -> Unit,
+    onLap: () -> Unit
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(key1 = stopwatchState.lapList) {
@@ -81,6 +118,74 @@ fun Stopwatch(
                 onPlayPause = if (stopwatchState.isActive) onPause else onStart,
                 onExtraButtonClicked = { onLap() }
             )
+        }
+    }
+}
+
+@Composable
+fun LandscapeStopwatchLayout(
+    stopwatchState: StopwatchState,
+    onStart: () -> Unit,
+    onPause: () -> Unit,
+    onStop: () -> Unit,
+    onLap: () -> Unit
+) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(key1 = stopwatchState.lapList) {
+        snapshotFlow { listState.firstVisibleItemIndex }
+            .collect {
+                if (stopwatchState.lapList.lastIndex >= 0) {
+                    listState.animateScrollToItem(stopwatchState.lapList.lastIndex, 0)
+                }
+            }
+    }
+
+    val stopwatchWeight by animateFloatAsState(
+        targetValue = if (stopwatchState.lapList.isEmpty()) 1f else 0.5f,
+        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
+        label = "Stopwatch Column Weight"
+    )
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier
+                .weight(stopwatchWeight)
+                .animateContentSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            StopwatchDisplayLandscape(
+                modifier = Modifier,
+                formattedTime = stopwatchState.formattedTime
+            )
+            Spacer(modifier = Modifier.height(space20))
+            FloatingActionButtonRow(
+                isPlaying = stopwatchState.isActive,
+                isStart = stopwatchState.isStart,
+                onStop = onStop,
+                onPlayPause = if (stopwatchState.isActive) onPause else onStart,
+                onExtraButtonClicked = { onLap() }
+            )
+        }
+
+        if (stopwatchState.lapList.isNotEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxWidth().weight(0.5f),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                StopwatchHeader()
+                StopwatchLapList(
+                    lapList = stopwatchState.lapList,
+                    listState = listState
+                )
+            }
         }
     }
 }

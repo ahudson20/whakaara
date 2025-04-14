@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.ui)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.adaptive.navigation)
 
     // Kover
     kover(project(Modules.coreData))

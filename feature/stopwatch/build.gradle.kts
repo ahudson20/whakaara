@@ -20,6 +20,10 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.material3.windowSizeClass)
+    implementation(libs.androidx.adaptive.android)
+    implementation(libs.androidx.adaptive.layout)
+
 
     testImplementation(libs.junit)
 

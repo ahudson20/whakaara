@@ -1,6 +1,8 @@
 package com.whakaara.feature.stopwatch.ui
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -25,7 +27,9 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.whakaara.core.designsystem.theme.FontScalePreviews
@@ -49,21 +53,39 @@ fun StopwatchLapList(
 ) {
     val minDiff = lapList.minOfOrNull { it.diff }
     val maxDiff = lapList.maxOfOrNull { it.diff }
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.dp
+
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    val adjustedModifier = when {
+        isPortrait && lapList.isNotEmpty() -> modifier.height(screenHeightDp * 0.45f)
+        isPortrait -> modifier.height(spaceNone)
+        else -> modifier
+    }
 
     LazyColumn(
-        modifier = modifier
+        modifier = adjustedModifier
             .fillMaxWidth()
             .animateContentSize()
-            .height(height = if (lapList.isNotEmpty()) 350.dp else spaceNone)
             .verticalFadingEdge(
                 lazyListState = listState,
                 length = 100.dp
             ),
         verticalArrangement = Arrangement.Top,
         state = listState,
-        reverseLayout = true
+        reverseLayout = lapList.isNotEmpty()
     ) {
-        itemsIndexed(lapList) { index, item ->
+        if (lapList.isEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier.fillMaxWidth().border(1.dp, Color.Blue),
+                    text = "Lap list empty!",
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        itemsIndexed(items = lapList) { index, item ->
             if (index != 0) {
                 Spacer(
                     modifier = Modifier
@@ -112,26 +134,30 @@ private fun LapCell(
     ) {
         Card(shape = Shapes.small) {
             Box(
-                modifier = Modifier.padding(all = spaceMedium)
+                modifier = Modifier.padding(top = spaceMedium, bottom = spaceMedium)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier.weight(1f),
                         text = String.format(locale = Locale.ROOT, format = "%02d", index.inc()),
-                        color = diffTextColor
+                        color = diffTextColor,
+                        textAlign = TextAlign.Center
                     )
-                    Box(
+                    Text(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(start = spaceXLarge, end = spaceMedium)
-                    ) {
-                        Text(
-                            text = DateUtils.formatTimeForStopwatchLap(lap.time)
-                        )
-                    }
-                    Text(text = DateUtils.formatTimeForStopwatchLap(lap.diff))
+                            .weight(3f)
+                            .padding(start = spaceXLarge, end = spaceMedium),
+                        text = DateUtils.formatTimeForStopwatchLap(lap.time),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        modifier = Modifier.weight(2f),
+                        text = DateUtils.formatTimeForStopwatchLap(lap.diff),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
@@ -219,6 +245,14 @@ fun Modifier.verticalFadingEdge(
             ),
             topLeft = Offset(x = 0f, y = size.height - topFadingEdgeStrength)
         )
+    }
+}
+
+fun Modifier.customHeight(condition : Boolean, modifier : Modifier.() -> Modifier) : Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
     }
 }
 

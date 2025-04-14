@@ -1,10 +1,10 @@
 [versions]
-androidxNavigationCompose = "2.8.5"
-androidxCore = "1.15.0"
+androidxNavigationCompose = "2.8.9"
+androidxCore = "1.16.0"
 androidxCoreSplashscreen = "1.1.0-rc01"
-androidxComposeUi = "1.7.6"
+androidxComposeUi = "1.7.8"
 androidxLifecycle = "2.8.7"
-androidxActivityCompose = "1.9.3"
+androidxActivityCompose = "1.10.1"
 androidxRoom = "2.6.1"
 androidxWork = "2.10.0"
 androidxArchCore = "2.2.0"
@@ -13,17 +13,18 @@ androidxHiltNavCompose = "1.2.0"
 androidxGlance = "1.1.1"
 androidGradlePlugin = "8.7.3"
 androidxAnnotation = "1.9.1"
+androidxAdaptiveNavigation = "1.4.0-alpha12"
 datastorePreferences = "1.1.1"
 javaxInject = "1"
 jetbrainsKotlinxMetadata = "0.9.0"
-jetbrainsKotilnxCoroutines = "1.8.1"
+jetbrainsKotilnxCoroutines = "1.9.0"
 junit = "4.13.2"
-accompanistPermissions = "0.34.0"
+accompanistPermissions = "0.37.0"
 chargemap = "1.0.3"
 dokar3 = "0.5.7"
-material3 = "1.3.1"
-materialIconsExtended = "1.7.6"
-materialVersion = "1.7.6"
+material3 = "1.3.2"
+materialIconsExtended = "1.7.8"
+materialVersion = "1.7.8"
 timePickerVersion = "0.7.2"
 composeSettingsM3 = "1.0.3"
 turbine = "1.1.0"
@@ -39,16 +40,21 @@ appcompat = "1.7.0"
 material = "1.12.0"
 kotlinGradlePlugin = "1.9.23"
 kotlinCompilerExtensionVersion = "1.5.13"
-androidxComposeBom = "2024.12.01"
-uiGraphicsAndroid = "1.7.6"
-ui = "1.7.6"
+androidxComposeBom = "2025.04.00"
+uiGraphicsAndroid = "1.7.8"
+ui = "1.7.8"
 kover = "0.7.5"
+adaptiveAndroid = "1.1.0"
 
 [libraries]
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-material = { group = "androidx.compose.material", name = "material", version.ref = "materialVersion" }
 androidx-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+androidx-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
+androidx-adaptive-android = { group = "androidx.compose.material3.adaptive", name = "adaptive", version.ref = "adaptiveAndroid" }
+androidx-adaptive-layout = { group = "androidx.compose.material3.adaptive", name = "adaptive-layout", version.ref = "adaptiveAndroid" }
+androidx-adaptive-navigation = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "androidxAdaptiveNavigation" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigationCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }

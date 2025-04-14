@@ -2,7 +2,10 @@ package com.app.whakaara.ui.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Stable
@@ -16,9 +19,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.rememberNavController
 import com.app.whakaara.state.events.PreferencesEventCallbacks
-import com.app.whakaara.ui.navigation.BottomNavigation
+import com.app.whakaara.ui.navigation.BottomNavItem
 import com.app.whakaara.ui.navigation.NavGraph
 import com.app.whakaara.ui.navigation.TopBar
+import com.app.whakaara.ui.navigation.navigateToRootScreen
 import com.whakaara.core.RootScreen
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.ThemePreviews
@@ -41,34 +45,46 @@ fun MainScreen(
     val navController = rememberNavController()
     val currentSelectedScreen by navController.currentScreenAsState()
     val currentRoute by navController.currentRouteAsState()
+    val navItems = listOf(
+        BottomNavItem.Alarm,
+        BottomNavItem.Timer,
+        BottomNavItem.Stopwatch
+    )
 
-    Scaffold(
-        topBar = {
-            if (!preferencesState.preferences.shouldShowOnboarding) {
-                TopBar(
-                    route = currentRoute,
-                    preferencesState = preferencesState,
-                    preferencesEventCallbacks = preferencesEventCallbacks
-                )
-            }
-        },
-        bottomBar = {
-            if (!preferencesState.preferences.shouldShowOnboarding) {
-                BottomNavigation(
-                    navController = navController,
-                    currentSelectedScreen = currentSelectedScreen
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            navItems.forEachIndexed { _, bottomNavItem ->
+                item(
+                    selected = bottomNavItem.rootScreen == currentSelectedScreen,
+                    icon = { Icon(imageVector = bottomNavItem.icon, contentDescription = bottomNavItem.title) },
+                    label = { Text(text = bottomNavItem.title) },
+                    onClick = {
+                        navController.navigateToRootScreen(bottomNavItem.rootScreen)
+                    }
                 )
             }
         }
-    ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)) {
-            NavGraph(
-                navController = navController,
-                shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding,
-                alarmViewModel = alarmViewModel,
-                timerViewModel = timerViewModel,
-                stopwatchViewModel = stopwatchViewModel
-            )
+    ) {
+        Scaffold(
+            topBar = {
+                if (!preferencesState.preferences.shouldShowOnboarding) {
+                    TopBar(
+                        route = currentRoute,
+                        preferencesState = preferencesState,
+                        preferencesEventCallbacks = preferencesEventCallbacks
+                    )
+                }
+            }
+        ) { padding ->
+            Box(modifier = Modifier.padding(padding)) {
+                NavGraph(
+                    navController = navController,
+                    shouldShowOnboarding = preferencesState.preferences.shouldShowOnboarding,
+                    alarmViewModel = alarmViewModel,
+                    timerViewModel = timerViewModel,
+                    stopwatchViewModel = stopwatchViewModel
+                )
+            }
         }
     }
 }

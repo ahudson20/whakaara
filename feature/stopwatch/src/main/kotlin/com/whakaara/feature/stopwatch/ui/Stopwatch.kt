@@ -3,7 +3,6 @@ package com.whakaara.feature.stopwatch.ui
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -104,7 +102,7 @@ fun PortraitStopwatchLayout(
                     StopwatchHeader()
                 }
                 StopwatchLapList(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().animateContentSize(),
                     lapList = stopwatchState.lapList,
                     listState = listState
                 )
@@ -128,7 +126,8 @@ fun LandscapeStopwatchLayout(
     onStart: () -> Unit,
     onPause: () -> Unit,
     onStop: () -> Unit,
-    onLap: () -> Unit
+    onLap: () -> Unit,
+
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(key1 = stopwatchState.lapList) {
@@ -140,12 +139,6 @@ fun LandscapeStopwatchLayout(
             }
     }
 
-    val stopwatchWeight by animateFloatAsState(
-        targetValue = if (stopwatchState.lapList.isEmpty()) 1f else 0.5f,
-        animationSpec = tween(durationMillis = 250, easing = FastOutSlowInEasing),
-        label = "Stopwatch Column Weight"
-    )
-
     Row(
         modifier = Modifier
             .fillMaxSize()
@@ -154,9 +147,10 @@ fun LandscapeStopwatchLayout(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(
-            modifier = Modifier
-                .weight(stopwatchWeight)
-                .animateContentSize(),
+            modifier = Modifier.weight(1f)
+                .animateContentSize(
+                    animationSpec = tween(durationMillis = 300, easing = FastOutSlowInEasing)
+                ),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -174,18 +168,16 @@ fun LandscapeStopwatchLayout(
             )
         }
 
-        if (stopwatchState.lapList.isNotEmpty()) {
-            Column(
-                modifier = Modifier.fillMaxWidth().weight(0.5f),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                StopwatchHeader()
-                StopwatchLapList(
-                    lapList = stopwatchState.lapList,
-                    listState = listState
-                )
-            }
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            StopwatchHeader()
+            StopwatchLapList(
+                lapList = stopwatchState.lapList,
+                listState = listState
+            )
         }
     }
 }

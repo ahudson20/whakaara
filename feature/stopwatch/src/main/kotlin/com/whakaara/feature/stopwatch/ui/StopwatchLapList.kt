@@ -2,7 +2,6 @@ package com.whakaara.feature.stopwatch.ui
 
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -29,6 +28,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -41,6 +41,7 @@ import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
 import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.R
 import com.whakaara.feature.stopwatch.util.DateUtils
 import com.whakaara.model.stopwatch.Lap
 import java.util.Locale
@@ -78,8 +79,8 @@ fun StopwatchLapList(
         if (lapList.isEmpty()) {
             item {
                 Text(
-                    modifier = Modifier.fillMaxWidth().border(1.dp, Color.Blue),
-                    text = "Lap list empty!",
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.stopwatch_lap_list_empty),
                     textAlign = TextAlign.Center
                 )
             }

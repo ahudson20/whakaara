@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.app.whakaara.logic.MainViewModel
+import com.app.whakaara.state.events.AppViewModels
 import com.app.whakaara.state.events.PreferencesEventCallbacks
 import com.app.whakaara.ui.screens.MainScreen
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
@@ -33,6 +34,12 @@ class MainActivity : ComponentActivity(), PreferencesEventCallbacks {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val appViewModels = AppViewModels(
+            main = viewModel,
+            timer = timerViewModel,
+            stopwatch = stopwatchViewModel,
+            alarm = alarmViewModel
+        )
 
         installSplashScreen().setKeepOnScreenCondition {
             !viewModel.preferencesUiState.value.isReady
@@ -40,6 +47,7 @@ class MainActivity : ComponentActivity(), PreferencesEventCallbacks {
 
         setContent {
             val preferencesState by viewModel.preferencesUiState.collectAsStateWithLifecycle()
+            val timerState by timerViewModel.timerState.collectAsStateWithLifecycle()
 
             val useDarkColours = when (preferencesState.preferences.appTheme) {
                 AppTheme.MODE_DAY -> false
@@ -54,9 +62,8 @@ class MainActivity : ComponentActivity(), PreferencesEventCallbacks {
                 MainScreen(
                     preferencesState = preferencesState,
                     preferencesEventCallbacks = this@MainActivity,
-                    alarmViewModel = alarmViewModel,
-                    timerViewModel = timerViewModel,
-                    stopwatchViewModel = stopwatchViewModel
+                    viewModels = appViewModels,
+                    timerState = timerState,
                 )
             }
         }

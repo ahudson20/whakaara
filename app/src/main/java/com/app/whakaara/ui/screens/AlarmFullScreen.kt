@@ -19,6 +19,7 @@ import com.app.whakaara.R
 import com.app.whakaara.ui.clock.TextClock
 import com.whakaara.core.GeneralUtils.Companion.showToast
 import com.whakaara.core.designsystem.theme.AlarmPreviewProvider
+import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
@@ -81,7 +82,7 @@ fun AlarmFullScreen(
 
 @Composable
 @ThemePreviews
-@com.whakaara.core.designsystem.theme.FontScalePreviews
+@FontScalePreviews
 private fun NotificationFullScreenPreview(
     @PreviewParameter(AlarmPreviewProvider::class) alarm: Alarm
 ) {

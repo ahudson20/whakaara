@@ -228,7 +228,7 @@ class TimerViewModel @Inject constructor(
             val status = preferencesDatastore.readTimerStatus().first()
             if (status != TimerStateDataStore()) {
                 with(status) {
-                    val difference = java.lang.System.currentTimeMillis() - timeStamp
+                    val difference = System.currentTimeMillis() - timeStamp
                     if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
                         if (isActive) {
                             recreateActiveTimer(
@@ -286,7 +286,7 @@ class TimerViewModel @Inject constructor(
     // endregion
 
     //region tmw
-    fun recreateActiveTimer(
+    private fun recreateActiveTimer(
         milliseconds: Long,
         inputHours: String,
         inputMinutes: String,
@@ -461,7 +461,7 @@ class TimerViewModel @Inject constructor(
         )
     }
 
-    fun pauseTimerNotificationCountdown() {
+    private fun pauseTimerNotificationCountdown() {
         val startTimerReceiverIntent =
             app.applicationContext.getTimerReceiverIntent(intentAction = NotificationUtilsConstants.TIMER_RECEIVER_ACTION_START).apply {
                 putExtra(NotificationUtilsConstants.TIMER_RECEIVER_CURRENT_TIME_EXTRA, timerState.value.currentTime)

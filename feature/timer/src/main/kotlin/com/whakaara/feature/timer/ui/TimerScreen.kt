@@ -1,5 +1,6 @@
 package com.whakaara.feature.timer.ui
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
@@ -12,24 +13,25 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowWidthSizeClass
 import com.whakaara.core.constants.DateUtilsConstants
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.feature.timer.R
-import com.whakaara.feature.timer.util.DateUtils
 import com.whakaara.model.StringStateEvent
 import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.model.timer.TimerState
-import java.util.Calendar
 
 @Composable
 fun TimerScreen(
@@ -37,10 +39,15 @@ fun TimerScreen(
     updateHours: (newValue: String) -> Unit,
     updateMinutes: (newValue: String) -> Unit,
     updateSeconds: (newValue: String) -> Unit,
-    timeFormat: TimeFormat
+    timeFormat: TimeFormat,
+    windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 ) {
     val focusManager = LocalFocusManager.current
-    val context = LocalContext.current
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLargeScreen = (windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.MEDIUM || windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED)
+    val isSplitMode = isLandscape && isLargeScreen
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,75 +64,119 @@ fun TimerScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        AnimatedContent(
-            targetState = (!timerState.isTimerActive && !timerState.isTimerPaused),
-            transitionSpec = {
-                (scaleIn(animationSpec = tween(1000, delayMillis = 90)))
-                    .togetherWith(scaleOut(animationSpec = tween(600)))
-            },
-            label = ""
-        ) { targetState ->
-            if (targetState) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = spaceMedium, end = spaceMedium),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    TimerInputField(
-                        label = stringResource(id = R.string.timer_screen_hour_label),
-                        regex = DateUtilsConstants.TIMER_HOURS_INPUT_REGEX,
-                        updateStringEvent = StringStateEvent(
-                            value = timerState.inputHours,
-                            onValueChange = { newValue ->
-                                updateHours(newValue)
-                            }
-                        )
-                    )
+        if (isSplitMode) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = spaceMedium),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                TimerInputView(
+                    modifier = Modifier.weight(1F),
+                    timerState = timerState,
+                    updateHours = updateHours,
+                    updateMinutes = updateMinutes,
+                    updateSeconds = updateSeconds
+                )
 
-                    TimerInputField(
-                        label = stringResource(id = R.string.timer_screen_minutes_label),
-                        regex = DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
-                        updateStringEvent = StringStateEvent(
-                            value = timerState.inputMinutes,
-                            onValueChange = { newValue ->
-                                updateMinutes(newValue)
-                            }
-                        )
+                TimerCountdownView(
+                    modifier = Modifier.weight(1F),
+                    timerState = timerState,
+                    timeFormat = timeFormat
+                )
+            }
+        } else {
+            AnimatedContent(
+                targetState = (!timerState.isTimerActive && !timerState.isTimerPaused),
+                transitionSpec = {
+                    (scaleIn(animationSpec = tween(1000, delayMillis = 90)))
+                        .togetherWith(scaleOut(animationSpec = tween(600)))
+                },
+                label = ""
+            ) { targetState ->
+                if (targetState) {
+                    TimerInputView(
+                        timerState = timerState,
+                        updateHours = updateHours,
+                        updateMinutes = updateMinutes,
+                        updateSeconds = updateSeconds
                     )
-
-                    TimerInputField(
-                        label = stringResource(id = R.string.timer_screen_seconds_label),
-                        regex = DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
-                        updateStringEvent = StringStateEvent(
-                            value = timerState.inputSeconds,
-                            onValueChange = { newValue ->
-                                updateSeconds(newValue)
-                            }
-                        )
+                } else {
+                    TimerCountdownView(
+                        timerState = timerState,
+                        timeFormat = timeFormat
                     )
                 }
-            } else {
-                TimerCountdownDisplay(
-                    progress = timerState.progress,
-                    time = timerState.time,
-                    finishTime = if (timerState.isTimerPaused) {
-                        context.getString(R.string.timer_screen_paused)
-                    } else {
-                        DateUtils.getTimerFinishFormatted(
-                            date = Calendar.getInstance().apply {
-                                add(
-                                    Calendar.MILLISECOND,
-                                    timerState.millisecondsFromTimerInput.toInt()
-                                )
-                            },
-                            timeFormat = timeFormat
-                        )
-                    }
-                )
             }
         }
     }
+}
+
+@Composable
+fun TimerInputView(
+    modifier: Modifier = Modifier,
+    timerState: TimerState,
+    updateHours: (newValue: String) -> Unit,
+    updateMinutes: (newValue: String) -> Unit,
+    updateSeconds: (newValue: String) -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(start = spaceMedium, end = spaceMedium),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        TimerInputField(
+            label = stringResource(id = R.string.timer_screen_hour_label),
+            regex = DateUtilsConstants.TIMER_HOURS_INPUT_REGEX,
+            updateStringEvent = StringStateEvent(
+                value = timerState.inputHours,
+                onValueChange = { newValue ->
+                    updateHours(newValue)
+                }
+            )
+        )
+
+        TimerInputField(
+            label = stringResource(id = R.string.timer_screen_minutes_label),
+            regex = DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
+            updateStringEvent = StringStateEvent(
+                value = timerState.inputMinutes,
+                onValueChange = { newValue ->
+                    updateMinutes(newValue)
+                }
+            )
+        )
+
+        TimerInputField(
+            label = stringResource(id = R.string.timer_screen_seconds_label),
+            regex = DateUtilsConstants.TIMER_MINUTES_AND_SECONDS_INPUT_REGEX,
+            updateStringEvent = StringStateEvent(
+                value = timerState.inputSeconds,
+                onValueChange = { newValue ->
+                    updateSeconds(newValue)
+                }
+            )
+        )
+    }
+}
+
+@Composable
+fun TimerCountdownView(
+    modifier: Modifier = Modifier,
+    timerState: TimerState,
+    timeFormat: TimeFormat
+) {
+    TimerCountdownDisplay(
+        modifier = modifier,
+        progress = timerState.progress,
+        time = timerState.time,
+        isPaused = timerState.isTimerPaused,
+        isStart = timerState.isStart,
+        millisecondsFromTimerInput = timerState.millisecondsFromTimerInput,
+        timeFormat = timeFormat
+    )
 }
 
 @Composable

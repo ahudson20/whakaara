@@ -2,7 +2,7 @@ import com.android.build.api.variant.ApplicationAndroidComponentsExtension
 import com.whakaara.structure.configureKover
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.getByType
+import org.gradle.kotlin.dsl.configure
 
 class AndroidApplicationKoverPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -10,8 +10,10 @@ class AndroidApplicationKoverPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("org.jetbrains.kotlinx.kover")
             }
-            val extension = extensions.getByType<ApplicationAndroidComponentsExtension>()
-            configureKover(extension)
+
+            extensions.configure<ApplicationAndroidComponentsExtension> {
+                configureKover(this)
+            }
         }
     }
 }

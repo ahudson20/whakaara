@@ -31,7 +31,7 @@ fun NavGraph(
             RootScreen.Alarm.route
         }
     ) {
-        addOnboardingRoute(navController)
+        addOnboardingRoute(navController = navController)
         addAlarmRoute(
             viewModel = viewModels.alarm
         )

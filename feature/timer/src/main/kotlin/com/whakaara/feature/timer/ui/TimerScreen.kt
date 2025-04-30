@@ -21,6 +21,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowWidthSizeClass
 import com.whakaara.core.constants.DateUtilsConstants
@@ -68,7 +69,7 @@ fun TimerScreen(
             Row(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = spaceMedium),
+                    .padding(start = spaceMedium, end = spaceMedium, bottom = 56.0.dp),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -83,7 +84,9 @@ fun TimerScreen(
                 TimerCountdownView(
                     modifier = Modifier.weight(1F),
                     timerState = timerState,
-                    timeFormat = timeFormat
+                    timeFormat = timeFormat,
+                    isSplitMode = true,
+                    isLargeScreen = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED
                 )
             }
         } else {
@@ -105,7 +108,8 @@ fun TimerScreen(
                 } else {
                     TimerCountdownView(
                         timerState = timerState,
-                        timeFormat = timeFormat
+                        timeFormat = timeFormat,
+                        isLargeScreen = isLargeScreen
                     )
                 }
             }
@@ -166,7 +170,9 @@ fun TimerInputView(
 fun TimerCountdownView(
     modifier: Modifier = Modifier,
     timerState: TimerState,
-    timeFormat: TimeFormat
+    timeFormat: TimeFormat,
+    isSplitMode: Boolean = false,
+    isLargeScreen: Boolean = false
 ) {
     TimerCountdownDisplay(
         modifier = modifier,
@@ -175,7 +181,9 @@ fun TimerCountdownView(
         isPaused = timerState.isTimerPaused,
         isStart = timerState.isStart,
         millisecondsFromTimerInput = timerState.millisecondsFromTimerInput,
-        timeFormat = timeFormat
+        timeFormat = timeFormat,
+        isSplitMode = isSplitMode,
+        isLargeScreen = isLargeScreen
     )
 }
 

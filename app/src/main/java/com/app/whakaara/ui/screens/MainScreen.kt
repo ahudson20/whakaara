@@ -21,8 +21,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldValue
+import androidx.compose.material3.adaptive.navigationsuite.rememberNavigationSuiteScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -66,6 +69,7 @@ import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.model.timer.TimerState
+import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.util.Calendar
 
@@ -82,6 +86,7 @@ fun MainScreen(
     val currentRoute by navController.currentRouteAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val navigationSuiteState = rememberNavigationSuiteScaffoldState(initialValue = NavigationSuiteScaffoldValue.Hidden)
     val context = LocalContext.current
     val isDialogShown = rememberSaveable { mutableStateOf(false) }
     val notificationPermissionState = rememberPermissionStateSafe(permission = Manifest.permission.POST_NOTIFICATIONS)
@@ -92,6 +97,7 @@ fun MainScreen(
                     viewModels.timer.startTimer()
                 }
             }
+
             LeafScreen.Alarm.route -> {
                 if (wasGranted) {
                     isDialogShown.value = !isDialogShown.value
@@ -105,19 +111,28 @@ fun MainScreen(
         BottomNavItem.Stopwatch
     )
 
+    LaunchedEffect(key1 = preferencesState.preferences.shouldShowOnboarding) {
+        scope.launch {
+            if (preferencesState.preferences.shouldShowOnboarding) {
+                navigationSuiteState.hide()
+            } else {
+                navigationSuiteState.show()
+            }
+        }
+    }
+
     NavigationSuiteScaffold(
+        state = navigationSuiteState,
         navigationSuiteItems = {
-            if (!preferencesState.preferences.shouldShowOnboarding) {
-                navItems.forEachIndexed { _, bottomNavItem ->
-                    item(
-                        selected = bottomNavItem.rootScreen == currentSelectedScreen,
-                        icon = { Icon(imageVector = bottomNavItem.icon, contentDescription = bottomNavItem.title) },
-                        label = { Text(text = bottomNavItem.title) },
-                        onClick = {
-                            navController.navigateToRootScreen(bottomNavItem.rootScreen)
-                        }
-                    )
-                }
+            navItems.forEachIndexed { _, bottomNavItem ->
+                item(
+                    selected = bottomNavItem.rootScreen == currentSelectedScreen,
+                    icon = { Icon(imageVector = bottomNavItem.icon, contentDescription = bottomNavItem.title) },
+                    label = { Text(text = bottomNavItem.title) },
+                    onClick = {
+                        navController.navigateToRootScreen(bottomNavItem.rootScreen)
+                    }
+                )
             }
         }
     ) {
@@ -170,6 +185,7 @@ fun MainScreen(
                             }
                         )
                     }
+
                     LeafScreen.Alarm.route -> {
                         FloatingActionButton(
                             shape = CircleShape,

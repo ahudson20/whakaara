@@ -89,7 +89,7 @@ fun StopwatchDisplayLandscape(
     formattedTime: String,
     windowSizeClass: WindowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
 ) {
-    val showFancyDisplay = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.MEDIUM || windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED
+    val showFancyDisplay = windowSizeClass.windowWidthSizeClass == WindowWidthSizeClass.EXPANDED
 
     if (showFancyDisplay) {
         StopwatchDisplay(modifier = modifier, formattedTime = formattedTime)

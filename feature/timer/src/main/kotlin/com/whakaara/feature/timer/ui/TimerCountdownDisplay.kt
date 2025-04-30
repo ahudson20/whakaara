@@ -23,11 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings.space275
+import com.whakaara.core.designsystem.theme.Spacings.spaceNone
 import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
 import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
 import com.whakaara.core.designsystem.theme.Spacings.spaceXxSmall
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.core.designsystem.theme.primaryGreen
 import com.whakaara.feature.timer.R
 import com.whakaara.feature.timer.util.DateUtils
 import com.whakaara.model.preferences.TimeFormat
@@ -41,7 +43,9 @@ fun TimerCountdownDisplay(
     isPaused: Boolean,
     isStart: Boolean,
     millisecondsFromTimerInput: Long,
-    timeFormat: TimeFormat
+    timeFormat: TimeFormat,
+    isSplitMode: Boolean = false,
+    isLargeScreen: Boolean = false
 ) {
     val animatedProgress by animateFloatAsState(
         targetValue = progress,
@@ -60,12 +64,14 @@ fun TimerCountdownDisplay(
         Box(
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(
-                modifier = Modifier.size(space275),
-                progress = { animatedProgress },
-                color = com.whakaara.core.designsystem.theme.primaryGreen,
-                strokeWidth = spaceXSmall
-            )
+            if (!isSplitMode || isLargeScreen) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(space275),
+                    progress = { animatedProgress },
+                    color = primaryGreen,
+                    strokeWidth = spaceXSmall
+                )
+            }
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -74,7 +80,7 @@ fun TimerCountdownDisplay(
                     text = time
                 )
                 Row(
-                    modifier = Modifier.offset(y = spaceXLarge),
+                    modifier = Modifier.offset(y = if (!isSplitMode) spaceXLarge else spaceNone),
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(

@@ -62,16 +62,13 @@ import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.core.rememberPermissionStateSafe
 import com.whakaara.feature.alarm.R
-import com.whakaara.feature.alarm.utils.DateUtils
 import com.whakaara.feature.alarm.utils.GeneralUtils.Companion.showToast
-import com.whakaara.model.alarm.Alarm
 import com.whakaara.model.preferences.Preferences
 import com.whakaara.model.preferences.PreferencesState
 import com.whakaara.model.preferences.TimeFormat
 import com.whakaara.model.timer.TimerState
 import kotlinx.coroutines.launch
 import java.time.LocalTime
-import java.util.Calendar
 
 @OptIn(ExperimentalPermissionsApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -238,27 +235,13 @@ fun MainScreen(
         TimePickerDialog(
             onDismissRequest = { isDialogShown.value = false },
             initialTime = LocalTime.now().plusMinutes(1).noSeconds(),
-            onTimeChange = {
-                val date = Calendar.getInstance().apply {
-                    set(Calendar.HOUR_OF_DAY, it.hour)
-                    set(Calendar.MINUTE, it.minute)
-                    set(Calendar.SECOND, 0)
-                }
+            onTimeChange = { localTime ->
                 viewModels.alarm.create(
-                    Alarm(
-                        date = date,
-                        subTitle = DateUtils.getAlarmTimeFormatted(
-                            date = date,
-                            timeFormat = preferencesState.preferences.timeFormat
-                        ),
-                        vibration = preferencesState.preferences.isVibrateEnabled,
-                        isSnoozeEnabled = preferencesState.preferences.isSnoozeEnabled,
-                        deleteAfterGoesOff = preferencesState.preferences.deleteAfterGoesOff
-                    )
+                    localTime = localTime,
                 )
                 isDialogShown.value = false
                 context.showToast(
-                    message = viewModels.alarm.getTimeUntilAlarmFormatted(date)
+                    message = viewModels.alarm.getTimeUntilAlarmFormatted(localTime = localTime)
                 )
             },
             title = { Text(text = stringResource(id = R.string.time_picker_dialog_title)) },

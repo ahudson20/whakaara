@@ -1,5 +1,4 @@
 import com.whakaara.structure.Modules
-import com.whakaara.structure.modules
 
 plugins {
     alias(libs.plugins.whakaara.android.library)
@@ -30,7 +29,7 @@ android {
 }
 
 dependencies {
-    modules(Modules.coreDatabase)
+    api(project(Modules.coreDatabase))
     api(project(Modules.coreModel))
 
     testImplementation(libs.androidx.arch.core.testing)

@@ -83,27 +83,27 @@ class TimerViewModel @Inject constructor(
         timerRepository.timerState.collectLatest { state ->
             when (state) {
                 is TimerStateReceiver.Idle -> {
-                    logD("TimerStateReceiver.Idle")
+                    logD(message = "TimerStateReceiver.Idle")
                 }
 
                 is TimerStateReceiver.Started -> {
                     startTimer()
                     startTimerNotificationCountdown(milliseconds = state.currentTime + Calendar.getInstance().timeInMillis)
 
-                    logD("TimerStateReceiver.Started")
+                    logD(message = "TimerStateReceiver.Started")
                 }
 
                 is TimerStateReceiver.Paused -> {
                     pauseTimer()
                     pauseTimerNotificationCountdown()
 
-                    logD("TimerStateReceiver.Paused")
+                    logD(message = "TimerStateReceiver.Paused")
                 }
 
                 is TimerStateReceiver.Stopped -> {
                     resetTimer()
 
-                    logD("TimerStateReceiver.Stopped")
+                    logD(message = "TimerStateReceiver.Stopped")
                 }
             }
         }
@@ -190,68 +190,60 @@ class TimerViewModel @Inject constructor(
     }
 
     fun restartTimer() {
+        cancelNotification()
+        cancelTimerAlarm()
+        countDownTimerUtil.cancel()
+        _timerState.update {
+            it.copy(
+                isTimerPaused = false,
+                isTimerActive = false,
+                isStart = true,
+                currentTime = GeneralConstants.ZERO_MILLIS,
+                progress = GeneralConstants.STARTING_CIRCULAR_PROGRESS,
+                time = DateUtilsConstants.TIMER_STARTING_FORMAT
+            )
+        }
+
         if (_preferences.value.preferences.autoRestartTimer) {
-            cancelNotification()
-            cancelTimerAlarm()
-            countDownTimerUtil.cancel()
             _timerState.update {
                 it.copy(
-                    isTimerPaused = false,
-                    isTimerActive = false,
-                    currentTime = GeneralConstants.ZERO_MILLIS,
-                    isStart = true,
-                    progress = GeneralConstants.STARTING_CIRCULAR_PROGRESS,
-                    time = DateUtilsConstants.TIMER_STARTING_FORMAT,
                     millisecondsFromTimerInput = GeneralConstants.ZERO_MILLIS
                 )
             }
             startTimer()
-        } else {
-            cancelNotification()
-            cancelTimerAlarm()
-            countDownTimerUtil.cancel()
-            _timerState.update {
-                it.copy(
-                    isTimerPaused = false,
-                    isTimerActive = false,
-                    isStart = true,
-                    progress = GeneralConstants.STARTING_CIRCULAR_PROGRESS,
-                    time = DateUtilsConstants.TIMER_STARTING_FORMAT,
-                    currentTime = GeneralConstants.ZERO_MILLIS
-                )
-            }
         }
     }
 
     fun recreateTimer() = viewModelScope.launch(mainDispatcher) {
-        if (timerState.value == TimerState()) {
-            val status = preferencesDatastore.readTimerStatus().first()
-            if (status != TimerStateDataStore()) {
-                with(status) {
-                    val difference = java.lang.System.currentTimeMillis() - timeStamp
-                    if (remainingTimeInMillis > 0 && (remainingTimeInMillis > difference)) {
-                        if (isActive) {
-                            recreateActiveTimer(
-                                milliseconds = remainingTimeInMillis - difference,
-                                inputHours = inputHours,
-                                inputMinutes = inputMinutes,
-                                inputSeconds = inputSeconds
-                            )
-                        } else if (isPaused) {
-                            recreatePausedTimer(
-                                milliseconds = remainingTimeInMillis - difference,
-                                inputHours = inputHours,
-                                inputMinutes = inputMinutes,
-                                inputSeconds = inputSeconds
-                            )
-                        }
-                        preferencesDatastore.saveTimerData(
-                            state = TimerStateDataStore()
-                        )
-                    }
-                }
-            }
+        if (timerState.value != TimerState()) return@launch
+
+        val status = preferencesDatastore.readTimerStatus().first()
+        if (status == TimerStateDataStore()) return@launch
+
+        val difference = System.currentTimeMillis() - status.timeStamp
+        val remaining = status.remainingTimeInMillis - difference
+
+        if (remaining <= 0) return@launch
+
+        if (status.isActive) {
+            recreateActiveTimer(
+                milliseconds = remaining,
+                inputHours = status.inputHours,
+                inputMinutes = status.inputMinutes,
+                inputSeconds = status.inputSeconds
+            )
+        } else if (status.isPaused) {
+            recreatePausedTimer(
+                milliseconds = remaining,
+                inputHours = status.inputHours,
+                inputMinutes = status.inputMinutes,
+                inputSeconds = status.inputSeconds
+            )
         }
+
+        preferencesDatastore.saveTimerData(
+            state = TimerStateDataStore()
+        )
     }
 
     fun saveTimerStateForRecreation() = viewModelScope.launch(ioDispatcher) {
@@ -286,7 +278,7 @@ class TimerViewModel @Inject constructor(
     // endregion
 
     //region tmw
-    fun recreateActiveTimer(
+    private fun recreateActiveTimer(
         milliseconds: Long,
         inputHours: String,
         inputMinutes: String,
@@ -318,10 +310,13 @@ class TimerViewModel @Inject constructor(
         }
     }
 
-    private fun checkIfOneInputValueGreaterThanZero() =
-        ((timerState.value.inputHours.toIntOrNull() ?: 0) > 0) ||
-            ((timerState.value.inputMinutes.toIntOrNull() ?: 0) > 0) ||
-            ((timerState.value.inputSeconds.toIntOrNull() ?: 0) > 0)
+    private fun checkIfOneInputValueGreaterThanZero(): Boolean {
+        return listOf(
+            timerState.value.inputHours,
+            timerState.value.inputMinutes,
+            timerState.value.inputSeconds
+        ).any { it.toIntOrNull()?.let { num -> num > 0 } == true }
+    }
 
     private fun startCountDownTimer(timeToCountDown: Long) {
         countDownTimerUtil.countdown(
@@ -461,7 +456,7 @@ class TimerViewModel @Inject constructor(
         )
     }
 
-    fun pauseTimerNotificationCountdown() {
+    private fun pauseTimerNotificationCountdown() {
         val startTimerReceiverIntent =
             app.applicationContext.getTimerReceiverIntent(intentAction = NotificationUtilsConstants.TIMER_RECEIVER_ACTION_START).apply {
                 putExtra(NotificationUtilsConstants.TIMER_RECEIVER_CURRENT_TIME_EXTRA, timerState.value.currentTime)

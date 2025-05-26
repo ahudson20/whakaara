@@ -23,7 +23,6 @@ fun AlarmRoute(
             AlarmScreen(
                 alarms = state.alarms,
                 preferencesState = preferencesState,
-                create = viewModel::create,
                 delete = viewModel::delete,
                 disable = viewModel::disable,
                 enable = viewModel::enable,

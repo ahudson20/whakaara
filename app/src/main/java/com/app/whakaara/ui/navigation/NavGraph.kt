@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navigation
+import com.app.whakaara.state.events.AppViewModels
 import com.whakaara.core.LeafScreen
 import com.whakaara.core.RootScreen
 import com.whakaara.feature.alarm.AlarmViewModel
@@ -19,9 +20,7 @@ import com.whakaara.onboarding.navigation.onboardingScreen
 @Composable
 fun NavGraph(
     navController: NavHostController,
-    stopwatchViewModel: StopwatchViewModel,
-    timerViewModel: TimerViewModel,
-    alarmViewModel: AlarmViewModel,
+    viewModels: AppViewModels,
     shouldShowOnboarding: Boolean = false
 ) {
     NavHost(
@@ -32,15 +31,15 @@ fun NavGraph(
             RootScreen.Alarm.route
         }
     ) {
-        addOnboardingRoute(navController)
+        addOnboardingRoute(navController = navController)
         addAlarmRoute(
-            viewModel = alarmViewModel
+            viewModel = viewModels.alarm
         )
         addTimerRoute(
-            viewModel = timerViewModel
+            viewModel = viewModels.timer
         )
         addStopwatchRoute(
-            viewModel = stopwatchViewModel
+            viewModel = viewModels.stopwatch
         )
     }
 }

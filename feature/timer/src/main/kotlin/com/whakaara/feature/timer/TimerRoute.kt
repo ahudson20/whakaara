@@ -17,10 +17,6 @@ fun TimerRoute(
         updateHours = viewModel::updateInputHours,
         updateMinutes = viewModel::updateInputMinutes,
         updateSeconds = viewModel::updateInputSeconds,
-        startTimer = viewModel::startTimer,
-        stopTimer = viewModel::resetTimer,
-        restartTimer = viewModel::restartTimer,
-        pauseTimer = viewModel::pauseTimer,
         timeFormat = preferences.preferences.timeFormat
     )
 }

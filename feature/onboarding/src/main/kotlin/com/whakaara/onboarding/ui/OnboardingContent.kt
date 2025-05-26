@@ -55,7 +55,7 @@ fun OnboardingContent(
     Column(modifier = modifier.fillMaxSize()) {
         HorizontalPager(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .weight(1f),
             state = pagerState,
             verticalAlignment = Alignment.Top

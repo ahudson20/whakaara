@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.adaptive.android)
+    implementation(libs.androidx.adaptive.layout)
     implementation(libs.accompanist.permissions)
     implementation(libs.gson)
 

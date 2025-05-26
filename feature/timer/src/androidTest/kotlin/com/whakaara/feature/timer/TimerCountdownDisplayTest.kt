@@ -5,6 +5,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
 import com.whakaara.feature.timer.ui.TimerCountdownDisplay
+import com.whakaara.model.preferences.TimeFormat
 import org.junit.Rule
 import org.junit.Test
 
@@ -17,7 +18,6 @@ class TimerCountdownDisplayTest {
         // Given
         val progress = 1.0F
         val time = "00:10:00"
-        val finishTime = "2:34 PM"
 
         // When
         setContent {
@@ -25,13 +25,16 @@ class TimerCountdownDisplayTest {
                 TimerCountdownDisplay(
                     progress = progress,
                     time = time,
-                    finishTime = finishTime
+                    isPaused = false,
+                    isStart = true,
+                    millisecondsFromTimerInput = 0,
+                    timeFormat = TimeFormat.TWELVE_HOURS
                 )
             }
         }
 
         // Then
         onNodeWithText("00:10:00").assertIsDisplayed()
-        onNodeWithText("2:34 PM").assertIsDisplayed()
+        onNodeWithText("No timer set!").assertIsDisplayed()
     }
 }

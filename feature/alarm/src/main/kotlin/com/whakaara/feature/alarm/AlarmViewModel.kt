@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import java.time.LocalTime
 import java.util.Calendar
 import java.util.UUID
 import java.util.concurrent.TimeUnit
@@ -105,7 +106,24 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun create(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
+    fun create(localTime: LocalTime) = viewModelScope.launch(ioDispatcher) {
+        val date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, localTime.hour)
+            set(Calendar.MINUTE, localTime.minute)
+            set(Calendar.SECOND, 0)
+        }
+
+        val alarm = Alarm(
+            date = date,
+            subTitle = getAlarmTimeFormatted(
+                date = date,
+                timeFormat = preferencesState.value.preferences.timeFormat
+            ),
+            vibration = preferencesState.value.preferences.isVibrateEnabled,
+            isSnoozeEnabled = preferencesState.value.preferences.isSnoozeEnabled,
+            deleteAfterGoesOff = preferencesState.value.preferences.deleteAfterGoesOff
+        )
+
         repository.insert(alarm = alarm)
         createAlarm(
             alarmId = alarm.alarmId.toString(),
@@ -218,7 +236,7 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun createAlarm(
+    private fun createAlarm(
         alarmId: String,
         date: Calendar,
         autoSilenceTime: Int,
@@ -239,12 +257,12 @@ class AlarmViewModel @Inject constructor(
         updateWidget()
     }
 
-    fun deleteAlarm(alarmId: String) {
+    private fun deleteAlarm(alarmId: String) {
         stopAlarm(alarmId = alarmId)
         updateWidget()
     }
 
-    fun stopStartUpdateWidget(
+    private fun stopStartUpdateWidget(
         alarmId: String,
         date: Calendar,
         autoSilenceTime: Int,
@@ -477,6 +495,21 @@ class AlarmViewModel @Inject constructor(
                 )
             )
         }
+    }
+
+    fun getTimeUntilAlarmFormatted(localTime: LocalTime): String {
+        val date = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, localTime.hour)
+            set(Calendar.MINUTE, localTime.minute)
+            set(Calendar.SECOND, 0)
+        }
+        return convertSecondsToHMm(
+            seconds = TimeUnit.MILLISECONDS.toSeconds(
+                DateUtils.getDifferenceFromCurrentTimeInMillis(
+                    time = date
+                )
+            )
+        )
     }
 
     fun getTimeUntilAlarmFormatted(date: Calendar): String {

@@ -45,7 +45,6 @@ class AlarmScreenTest {
                 AlarmScreen(
                     alarms = listOf(firstAlarm, secondAlarm),
                     preferencesState = PreferencesState(),
-                    create = {},
                     delete = {},
                     disable = {},
                     enable = {},

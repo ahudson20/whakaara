@@ -1,5 +1,6 @@
 package com.whakaara.feature.stopwatch.ui
 
+import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,10 +26,14 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.debugInspectorInfo
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.whakaara.core.designsystem.theme.FontScalePreviews
+import com.whakaara.core.designsystem.theme.Shapes
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.Spacings.spaceNone
 import com.whakaara.core.designsystem.theme.Spacings.spaceSmall
@@ -36,6 +41,7 @@ import com.whakaara.core.designsystem.theme.Spacings.spaceXLarge
 import com.whakaara.core.designsystem.theme.Spacings.spaceXSmall
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
+import com.whakaara.feature.stopwatch.R
 import com.whakaara.feature.stopwatch.util.DateUtils
 import com.whakaara.model.stopwatch.Lap
 import java.util.Locale
@@ -48,21 +54,39 @@ fun StopwatchLapList(
 ) {
     val minDiff = lapList.minOfOrNull { it.diff }
     val maxDiff = lapList.maxOfOrNull { it.diff }
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.dp
+
+    val isPortrait = configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+    val adjustedModifier = when {
+        isPortrait && lapList.isNotEmpty() -> modifier.height(screenHeightDp * 0.45f)
+        isPortrait -> modifier.height(spaceNone)
+        else -> modifier
+    }
 
     LazyColumn(
-        modifier = modifier
+        modifier = adjustedModifier
             .fillMaxWidth()
             .animateContentSize()
-            .height(height = if (lapList.isNotEmpty()) 350.dp else spaceNone)
             .verticalFadingEdge(
                 lazyListState = listState,
                 length = 100.dp
             ),
         verticalArrangement = Arrangement.Top,
         state = listState,
-        reverseLayout = true
+        reverseLayout = lapList.isNotEmpty()
     ) {
-        itemsIndexed(lapList) { index, item ->
+        if (lapList.isEmpty()) {
+            item {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.stopwatch_lap_list_empty),
+                    textAlign = TextAlign.Center
+                )
+            }
+        }
+
+        itemsIndexed(items = lapList) { index, item ->
             if (index != 0) {
                 Spacer(
                     modifier = Modifier
@@ -109,28 +133,32 @@ private fun LapCell(
             .fillMaxWidth()
             .padding(start = spaceMedium, end = spaceMedium)
     ) {
-        Card(shape = com.whakaara.core.designsystem.theme.Shapes.small) {
+        Card(shape = Shapes.small) {
             Box(
-                modifier = Modifier.padding(all = spaceMedium)
+                modifier = Modifier.padding(top = spaceMedium, bottom = spaceMedium)
             ) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
+                        modifier = Modifier.weight(1f),
                         text = String.format(locale = Locale.ROOT, format = "%02d", index.inc()),
-                        color = diffTextColor
+                        color = diffTextColor,
+                        textAlign = TextAlign.Center
                     )
-                    Box(
+                    Text(
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(start = spaceXLarge, end = spaceMedium)
-                    ) {
-                        Text(
-                            text = DateUtils.formatTimeForStopwatchLap(lap.time)
-                        )
-                    }
-                    Text(text = DateUtils.formatTimeForStopwatchLap(lap.diff))
+                            .weight(3f)
+                            .padding(start = spaceXLarge, end = spaceMedium),
+                        text = DateUtils.formatTimeForStopwatchLap(lap.time),
+                        textAlign = TextAlign.Center
+                    )
+                    Text(
+                        modifier = Modifier.weight(2f),
+                        text = DateUtils.formatTimeForStopwatchLap(lap.diff),
+                        textAlign = TextAlign.Center
+                    )
                 }
             }
         }
@@ -142,7 +170,7 @@ fun Modifier.verticalFadingEdge(
     length: Dp,
     edgeColor: Color? = null
 ) = composed(
-    debugInspectorInfo {
+    inspectorInfo = debugInspectorInfo {
         name = "length"
         value = length
     }
@@ -150,25 +178,47 @@ fun Modifier.verticalFadingEdge(
     val color = edgeColor ?: MaterialTheme.colorScheme.background
 
     drawWithContent {
-        val bottomFadingEdgeStrength by derivedStateOf {
-            lazyListState.layoutInfo.run {
-                val lastItem = visibleItemsInfo.lastOrNull()
-                if (lastItem == null) {
-                    0f
-                } else {
-                    when {
-                        visibleItemsInfo.size in 0..1 -> 0f
-                        lastItem.index < totalItemsCount - 1 -> 1f
-                        lastItem.offset + lastItem.size <= viewportEndOffset -> 1f
-                        lastItem.offset + lastItem.size > viewportEndOffset ->
-                            lastItem.run {
-                                (size - (viewportEndOffset - offset)) / size.toFloat()
-                            }
+        val topFadingEdgeStrength by derivedStateOf {
+            lazyListState.layoutInfo
+                .run {
+                    val firstItem = visibleItemsInfo.firstOrNull()
+                    if (firstItem == null) {
+                        0f
+                    } else {
+                        when {
+                            visibleItemsInfo.size in 0..1 -> 0f
+                            firstItem.index > 0 -> 1f // Added
+                            firstItem.offset == viewportStartOffset -> 0f
+                            firstItem.offset < viewportStartOffset ->
+                                firstItem.run { kotlin.math.abs(offset) / size.toFloat() }
 
-                        else -> 1f
+                            else -> 1f
+                        }
                     }
                 }
-            }.coerceAtMost(1f) * length.value
+                .coerceAtMost(1f) * length.value
+        }
+        val bottomFadingEdgeStrength by derivedStateOf {
+            lazyListState.layoutInfo
+                .run {
+                    val lastItem = visibleItemsInfo.lastOrNull()
+                    if (lastItem == null) {
+                        0f
+                    } else {
+                        when {
+                            visibleItemsInfo.size in 0..1 -> 0f
+                            lastItem.index < totalItemsCount - 1 -> 1f // Added
+                            lastItem.offset + lastItem.size <= viewportEndOffset -> 0f // added the <=
+                            lastItem.offset + lastItem.size > viewportEndOffset ->
+                                lastItem.run {
+                                    (size - (viewportEndOffset - offset)) / size.toFloat() // Fixed the percentage computation
+                                }
+
+                            else -> 1f
+                        }
+                    }
+                }
+                .coerceAtMost(1f) * length.value
         }
 
         drawContent()
@@ -176,14 +226,34 @@ fun Modifier.verticalFadingEdge(
         drawRect(
             brush = Brush.verticalGradient(
                 colors = listOf(
-                    Color.Transparent,
-                    color
+                    color,
+                    Color.Transparent
                 ),
-                startY = size.height - bottomFadingEdgeStrength,
-                endY = size.height
+                startY = 0f,
+                endY = bottomFadingEdgeStrength
             ),
-            topLeft = Offset(x = 0f, y = size.height - bottomFadingEdgeStrength)
+            size = size.copy(height = bottomFadingEdgeStrength)
         )
+
+        drawRect(
+            brush = Brush.verticalGradient(
+                colors = listOf(
+                    Color.Transparent,
+                    color,
+                ),
+                startY = size.height - topFadingEdgeStrength,
+                endY = size.height,
+            ),
+            topLeft = Offset(x = 0f, y = size.height - topFadingEdgeStrength)
+        )
+    }
+}
+
+fun Modifier.customHeight(condition : Boolean, modifier : Modifier.() -> Modifier) : Modifier {
+    return if (condition) {
+        then(modifier(Modifier))
+    } else {
+        this
     }
 }
 

@@ -19,6 +19,7 @@ class AndroidLibraryPlugin : Plugin<Project> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = DefaultConfig.compileSdk
             }
+
             extensions.configure<LibraryAndroidComponentsExtension> {
                 beforeVariants {
                     it.enableAndroidTest = it.enableAndroidTest &&

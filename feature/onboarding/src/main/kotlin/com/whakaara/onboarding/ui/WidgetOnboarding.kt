@@ -1,5 +1,6 @@
 package com.whakaara.onboarding.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.whakaara.core.designsystem.theme.FontScalePreviews
 import com.whakaara.core.designsystem.theme.Spacings
-import com.whakaara.core.designsystem.theme.Spacings.space200
 import com.whakaara.core.designsystem.theme.Spacings.spaceMedium
 import com.whakaara.core.designsystem.theme.ThemePreviews
 import com.whakaara.core.designsystem.theme.WhakaaraTheme
@@ -36,9 +36,9 @@ fun WidgetOnboarding(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxSize()
             .padding(spaceMedium),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
-        Spacer(modifier = Modifier.height(space200))
         Text(
             modifier = Modifier.width(300.dp),
             text = stringResource(id = R.string.onboarding_widget_title),

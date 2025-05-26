@@ -22,9 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.App.Starting">
 
+
+        <!--            android:screenOrientation="portrait"-->
         <activity
             android:name=".activities.MainActivity"
-            android:screenOrientation="portrait"
             android:exported="true"
             android:theme="@style/Theme.App.Starting"
             android:launchMode="singleTask"
@@ -44,10 +45,11 @@
 
         </activity>
 
+        <!--            android:screenOrientation="portrait"-->
+
         <activity
             android:name=".activities.FullScreenNotificationActivity"
             android:exported="false"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.Whakaara"
             android:showForAllUsers="true"
             android:showWhenLocked="true"
@@ -84,11 +86,6 @@
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
             </intent-filter>
         </receiver>
-
-<!--        <receiver android:name=".receiver.MediaServiceReceiver"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="false">-->
-<!--        </receiver>-->
 
         <receiver android:name="com.whakaara.feature.alarm.receiver.AlarmMediaServiceReceiver"
             android:enabled="true"

@@ -5,21 +5,21 @@ androidxCoreSplashscreen = "1.1.0-rc01"
 androidxComposeUi = "1.7.8"
 androidxLifecycle = "2.8.7"
 androidxActivityCompose = "1.10.1"
-androidxRoom = "2.6.1"
+androidxRoom = "2.7.0"
 androidxWork = "2.10.0"
 androidxArchCore = "2.2.0"
 androidxJunitTextExt = "1.2.1"
 androidxHiltNavCompose = "1.2.0"
 androidxGlance = "1.1.1"
-androidGradlePlugin = "8.7.3"
+androidGradlePlugin = "8.9.2"
 androidxAnnotation = "1.9.1"
 androidxAdaptiveNavigation = "1.4.0-alpha12"
-datastorePreferences = "1.1.1"
+datastorePreferences = "1.1.4"
 javaxInject = "1"
 jetbrainsKotlinxMetadata = "0.9.0"
 jetbrainsKotilnxCoroutines = "1.9.0"
 junit = "4.13.2"
-accompanistPermissions = "0.37.0"
+accompanistPermissions = "0.37.2"
 chargemap = "1.0.3"
 dokar3 = "0.5.7"
 material3 = "1.3.2"
@@ -28,18 +28,16 @@ materialVersion = "1.7.8"
 timePickerVersion = "0.7.2"
 composeSettingsM3 = "1.0.3"
 turbine = "1.1.0"
-mockk = "1.13.12"
-gson = "2.11.0"
-hiltDaggerAndroid = "2.53.1"
+mockk = "1.14.0"
+gson = "2.13.0"
+hiltDaggerAndroid = "2.56.2"
 lottie = "6.4.0"
 ktlint = "12.1.0"
-kotlin-android = "1.9.23"
-ksp = "1.9.23-1.0.20"
+kotlin = "2.1.0"
+ksp = "2.1.0-1.0.29"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-kotlinGradlePlugin = "1.9.23"
-kotlinCompilerExtensionVersion = "1.5.13"
 androidxComposeBom = "2025.04.00"
 uiGraphicsAndroid = "1.7.8"
 ui = "1.7.8"
@@ -117,7 +115,8 @@ material = { group = "com.google.android.material", name = "material", version.r
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
-kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlinGradlePlugin" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-compiler-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 kotlin-ktlint = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 kover-gradlePlugin = { group = "org.jetbrains.kotlinx.kover", name = "org.jetbrains.kotlinx.kover.gradle.plugin", version.ref = "kover" }
@@ -127,9 +126,10 @@ android-application = { id = "com.android.application", version.ref = "androidGr
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hiltDaggerAndroid" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-android" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinx-kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 # Plugins defined by this project
 whakaara-android-application = { id = "whakaara.android.application", version = "unspecified" }

@@ -1,5 +1,4 @@
-
-import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
+import com.android.build.api.dsl.ApplicationExtension
 import com.whakaara.structure.DefaultConfig
 import com.whakaara.structure.configureKotlinAndroid
 import org.gradle.api.Plugin
@@ -13,7 +12,7 @@ class AndroidApplicationPlugin : Plugin<Project> {
                 apply("com.android.application")
                 apply("org.jetbrains.kotlin.android")
 
-                extensions.configure<BaseAppModuleExtension> {
+                extensions.configure<ApplicationExtension> {
                     configureKotlinAndroid(this)
                     defaultConfig {
                         targetSdk = DefaultConfig.compileSdk

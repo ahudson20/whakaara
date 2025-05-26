@@ -14,7 +14,7 @@ jobs:
 
     steps:
       - name: "checkout"
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@v4.2.2
 
       - name: Kotlin Linter
         uses: vroy/gha-kotlin-linter@v4
@@ -44,10 +44,10 @@ jobs:
           ls /dev/kvm
 
     - name: Checkout
-      uses: actions/checkout@v4.1.1
+      uses: actions/checkout@v4.2.2
 
     - name: set up JDK 17
-      uses: actions/setup-java@v4.2.1
+      uses: actions/setup-java@v4.6.0
       with:
         java-version: '17'
         distribution: 'temurin'
@@ -57,7 +57,7 @@ jobs:
       uses: gradle/actions/setup-gradle@v4
 
     - name: Set up Android SDK
-      uses: android-actions/setup-android@v3.2.1
+      uses: android-actions/setup-android@v3.2.2
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
@@ -69,7 +69,7 @@ jobs:
       run: ./gradlew testDebugUnitTest
 
     - name: Run instrumented test
-      uses: ReactiveCircus/android-emulator-runner@v2.30.1
+      uses: ReactiveCircus/android-emulator-runner@v2.33.0
       with:
         arch: 'x86_64'
         api-level: 33
@@ -91,7 +91,7 @@ jobs:
         update-comment: true
 
     - name: Upload Test Reports Folder
-      uses: actions/upload-artifact@v4.3.1
+      uses: actions/upload-artifact@v4.6.0
       if: ${{ always() }}
       with:
         name: reports
@@ -109,7 +109,7 @@ jobs:
     if: ${{ always() }}
     steps:
     - name: Download Test Reports Folder
-      uses: actions/download-artifact@v4.1.4
+      uses: actions/download-artifact@v4.1.8
       with:
         name: reports
 

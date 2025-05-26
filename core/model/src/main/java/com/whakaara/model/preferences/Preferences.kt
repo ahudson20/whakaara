@@ -21,5 +21,6 @@ data class Preferences(
     val autoRestartTimer: Boolean,
     val timerSoundPath: String,
     val gradualSoundDuration: GradualSoundDuration,
-    val timerGradualSoundDuration: GradualSoundDuration
+    val timerGradualSoundDuration: GradualSoundDuration,
+    val flashLight: Boolean
 )

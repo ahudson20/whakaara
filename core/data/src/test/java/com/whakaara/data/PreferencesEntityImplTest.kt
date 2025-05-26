@@ -102,7 +102,8 @@ class PreferencesEntityImplTest {
             autoRestartTimer = true,
             timerSoundPath = "",
             gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
-            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
+            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+            flashLight = false
         )
         val preferencesSlot = slot<PreferencesEntity>()
         coEvery { preferencesDao.insert(any()) } returns mockk()
@@ -142,7 +143,8 @@ class PreferencesEntityImplTest {
             autoRestartTimer = true,
             timerSoundPath = "",
             gradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
-            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER
+            timerGradualSoundDuration = GradualSoundDuration.GRADUAL_INCREASE_DURATION_NEVER,
+            flashLight = false
         )
         val preferencesSlot = slot<PreferencesEntity>()
         coEvery { preferencesDao.updatePreferences(any()) } returns mockk()

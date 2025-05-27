@@ -24,6 +24,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.app.whakaara.R
 import com.app.whakaara.ui.navigation.BottomNavItem
 import com.app.whakaara.ui.settings.AlarmSettings
+import com.app.whakaara.ui.settings.AppInfoDisplay
 import com.app.whakaara.ui.settings.GeneralSettings
 import com.app.whakaara.ui.settings.TimerSettings
 import com.whakaara.core.designsystem.theme.FontScalePreviews
@@ -92,6 +93,8 @@ fun SettingsScreen(
                     )
                 }
             }
+
+            AppInfoDisplay()
         }
     }
 }

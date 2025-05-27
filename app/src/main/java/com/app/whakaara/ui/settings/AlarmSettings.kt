@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.core.net.toUri
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import com.alorma.compose.settings.storage.base.rememberBooleanSettingState
 import com.alorma.compose.settings.storage.base.rememberIntSettingState
@@ -59,7 +60,7 @@ fun AlarmSettings(
     val vibrator = (context.getSystemService(Service.VIBRATOR_MANAGER_SERVICE) as VibratorManager).defaultVibrator
 
     val currentRingtoneUri: Uri = if (preferencesState.preferences.alarmSoundPath.isNotEmpty()) {
-        Uri.parse(preferencesState.preferences.alarmSoundPath)
+        preferencesState.preferences.alarmSoundPath.toUri()
     } else {
         Settings.System.DEFAULT_ALARM_ALERT_URI
     }

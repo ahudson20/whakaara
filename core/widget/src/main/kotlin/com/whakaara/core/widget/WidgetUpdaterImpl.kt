@@ -8,7 +8,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
 class WidgetUpdaterImpl @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : WidgetUpdater {
     override fun updateWidget() {
         val intent = Intent(context, AppWidgetReceiver::class.java).apply {

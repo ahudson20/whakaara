@@ -7,31 +7,30 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
 import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 // Taken from NIA sample app by Google
 
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>
+    commonExtension: CommonExtension
 ) {
     commonExtension.apply {
         compileSdk = DefaultConfig.compileSdk
 
-        defaultConfig {
+        defaultConfig.apply {
             minSdk = DefaultConfig.minSdk
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         }
 
-        compileOptions {
+        compileOptions.apply {
             // Up to Java 11 APIs are available through desugaring
             // https://developer.android.com/studio/write/java11-minimal-support-table
             sourceCompatibility = JavaVersion.VERSION_17
             targetCompatibility = JavaVersion.VERSION_17
         }
 
-        lint {
+        lint.apply {
             abortOnError = false
         }
     }
@@ -61,23 +60,23 @@ private fun Project.configureKotlin(
                     "-Xopt-in=androidx.compose.material3.ExperimentalMaterial3Api",
                     "-Xopt-in=androidx.lifecycle.compose.ExperimentalLifecycleComposeApi",
                     "-Xopt-in=androidx.compose.animation.ExperimentalSharedTransitionApi",
-                    "-Xcontext-receivers",
+//                    "-Xcontext-receivers",
                     "-Xskip-prerelease-check"
                 )
             )
 
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmTarget.set(JVM_17)
         }
     }
 }
 
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>
+    commonExtension: CommonExtension
 ) {
     pluginManager.apply("org.jetbrains.kotlin.plugin.compose")
 
     commonExtension.apply {
-        buildFeatures {
+        buildFeatures.apply {
             compose = true
         }
 
@@ -89,7 +88,7 @@ internal fun Project.configureAndroidCompose(
             add("debugImplementation", libs.findLibrary("androidx-compose-ui-tooling").get())
         }
 
-        testOptions {
+        testOptions.apply {
             unitTests {
                 isIncludeAndroidResources = true
             }
@@ -97,7 +96,7 @@ internal fun Project.configureAndroidCompose(
     }
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
-        featureFlags.addAll(ComposeFeatureFlag.StrongSkipping)
+//        featureFlags.addAll(ComposeFeatureFlag.StrongSkipping)
         reportsDestination.set(layout.buildDirectory.dir("compose_compiler"))
     }
 }

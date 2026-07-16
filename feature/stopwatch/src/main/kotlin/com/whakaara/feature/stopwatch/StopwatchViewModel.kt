@@ -39,28 +39,29 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Named
+import kotlin.time.Duration.Companion.milliseconds
 
 @HiltViewModel
 class StopwatchViewModel @Inject constructor(
     private val app: Application,
     private val notificationManager: NotificationManager,
-    @Named("stopwatch")
+    @param:Named("stopwatch")
     private val stopwatchNotificationBuilder: NotificationCompat.Builder,
-    @ApplicationScope private val coroutineScope: CoroutineScope,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    @param:ApplicationScope private val coroutineScope: CoroutineScope,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val preferencesDataStore: PreferencesDataStoreRepository,
     private val stopwatchRepository: StopwatchRepository
 ) : AndroidViewModel(application = app) {
 
-    private val _stopwatchState: MutableStateFlow<StopwatchState> = MutableStateFlow(StopwatchState())
+    private val _stopwatchState: MutableStateFlow<StopwatchState> = MutableStateFlow(value = StopwatchState())
     val stopwatchState: StateFlow<StopwatchState> = _stopwatchState.asStateFlow()
 
     init {
         collectStopwatchStateFromReceiver()
     }
 
-    private fun collectStopwatchStateFromReceiver() = viewModelScope.launch(ioDispatcher) {
+    private fun collectStopwatchStateFromReceiver() = viewModelScope.launch(context = ioDispatcher) {
         val localState = preferencesDataStore.readStopwatchState().first().asExternalModel()
         stopwatchRepository.stopwatchState.collectLatest { state ->
             handleReceiverState(receiverState = state, localState = localState)
@@ -70,7 +71,7 @@ class StopwatchViewModel @Inject constructor(
     private suspend fun handleReceiverState(receiverState: StopwatchReceiverState, localState: StopwatchState) {
         when (receiverState) {
             is StopwatchReceiverState.Idle -> {
-                logD("StopwatchReceiver.Idle")
+                logD(message = "StopwatchReceiver.Idle")
             }
 
             is StopwatchReceiverState.Started -> {
@@ -78,7 +79,7 @@ class StopwatchViewModel @Inject constructor(
                 cancelNotification()
                 createStopwatchNotification()
 
-                logD("StopwatchReceiver.Started")
+                logD(message = "StopwatchReceiver.Started")
             }
 
             is StopwatchReceiverState.Paused -> {
@@ -86,18 +87,18 @@ class StopwatchViewModel @Inject constructor(
                 cancelNotification()
                 pauseStopwatchNotification()
 
-                logD("StopwatchReceiver.Paused")
+                logD(message = "StopwatchReceiver.Paused")
             }
 
             is StopwatchReceiverState.Stopped -> {
                 resetStopwatch()
 
-                logD("StopwatchReceiver.Stopped")
+                logD(message = "StopwatchReceiver.Stopped")
             }
         }
     }
 
-    fun saveStopwatchStateForRecreation() = viewModelScope.launch(ioDispatcher) {
+    fun saveStopwatchStateForRecreation() = viewModelScope.launch(context = ioDispatcher) {
         if (stopwatchState.value.isActive || stopwatchState.value.isPaused) {
             preferencesDataStore.saveStopwatchState(
                 state = stopwatchState.value.asInternalModel()
@@ -105,7 +106,7 @@ class StopwatchViewModel @Inject constructor(
         }
     }
 
-    fun recreateStopwatch() = viewModelScope.launch(mainDispatcher) {
+    fun recreateStopwatch() = viewModelScope.launch(context = mainDispatcher) {
         if (stopwatchState.value == StopwatchState()) {
             val state = preferencesDataStore.readStopwatchState().first().asExternalModel()
             when {
@@ -156,7 +157,7 @@ class StopwatchViewModel @Inject constructor(
             }
 
             while (stopwatchState.value.isActive) {
-                delay(GeneralConstants.TIMER_START_DELAY_MILLIS)
+                delay(duration = GeneralConstants.TIMER_START_DELAY_MILLIS.milliseconds)
                 val time = stopwatchState.value.timeMillis + (System.currentTimeMillis() - stopwatchState.value.lastTimeStamp)
                 _stopwatchState.update {
                     it.copy(
@@ -181,7 +182,7 @@ class StopwatchViewModel @Inject constructor(
         }
     }
 
-    fun resetStopwatch() = viewModelScope.launch(ioDispatcher) {
+    fun resetStopwatch() = viewModelScope.launch(context = ioDispatcher) {
         cancelNotification()
         coroutineScope.coroutineContext.cancelChildren()
         _stopwatchState.update {

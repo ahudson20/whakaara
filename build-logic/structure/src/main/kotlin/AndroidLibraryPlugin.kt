@@ -1,6 +1,4 @@
-
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
-import com.android.build.gradle.LibraryExtension
 import com.whakaara.structure.DefaultConfig
 import com.whakaara.structure.configureKotlinAndroid
 import org.gradle.api.Plugin
@@ -12,12 +10,11 @@ class AndroidLibraryPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
             }
 
-            extensions.configure<LibraryExtension> {
+            extensions.configure<com.android.build.api.dsl.LibraryExtension> {
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = DefaultConfig.compileSdk
+                testOptions.targetSdk = DefaultConfig.compileSdk
             }
 
             extensions.configure<LibraryAndroidComponentsExtension> {

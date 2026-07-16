@@ -1,5 +1,4 @@
-
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.whakaara.structure.configureAndroidCompose
 import org.gradle.api.Plugin
 import org.gradle.api.Project

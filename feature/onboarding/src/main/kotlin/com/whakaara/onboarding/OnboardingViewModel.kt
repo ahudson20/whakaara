@@ -14,9 +14,9 @@ import javax.inject.Inject
 class OnboardingViewModel @Inject constructor(
     private val app: Application,
     private val preferencesRepository: PreferencesRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application = app) {
-    fun updatePreferences() = viewModelScope.launch(ioDispatcher) {
+    fun updatePreferences() = viewModelScope.launch(context = ioDispatcher) {
         preferencesRepository.updateShouldShowOnboarding(
             shouldShowOnboarding = false
         )

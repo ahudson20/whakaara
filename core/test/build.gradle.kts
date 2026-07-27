@@ -3,7 +3,6 @@ import com.whakaara.structure.modules
 
 plugins {
     alias(libs.plugins.whakaara.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.whakaara.lint)
 }
 

@@ -18,9 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val preferencesRepository: PreferencesRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ViewModel() {
-    private val _preferencesState = MutableStateFlow(PreferencesState())
+    private val _preferencesState = MutableStateFlow(value = PreferencesState())
     val preferencesUiState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
     init {
@@ -28,12 +28,12 @@ class MainViewModel @Inject constructor(
     }
 
     private fun getPreferences() = viewModelScope.launch {
-        preferencesRepository.getPreferencesFlow().flowOn(ioDispatcher).collect { preferences ->
+        preferencesRepository.getPreferencesFlow().flowOn(context = ioDispatcher).collect { preferences ->
             _preferencesState.value = PreferencesState(preferences = preferences, isReady = true)
         }
     }
 
-    fun updatePreferences(preferences: Preferences) = viewModelScope.launch(ioDispatcher) {
+    fun updatePreferences(preferences: Preferences) = viewModelScope.launch(context = ioDispatcher) {
         preferencesRepository.updatePreferences(preferences = preferences)
     }
 }

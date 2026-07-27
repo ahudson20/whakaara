@@ -4,7 +4,7 @@ import com.whakaara.structure.modules
 plugins {
     alias(libs.plugins.whakaara.android.application)
     alias(libs.plugins.whakaara.application.compose)
-    alias(libs.plugins.whakaara.kover)
+//    alias(libs.plugins.whakaara.kover)
     alias(libs.plugins.whakaara.hilt)
     alias(libs.plugins.whakaara.lint)
 }
@@ -25,6 +25,7 @@ android {
         }
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -56,9 +57,17 @@ android {
         }
     }
 
-    android.sourceSets.configureEach {
-        kotlin.srcDir("src/$name/kotlin")
-    }
+//    android.sourceSets.configureEach {
+//        kotlin.srcDir("src/$name/kotlin")
+//    }
+
+//    sourceSets {
+//        named("main") {
+//            kotlin.srcDirs(
+//                "src/$name/kotlin"
+//            )
+//        }
+//    }
 }
 
 dependencies {
@@ -82,8 +91,8 @@ dependencies {
     implementation(libs.androidx.adaptive.navigation)
 
     // Kover
-    kover(project(Modules.coreData))
-    kover(project(Modules.coreDatabase))
+//    kover(project(Modules.coreData))
+//    kover(project(Modules.coreDatabase))
 
     // Material
     implementation(libs.material)

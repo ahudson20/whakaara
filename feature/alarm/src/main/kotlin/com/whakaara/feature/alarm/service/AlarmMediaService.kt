@@ -2,7 +2,6 @@ package com.whakaara.feature.alarm.service
 
 import android.app.Notification
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.hardware.camera2.CameraCharacteristics
@@ -52,6 +51,7 @@ import javax.inject.Inject
 import javax.inject.Named
 import kotlin.concurrent.timerTask
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration.Companion.milliseconds
 
 @AndroidEntryPoint
 class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
@@ -290,15 +290,15 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
     private fun startFlashlightStrobe(interval: Long = 300L) {
         if (cameraId == null) return
 
-        flashlightJob = lifecycleScope.launch(iODispatcher) {
+        flashlightJob = lifecycleScope.launch(context = iODispatcher) {
             try {
-                delay(100)
+                delay(duration = 100.milliseconds)
                 while (isActive) {
                     cameraId?.let { id ->
                         cameraManager.setTorchMode(id, true)
-                        delay(interval)
+                        delay(duration = interval.milliseconds)
                         cameraManager.setTorchMode(id, false)
-                        delay(interval)
+                        delay(duration = interval.milliseconds)
                     }
                 }
             } catch (exception: CancellationException) {
@@ -336,7 +336,7 @@ class AlarmMediaService : LifecycleService(), MediaPlayer.OnPreparedListener {
             serviceHandler = ServiceHandler(looper)
         }
 
-        cameraManager = getSystemService(Context.CAMERA_SERVICE) as CameraManager
+        cameraManager = getSystemService(CAMERA_SERVICE) as CameraManager
         cameraId = cameraManager.cameraIdList.find {
             cameraManager.getCameraCharacteristics(it)
                 .get(CameraCharacteristics.FLASH_INFO_AVAILABLE) == true

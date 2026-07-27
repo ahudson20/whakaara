@@ -51,21 +51,21 @@ class TimerViewModel @Inject constructor(
     private val app: Application,
     private val alarmManager: AlarmManager,
     private val notificationManager: NotificationManager,
-    @Named("timer")
+    @param:Named("timer")
     private val timerNotificationBuilder: NotificationCompat.Builder,
     private val countDownTimerUtil: CountDownTimerUtil,
     private val preferencesDatastore: PreferencesDataStoreRepository,
     private val timerRepository: TimerRepository,
     private val preferencesRepository: PreferencesRepository,
-    @ApplicationScope private val coroutineScope: CoroutineScope,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher
+    @param:ApplicationScope private val coroutineScope: CoroutineScope,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:MainDispatcher private val mainDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application = app) {
 
-    private val _timerState: MutableStateFlow<TimerState> = MutableStateFlow(TimerState())
+    private val _timerState: MutableStateFlow<TimerState> = MutableStateFlow(value = TimerState())
     val timerState: StateFlow<TimerState> = _timerState.asStateFlow()
 
-    private val _preferences: MutableStateFlow<PreferencesState> = MutableStateFlow(PreferencesState())
+    private val _preferences: MutableStateFlow<PreferencesState> = MutableStateFlow(value = PreferencesState())
     val preferences: StateFlow<PreferencesState> = _preferences.asStateFlow()
 
     init {
@@ -74,7 +74,7 @@ class TimerViewModel @Inject constructor(
     }
 
     private fun collectPreferencesState() = viewModelScope.launch {
-        preferencesRepository.getPreferencesFlow().flowOn(ioDispatcher).collect { preferences ->
+        preferencesRepository.getPreferencesFlow().flowOn(context = ioDispatcher).collect { preferences ->
             _preferences.value = PreferencesState(preferences = preferences, isReady = true)
         }
     }

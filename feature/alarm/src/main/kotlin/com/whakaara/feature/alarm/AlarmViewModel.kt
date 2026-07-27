@@ -45,13 +45,13 @@ class AlarmViewModel @Inject constructor(
     private val repository: AlarmRepository,
     private val preferencesRepository: PreferencesRepository,
     private val widgetUpdater: WidgetUpdater,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AndroidViewModel(application = app) {
 
-    private val _alarmState = MutableStateFlow<AlarmState>(AlarmState.Loading)
+    private val _alarmState = MutableStateFlow<AlarmState>(value = AlarmState.Loading)
     val alarmState: StateFlow<AlarmState> = _alarmState.asStateFlow()
 
-    private val _preferencesState = MutableStateFlow(PreferencesState())
+    private val _preferencesState = MutableStateFlow(value = PreferencesState())
     val preferencesState: StateFlow<PreferencesState> = _preferencesState.asStateFlow()
 
     init {
@@ -62,13 +62,13 @@ class AlarmViewModel @Inject constructor(
     }
 
     private fun getAllAlarms() = viewModelScope.launch {
-        repository.getAllAlarmsFlow().flowOn(ioDispatcher).collect { allAlarms ->
+        repository.getAllAlarmsFlow().flowOn(context = ioDispatcher).collect { allAlarms ->
             _alarmState.value = AlarmState.Success(alarms = allAlarms)
         }
     }
 
     private fun getPreferences() = viewModelScope.launch {
-        preferencesRepository.getPreferencesFlow().flowOn(ioDispatcher).collect { preferences ->
+        preferencesRepository.getPreferencesFlow().flowOn(context = ioDispatcher).collect { preferences ->
             _preferencesState.value = PreferencesState(preferences = preferences, isReady = true)
         }
     }
@@ -106,7 +106,7 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun create(localTime: LocalTime) = viewModelScope.launch(ioDispatcher) {
+    fun create(localTime: LocalTime) = viewModelScope.launch(context = ioDispatcher) {
         val date = Calendar.getInstance().apply {
             set(Calendar.HOUR_OF_DAY, localTime.hour)
             set(Calendar.MINUTE, localTime.minute)
@@ -136,13 +136,13 @@ class AlarmViewModel @Inject constructor(
         )
     }
 
-    fun delete(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
+    fun delete(alarm: Alarm) = viewModelScope.launch(context = ioDispatcher) {
         repository.delete(alarm = alarm)
         deleteAlarm(alarmId = alarm.alarmId.toString())
         cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)
     }
 
-    fun disable(alarm: Alarm) = viewModelScope.launch(ioDispatcher) {
+    fun disable(alarm: Alarm) = viewModelScope.launch(context = ioDispatcher) {
         updateExistingAlarmInDatabase(alarm.copy(isEnabled = false))
         deleteAlarm(alarmId = alarm.alarmId.toString())
         cancelUpcomingAlarm(alarmId = alarm.alarmId.toString(), alarmDate = alarm.date)

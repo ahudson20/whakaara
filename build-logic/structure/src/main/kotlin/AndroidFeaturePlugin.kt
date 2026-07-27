@@ -1,4 +1,3 @@
-import com.android.build.gradle.LibraryExtension
 import com.whakaara.structure.DefaultConfig
 import com.whakaara.structure.configureAndroidCompose
 import com.whakaara.structure.configureKotlinAndroid
@@ -13,7 +12,6 @@ class AndroidFeaturePlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
             }
 
             dependencies {
@@ -21,10 +19,10 @@ class AndroidFeaturePlugin : Plugin<Project> {
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
             }
 
-            extensions.configure<LibraryExtension> {
+            extensions.configure<com.android.build.api.dsl.LibraryExtension> {
                 configureAndroidCompose(this)
                 configureKotlinAndroid(this)
-                defaultConfig.targetSdk = DefaultConfig.compileSdk
+                testOptions.targetSdk = DefaultConfig.compileSdk
             }
         }
     }
